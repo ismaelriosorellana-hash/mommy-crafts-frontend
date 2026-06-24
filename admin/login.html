@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración | Mommy Crafts</title>
+    <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    <main class="admin-login-page">
+        <section class="admin-login-card">
+            <div class="admin-login-brand">
+                <img
+                    src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png"
+                    alt="Mommy Crafts"
+                >
+                <div>
+                    <h1>Panel administrativo</h1>
+                    <p>Acceso exclusivo para administradores.</p>
+                </div>
+            </div>
+
+            <form id="admin-login-form" novalidate>
+                <div class="admin-field">
+                    <label for="admin-email">Correo</label>
+                    <input
+                        id="admin-email"
+                        name="email"
+                        type="email"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="admin-field">
+                    <label for="admin-password">Contraseña</label>
+                    <input
+                        id="admin-password"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <label class="admin-checkbox" style="margin:4px 0 18px">
+                    <input id="admin-remember" type="checkbox">
+                    <span>Mantener sesión en este computador</span>
+                </label>
+
+                <button
+                    class="admin-button"
+                    id="admin-login-button"
+                    type="submit"
+                    style="width:100%"
+                >
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Iniciar sesión
+                </button>
+
+                <p
+                    id="admin-login-error"
+                    class="admin-login-help"
+                    role="alert"
+                    hidden
+                    style="color:var(--admin-danger)"
+                ></p>
+            </form>
+
+            <p class="admin-login-help">
+                Utiliza el correo y la contraseña que configuraste al ejecutar
+                <strong>npm run create-admin</strong>.
+            </p>
+        </section>
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script src="js/admin-api.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

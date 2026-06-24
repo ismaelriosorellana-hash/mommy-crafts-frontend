@@ -368,8 +368,12 @@
         document.body.classList.remove("modal-open");
     }
 
-    function buildWhatsAppOrder(formData) {
+    function buildWhatsAppOrder(formData, orderNumber = "") {
         const lines = ["Hola, quiero realizar el siguiente pedido:", ""];
+
+        if (orderNumber) {
+            lines.push(`N.º de pedido: ${orderNumber}`, "");
+        }
 
         read().forEach((item, index) => {
             lines.push(
@@ -416,12 +420,162 @@
         );
         document.getElementById("form-pedido")?.addEventListener(
             "submit",
-            (event) => {
+            async (event) => {
                 event.preventDefault();
-                const formData = new FormData(event.currentTarget);
-                const message = buildWhatsAppOrder(formData);
-                const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(message)}`;
-                window.open(url, "_blank", "noopener,noreferrer");
+
+                const form =
+                    event.currentTarget;
+
+                const submitButton =
+                    form.querySelector(
+                        '[type="submit"]'
+                    );
+
+                const formData =
+                    new FormData(form);
+
+                const items = read();
+
+                if (!items.length) {
+                    alert(
+                        "Tu carrito está vacío."
+                    );
+
+                    return;
+                }
+
+                const whatsappWindow =
+                    window.open(
+                        "about:blank",
+                        "_blank"
+                    );
+
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.dataset.originalText =
+                        submitButton.innerHTML;
+                    submitButton.innerHTML =
+                        "Guardando pedido...";
+                }
+
+                try {
+                    const response =
+                        await API.request(
+                            "/pedidos",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+                                body: JSON.stringify({
+                                    cliente: {
+                                        nombre:
+                                            formData.get(
+                                                "nombre"
+                                            ),
+                                        rut:
+                                            formData.get(
+                                                "rut"
+                                            ),
+                                        email:
+                                            formData.get(
+                                                "email"
+                                            ),
+                                        telefono:
+                                            formData.get(
+                                                "telefono"
+                                            ),
+                                        direccion:
+                                            formData.get(
+                                                "direccion"
+                                            ),
+                                        comuna:
+                                            formData.get(
+                                                "comuna"
+                                            )
+                                    },
+                                    items:
+                                        items.map(
+                                            (item) => ({
+                                                productoId:
+                                                    item.productId,
+                                                nombre:
+                                                    item.name,
+                                                imagen:
+                                                    item.image,
+                                                cantidad:
+                                                    item.quantity,
+                                                precioUnitario:
+                                                    item.price,
+                                                varianteId:
+                                                    item.customization
+                                                        ?.variantId ||
+                                                    "",
+                                                color:
+                                                    item.customization
+                                                        ?.productVariant ||
+                                                    "",
+                                                sku:
+                                                    item.customization
+                                                        ?.sku ||
+                                                    "",
+                                                personalizacion:
+                                                    item.customization
+                                            })
+                                        ),
+                                    metodoPago:
+                                        formData.get(
+                                            "pedido-pago"
+                                        ),
+                                    observaciones:
+                                        formData.get(
+                                            "observaciones"
+                                        ),
+                                    origen: "web"
+                                })
+                            }
+                        );
+
+                    const message =
+                        buildWhatsAppOrder(
+                            formData,
+                            response.numeroPedido
+                        );
+
+                    const url =
+                        `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(message)}`;
+
+                    clear();
+                    closeCheckout();
+                    form.reset();
+
+                    if (
+                        whatsappWindow &&
+                        !whatsappWindow.closed
+                    ) {
+                        whatsappWindow.location.href =
+                            url;
+                    } else {
+                        window.location.href =
+                            url;
+                    }
+                } catch (error) {
+                    whatsappWindow?.close();
+
+                    alert(
+                        error.message ||
+                        "No fue posible guardar el pedido."
+                    );
+                } finally {
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.innerHTML =
+                            submitButton.dataset
+                                .originalText ||
+                            "Finalizar pedido";
+                    }
+                }
             }
         );
     }

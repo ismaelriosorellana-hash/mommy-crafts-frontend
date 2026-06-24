@@ -876,3 +876,165 @@
     background-size: cover;
     box-shadow: 0 0.15rem 0.35rem rgba(47, 41, 44, 0.12);
 }
+
+/* V3.9: selección dinámica de color en el modal */
+
+.color-option-card {
+    position: relative;
+    overflow: hidden;
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        background 160ms ease,
+        transform 160ms ease;
+}
+
+.color-option-card.selected {
+    border: 2px solid var(--color-primary-dark);
+    background: var(--color-primary-soft);
+    box-shadow:
+        0 0 0 0.32rem rgba(233, 168, 181, 0.22),
+        0 1rem 2rem rgba(71, 47, 56, 0.1);
+    transform: translateY(-0.15rem);
+}
+
+.color-option-selected-mark {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--color-primary-dark);
+    color: #fff;
+    box-shadow: 0 0.4rem 1rem rgba(71, 47, 56, 0.22);
+    opacity: 0;
+    transform: scale(0.65);
+    transition: opacity 160ms ease, transform 180ms ease;
+    pointer-events: none;
+}
+
+.color-option-card.selected .color-option-selected-mark {
+    opacity: 1;
+    transform: scale(1);
+}
+
+
+/* V3.10: precio base visible en cada producto del personalizador */
+.customizable-product-price {
+    color: var(--color-text) !important;
+    font-size: 1.2rem !important;
+    font-weight: 800 !important;
+}
+
+.customizable-product-action {
+    color: var(--color-primary-dark) !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+}
+
+
+/* ==========================================================
+   V3.13: selección directa de objetos en el personalizador
+   ========================================================== */
+
+#preview-user-image,
+#preview-main-text,
+#preview-secondary-text {
+    border-radius: 0.4rem;
+    outline: 0.2rem solid transparent;
+    outline-offset: 0.55rem;
+    transition:
+        outline-color 150ms ease,
+        filter 150ms ease;
+}
+
+#preview-user-image:hover,
+#preview-main-text:hover,
+#preview-secondary-text:hover {
+    filter: drop-shadow(0 0.4rem 0.75rem rgba(47, 41, 44, 0.2));
+}
+
+#preview-user-image.editor-object-selected,
+#preview-main-text.editor-object-selected,
+#preview-secondary-text.editor-object-selected {
+    outline-color: var(--color-primary-dark);
+    filter: drop-shadow(0 0.45rem 0.8rem rgba(233, 168, 181, 0.45));
+}
+
+.editor-selection-help {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    margin: 1.2rem 0 0;
+    padding: 1rem 1.2rem;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-soft);
+    color: var(--color-text-soft);
+    font-size: 1.05rem;
+    line-height: 1.45;
+}
+
+.editor-selection-help p {
+    margin: 0;
+}
+
+.editor-selection-help i {
+    margin-top: 0.2rem;
+    color: var(--color-primary-dark);
+}
+
+.editor-selection-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 4rem;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--color-text-soft);
+    font-size: 1.05rem;
+}
+
+.editor-selection-status strong {
+    color: var(--color-text);
+}
+
+.font-family-control {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 16rem;
+    color: var(--color-text-soft);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.font-family-control select {
+    min-height: 4rem;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    outline: none;
+    background: #fff;
+    color: var(--color-text);
+    font: inherit;
+}
+
+.font-family-control select:focus {
+    border-color: var(--color-primary-dark);
+    box-shadow: 0 0 0 0.3rem rgba(233, 168, 181, 0.16);
+}
+
+@media (max-width: 650px) {
+    .editor-selection-status,
+    .font-family-control {
+        width: 100%;
+    }
+
+    .divider {
+        display: none;
+    }
+}

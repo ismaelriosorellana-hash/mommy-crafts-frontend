@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen | Mommy Crafts</title>
+    <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body data-admin-page="dashboard" data-admin-title="Resumen">
+    <section id="admin-page-content">
+
+<div class="admin-page-intro">
+    <div>
+        <h2>Estado general de la tienda</h2>
+        <p>Ventas, pedidos e inventario en un solo lugar.</p>
+    </div>
+
+    <button class="admin-button secondary" id="dashboard-refresh" type="button">
+        <i class="fa-solid fa-rotate"></i>
+        Actualizar
+    </button>
+</div>
+
+<div class="admin-grid metrics">
+    <article class="admin-card admin-metric">
+        <div>
+            <div class="admin-metric-label">Ventas de hoy</div>
+            <div class="admin-metric-value" id="metric-sales">$0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+    </article>
+
+    <article class="admin-card admin-metric">
+        <div>
+            <div class="admin-metric-label">Pedidos pendientes</div>
+            <div class="admin-metric-value" id="metric-pending">0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-clock"></i></div>
+    </article>
+
+    <article class="admin-card admin-metric">
+        <div>
+            <div class="admin-metric-label">Pedidos de hoy</div>
+            <div class="admin-metric-value" id="metric-orders">0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+    </article>
+
+    <article class="admin-card admin-metric">
+        <div>
+            <div class="admin-metric-label">Productos con stock bajo</div>
+            <div class="admin-metric-value" id="metric-low-stock">0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    </article>
+</div>
+
+<div class="admin-grid two">
+    <section class="admin-card">
+        <div class="admin-card-header">
+            <h3>Pedidos recientes</h3>
+            <a href="pedidos.html" class="admin-button ghost small">Ver todos</a>
+        </div>
+        <div class="admin-card-body" id="dashboard-orders"></div>
+    </section>
+
+    <section class="admin-card">
+        <div class="admin-card-header">
+            <h3>Alertas de inventario</h3>
+            <a href="inventario.html" class="admin-button ghost small">Gestionar</a>
+        </div>
+        <div class="admin-card-body" id="dashboard-stock"></div>
+    </section>
+</div>
+
+    </section>
+
+    <script src="../js/config.js"></script>
+    <script src="js/admin-api.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

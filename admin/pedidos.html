@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos | Mommy Crafts</title>
+    <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body data-admin-page="pedidos" data-admin-title="Pedidos">
+    <section id="admin-page-content">
+
+<div class="admin-page-intro">
+    <div>
+        <h2>Gestión de pedidos</h2>
+        <p>Revisa clientes, productos, pagos y estados.</p>
+    </div>
+
+    <button class="admin-button secondary" id="orders-refresh" type="button">
+        <i class="fa-solid fa-rotate"></i>
+        Actualizar
+    </button>
+</div>
+
+<div class="admin-toolbar">
+    <div class="admin-toolbar-group" style="flex:1">
+        <div class="admin-field" style="min-width:min(100%,320px);flex:1">
+            <input id="orders-search" type="search" placeholder="Buscar por pedido, cliente o correo">
+        </div>
+
+        <select id="orders-status" aria-label="Filtrar por estado" style="min-height:43px;border:1px solid var(--admin-border);border-radius:11px;padding:0 12px">
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="confirmado">Confirmado</option>
+            <option value="en_produccion">En producción</option>
+            <option value="listo">Listo</option>
+            <option value="enviado">Enviado</option>
+            <option value="entregado">Entregado</option>
+            <option value="cancelado">Cancelado</option>
+        </select>
+    </div>
+</div>
+
+<section class="admin-card">
+    <div class="admin-table-wrap" id="orders-table"></div>
+</section>
+
+<div class="admin-modal" id="order-modal" hidden>
+    <section class="admin-modal-panel">
+        <header class="admin-modal-header">
+            <h3 id="order-modal-title">Detalle del pedido</h3>
+            <button class="admin-icon-button" type="button" data-close-modal="order-modal" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+
+        <div class="admin-modal-body" id="order-detail"></div>
+
+        <footer class="admin-modal-footer">
+            <button class="admin-button secondary" type="button" data-close-modal="order-modal">
+                Cerrar
+            </button>
+
+            <button class="admin-button" id="order-save" type="button">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Guardar cambios
+            </button>
+        </footer>
+    </section>
+</div>
+
+    </section>
+
+    <script src="../js/config.js"></script>
+    <script src="js/admin-api.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script src="js/orders-admin.js"></script>
+</body>
+</html>

@@ -22,9 +22,25 @@
         style: "",
         imageName: "",
         activeText: "main",
+        selectedObject: null,
         image: { x: 0, y: 0, scale: 1, rotation: 0 },
-        main: { x: 0, y: 0, scale: 1, rotation: 0 },
-        secondary: { x: 0, y: 0, scale: 1, rotation: 0 }
+        main: {
+            x: 0,
+            y: 0,
+            scale: 1,
+            rotation: 0,
+            fontFamily: "Arial, sans-serif",
+            color: "#2f292c"
+        },
+        secondary: {
+            x: 0,
+            y: 0,
+            scale: 1,
+            rotation: 0,
+            fontFamily: "Georgia, serif",
+            color: "#2f292c"
+        },
+        autoAdvanceTimer: 0
     };
 
     const $ = (selector) => document.querySelector(selector);
@@ -53,6 +69,9 @@
         upload: $("#upload-area"),
         imageControls: $("#image-editor-controls"),
         textControls: $("#text-editor-controls"),
+        preview: $("#product-preview"),
+        selectedObjectName: $("#selected-object-name"),
+        fontFamily: $("#text-font-family"),
         runningTotal: $("#customization-running-total"),
         breakdown: $("#customization-price-breakdown"),
         finalTotal: $("#customization-final-total")
@@ -67,25 +86,48 @@
         );
     }
 
-    function categoryBase(category) {
-        return Number(
-            CONFIG.CUSTOMIZATION_PRICING?.categoryBase?.[category]
-        ) || 0;
-    }
 
-    function productOverride(product) {
-        const name = normalize(product?.nombre);
-        const overrides =
-            CONFIG.CUSTOMIZATION_PRICING?.productBaseOverrides || {};
+function configuredCategoryBase(category) {
+    return Number(
+        CONFIG.CUSTOMIZATION_PRICING?.categoryBase?.[category]
+    ) || 0;
+}
 
-        for (const [key, value] of Object.entries(overrides)) {
-            if (name.includes(normalize(key))) {
-                return Number(value) || 0;
-            }
+function productOverride(product) {
+    const name = normalize(product?.nombre);
+    const overrides =
+        CONFIG.CUSTOMIZATION_PRICING?.productBaseOverrides || {};
+
+    for (const [key, value] of Object.entries(overrides)) {
+        if (name.includes(normalize(key))) {
+            return Number(value) || 0;
         }
-
-        return 0;
     }
+
+    return 0;
+}
+
+function productBasePrice(product, category = "") {
+    const custom = product?.personalizationPricing || {};
+
+    return (
+        Number(custom.base) ||
+        Number(product?.precio) ||
+        productOverride(product) ||
+        configuredCategoryBase(category) ||
+        0
+    );
+}
+
+function categoryBase(category) {
+    const prices = categoryProducts(category)
+        .map((product) => productBasePrice(product, category))
+        .filter((value) => Number.isFinite(value) && value > 0);
+
+    return prices.length
+        ? Math.min(...prices)
+        : configuredCategoryBase(category);
+}
 
     function pricing() {
         const custom = state.product?.personalizationPricing || {};
@@ -93,11 +135,10 @@
 
         return {
             base:
-                Number(custom.base) ||
-                productOverride(state.product) ||
-                categoryBase(state.category) ||
-                Number(state.product?.precio) ||
-                0,
+                productBasePrice(
+                    state.product,
+                    state.category
+                ),
             image:
                 Number(custom.image) ||
                 Number(extras.image) ||
@@ -239,6 +280,14 @@
             scale(${transform.scale})
             rotate(${transform.rotation}deg)
         `;
+
+        element.style.fontFamily =
+            transform.fontFamily ||
+            "Arial, sans-serif";
+
+        element.style.color =
+            transform.color ||
+            "#2f292c";
     }
 
     function resetTransforms() {
@@ -253,20 +302,255 @@
             x: 0,
             y: 0,
             scale: 1,
-            rotation: 0
+            rotation: 0,
+            fontFamily: "Arial, sans-serif",
+            color: "#2f292c"
         });
 
         Object.assign(state.secondary, {
             x: 0,
             y: 0,
             scale: 1,
-            rotation: 0
+            rotation: 0,
+            fontFamily: "Georgia, serif",
+            color: "#2f292c"
         });
 
         applyImage();
         applyText("main");
         applyText("secondary");
     }
+
+
+function selectedTextType() {
+    return ["main", "secondary"].includes(
+        state.selectedObject
+    )
+        ? state.selectedObject
+        : null;
+}
+
+function updateSelectionUI() {
+    const current = els();
+    const selectedText = selectedTextType();
+
+    current.userImage?.classList.toggle(
+        "editor-object-selected",
+        state.selectedObject === "image"
+    );
+
+    current.mainText?.classList.toggle(
+        "editor-object-selected",
+        state.selectedObject === "main"
+    );
+
+    current.secondaryText?.classList.toggle(
+        "editor-object-selected",
+        state.selectedObject === "secondary"
+    );
+
+    const imageSelected =
+        state.step === 5 &&
+        state.selectedObject === "image" &&
+        current.userImage &&
+        !current.userImage.hidden;
+
+    if (current.imageControls) {
+        current.imageControls.hidden =
+            !imageSelected;
+    }
+
+    const textElementSelected =
+        selectedText &&
+        state.step === 6 &&
+        !textElement(selectedText)?.hidden;
+
+    if (current.textControls) {
+        current.textControls.hidden =
+            !textElementSelected;
+    }
+
+    if (
+        textElementSelected &&
+        current.selectedObjectName
+    ) {
+        current.selectedObjectName.textContent =
+            selectedText === "main"
+                ? "Texto principal"
+                : "Texto secundario";
+    }
+
+    if (
+        textElementSelected &&
+        current.fontFamily
+    ) {
+        current.fontFamily.value =
+            textState(selectedText).fontFamily ||
+            "Arial, sans-serif";
+    }
+}
+
+function selectObject(type) {
+    const current = els();
+
+    if (
+        type === "image" &&
+        (
+            state.step !== 5 ||
+            !current.userImage ||
+            current.userImage.hidden
+        )
+    ) {
+        return;
+    }
+
+    if (
+        ["main", "secondary"].includes(type) &&
+        (
+            state.step !== 6 ||
+            textElement(type)?.hidden
+        )
+    ) {
+        return;
+    }
+
+    state.selectedObject = type;
+
+    if (["main", "secondary"].includes(type)) {
+        state.activeText = type;
+    }
+
+    updateSelectionUI();
+}
+
+function deselectObject() {
+    state.selectedObject = null;
+    updateSelectionUI();
+}
+
+function clearTextStep() {
+    [
+        "texto-principal",
+        "texto-secundario",
+        "instrucciones"
+    ].forEach((id) => {
+        const field = document.getElementById(id);
+        if (field) field.value = "";
+    });
+
+    const current = els();
+
+    if (current.mainText) {
+        current.mainText.textContent = "Tu texto aquí";
+        current.mainText.hidden = true;
+    }
+
+    if (current.secondaryText) {
+        current.secondaryText.textContent = "";
+        current.secondaryText.hidden = true;
+    }
+
+    Object.assign(state.main, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotation: 0,
+        fontFamily: "Arial, sans-serif",
+        color: "#2f292c"
+    });
+
+    Object.assign(state.secondary, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotation: 0,
+        fontFamily: "Georgia, serif",
+        color: "#2f292c"
+    });
+
+    if (["main", "secondary"].includes(state.selectedObject)) {
+        state.selectedObject = null;
+    }
+
+    applyText("main");
+    applyText("secondary");
+    counters();
+    updateSelectionUI();
+}
+
+function clearImageStep() {
+    removeImage();
+
+    Object.assign(state.image, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotation: 0
+    });
+
+    applyImage();
+}
+
+function clearVariantStep() {
+    state.variant = null;
+
+    document
+        .querySelectorAll(".color-option-card")
+        .forEach((card) => {
+            card.classList.remove("selected");
+            card.setAttribute("aria-checked", "false");
+        });
+
+    updatePreview();
+}
+
+function clearStyleStep() {
+    state.style = "";
+
+    document
+        .querySelectorAll('input[name="estilo"]')
+        .forEach((input) => {
+            input.checked = false;
+        });
+}
+
+function clearProductStep() {
+    state.product = null;
+    state.variant = null;
+
+    document
+        .querySelectorAll(".customizable-product-card")
+        .forEach((card) => {
+            card.classList.remove("selected");
+        });
+
+    const current = els();
+
+    if (current.colors) {
+        current.colors.innerHTML =
+            "<p>Primero selecciona un producto.</p>";
+    }
+
+    if (current.productImage) {
+        current.productImage.src =
+            CONFIG.placeholderImage;
+
+        current.productImage.alt =
+            "Selecciona un producto";
+    }
+}
+
+function clearStepsAfter(step) {
+    window.clearTimeout(state.autoAdvanceTimer);
+
+    if (step < 6) clearTextStep();
+    if (step < 5) clearImageStep();
+    if (step < 4) clearVariantStep();
+    if (step < 3) clearStyleStep();
+    if (step < 2) clearProductStep();
+
+    updatePrice();
+}
 
     function counters() {
         [
@@ -321,10 +605,44 @@
                     ? "Ver resumen"
                     : "Siguiente";
         }
+
+        if (
+            state.step !== 5 &&
+            state.selectedObject === "image"
+        ) {
+            state.selectedObject = null;
+        }
+
+        if (
+            state.step !== 6 &&
+            ["main", "secondary"].includes(
+                state.selectedObject
+            )
+        ) {
+            state.selectedObject = null;
+        }
+
+        updateSelectionUI();
     }
+
+
+function advanceToStep(nextStep, delay = 180) {
+    window.clearTimeout(state.autoAdvanceTimer);
+
+    state.autoAdvanceTimer = window.setTimeout(() => {
+        if (nextStep < 1 || nextStep > TOTAL_STEPS) return;
+        state.step = nextStep;
+        stepUI();
+
+        if (state.step === 6) {
+            updateText();
+        }
+    }, delay);
+}
 
     function reset() {
         const current = els();
+        window.clearTimeout(state.autoAdvanceTimer);
 
         Object.assign(state, {
             step: 1,
@@ -334,7 +652,8 @@
             variant: null,
             style: "",
             imageName: "",
-            activeText: "main"
+            activeText: "main",
+            selectedObject: null
         });
 
         document
@@ -460,6 +779,7 @@
 
             button.addEventListener("click", () => {
                 selectCategory(category);
+                advanceToStep(2);
             });
 
             fragment.appendChild(button);
@@ -471,9 +791,8 @@
     function selectCategory(category) {
         const current = els();
 
+        clearStepsAfter(1);
         state.category = category;
-        state.product = null;
-        state.variant = null;
 
         document
             .querySelectorAll(".customization-category-card")
@@ -525,6 +844,7 @@
             const image = document.createElement("img");
             const content = document.createElement("span");
             const name = document.createElement("strong");
+            const basePrice = document.createElement("span");
             const action = document.createElement("span");
 
             button.type = "button";
@@ -541,14 +861,19 @@
 
             name.textContent = product.nombre;
 
+            basePrice.className = "customizable-product-price";
+            basePrice.textContent =
+                `Desde ${money(productBasePrice(product, state.category))}`;
+
             action.className = "customizable-product-action";
             action.textContent = "Seleccionar producto";
 
-            content.append(name, action);
+            content.append(name, basePrice, action);
             button.append(image, content);
 
             button.addEventListener("click", () => {
                 selectProduct(product);
+                advanceToStep(3);
             });
 
             fragment.appendChild(button);
@@ -558,9 +883,17 @@
     }
 
     function selectProduct(product) {
+        clearStepsAfter(2);
         state.product = product;
+
+        const selectableVariants =
+            window.Products
+                .getSelectableVariants(product);
+
         state.variant =
+            selectableVariants[0] ||
             product.variantes?.[0] || {
+                id: "standard",
                 nombre: "Estándar",
                 imagen: product.imagenPrincipal
             };
@@ -602,10 +935,17 @@
             return;
         }
 
+        const selectableVariants =
+            window.Products
+                .getSelectableVariants(
+                    state.product
+                );
+
         const variants =
-            state.product.variantes?.length
-                ? state.product.variantes
+            selectableVariants.length
+                ? selectableVariants
                 : [{
+                    id: "standard",
                     nombre: "Estándar",
                     imagen: state.product.imagenPrincipal
                 }];
@@ -617,10 +957,21 @@
             const button = document.createElement("button");
             const image = document.createElement("img");
             const label = document.createElement("span");
+            const selectionMark = document.createElement("span");
+
+            const isSelected =
+                state.variant?.id ===
+                variant.id;
 
             button.type = "button";
             button.className =
-                `color-option-card${index === 0 ? " selected" : ""}`;
+                `color-option-card${isSelected ? " selected" : ""}`;
+            button.dataset.variantId = variant.id;
+            button.setAttribute("role", "radio");
+            button.setAttribute(
+                "aria-checked",
+                String(isSelected)
+            );
 
             image.src =
                 variant.imagen ||
@@ -636,19 +987,46 @@
                 swatch.style.backgroundImage = `url("${variant.imagen}")`;
             }
 
+            selectionMark.className =
+                "color-option-selected-mark";
+            selectionMark.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+            selectionMark.innerHTML =
+                '<i class="fa-solid fa-check"></i>';
+
             label.textContent = variant.nombre;
-            button.append(image, swatch, label);
+            button.append(
+                image,
+                swatch,
+                label,
+                selectionMark
+            );
 
             button.addEventListener("click", () => {
                 grid
                     .querySelectorAll(".color-option-card")
                     .forEach((card) => {
-                        card.classList.remove("selected");
+                        const selected =
+                            card === button;
+
+                        card.classList.toggle(
+                            "selected",
+                            selected
+                        );
+
+                        card.setAttribute(
+                            "aria-checked",
+                            String(selected)
+                        );
                     });
 
-                button.classList.add("selected");
+                clearStepsAfter(4);
                 state.variant = variant;
                 updatePreview();
+                updatePrice();
+                advanceToStep(5);
             });
 
             grid.appendChild(button);
@@ -709,10 +1087,23 @@
             current.secondaryText.hidden = !secondary;
         }
 
-        if (current.textControls) {
-            current.textControls.hidden = !main && !secondary;
+        if (
+            state.selectedObject === "main" &&
+            !main
+        ) {
+            state.selectedObject = null;
         }
 
+        if (
+            state.selectedObject === "secondary" &&
+            !secondary
+        ) {
+            state.selectedObject = null;
+        }
+
+        applyText("main");
+        applyText("secondary");
+        updateSelectionUI();
         counters();
         updatePrice();
     }
@@ -748,6 +1139,7 @@
 
             applyImage();
             updatePrice();
+            selectObject("image");
         };
 
         reader.readAsDataURL(file);
@@ -767,6 +1159,12 @@
         if (current.imageControls) current.imageControls.hidden = true;
 
         state.imageName = "";
+
+        if (state.selectedObject === "image") {
+            state.selectedObject = null;
+        }
+
+        updateSelectionUI();
         updatePrice();
     }
 
@@ -832,7 +1230,9 @@
             totalPrice: result.total,
             imageTransform: { ...state.image },
             mainTextTransform: { ...state.main },
-            secondaryTextTransform: { ...state.secondary }
+            secondaryTextTransform: { ...state.secondary },
+            mainTextFont: state.main.fontFamily,
+            secondaryTextFont: state.secondary.fontFamily
         };
 
         const pricedProduct = {
@@ -907,6 +1307,7 @@
     }
 
     function close() {
+        window.clearTimeout(state.autoAdvanceTimer);
         const overlay = els().overlay;
         if (!overlay) return;
 
@@ -915,49 +1316,71 @@
         document.body.classList.remove("modal-open");
     }
 
-    function drag(element, getTransform, applyTransform) {
-        if (!element) return;
 
-        let active = false;
-        let startX = 0;
-        let startY = 0;
-        let initialX = 0;
-        let initialY = 0;
+function drag(
+    element,
+    type,
+    getTransform,
+    applyTransform
+) {
+    if (!element) return;
 
-        element.addEventListener("pointerdown", (event) => {
-            if (element.hidden) return;
+    let active = false;
+    let startX = 0;
+    let startY = 0;
+    let initialX = 0;
+    let initialY = 0;
 
-            const transform = getTransform();
+    element.addEventListener("pointerdown", (event) => {
+        if (element.hidden) return;
 
-            active = true;
-            startX = event.clientX;
-            startY = event.clientY;
-            initialX = transform.x;
-            initialY = transform.y;
+        if (
+            type === "image" &&
+            state.step !== 5
+        ) {
+            return;
+        }
 
-            element.setPointerCapture?.(event.pointerId);
-            event.preventDefault();
-        });
+        if (
+            ["main", "secondary"].includes(type) &&
+            state.step !== 6
+        ) {
+            return;
+        }
 
-        element.addEventListener("pointermove", (event) => {
-            if (!active) return;
+        selectObject(type);
 
-            const transform = getTransform();
+        const transform = getTransform();
 
-            transform.x = initialX + event.clientX - startX;
-            transform.y = initialY + event.clientY - startY;
+        active = true;
+        startX = event.clientX;
+        startY = event.clientY;
+        initialX = transform.x;
+        initialY = transform.y;
 
-            applyTransform();
-        });
+        element.setPointerCapture?.(event.pointerId);
+        event.preventDefault();
+        event.stopPropagation();
+    });
 
-        const stop = () => {
-            active = false;
-        };
+    element.addEventListener("pointermove", (event) => {
+        if (!active) return;
 
-        element.addEventListener("pointerup", stop);
-        element.addEventListener("pointercancel", stop);
-    }
+        const transform = getTransform();
 
+        transform.x = initialX + event.clientX - startX;
+        transform.y = initialY + event.clientY - startY;
+
+        applyTransform();
+    });
+
+    const stop = () => {
+        active = false;
+    };
+
+    element.addEventListener("pointerup", stop);
+    element.addEventListener("pointercancel", stop);
+}
     function bind() {
         const current = els();
         if (!current.overlay) return;
@@ -967,6 +1390,18 @@
         current.overlay.addEventListener("click", (event) => {
             if (event.target === current.overlay) close();
         });
+
+        document
+            .querySelectorAll('input[name="estilo"]')
+            .forEach((input) => {
+                input.addEventListener("change", () => {
+                    if (!input.checked) return;
+
+                    clearStepsAfter(3);
+                    state.style = input.value;
+                    advanceToStep(4);
+                });
+            });
 
         current.next?.addEventListener("click", () => {
             if (!validStep()) {
@@ -988,7 +1423,11 @@
 
         current.previous?.addEventListener("click", () => {
             if (state.step > 1) {
-                state.step -= 1;
+                const previousStep =
+                    state.step - 1;
+
+                clearStepsAfter(previousStep);
+                state.step = previousStep;
                 stepUI();
             }
         });
@@ -998,6 +1437,7 @@
             if (current.footer) current.footer.hidden = false;
             if (current.summary) current.summary.hidden = true;
 
+            clearStepsAfter(1);
             state.step = 1;
             stepUI();
         });
@@ -1053,62 +1493,130 @@
         $("#texto-secundario")?.addEventListener("input", updateText);
         $("#instrucciones")?.addEventListener("input", counters);
 
-        $("#btn-select-main")?.addEventListener("click", () => {
-            state.activeText = "main";
-        });
-
-        $("#btn-select-secondary")?.addEventListener("click", () => {
-            state.activeText = "secondary";
-        });
-
         $("#btn-text-zoom-in")?.addEventListener("click", () => {
-            const transform = textState(state.activeText);
+            const type = selectedTextType();
+            if (!type) return;
+
+            const transform = textState(type);
             transform.scale = Math.min(3, transform.scale + 0.1);
-            applyText(state.activeText);
+            applyText(type);
         });
 
         $("#btn-text-zoom-out")?.addEventListener("click", () => {
-            const transform = textState(state.activeText);
+            const type = selectedTextType();
+            if (!type) return;
+
+            const transform = textState(type);
             transform.scale = Math.max(0.3, transform.scale - 0.1);
-            applyText(state.activeText);
+            applyText(type);
         });
 
         $("#btn-text-rotate-left")?.addEventListener("click", () => {
-            const transform = textState(state.activeText);
+            const type = selectedTextType();
+            if (!type) return;
+
+            const transform = textState(type);
             transform.rotation -= 15;
-            applyText(state.activeText);
+            applyText(type);
         });
 
         $("#btn-text-reset")?.addEventListener("click", () => {
-            Object.assign(textState(state.activeText), {
+            const type = selectedTextType();
+            if (!type) return;
+
+            const transform = textState(type);
+            const defaultFont =
+                type === "main"
+                    ? "Arial, sans-serif"
+                    : "Georgia, serif";
+
+            Object.assign(transform, {
                 x: 0,
                 y: 0,
                 scale: 1,
-                rotation: 0
+                rotation: 0,
+                fontFamily: defaultFont,
+                color: "#2f292c"
             });
-            applyText(state.activeText);
+
+            applyText(type);
+            updateSelectionUI();
         });
 
         $("#btn-text-color")?.addEventListener("click", () => {
+            const type = selectedTextType();
+            if (!type) return;
+
             const input = document.createElement("input");
             input.type = "color";
-            input.value = "#2f292c";
+            input.value =
+                textState(type).color ||
+                "#2f292c";
 
             input.addEventListener("input", () => {
-                const target = textElement(state.activeText);
-                if (target) target.style.color = input.value;
+                textState(type).color = input.value;
+                applyText(type);
             });
 
             input.click();
         });
 
-        drag(current.userImage, () => state.image, applyImage);
-        drag(current.mainText, () => state.main, () => applyText("main"));
+        current.fontFamily?.addEventListener("change", () => {
+            const type = selectedTextType();
+            if (!type) return;
+
+            textState(type).fontFamily =
+                current.fontFamily.value;
+
+            applyText(type);
+        });
+
+        drag(
+            current.userImage,
+            "image",
+            () => state.image,
+            applyImage
+        );
+
+        drag(
+            current.mainText,
+            "main",
+            () => state.main,
+            () => applyText("main")
+        );
+
         drag(
             current.secondaryText,
+            "secondary",
             () => state.secondary,
             () => applyText("secondary")
         );
+
+        current.preview?.addEventListener("click", (event) => {
+            const editable = event.target.closest(
+                "#preview-user-image, #preview-main-text, #preview-secondary-text"
+            );
+
+            if (!editable) {
+                deselectObject();
+            }
+        });
+
+        document.addEventListener("click", (event) => {
+            if (!current.overlay.classList.contains("active")) {
+                return;
+            }
+
+            if (
+                event.target.closest(
+                    "#preview-user-image, #preview-main-text, #preview-secondary-text, .image-editor-controls, .text-editor-controls"
+                )
+            ) {
+                return;
+            }
+
+            deselectObject();
+        });
     }
 
     window.Customization = Object.freeze({

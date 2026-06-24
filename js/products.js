@@ -9,6 +9,7 @@
         productoActual: null,
         varianteActual: null,
         imagenesDetalleActual: [],
+        galeriaDetalleActual: [],
         indiceImagenActual: 0,
         loadPromise: null
     };
@@ -662,6 +663,72 @@ function getVariantImages(product, variant) {
         : [CONFIG.placeholderImage];
 }
 
+
+function buildProductGallery(product) {
+    const gallery = [];
+    const indexByUrl = new Map();
+
+    function addImage(url, variant = null) {
+        const cleanUrl = stringValue(url);
+        if (!cleanUrl) return;
+
+        const existingIndex = indexByUrl.get(cleanUrl);
+
+        if (existingIndex !== undefined) {
+            const existing = gallery[existingIndex];
+
+            if (!existing.variantId && variant?.id) {
+                existing.variantId = variant.id;
+                existing.variantName = variant.nombre;
+                existing.colorHex = variant.colorHex;
+            }
+
+            return;
+        }
+
+        indexByUrl.set(cleanUrl, gallery.length);
+        gallery.push({
+            url: cleanUrl,
+            variantId: variant?.selectable ? variant.id : "",
+            variantName: variant?.selectable ? variant.nombre : "",
+            colorHex: variant?.selectable ? variant.colorHex : ""
+        });
+    }
+
+    (product?.imagenes || []).forEach((url) => addImage(url));
+
+    getSelectableVariants(product).forEach((variant) => {
+        getVariantImages(product, variant).forEach((url) => addImage(url, variant));
+    });
+
+    if (!gallery.length) {
+        addImage(CONFIG.placeholderImage);
+    }
+
+    return gallery.filter(
+        (entry, index) =>
+            entry.url !== CONFIG.placeholderImage ||
+            gallery.length === 1 ||
+            index !== 0
+    );
+}
+
+function findGalleryIndexForVariant(product, variant, preferredUrl = "") {
+    const gallery = state.galeriaDetalleActual;
+
+    if (preferredUrl) {
+        const preferredIndex = gallery.findIndex((entry) => entry.url === preferredUrl);
+        if (preferredIndex >= 0) return preferredIndex;
+    }
+
+    const variantIndex = gallery.findIndex((entry) => entry.variantId === variant?.id);
+    if (variantIndex >= 0) return variantIndex;
+
+    const firstVariantImage = getVariantImages(product, variant)[0];
+    const imageIndex = gallery.findIndex((entry) => entry.url === firstVariantImage);
+    return imageIndex >= 0 ? imageIndex : 0;
+}
+
 function hasAvailableStock(product) {
     const variants = getSelectableVariants(product);
     if (!variants.length) return numberValue(product?.stock) > 0;
@@ -976,163 +1043,191 @@ function hasAvailableStock(product) {
             );
     }
 
-    function createProductCard(product) {
-        const template =
-            document.getElementById(
-                "product-card-template"
-            );
 
-        if (!template) {
-            console.error(
-                "No existe #product-card-template."
-            );
-            return null;
-        }
+function createProductCard(product) {
+    const template = document.getElementById("product-card-template");
 
-        const fragment =
-            template.content.cloneNode(true);
-
-        const article =
-            fragment.querySelector(".card-product");
-
-        const link =
-            fragment.querySelector(".product-card-link");
-
-        const image =
-            fragment.querySelector(".product-card-image");
-
-        const badge =
-            fragment.querySelector(".product-badge");
-
-        const discountBadge =
-            fragment.querySelector(".product-discount-badge");
-
-        const category =
-            fragment.querySelector(".product-category");
-
-        const name =
-            fragment.querySelector(".product-name");
-
-        const colorRow =
-            fragment.querySelector(".product-card-color-row");
-
-        const colorSwatches =
-            fragment.querySelector(".product-card-color-swatches");
-
-        const price =
-            fragment.querySelector(".product-price");
-
-        const originalPrice =
-            fragment.querySelector(
-                ".product-original-price"
-            );
-
-        const addButton =
-            fragment.querySelector(".add-cart");
-
-        article.dataset.productId = product.id;
-
-        link.href =
-            `producto.html?id=${encodeURIComponent(product.id)}`;
-
-        const cardVariant = getDefaultVariant(product);
-
-        image.src = cardVariant?.imagen || product.imagenPrincipal;
-        image.alt = product.nombre;
-        image.style.objectFit =
-            product.cardImageFit || "cover";
-        image.style.objectPosition =
-            product.imagePosition || "center";
-
-        image.addEventListener(
-            "error",
-            () => {
-                image.src = CONFIG.placeholderImage;
-            },
-            { once: true }
-        );
-
-        category.textContent = product.categoria;
-        name.textContent = product.nombre;
-
-        const selectableVariants = getSelectableVariants(product);
-
-        if (colorRow && colorSwatches && selectableVariants.length) {
-            colorRow.hidden = false;
-            colorSwatches.innerHTML = "";
-
-            selectableVariants.slice(0, 6).forEach((variant) => {
-                const dot = document.createElement("span");
-                dot.className = "product-card-color-dot";
-                dot.title = variant.nombre;
-                dot.setAttribute("aria-label", variant.nombre);
-
-                if (variant.colorHex) {
-                    dot.style.background = variant.colorHex;
-                } else {
-                    dot.style.backgroundImage = `url("${variant.imagen}")`;
-                }
-
-                colorSwatches.appendChild(dot);
-            });
-
-            if (selectableVariants.length > 6) {
-                const more = document.createElement("span");
-                more.className = "product-card-color-more";
-                more.textContent = `+${selectableVariants.length - 6}`;
-                colorSwatches.appendChild(more);
-            }
-        }
-
-        price.textContent = formatPrice(getVariantPrice(product, cardVariant));
-
-        if (product.insignia) {
-            badge.hidden = false;
-            badge.textContent = product.insignia;
-        }
-
-        const discountPercentage = calculateDiscountPercentage(product);
-        if (discountBadge && discountPercentage > 0) {
-            discountBadge.hidden = false;
-            discountBadge.textContent = `-${discountPercentage}%`;
-            discountBadge.setAttribute("aria-label", `${discountPercentage}% de descuento`);
-        }
-
-        if (
-            product.precioOriginal > 0 &&
-            product.precioOriginal > product.precio
-        ) {
-            originalPrice.hidden = false;
-
-            originalPrice.textContent =
-                formatPrice(product.precioOriginal);
-        }
-
-        if (!hasAvailableStock(product)) {
-            addButton.disabled = true;
-            addButton.querySelector("span").textContent = "Agotado";
-        } else if (selectableVariants.length) {
-            addButton.querySelector("span").textContent = "Elegir color";
-            addButton.addEventListener("click", () => {
-                window.location.href = `producto.html?id=${encodeURIComponent(product.id)}`;
-            });
-        } else {
-            addButton.addEventListener(
-                "click",
-                () => {
-                    window.Cart?.add(product, 1);
-                    showToast(`${product.nombre} fue agregado al carrito.`);
-                    const label = addButton.querySelector("span");
-                    label.textContent = "Agregado";
-                    window.setTimeout(() => {
-                        label.textContent = "Agregar";
-                    }, 1200);
-                }
-            );
-        }
-
-        return fragment;
+    if (!template) {
+        console.error("No existe #product-card-template.");
+        return null;
     }
+
+    const fragment = template.content.cloneNode(true);
+    const article = fragment.querySelector(".card-product");
+    const link = fragment.querySelector(".product-card-link");
+    const image = fragment.querySelector(".product-card-image");
+    const badge = fragment.querySelector(".product-badge");
+    const discountBadge = fragment.querySelector(".product-discount-badge");
+    const category = fragment.querySelector(".product-category");
+    const name = fragment.querySelector(".product-name");
+    const colorRow = fragment.querySelector(".product-card-color-row");
+    const colorSwatches = fragment.querySelector(".product-card-color-swatches");
+    const price = fragment.querySelector(".product-price");
+    const originalPrice = fragment.querySelector(".product-original-price");
+    const addButton = fragment.querySelector(".add-cart");
+
+    article.dataset.productId = product.id;
+    category.textContent = product.categoria;
+    name.textContent = product.nombre;
+
+    if (product.insignia) {
+        badge.hidden = false;
+        badge.textContent = product.insignia;
+    }
+
+    const selectableVariants = getSelectableVariants(product);
+    let activeVariant = getDefaultVariant(product);
+
+    function updateCardVariant(variant) {
+        activeVariant = variant || activeVariant;
+
+        const targetImage = activeVariant?.imagen || product.imagenPrincipal;
+        const targetPrice = getVariantPrice(product, activeVariant);
+        const targetOriginal = getVariantOriginalPrice(product, activeVariant);
+        const discount = targetOriginal > targetPrice && targetOriginal > 0
+            ? Math.round(((targetOriginal - targetPrice) / targetOriginal) * 100)
+            : 0;
+
+        if (targetImage && image.src !== targetImage) {
+            image.classList.add("is-changing-variant");
+            const preloader = new Image();
+
+            preloader.onload = () => {
+                image.src = targetImage;
+                requestAnimationFrame(() => {
+                    image.classList.remove("is-changing-variant");
+                });
+            };
+
+            preloader.onerror = () => {
+                image.src = CONFIG.placeholderImage;
+                image.classList.remove("is-changing-variant");
+            };
+
+            preloader.src = targetImage;
+        } else {
+            image.src = targetImage || CONFIG.placeholderImage;
+        }
+
+        image.alt = activeVariant?.selectable
+            ? `${product.nombre} color ${activeVariant.nombre}`
+            : product.nombre;
+
+        price.textContent = formatPrice(targetPrice);
+
+        if (targetOriginal > targetPrice && targetOriginal > 0) {
+            originalPrice.hidden = false;
+            originalPrice.textContent = formatPrice(targetOriginal);
+        } else {
+            originalPrice.hidden = true;
+            originalPrice.textContent = "";
+        }
+
+        if (discountBadge) {
+            discountBadge.hidden = discount <= 0;
+            discountBadge.textContent = discount > 0 ? `-${discount}%` : "";
+            discountBadge.setAttribute(
+                "aria-label",
+                discount > 0 ? `${discount}% de descuento` : ""
+            );
+        }
+
+        colorSwatches
+            ?.querySelectorAll(".product-card-color-dot")
+            .forEach((dot) => {
+                const selected = dot.dataset.variantId === activeVariant?.id;
+                dot.classList.toggle("selected", selected);
+                dot.setAttribute("aria-checked", String(selected));
+            });
+
+        const variantParam = activeVariant?.selectable
+            ? `&variante=${encodeURIComponent(activeVariant.id)}`
+            : "";
+
+        link.href = `producto.html?id=${encodeURIComponent(product.id)}${variantParam}`;
+        article.dataset.selectedVariantId = activeVariant?.id || "";
+    }
+
+    image.style.objectFit = product.cardImageFit || "cover";
+    image.style.objectPosition = product.imagePosition || "center";
+    image.addEventListener("error", () => {
+        image.src = CONFIG.placeholderImage;
+    }, { once: true });
+
+    if (colorRow && colorSwatches && selectableVariants.length) {
+        colorRow.hidden = false;
+        colorSwatches.innerHTML = "";
+        colorSwatches.setAttribute("role", "radiogroup");
+        colorSwatches.setAttribute("aria-label", `Colores disponibles para ${product.nombre}`);
+
+        selectableVariants.slice(0, 6).forEach((variant) => {
+            const dot = document.createElement("span");
+            dot.className = "product-card-color-dot";
+            dot.dataset.variantId = variant.id;
+            dot.title = variant.nombre;
+            dot.tabIndex = 0;
+            dot.setAttribute("role", "radio");
+            dot.setAttribute("aria-label", `Mostrar ${product.nombre} en color ${variant.nombre}`);
+            dot.setAttribute("aria-checked", "false");
+
+            if (variant.colorHex) {
+                dot.style.background = variant.colorHex;
+            } else {
+                dot.style.backgroundImage = `url("${variant.imagen}")`;
+            }
+
+            const choose = (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                updateCardVariant(variant);
+            };
+
+            dot.addEventListener("click", choose);
+            dot.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    choose(event);
+                }
+            });
+
+            colorSwatches.appendChild(dot);
+        });
+
+        if (selectableVariants.length > 6) {
+            const more = document.createElement("span");
+            more.className = "product-card-color-more";
+            more.textContent = `+${selectableVariants.length - 6}`;
+            colorSwatches.appendChild(more);
+        }
+    }
+
+    updateCardVariant(activeVariant);
+
+    if (!hasAvailableStock(product)) {
+        addButton.disabled = true;
+        addButton.querySelector("span").textContent = "Agotado";
+    } else if (selectableVariants.length) {
+        addButton.querySelector("span").textContent = "Elegir color";
+        addButton.addEventListener("click", () => {
+            const variantParam = activeVariant?.id
+                ? `&variante=${encodeURIComponent(activeVariant.id)}`
+                : "";
+            window.location.href =
+                `producto.html?id=${encodeURIComponent(product.id)}${variantParam}`;
+        });
+    } else {
+        addButton.addEventListener("click", () => {
+            window.Cart?.add(product, 1);
+            showToast(`${product.nombre} fue agregado al carrito.`);
+            const label = addButton.querySelector("span");
+            label.textContent = "Agregado";
+            window.setTimeout(() => {
+                label.textContent = "Agregar";
+            }, 1200);
+        });
+    }
+
+    return fragment;
+}
 
     function renderProducts(
         container,
@@ -1442,95 +1537,248 @@ function hasAvailableStock(product) {
         }
     }
 
-    function renderThumbnails(product, images = product.imagenes) {
-        const container =
-            document.getElementById(
-                "detalle-thumbnails"
-            );
 
-        if (!container) return;
+function renderThumbnails(
+    product,
+    entries = state.galeriaDetalleActual
+) {
+    const container =
+        document.getElementById(
+            "detalle-thumbnails"
+        );
 
-        container.innerHTML = "";
+    if (!container) return;
 
-        images
-            .forEach((url, index) => {
-                const button =
-                    document.createElement("button");
+    container.innerHTML = "";
 
-                const image =
-                    document.createElement("img");
+    entries.forEach((entry, index) => {
+        const button =
+            document.createElement("button");
 
-                button.type = "button";
+        const image =
+            document.createElement("img");
 
-                button.className =
-                    `detail-thumbnail${index === 0 ? " active" : ""}`;
+        button.type = "button";
+        button.className =
+            `detail-thumbnail${index === state.indiceImagenActual ? " active" : ""}`;
 
-                button.setAttribute(
-                    "aria-label",
-                    `Ver imagen ${index + 1} de ${product.nombre}`
-                );
+        button.dataset.imageIndex =
+            String(index);
 
-                image.src = url;
-                image.alt = "";
-                image.loading = "lazy";
-                image.style.objectFit =
-                    product.cardImageFit ||
-                    "cover";
-                image.style.objectPosition =
-                    product.imagePosition ||
-                    "center";
-
-                button.appendChild(image);
-
-                button.addEventListener(
-                    "click",
-                    () => setDetailImage(index)
-                );
-
-                container.appendChild(button);
-            });
-    }
-
-    function setDetailImage(index) {
-        const product =
-            state.productoActual;
-
-        const images = state.imagenesDetalleActual;
-
-        if (!product || !Array.isArray(images) || images.length === 0) {
-            return;
+        if (entry.variantId) {
+            button.dataset.variantId =
+                entry.variantId;
         }
 
-        const total = images.length;
+        const colorDescription =
+            entry.variantName
+                ? `, color ${entry.variantName}`
+                : "";
 
-        state.indiceImagenActual =
-            (index + total) % total;
+        button.setAttribute(
+            "aria-label",
+            `Ver imagen ${index + 1} de ${product.nombre}${colorDescription}`
+        );
 
-        const mainImage =
-            document.getElementById(
-                "detalle-imagen-principal"
+        image.src = entry.url;
+        image.alt = "";
+        image.loading = "lazy";
+        image.draggable = false;
+        image.style.objectFit =
+            product.cardImageFit ||
+            "cover";
+        image.style.objectPosition =
+            product.imagePosition ||
+            "center";
+
+        button.appendChild(image);
+
+        if (entry.variantName) {
+            const indicator =
+                document.createElement("span");
+
+            indicator.className =
+                "detail-thumbnail-color";
+
+            indicator.title =
+                entry.variantName;
+
+            indicator.setAttribute(
+                "aria-hidden",
+                "true"
             );
 
-        mainImage.src =
-            images[state.indiceImagenActual];
+            if (entry.colorHex) {
+                indicator.style.background =
+                    entry.colorHex;
+            } else {
+                indicator.style.backgroundImage =
+                    `url("${entry.url}")`;
+            }
 
-        document
-            .querySelectorAll(
-                ".detail-thumbnail"
-            )
-            .forEach(
-                (
-                    thumbnail,
-                    thumbnailIndex
-                ) => {
-                    thumbnail.classList.toggle(
-                        "active",
-                        thumbnailIndex ===
-                        state.indiceImagenActual
-                    );
-                }
+            button.appendChild(indicator);
+        }
+
+        button.addEventListener(
+            "click",
+            (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                setDetailImage(index);
+            }
+        );
+
+        container.appendChild(button);
+    });
+
+    window.ProductGallery?.init();
+}
+
+function updateSelectedVariantUI(
+    product,
+    variant
+) {
+    state.varianteActual = variant;
+
+    document
+        .querySelectorAll(
+            ".product-color-option"
+        )
+        .forEach((button) => {
+            const selected =
+                button.dataset.variantId ===
+                variant?.id;
+
+            button.classList.toggle(
+                "selected",
+                selected
             );
+
+            button.setAttribute(
+                "aria-checked",
+                String(selected)
+            );
+        });
+
+    const selectedColor =
+        document.getElementById(
+            "product-selected-color"
+        );
+
+    if (selectedColor) {
+        selectedColor.textContent =
+            variant?.nombre ||
+            "Estándar";
     }
+
+    updateDetailPrice(product, variant);
+    updateDetailStock(product, variant);
+}
+
+function setDetailImage(
+    index,
+    options = {}
+) {
+    const product =
+        state.productoActual;
+
+    const gallery =
+        state.galeriaDetalleActual;
+
+    if (
+        !product ||
+        !Array.isArray(gallery) ||
+        gallery.length === 0
+    ) {
+        return;
+    }
+
+    const total = gallery.length;
+
+    state.indiceImagenActual =
+        (index + total) % total;
+
+    const entry =
+        gallery[state.indiceImagenActual];
+
+    if (
+        options.syncVariant !== false &&
+        entry.variantId
+    ) {
+        const variant =
+            getSelectableVariants(product)
+                .find(
+                    (item) =>
+                        item.id ===
+                        entry.variantId
+                );
+
+        if (variant) {
+            updateSelectedVariantUI(
+                product,
+                variant
+            );
+        }
+    }
+
+    const mainImage =
+        document.getElementById(
+            "detalle-imagen-principal"
+        );
+
+    if (mainImage) {
+        mainImage.classList.add("is-switching-image");
+        mainImage.src = entry.url;
+        mainImage.alt =
+            entry.variantName
+                ? `${product.nombre} color ${entry.variantName}`
+                : product.nombre;
+
+        const reveal = () => {
+            requestAnimationFrame(() => {
+                mainImage.classList.remove("is-switching-image");
+            });
+        };
+
+        if (mainImage.complete) {
+            reveal();
+        } else {
+            mainImage.addEventListener("load", reveal, { once: true });
+        }
+
+        window.ProductGallery?.syncZoomSource();
+    }
+
+    document
+        .querySelectorAll(
+            ".detail-thumbnail"
+        )
+        .forEach(
+            (
+                thumbnail,
+                thumbnailIndex
+            ) => {
+                thumbnail.classList.toggle(
+                    "active",
+                    thumbnailIndex ===
+                    state.indiceImagenActual
+                );
+
+                thumbnail.setAttribute(
+                    "aria-current",
+                    thumbnailIndex ===
+                    state.indiceImagenActual
+                        ? "true"
+                        : "false"
+                );
+            }
+        );
+
+    window.ProductGallery
+        ?.scrollThumbnailIntoView(
+            state.indiceImagenActual
+        );
+}
 
     function initAccordions() {
         document
@@ -1759,30 +2007,28 @@ function updateDetailStock(product, variant) {
     }
 }
 
-function selectProductVariant(product, variant) {
-    state.varianteActual = variant;
-    state.imagenesDetalleActual = getVariantImages(product, variant);
-    state.indiceImagenActual = 0;
 
-    const mainImage = document.getElementById("detalle-imagen-principal");
-    if (mainImage) {
-        mainImage.src = state.imagenesDetalleActual[0];
-        mainImage.alt = `${product.nombre} color ${variant.nombre}`;
-    }
+function selectProductVariant(
+    product,
+    variant,
+    preferredUrl = ""
+) {
+    updateSelectedVariantUI(
+        product,
+        variant
+    );
 
-    renderThumbnails(product, state.imagenesDetalleActual);
+    const galleryIndex =
+        findGalleryIndexForVariant(
+            product,
+            variant,
+            preferredUrl
+        );
 
-    document.querySelectorAll(".product-color-option").forEach((button) => {
-        const selected = button.dataset.variantId === variant.id;
-        button.classList.toggle("selected", selected);
-        button.setAttribute("aria-checked", String(selected));
-    });
-
-    const selectedColor = document.getElementById("product-selected-color");
-    if (selectedColor) selectedColor.textContent = variant.nombre;
-
-    updateDetailPrice(product, variant);
-    updateDetailStock(product, variant);
+    setDetailImage(
+        galleryIndex,
+        { syncVariant: false }
+    );
 }
 
 function renderColorSelector(product) {
@@ -1793,7 +2039,10 @@ function renderColorSelector(product) {
     if (!section || !container || !product.publicarCatalogo || variants.length === 0) {
         if (section) section.hidden = true;
         state.varianteActual = product.variantes?.[0] || null;
-        state.imagenesDetalleActual = getVariantImages(product, state.varianteActual);
+        state.galeriaDetalleActual = buildProductGallery(product);
+        state.imagenesDetalleActual = state.galeriaDetalleActual.map((entry) => entry.url);
+        renderThumbnails(product, state.galeriaDetalleActual);
+        setDetailImage(0, { syncVariant: false });
         return;
     }
 
@@ -1807,6 +2056,7 @@ function renderColorSelector(product) {
         const name = document.createElement("strong");
         const availability = document.createElement("small");
         const indicator = document.createElement("span");
+        const selectionMark = document.createElement("span");
         const stockAmount = getVariantStock(product, variant);
 
         button.type = "button";
@@ -1814,6 +2064,10 @@ function renderColorSelector(product) {
         button.dataset.variantId = variant.id;
         button.setAttribute("role", "radio");
         button.setAttribute("aria-checked", "false");
+        button.setAttribute(
+            "aria-label",
+            `${variant.nombre}: ${stockAmount > 0 ? `${stockAmount} disponibles` : "agotado"}`
+        );
         button.disabled = stockAmount <= 0;
 
         image.src = variant.imagen || product.imagenPrincipal;
@@ -1831,8 +2085,22 @@ function renderColorSelector(product) {
             indicator.style.backgroundImage = `url("${variant.imagen}")`;
         }
 
+        selectionMark.className =
+            "product-color-selected-mark";
+        selectionMark.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+        selectionMark.innerHTML =
+            '<i class="fa-solid fa-check"></i>';
+
         content.append(name, availability);
-        button.append(image, content, indicator);
+        button.append(
+            image,
+            content,
+            indicator,
+            selectionMark
+        );
         button.addEventListener("click", () => selectProductVariant(product, variant));
         container.appendChild(button);
     });
@@ -1845,6 +2113,7 @@ function renderColorSelector(product) {
         state.productoActual = product;
         state.varianteActual = null;
         state.imagenesDetalleActual = [];
+        state.galeriaDetalleActual = [];
         state.indiceImagenActual = 0;
 
         trackProductView(product.id);
@@ -1960,21 +2229,18 @@ function renderColorSelector(product) {
             );
         }
 
-        if (
-            product.imagenes.length === 0
-        ) {
-            product.imagenes = [
-                CONFIG.placeholderImage
-            ];
-        }
-
         const mainImage =
             document.getElementById(
                 "detalle-imagen-principal"
             );
 
+        const initialMainImage =
+            initialVariant?.imagen ||
+            product.imagenes[0] ||
+            CONFIG.placeholderImage;
+
         mainImage.src =
-            product.imagenes[0];
+            initialMainImage;
 
         mainImage.alt =
             product.nombre;
@@ -1987,14 +2253,44 @@ function renderColorSelector(product) {
             product.imagePosition ||
             "center";
 
-        state.imagenesDetalleActual = product.imagenes;
+        state.galeriaDetalleActual =
+            buildProductGallery(product);
 
-        renderThumbnails(product, state.imagenesDetalleActual);
+        state.imagenesDetalleActual =
+            state.galeriaDetalleActual
+                .map((entry) => entry.url);
+
+        renderThumbnails(
+            product,
+            state.galeriaDetalleActual
+        );
 
         window.ProductOptions
             ?.init(product);
 
         renderColorSelector(product);
+
+        const requestedVariantId =
+            new URLSearchParams(window.location.search)
+                .get("variante");
+
+        if (requestedVariantId) {
+            const requestedVariant =
+                getSelectableVariants(product)
+                    .find((variant) =>
+                        variant.id === requestedVariantId
+                    );
+
+            if (requestedVariant) {
+                selectProductVariant(product, requestedVariant);
+            }
+        }
+
+        if (!state.varianteActual) {
+            setDetailImage(0, {
+                syncVariant: false
+            });
+        }
 
         const characteristics =
             document.getElementById(
@@ -2273,6 +2569,7 @@ function renderColorSelector(product) {
         getVariantStock,
         getVariantPrice,
         getVariantImages,
+        buildProductGallery,
         formatPrice,
         calculateDiscountPercentage,
         isCatalogProduct,

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banners | Mommy Crafts</title>
+    <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body data-admin-page="banners" data-admin-title="Banners">
+    <section id="admin-page-content">
+
+<div class="admin-page-intro">
+    <div>
+        <h2>Banner principal</h2>
+        <p>Administra imágenes, textos, orden y visibilidad.</p>
+    </div>
+
+    <button class="admin-button" id="banner-new" type="button">
+        <i class="fa-solid fa-plus"></i>
+        Nuevo banner
+    </button>
+</div>
+
+<section class="admin-card">
+    <div class="admin-table-wrap" id="banners-table"></div>
+</section>
+
+<div class="admin-modal" id="banner-modal" hidden>
+    <section class="admin-modal-panel" style="width:min(100%,760px)">
+        <header class="admin-modal-header">
+            <h3 id="banner-modal-title">Nuevo banner</h3>
+            <button class="admin-icon-button" type="button" data-close-modal="banner-modal" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+
+        <form id="banner-form">
+            <div class="admin-modal-body">
+                <input id="banner-id" type="hidden">
+
+                <div class="admin-form-grid">
+                    <div class="admin-field">
+                        <label for="banner-name">Nombre interno</label>
+                        <input id="banner-name" required>
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="banner-order">Orden</label>
+                        <input id="banner-order" type="number" step="1" value="0">
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="banner-eyebrow">Texto superior</label>
+                        <input id="banner-eyebrow">
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="banner-title">Título</label>
+                        <input id="banner-title" required>
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="banner-button">Texto del botón</label>
+                        <input id="banner-button" value="Ver productos">
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="banner-target">Destino</label>
+                        <input id="banner-target" value="#lo-mas-vendido">
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="banner-desktop">Imagen escritorio</label>
+                        <input id="banner-desktop" type="url" required>
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="banner-mobile">Imagen móvil</label>
+                        <input id="banner-mobile" type="url">
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="banner-position">Posición</label>
+                        <input id="banner-position" value="center" placeholder="center top">
+                    </div>
+
+                    <div class="admin-field" style="align-content:end">
+                        <label class="admin-checkbox">
+                            <input id="banner-active" type="checkbox" checked>
+                            Banner activo
+                        </label>
+                    </div>
+
+                    <div class="admin-field full">
+                        <span>Vista previa</span>
+                        <div class="admin-image-preview" id="banner-preview">
+                            Ingresa una imagen de escritorio
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="admin-modal-footer">
+                <button class="admin-button secondary" type="button" data-close-modal="banner-modal">Cancelar</button>
+                <button class="admin-button" type="submit">Guardar banner</button>
+            </footer>
+        </form>
+    </section>
+</div>
+
+    </section>
+
+    <script src="../js/config.js"></script>
+    <script src="js/admin-api.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script src="js/banners-admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario | Mommy Crafts</title>
+    <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body data-admin-page="inventario" data-admin-title="Inventario">
+    <section id="admin-page-content">
+
+<div class="admin-page-intro">
+    <div>
+        <h2>Inventario y movimientos</h2>
+        <p>Controla stock general, variantes y ajustes manuales.</p>
+    </div>
+
+    <button class="admin-button" id="inventory-adjust-open" type="button">
+        <i class="fa-solid fa-sliders"></i>
+        Registrar ajuste
+    </button>
+</div>
+
+<div class="admin-grid two">
+    <section class="admin-card">
+        <div class="admin-card-header">
+            <h3>Stock bajo</h3>
+            <button class="admin-button secondary small" id="inventory-refresh" type="button">
+                <i class="fa-solid fa-rotate"></i>
+                Actualizar
+            </button>
+        </div>
+        <div class="admin-card-body" id="low-stock-list"></div>
+    </section>
+
+    <section class="admin-card">
+        <div class="admin-card-header">
+            <h3>Últimos movimientos</h3>
+        </div>
+        <div class="admin-table-wrap" id="inventory-movements"></div>
+    </section>
+</div>
+
+<div class="admin-modal" id="inventory-modal" hidden>
+    <section class="admin-modal-panel" style="width:min(100%,620px)">
+        <header class="admin-modal-header">
+            <h3>Registrar ajuste de inventario</h3>
+            <button class="admin-icon-button" type="button" data-close-modal="inventory-modal" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+
+        <form id="inventory-form">
+            <div class="admin-modal-body">
+                <div class="admin-form-grid">
+                    <div class="admin-field full">
+                        <label for="inventory-product">Producto</label>
+                        <select id="inventory-product" required></select>
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="inventory-variant">Variante</label>
+                        <select id="inventory-variant">
+                            <option value="">Stock general</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="inventory-type">Tipo</label>
+                        <select id="inventory-type">
+                            <option value="entrada">Entrada</option>
+                            <option value="salida">Salida</option>
+                            <option value="ajuste">Ajuste</option>
+                            <option value="devolucion">Devolución</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="inventory-quantity">Cantidad</label>
+                        <input id="inventory-quantity" type="number" step="1" required>
+                        <small>Usa un número positivo para entrada y negativo para salida.</small>
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="inventory-reason">Motivo</label>
+                        <textarea id="inventory-reason" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="admin-modal-footer">
+                <button class="admin-button secondary" type="button" data-close-modal="inventory-modal">Cancelar</button>
+                <button class="admin-button" type="submit">Guardar ajuste</button>
+            </footer>
+        </form>
+    </section>
+</div>
+
+    </section>
+
+    <script src="../js/config.js"></script>
+    <script src="js/admin-api.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script src="js/inventory-admin.js"></script>
+</body>
+</html>

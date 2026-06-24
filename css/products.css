@@ -818,8 +818,8 @@
     max-height: none !important;
     display: block;
     padding: 0 !important;
-    object-fit: cover !important;
-    object-position: center !important;
+    object-fit: contain;
+    object-position: center center !important;
     background: #fff;
 }
 
@@ -1080,4 +1080,422 @@
         align-items: flex-start;
         flex-direction: column;
     }
+}
+
+/* ==========================================================
+   V3.9: selección de color, galería completa y zoom
+   ========================================================== */
+
+.product-color-option {
+    overflow: hidden;
+    padding-right: 3.8rem;
+}
+
+.product-color-option.selected {
+    border: 2px solid var(--color-primary-dark);
+    background: linear-gradient(145deg, #fff 0%, var(--color-primary-soft) 100%);
+    box-shadow:
+        0 0 0 0.35rem rgba(233, 168, 181, 0.2),
+        0 1.2rem 2.6rem rgba(83, 53, 63, 0.1);
+    transform: translateY(-0.15rem);
+}
+
+.product-color-selected-mark {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--color-primary-dark);
+    color: #fff;
+    box-shadow: 0 0.4rem 1rem rgba(83, 53, 63, 0.22);
+    opacity: 0;
+    transform: scale(0.65);
+    transition: opacity 160ms ease, transform 180ms ease;
+    pointer-events: none;
+}
+
+.product-color-option.selected .product-color-selected-mark {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.detail-main-image-track {
+    position: relative;
+    overflow: hidden;
+    cursor: zoom-in;
+    outline: none;
+}
+
+.detail-main-image-track:focus-visible {
+    box-shadow: inset 0 0 0 0.3rem rgba(185, 91, 118, 0.34);
+}
+
+.detail-zoom-hint {
+    position: absolute;
+    right: 1.4rem;
+    bottom: 1.4rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 999px;
+    background: rgba(35, 30, 32, 0.72);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 0.8rem 2rem rgba(35, 30, 32, 0.18);
+    backdrop-filter: blur(0.8rem);
+    transition: transform 180ms ease, background 180ms ease;
+    pointer-events: none;
+}
+
+.detail-main-image-track:hover .detail-zoom-hint,
+.detail-main-image-track:focus-visible .detail-zoom-hint {
+    background: rgba(35, 30, 32, 0.88);
+    transform: translateY(-0.2rem);
+}
+
+.detail-thumbnails {
+    position: relative;
+    gap: 0.9rem;
+    margin-top: 1.4rem;
+    padding: 0.35rem 0.35rem 0.75rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y;
+    overscroll-behavior-inline: contain;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.detail-thumbnails::-webkit-scrollbar {
+    display: none;
+}
+
+.detail-thumbnails.is-dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+}
+
+.detail-thumbnail {
+    position: relative;
+    width: 8.2rem;
+    height: 8.2rem;
+    flex: 0 0 8.2rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1.15rem;
+    background: #fff;
+    box-shadow: 0 0.35rem 1rem rgba(71, 47, 56, 0.06);
+    scroll-snap-align: center;
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+}
+
+.detail-thumbnail:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-0.15rem);
+}
+
+.detail-thumbnail.active {
+    border: 2px solid var(--color-primary-dark);
+    box-shadow:
+        0 0 0 0.28rem rgba(233, 168, 181, 0.22),
+        0 0.8rem 1.8rem rgba(71, 47, 56, 0.1);
+    transform: translateY(-0.1rem);
+}
+
+.detail-thumbnail-color {
+    position: absolute;
+    right: 0.45rem;
+    bottom: 0.45rem;
+    width: 1.65rem;
+    height: 1.65rem;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    outline: 1px solid rgba(47, 41, 44, 0.2);
+    background-position: center;
+    background-size: cover;
+    box-shadow: 0 0.2rem 0.6rem rgba(47, 41, 44, 0.18);
+    pointer-events: none;
+}
+
+body.product-zoom-open {
+    overflow: hidden;
+}
+
+.product-zoom-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    background: rgba(21, 18, 19, 0.78);
+    opacity: 0;
+    backdrop-filter: blur(0.8rem);
+    transition: opacity 180ms ease;
+}
+
+.product-zoom-modal.is-open {
+    opacity: 1;
+}
+
+.product-zoom-shell {
+    width: min(118rem, 96vw);
+    height: min(88rem, 94vh);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 1.8rem;
+    background: #fff;
+    box-shadow: 0 3rem 8rem rgba(0, 0, 0, 0.35);
+    transform: translateY(1rem) scale(0.985);
+    transition: transform 180ms ease;
+}
+
+.product-zoom-modal.is-open .product-zoom-shell {
+    transform: translateY(0) scale(1);
+}
+
+.product-zoom-toolbar {
+    min-height: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1rem 1.4rem 1rem 1.8rem;
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.96);
+}
+
+.product-zoom-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.product-zoom-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.product-zoom-actions button {
+    width: 4rem;
+    height: 4rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.product-zoom-actions button:hover,
+.product-zoom-actions button:focus-visible {
+    border-color: var(--color-primary-dark);
+    background: var(--color-primary-soft);
+    transform: translateY(-0.1rem);
+}
+
+.product-zoom-close {
+    margin-left: 0.4rem;
+}
+
+#product-zoom-level {
+    min-width: 5.4rem;
+    color: var(--color-text-soft);
+    font-size: 1.05rem;
+    font-weight: 800;
+    text-align: center;
+}
+
+.product-zoom-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+        linear-gradient(45deg, #f4f1f2 25%, transparent 25%) 0 0 / 2rem 2rem,
+        linear-gradient(-45deg, #f4f1f2 25%, transparent 25%) 0 1rem / 2rem 2rem,
+        linear-gradient(45deg, transparent 75%, #f4f1f2 75%) 1rem -1rem / 2rem 2rem,
+        linear-gradient(-45deg, transparent 75%, #f4f1f2 75%) -1rem 0 / 2rem 2rem,
+        #fff;
+    cursor: default;
+    touch-action: none;
+}
+
+.product-zoom-stage.is-zoomed {
+    cursor: grab;
+}
+
+.product-zoom-stage.is-dragging {
+    cursor: grabbing;
+}
+
+.product-zoom-stage img {
+    width: min(100%, 110rem);
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+    transform-origin: center;
+    transition: transform 140ms ease-out;
+    user-select: none;
+    will-change: transform;
+}
+
+.product-zoom-stage.is-dragging img {
+    transition: none;
+}
+
+.product-zoom-instructions {
+    margin: 0;
+    padding: 1rem 1.6rem;
+    border-top: 1px solid var(--color-border);
+    background: #fff;
+    color: var(--color-text-soft);
+    font-size: 1rem;
+    text-align: center;
+}
+
+@media (max-width: 650px) {
+    .detail-zoom-hint {
+        right: 0.8rem;
+        bottom: 0.8rem;
+        padding: 0.65rem 0.8rem;
+    }
+
+    .detail-zoom-hint span {
+        display: none;
+    }
+
+    .product-zoom-modal {
+        padding: 0;
+    }
+
+    .product-zoom-shell {
+        width: 100vw;
+        height: 100dvh;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .product-zoom-title,
+    .product-zoom-instructions {
+        display: none;
+    }
+
+    .product-zoom-toolbar {
+        justify-content: flex-end;
+        padding-inline: 0.8rem;
+    }
+
+    .product-zoom-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+
+/* ==========================================================
+   V3.10: zoom directo y variantes interactivas en tarjetas
+   ========================================================== */
+
+.product-card-image {
+    transition:
+        opacity 180ms ease,
+        transform 260ms cubic-bezier(.22, .61, .36, 1);
+}
+
+.product-card-image.is-changing-variant {
+    opacity: 0.35;
+    transform: scale(0.985);
+}
+
+.product-card-color-dot {
+    position: relative;
+    cursor: pointer;
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease,
+        outline-color 160ms ease;
+}
+
+.product-card-color-dot:hover,
+.product-card-color-dot:focus-visible {
+    transform: scale(1.14);
+    outline-color: var(--color-primary-dark);
+}
+
+.product-card-color-dot.selected {
+    outline: 2px solid var(--color-primary-dark);
+    outline-offset: 2px;
+    transform: scale(1.08);
+    box-shadow: 0 0.35rem 0.9rem rgba(83, 53, 63, 0.22);
+}
+
+.detail-main-image-track {
+    cursor: zoom-in;
+    touch-action: manipulation;
+}
+
+.detail-main-image-track.is-inline-zoomed {
+    cursor: zoom-out;
+}
+
+.detail-main-img {
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    transition:
+        transform 320ms cubic-bezier(.22, .61, .36, 1),
+        opacity 160ms ease;
+    will-change: transform, transform-origin;
+}
+
+.detail-main-img.zoom-no-transition {
+    transition: none !important;
+}
+
+.detail-main-img.is-switching-image {
+    opacity: 0.2;
+}
+
+.detail-main-image-track.is-inline-zoomed .detail-zoom-hint {
+    background: rgba(35, 30, 32, 0.88);
+}
+
+.product-zoom-modal {
+    display: none !important;
+}
+
+/* ==========================================================
+   V3.11: imagen principal completa, sin recorte
+   ========================================================== */
+
+.detail-main-image-container,
+.detail-main-image-track {
+    overflow: hidden;
+    background: #fff;
+}
+
+.detail-main-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    object-position: center center !important;
 }

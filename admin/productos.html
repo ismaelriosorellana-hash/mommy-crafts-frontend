@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos | Mommy Crafts</title>
+    <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body data-admin-page="productos" data-admin-title="Productos">
+    <section id="admin-page-content">
+
+<div class="admin-page-intro">
+    <div>
+        <h2>Catálogo e inventario</h2>
+        <p>Crea, edita y desactiva productos y variantes.</p>
+    </div>
+
+    <button class="admin-button" id="product-new" type="button">
+        <i class="fa-solid fa-plus"></i>
+        Nuevo producto
+    </button>
+</div>
+
+<div class="admin-toolbar">
+    <div class="admin-toolbar-group" style="flex:1">
+        <div class="admin-field" style="min-width:min(100%,320px);flex:1">
+            <input id="product-search" type="search" placeholder="Buscar por nombre o descripción">
+        </div>
+
+        <select id="product-status" aria-label="Filtrar por estado" style="min-height:43px;border:1px solid var(--admin-border);border-radius:11px;padding:0 12px">
+            <option value="">Todos</option>
+            <option value="true">Activos</option>
+            <option value="false">Inactivos</option>
+        </select>
+    </div>
+
+    <button class="admin-button secondary" id="product-refresh" type="button">
+        <i class="fa-solid fa-rotate"></i>
+        Actualizar
+    </button>
+</div>
+
+<section class="admin-card">
+    <div class="admin-table-wrap" id="products-table"></div>
+</section>
+
+<div class="admin-modal" id="product-modal" hidden>
+    <section class="admin-modal-panel">
+        <header class="admin-modal-header">
+            <h3 id="product-modal-title">Nuevo producto</h3>
+            <button class="admin-icon-button" type="button" data-close-modal="product-modal" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+
+        <form id="product-form">
+            <div class="admin-modal-body">
+                <input id="product-id" type="hidden">
+
+                <h4 class="admin-section-title">Información principal</h4>
+
+                <div class="admin-form-grid">
+                    <div class="admin-field full">
+                        <label for="product-name">Nombre</label>
+                        <input id="product-name" required maxlength="180">
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="product-price">Precio</label>
+                        <input id="product-price" type="number" min="0" step="1" required>
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="product-original-price">Precio anterior</label>
+                        <input id="product-original-price" type="number" min="0" step="1">
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="product-stock">Stock general</label>
+                        <input id="product-stock" type="number" min="0" step="1">
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="product-order">Orden</label>
+                        <input id="product-order" type="number" step="1">
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="product-main-category">Categoría principal</label>
+                        <input id="product-main-category" placeholder="Vasos">
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="product-categories">Categorías</label>
+                        <input id="product-categories" placeholder="Vasos, Regalos">
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="product-badge">Insignia</label>
+                        <input id="product-badge" placeholder="Nuevo">
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="product-description">Descripción</label>
+                        <textarea id="product-description"></textarea>
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="product-images">Imágenes generales</label>
+                        <textarea id="product-images" placeholder="Una URL de Cloudinary por línea"></textarea>
+                        <small>Para productos con colores, también puedes dejar este campo vacío y usar imágenes dentro de cada variante.</small>
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="product-characteristics">Características</label>
+                        <textarea id="product-characteristics" placeholder="Capacidad: 450 ml&#10;Altura: 20 cm"></textarea>
+                        <small>Una característica por línea usando “Título: Valor”.</small>
+                    </div>
+                </div>
+
+                <div class="admin-checkbox-row" style="margin-top:18px">
+                    <label class="admin-checkbox"><input id="product-active" type="checkbox" checked> Activo</label>
+                    <label class="admin-checkbox"><input id="product-publish" type="checkbox" checked> Publicar en catálogo</label>
+                    <label class="admin-checkbox"><input id="product-featured" type="checkbox"> Destacado</label>
+                    <label class="admin-checkbox"><input id="product-customizable" type="checkbox"> Personalizable en modal</label>
+                </div>
+
+                <h4 class="admin-section-title">Personalización simple</h4>
+
+                <div class="admin-checkbox-row">
+                    <label class="admin-checkbox"><input id="light-enabled" type="checkbox"> Habilitada</label>
+                    <label class="admin-checkbox"><input id="light-name" type="checkbox"> Permitir nombre</label>
+                    <label class="admin-checkbox"><input id="light-image" type="checkbox"> Permitir imagen</label>
+                    <label class="admin-checkbox"><input id="light-observation" type="checkbox"> Permitir observación</label>
+                </div>
+
+                <div class="admin-form-grid" style="margin-top:14px">
+                    <div class="admin-field">
+                        <label for="light-image-count">Máximo de imágenes</label>
+                        <select id="light-image-count">
+                            <option value="1">1 imagen</option>
+                            <option value="2">2 imágenes</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="light-description">Descripción breve</label>
+                        <input id="light-description">
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="light-notice">Aviso al cliente</label>
+                        <input id="light-notice">
+                    </div>
+                </div>
+
+                <h4 class="admin-section-title">Variantes de color</h4>
+
+                <div id="product-variants" class="admin-variant-list"></div>
+
+                <button class="admin-button secondary small" id="variant-add" type="button" style="margin-top:12px">
+                    <i class="fa-solid fa-plus"></i>
+                    Agregar color
+                </button>
+            </div>
+
+            <footer class="admin-modal-footer">
+                <button class="admin-button secondary" type="button" data-close-modal="product-modal">
+                    Cancelar
+                </button>
+
+                <button class="admin-button" id="product-save" type="submit">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar producto
+                </button>
+            </footer>
+        </form>
+    </section>
+</div>
+
+    </section>
+
+    <script src="../js/config.js"></script>
+    <script src="js/admin-api.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script src="js/products-admin.js"></script>
+</body>
+</html>

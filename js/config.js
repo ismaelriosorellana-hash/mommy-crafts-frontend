@@ -69,6 +69,23 @@ window.CONFIG = Object.freeze({
         })
     }),
 
+
+/*
+ * Banner principal. Para cambiarlo, pega aquí la URL de Cloudinary.
+ * Puedes agregar más objetos al arreglo y se mostrarán automáticamente.
+ */
+HOME_BANNERS: Object.freeze([
+    Object.freeze({
+        desktopImage: "",
+        mobileImage: "",
+        position: "center",
+        eyebrow: "Regalos creados con intención",
+        title: "Productos auténticos y únicos para quienes más quieres",
+        buttonText: "Ver productos",
+        target: "#lo-mas-vendido"
+    })
+]),
+
     soporteTelefono: "+56 9 5463 3848",
     whatsapp: "56954633848",
     soporteMensaje: "Necesito ayuda con un producto",

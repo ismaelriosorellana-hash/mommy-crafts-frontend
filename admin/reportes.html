@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes | Mommy Crafts</title>
+    <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body data-admin-page="reportes" data-admin-title="Reportes">
+    <section id="admin-page-content">
+
+<div class="admin-page-intro">
+    <div>
+        <h2>Ventas y desempeño</h2>
+        <p>Consulta resultados por período y productos más vendidos.</p>
+    </div>
+</div>
+
+<div class="admin-toolbar">
+    <div class="admin-toolbar-group">
+        <div class="admin-field">
+            <label for="report-from">Desde</label>
+            <input id="report-from" type="date">
+        </div>
+
+        <div class="admin-field">
+            <label for="report-to">Hasta</label>
+            <input id="report-to" type="date">
+        </div>
+
+        <button class="admin-button" id="report-apply" type="button" style="align-self:end">
+            <i class="fa-solid fa-filter"></i>
+            Aplicar
+        </button>
+    </div>
+</div>
+
+<div class="admin-grid metrics">
+    <article class="admin-card admin-metric">
+        <div>
+            <div class="admin-metric-label">Ventas</div>
+            <div class="admin-metric-value" id="report-sales">$0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-dollar-sign"></i></div>
+    </article>
+
+    <article class="admin-card admin-metric">
+        <div>
+            <div class="admin-metric-label">Pedidos</div>
+            <div class="admin-metric-value" id="report-orders">0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-receipt"></i></div>
+    </article>
+
+    <article class="admin-card admin-metric">
+        <div>
+            <div class="admin-metric-label">Ticket promedio</div>
+            <div class="admin-metric-value" id="report-average">$0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-chart-simple"></i></div>
+    </article>
+
+    <article class="admin-card admin-metric">
+        <div>
+            <div class="admin-metric-label">Unidades vendidas</div>
+            <div class="admin-metric-value" id="report-units">0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-box"></i></div>
+    </article>
+</div>
+
+<div class="admin-grid two">
+    <section class="admin-card">
+        <div class="admin-card-header">
+            <h3>Ventas por día</h3>
+        </div>
+        <div class="admin-card-body" id="sales-chart"></div>
+    </section>
+
+    <section class="admin-card">
+        <div class="admin-card-header">
+            <h3>Productos más vendidos</h3>
+        </div>
+        <div class="admin-card-body" id="top-products-chart"></div>
+    </section>
+</div>
+
+    </section>
+
+    <script src="../js/config.js"></script>
+    <script src="js/admin-api.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script src="js/reports-admin.js"></script>
+</body>
+</html>

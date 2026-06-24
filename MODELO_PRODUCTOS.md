@@ -568,3 +568,8 @@ No guardes las variantes como textos del tipo:
 ```
 
 Deben ser objetos reales dentro de la matriz.
+
+
+## Galería completa y colores en V3.9
+
+La página reúne las imágenes generales del producto y las imágenes de cada objeto dentro de `variantes`. Al elegir un color, la imagen principal se cambia automáticamente a la primera imagen de esa variante. Las miniaturas permanecen visibles para navegar por todas las imágenes disponibles.

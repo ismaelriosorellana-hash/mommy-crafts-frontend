@@ -67,8 +67,8 @@
 
             <div class="container-logo">
                 <a class="brand-link" href="index.html" aria-label="Ir al inicio de Mommy Crafts">
-                    <img src="https://i.imgur.com/4boFiYs.png" alt="" class="logo-img small" />
-                    <img src="https://i.imgur.com/DhjxmeB.png" alt="Mommy Crafts" class="logo-title large" />
+                    <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png" alt="" class="logo-img small" />
+                    <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png" alt="Mommy Crafts" class="logo-title large" />
                 </a>
             </div>
 
@@ -175,13 +175,27 @@
             <section class="product-detail-grid" id="product-detail" aria-live="polite">
                 <div class="product-detail-images">
                     <div class="detail-main-image-container">
-                        <div class="detail-main-image-track" id="detalle-imagen-track">
+                        <div
+                            class="detail-main-image-track"
+                            id="detalle-imagen-track"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Acercar o alejar imagen del producto"
+                            aria-describedby="detail-zoom-help"
+                            aria-pressed="false"
+                        >
                             <img
                                 id="detalle-imagen-principal"
                                 src=""
                                 alt=""
                                 class="detail-main-img"
+                                draggable="false"
                             />
+
+                            <span class="detail-zoom-hint" id="detail-zoom-help">
+                                <i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i>
+                                Haz clic para acercar
+                            </span>
                         </div>
 
                         <button class="detail-arrow prev-detail" id="detail-prev" type="button" aria-label="Imagen anterior">
@@ -258,7 +272,7 @@
                 type="text"
                 id="light-customization-name"
                 maxlength="25"
-                placeholder="Ej.: Catalina"
+                placeholder="Ej.: Tu nombre o frase corta"
                 autocomplete="off"
             />
             <small id="light-customization-name-count">0 / 25</small>
@@ -550,10 +564,10 @@
 
                 <section class="modal-step-content" id="step-5" data-step-content="5">
                     <h3>Sube tu imagen</h3>
-                    <div class="upload-info-box">
-                        <i class="fa-solid fa-crop-simple" aria-hidden="true"></i>
-                        <p>Puedes mover, ampliar o rotar la imagen. Agregarla suma $3.000.</p>
-                    </div>
+<div class="upload-info-box">
+    <i class="fa-solid fa-crop-simple" aria-hidden="true"></i>
+    <p>Después de cargarla, haz clic sobre la imagen en la vista previa para moverla, ampliar o rotar. Para pasar al texto debes presionar Siguiente.</p>
+</div>
 
                     <label class="upload-area" id="upload-area" for="file-input">
                         <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
@@ -578,16 +592,35 @@
                         <p>Texto principal: +$2.000 · Texto secundario: +$2.000.</p>
                     </div>
 
-                    <div class="text-editor-controls" id="text-editor-controls" hidden>
-                        <button class="edit-btn active" id="btn-select-main" type="button" aria-label="Editar texto principal"><i class="fa-solid fa-heading" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-select-secondary" type="button" aria-label="Editar texto secundario"><i class="fa-solid fa-font" aria-hidden="true"></i></button>
-                        <span class="divider" aria-hidden="true"></span>
-                        <button class="edit-btn" id="btn-text-zoom-in" type="button" aria-label="Agrandar texto"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-text-zoom-out" type="button" aria-label="Achicar texto"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-text-rotate-left" type="button" aria-label="Rotar texto"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-text-color" type="button" aria-label="Cambiar color del texto"><i class="fa-solid fa-palette" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-text-reset" type="button" aria-label="Restablecer texto"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i></button>
-                    </div>
+<div class="editor-selection-help">
+    <i class="fa-solid fa-arrow-pointer" aria-hidden="true"></i>
+    <p>Escribe el texto y luego haz clic sobre él en la vista previa para moverlo o ajustarlo. Haz clic fuera del objeto para deseleccionarlo.</p>
+</div>
+
+<div class="text-editor-controls" id="text-editor-controls" hidden>
+    <span class="editor-selection-status">
+        Editando: <strong id="selected-object-name">Texto</strong>
+    </span>
+
+    <label class="font-family-control" for="text-font-family">
+        <span>Tipografía</span>
+        <select id="text-font-family">
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="'Trebuchet MS', sans-serif">Trebuchet</option>
+            <option value="Verdana, sans-serif">Verdana</option>
+            <option value="'Courier New', monospace">Courier New</option>
+            <option value="'Comic Sans MS', cursive">Comic Sans</option>
+        </select>
+    </label>
+
+    <span class="divider" aria-hidden="true"></span>
+    <button class="edit-btn" id="btn-text-zoom-in" type="button" aria-label="Agrandar texto" title="Agrandar texto"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+    <button class="edit-btn" id="btn-text-zoom-out" type="button" aria-label="Achicar texto" title="Achicar texto"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+    <button class="edit-btn" id="btn-text-rotate-left" type="button" aria-label="Rotar texto" title="Rotar texto"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+    <button class="edit-btn" id="btn-text-color" type="button" aria-label="Cambiar color del texto" title="Cambiar color"><i class="fa-solid fa-palette" aria-hidden="true"></i></button>
+    <button class="edit-btn" id="btn-text-reset" type="button" aria-label="Restablecer texto" title="Restablecer texto"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i></button>
+</div>
 
                     <div class="text-fields">
                         <div class="field-group">
@@ -648,6 +681,7 @@
 
 
 
+
     <template id="product-card-template">
         <article class="card-product">
             <a class="product-card-link" href="#">
@@ -687,6 +721,7 @@
     <script src="js/api.js" defer></script>
     <script src="js/cart.js" defer></script>
     <script src="js/product-options.js" defer></script>
+    <script src="js/product-gallery.js" defer></script>
     <script src="js/products.js" defer></script>
     <script src="js/ui.js" defer></script>
     <script src="js/customization.js" defer></script>
