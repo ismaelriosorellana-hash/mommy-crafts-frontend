@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Revisa y finaliza tu compra en Mommy Crafts." />
+    <title>Carrito | Mommy Crafts</title>
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+/>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/products.css" />
+    <link rel="stylesheet" href="css/cart.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+</head>
+<body data-page="cart">
+    <a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+    <header class="site-header" id="site-header">
+    <div class="promo-banner" aria-label="Promociones vigentes">
+    <div class="promo-banner-track">
+        <div class="promo-banner-loop">
+            <span class="promo-banner-text">
+                <i class="fa-solid fa-truck-fast" aria-hidden="true"></i>
+                Despacho gratis dentro de Santiago por tiempo limitado
+            </span>
+
+            <span class="promo-banner-text">
+                <i class="fa-solid fa-gift" aria-hidden="true"></i>
+                Productos personalizados para cada ocasión
+            </span>
+        </div>
+
+        <div class="promo-banner-loop" aria-hidden="true">
+            <span class="promo-banner-text">
+                <i class="fa-solid fa-truck-fast" aria-hidden="true"></i>
+                Despacho gratis dentro de Santiago por tiempo limitado
+            </span>
+
+            <span class="promo-banner-text">
+                <i class="fa-solid fa-gift" aria-hidden="true"></i>
+                Productos personalizados para cada ocasión
+            </span>
+        </div>
+    </div>
+</div>
+
+    <div class="container-hero">
+        <div class="container hero">
+            <nav class="social-icons-header" aria-label="Redes sociales">
+                <a data-social="instagram" href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+                </a>
+                <a data-social="whatsapp" href="#" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                    <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                </a>
+                <a data-social="threads" href="#" target="_blank" rel="noopener noreferrer" aria-label="Threads">
+                    <i class="fa-brands fa-threads" aria-hidden="true"></i>
+                </a>
+                <a data-social="tiktok" href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                    <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+                </a>
+            </nav>
+
+            <div class="container-logo">
+                <a class="brand-link" href="index.html" aria-label="Ir al inicio de Mommy Crafts">
+                    <img src="https://i.imgur.com/4boFiYs.png" alt="" class="logo-img small" />
+                    <img src="https://i.imgur.com/DhjxmeB.png" alt="Mommy Crafts" class="logo-title large" />
+                </a>
+            </div>
+
+            <a
+                class="customer-support"
+                id="support-whatsapp"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Hablar con soporte al cliente por WhatsApp"
+            >
+                <span class="support-icon" aria-hidden="true">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </span>
+                <span class="content-customer-support">
+                    <span class="text">Soporte al cliente</span>
+                    <span class="number" id="telefono-soporte">+56 9 5463 3848</span>
+                </span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container-navbar">
+        <nav class="navbar container" aria-label="Navegación principal">
+            <button
+                class="mobile-menu-button"
+                id="mobile-menu-button"
+                type="button"
+                aria-label="Abrir menú"
+                aria-expanded="false"
+                aria-controls="main-menu"
+            >
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+
+            <ul class="menu" id="main-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="catalogo.html">Todos</a></li>
+
+                <li class="has-dropdown">
+                    <a href="catalogo.html" aria-haspopup="true">
+                        Categorías
+                        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    </a>
+                    <ul class="dropdown categories-dropdown" id="categories-dropdown">
+                        <li class="dropdown-loading">Cargando categorías...</li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#" data-open-customization>
+                        Personaliza tu producto
+                    </a>
+                </li>
+            </ul>
+
+            <div class="search-shell">
+                <form class="search-form" id="search-form" role="search">
+                    <label class="sr-only" for="search-input">Buscar productos</label>
+                    <input
+                        id="search-input"
+                        name="q"
+                        type="search"
+                        placeholder="Busca un producto..."
+                        autocomplete="off"
+                        aria-autocomplete="list"
+                        aria-controls="search-suggestions"
+                        aria-expanded="false"
+                    />
+                    <button class="btn-search" type="submit" aria-label="Buscar">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    </button>
+                </form>
+
+                <div
+                    class="search-suggestions"
+                    id="search-suggestions"
+                    role="listbox"
+                    aria-label="Sugerencias de búsqueda"
+                    hidden
+                ></div>
+            </div>
+
+            <div class="navbar-actions">
+                <a class="icon-btn cart-button" href="carrito.html" aria-label="Ver carrito">
+                    <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+                    <span class="badge" id="cart-count">0</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+</header>
+
+    <main id="main-content" class="cart-page">
+        <div class="container">
+            <nav class="breadcrumb" aria-label="Migas de pan">
+                <a href="index.html">Inicio</a>
+                <span aria-hidden="true">/</span>
+                <span>Carrito</span>
+            </nav>
+
+            <div class="section-header">
+                <div>
+                    <p class="section-kicker">Tu compra</p>
+                    <h1 class="section-title">Carrito de compras</h1>
+                </div>
+                <a href="index.html" class="section-link">Seguir comprando</a>
+            </div>
+
+            <div class="cart-layout">
+                <section class="cart-products" aria-labelledby="cart-products-title">
+                    <h2 class="sr-only" id="cart-products-title">Productos del carrito</h2>
+
+                    <div class="cart-items" id="cart-items" aria-live="polite">
+                        <p class="cart-empty" id="cart-empty">Tu carrito está vacío.</p>
+                    </div>
+                </section>
+
+                <aside class="cart-summary-panel" aria-labelledby="cart-summary-title">
+                    <h2 id="cart-summary-title">Resumen</h2>
+
+                    <dl class="cart-totals">
+                        <div>
+                            <dt>Subtotal</dt>
+                            <dd id="cart-subtotal">$0</dd>
+                        </div>
+                        <div>
+                            <dt>Envío</dt>
+                            <dd id="cart-shipping">Por calcular</dd>
+                        </div>
+                        <div class="cart-total-row">
+                            <dt>Total</dt>
+                            <dd id="cart-total">$0</dd>
+                        </div>
+                    </dl>
+
+                    <button class="btn-primary" id="btn-open-checkout" type="button" disabled>
+                        Ir a pagar
+                    </button>
+
+                    <p class="cart-security-note">
+                        <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                        Tus datos se utilizarán únicamente para gestionar el pedido.
+                    </p>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+    <div class="container container-footer">
+        <div class="menu-footer">
+            <section class="contact-info" aria-labelledby="footer-contact-title">
+                <h2 class="title-footer" id="footer-contact-title">Contacto</h2>
+                <ul>
+                    <li><a id="footer-support-whatsapp" href="https://wa.me/56954633848?text=Necesito%20ayuda%20con%20un%20producto" target="_blank" rel="noopener noreferrer">WhatsApp: +56 9 5463 3848</a></li>
+                    <li><a href="mailto:contacto@mommycrafts.cl">contacto@mommycrafts.cl</a></li>
+                    <li>Santiago, Chile</li>
+                </ul>
+            </section>
+
+            <nav class="information" aria-labelledby="footer-info-title">
+                <h2 class="title-footer" id="footer-info-title">Información</h2>
+                <ul>
+                    <li><a href="#">Acerca de nosotros</a></li>
+                    <li><a href="#">Envíos y retiros</a></li>
+                    <li><a href="#">Política de privacidad</a></li>
+                    <li><a href="#">Términos y condiciones</a></li>
+                </ul>
+            </nav>
+
+            <nav class="my-account" aria-labelledby="footer-help-title">
+                <h2 class="title-footer" id="footer-help-title">Ayuda</h2>
+                <ul>
+                    <li><a href="carrito.html">Mi carrito</a></li>
+                    <li><a href="#" data-open-customization>Personalizar producto</a></li>
+                    <li><a href="https://wa.me/56954633848" target="_blank" rel="noopener noreferrer">Contactar por WhatsApp</a></li>
+                </ul>
+            </nav>
+
+            <section class="newsletter" aria-labelledby="footer-newsletter-title">
+                <h2 class="title-footer" id="footer-newsletter-title">Novedades</h2>
+                <form class="newsletter-form" id="newsletter-form">
+                    <label class="sr-only" for="newsletter-email">Correo electrónico</label>
+                    <input id="newsletter-email" type="email" placeholder="Ingresa tu correo..." required />
+                    <button type="submit">Suscribirme</button>
+                </form>
+            </section>
+        </div>
+
+        <div class="copyright">
+            <p>Mommy Crafts &copy; <span id="current-year">2026</span>. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+    <template id="cart-item-template">
+        <article class="cart-item">
+            <a class="cart-item-image-link" href="#">
+                <img class="cart-item-image" src="" alt="" loading="lazy" />
+            </a>
+
+            <div class="cart-item-info">
+                <a class="cart-item-name" href="#"></a>
+                <p class="cart-item-customization" hidden></p>
+                <p class="cart-item-unit-price"></p>
+            </div>
+
+            <div class="cart-item-quantity">
+                <label class="sr-only">Cantidad</label>
+                <button class="quantity-button quantity-decrease" type="button" aria-label="Disminuir cantidad">−</button>
+                <input class="quantity-input" type="number" min="1" value="1" inputmode="numeric" />
+                <button class="quantity-button quantity-increase" type="button" aria-label="Aumentar cantidad">+</button>
+            </div>
+
+            <strong class="cart-item-total"></strong>
+
+            <button class="cart-item-remove" type="button" aria-label="Eliminar producto">
+                <i class="fa-solid fa-trash" aria-hidden="true"></i>
+            </button>
+        </article>
+    </template>
+
+    <div class="modal-pedido-overlay" id="modal-pedido" aria-hidden="true">
+    <section class="modal-pedido-box" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+        <header class="modal-pedido-header">
+            <h2 id="checkout-title">
+                <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                Finalizar compra
+            </h2>
+            <button class="modal-pedido-close" id="modal-pedido-close" type="button" aria-label="Cerrar formulario">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </header>
+
+        <div class="modal-pedido-body">
+            <div class="pedido-producto-info" id="pedido-producto-info"></div>
+
+            <form id="form-pedido" class="form-pedido">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pedido-nombre">Nombre completo <span aria-hidden="true">*</span></label>
+                        <input type="text" id="pedido-nombre" name="nombre" autocomplete="name" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pedido-rut">RUT <span aria-hidden="true">*</span></label>
+                        <input type="text" id="pedido-rut" name="rut" inputmode="text" placeholder="12.345.678-9" required />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pedido-email">Correo electrónico <span aria-hidden="true">*</span></label>
+                        <input type="email" id="pedido-email" name="email" autocomplete="email" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pedido-telefono">Teléfono <span aria-hidden="true">*</span></label>
+                        <input type="tel" id="pedido-telefono" name="telefono" autocomplete="tel" placeholder="+56 9 1234 5678" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pedido-direccion">Dirección de entrega <span aria-hidden="true">*</span></label>
+                    <input type="text" id="pedido-direccion" name="direccion" autocomplete="street-address" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="pedido-comuna">Comuna <span aria-hidden="true">*</span></label>
+                    <input type="text" id="pedido-comuna" name="comuna" autocomplete="address-level2" required />
+                </div>
+
+                <fieldset class="form-group">
+                    <legend>Forma de pago</legend>
+                    <div class="payment-options">
+                        <label>
+                            <input type="radio" name="pedido-pago" value="mercadopago" checked />
+                            Mercado Pago
+                        </label>
+                        <label>
+                            <input type="radio" name="pedido-pago" value="transferencia" />
+                            Transferencia bancaria
+                        </label>
+                    </div>
+                </fieldset>
+
+                <div class="form-group">
+                    <label for="pedido-observaciones">Observaciones (opcional)</label>
+                    <textarea id="pedido-observaciones" name="observaciones" rows="3"></textarea>
+                </div>
+
+                <div class="form-checkbox">
+                    <input type="checkbox" id="pedido-terminos" required />
+                    <label for="pedido-terminos">
+                        Acepto los <a href="#">términos y condiciones</a> y la política de privacidad.
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-enviar-pedido" id="btn-enviar-pedido">
+                    <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                    Confirmar pedido
+                </button>
+            </form>
+        </div>
+    </section>
+</div>
+
+    <template id="product-card-template">
+        <article class="card-product">
+            <a class="product-card-link" href="#">
+                <div class="container-img">
+                    <img class="product-card-image" src="" alt="" loading="lazy" />
+                    <span class="product-badge" hidden></span>
+                    <span class="product-discount-badge" hidden></span>
+                </div>
+                <div class="content-card-product">
+                    <p class="product-category"></p>
+                    <h3 class="product-name"></h3>
+
+<div class="product-card-color-row" hidden>
+    <span class="product-card-color-label">Colores</span>
+    <div class="product-card-color-swatches" aria-label="Colores disponibles"></div>
+</div>
+                    <div class="product-price-row">
+                        <strong class="product-price"></strong>
+                        <span class="product-original-price" hidden></span>
+                    </div>
+                </div>
+            </a>
+            <button class="add-cart" type="button">
+                <i class="fa-solid fa-cart-plus" aria-hidden="true"></i>
+                <span>Agregar</span>
+            </button>
+        </article>
+    </template>
+
+    <div class="modal-overlay" id="modal-personalizar" aria-hidden="true">
+    <section
+        class="modal-box"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="customization-title"
+    >
+        <header class="modal-header">
+            <div>
+                <p class="modal-eyebrow">Diseño referencial</p>
+                <h2 id="customization-title">
+                    <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+                    Personaliza tu producto
+                </h2>
+            </div>
+
+            <button
+                class="modal-close"
+                id="modal-close"
+                type="button"
+                aria-label="Cerrar personalización"
+            >
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </header>
+
+        <div class="modal-steps" aria-label="Progreso de personalización">
+            <div class="step active" data-step="1"><span>1</span> Tipo</div>
+            <div class="step-line" aria-hidden="true"></div>
+            <div class="step" data-step="2"><span>2</span> Producto</div>
+            <div class="step-line" aria-hidden="true"></div>
+            <div class="step" data-step="3"><span>3</span> Estilo</div>
+            <div class="step-line" aria-hidden="true"></div>
+            <div class="step" data-step="4"><span>4</span> Color</div>
+            <div class="step-line" aria-hidden="true"></div>
+            <div class="step" data-step="5"><span>5</span> Imagen</div>
+            <div class="step-line" aria-hidden="true"></div>
+            <div class="step" data-step="6"><span>6</span> Texto</div>
+        </div>
+
+        <div class="modal-body modal-body-preview">
+            <aside class="live-preview-panel" aria-labelledby="preview-title">
+                <h3 id="preview-title">Vista previa en vivo</h3>
+
+                <div class="preview-note">
+                    <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                    La visualización es solo un ejemplo. El diseño final puede tener cambios de tamaño, posición o color.
+                </div>
+
+                <div class="product-preview" id="product-preview">
+                    <div class="preview-product-shape" id="preview-shape">
+                        <img id="preview-product-image" src="" alt="" />
+                        <img id="preview-user-image" src="" alt="Diseño cargado por el cliente" hidden />
+                        <div id="preview-main-text" hidden>Tu texto aquí</div>
+                        <div id="preview-secondary-text" hidden></div>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="customization-form">
+                <section class="modal-step-content active" id="step-1" data-step-content="1">
+                    <h3>Elige el tipo de producto</h3>
+                    <p class="customization-step-description">
+                        Selecciona una categoría para continuar.
+                    </p>
+
+                    <div
+                        class="customization-category-grid"
+                        id="customization-category-grid"
+                        aria-live="polite"
+                    >
+                        <p class="loading-products">Cargando tipos de producto...</p>
+                    </div>
+                </section>
+
+                <section class="modal-step-content" id="step-2" data-step-content="2">
+                    <div class="customization-product-panel-header">
+                        <div>
+                            <p class="modal-eyebrow">Productos disponibles</p>
+                            <h3 id="selected-customization-category">Selecciona un tipo</h3>
+                        </div>
+
+                        <div class="customization-base-price">
+                            <span>Precio base</span>
+                            <strong id="customization-base-price">$0</strong>
+                        </div>
+                    </div>
+
+                    <p class="customization-step-description">
+                        Elige el producto que servirá como base de tu diseño.
+                    </p>
+
+                    <div
+                        class="customizable-products-grid"
+                        id="customizable-products-grid"
+                        aria-live="polite"
+                    >
+                        <p class="loading-products">Selecciona primero un tipo de producto.</p>
+                    </div>
+                </section>
+
+                <section class="modal-step-content" id="step-3" data-step-content="3">
+                    <h3>Elige un estilo referencial</h3>
+                    <div class="style-info-box">
+                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                        <p>El estilo orienta el diseño. El resultado final será revisado contigo antes de producirlo.</p>
+                    </div>
+
+                    <div class="option-grid">
+                        <label class="option-card"><input type="radio" name="estilo" value="Minimalista" /><i class="fa-solid fa-minus" aria-hidden="true"></i><span>Minimalista</span></label>
+                        <label class="option-card"><input type="radio" name="estilo" value="Colorido" /><i class="fa-solid fa-palette" aria-hidden="true"></i><span>Colorido</span></label>
+                        <label class="option-card"><input type="radio" name="estilo" value="Elegante" /><i class="fa-solid fa-crown" aria-hidden="true"></i><span>Elegante</span></label>
+                        <label class="option-card"><input type="radio" name="estilo" value="Infantil" /><i class="fa-solid fa-child-reaching" aria-hidden="true"></i><span>Infantil</span></label>
+                        <label class="option-card"><input type="radio" name="estilo" value="Romántico" /><i class="fa-solid fa-heart" aria-hidden="true"></i><span>Romántico</span></label>
+                        <label class="option-card"><input type="radio" name="estilo" value="Otro" /><i class="fa-solid fa-pen-nib" aria-hidden="true"></i><span>Otro</span></label>
+                    </div>
+                </section>
+
+                <section class="modal-step-content" id="step-4" data-step-content="4">
+                    <h3>Elige un color o variante</h3>
+                    <div id="color-selection-area" class="color-selection-grid" aria-live="polite">
+                        <p>Primero selecciona un producto.</p>
+                    </div>
+                </section>
+
+                <section class="modal-step-content" id="step-5" data-step-content="5">
+                    <h3>Sube tu imagen</h3>
+                    <div class="upload-info-box">
+                        <i class="fa-solid fa-crop-simple" aria-hidden="true"></i>
+                        <p>Puedes mover, ampliar o rotar la imagen. Agregarla suma $3.000.</p>
+                    </div>
+
+                    <label class="upload-area" id="upload-area" for="file-input">
+                        <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                        <strong>Selecciona o arrastra una imagen</strong>
+                        <span>PNG, JPG o WEBP · Máximo 5 MB</span>
+                        <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" />
+                    </label>
+
+                    <div class="image-editor-controls" id="image-editor-controls" hidden>
+                        <button class="edit-btn" id="btn-zoom-in" type="button" aria-label="Acercar imagen"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+                        <button class="edit-btn" id="btn-zoom-out" type="button" aria-label="Alejar imagen"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+                        <button class="edit-btn" id="btn-rotate-left" type="button" aria-label="Rotar imagen"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+                        <button class="edit-btn" id="btn-reset-image" type="button" aria-label="Restablecer imagen"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i></button>
+                        <button class="edit-btn danger" id="btn-remove-img-editor" type="button" aria-label="Quitar imagen"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                </section>
+
+                <section class="modal-step-content" id="step-6" data-step-content="6">
+                    <h3>Agrega texto</h3>
+                    <div class="style-info-box customization-text-pricing">
+                        <i class="fa-solid fa-receipt" aria-hidden="true"></i>
+                        <p>Texto principal: +$2.000 · Texto secundario: +$2.000.</p>
+                    </div>
+
+                    <div class="text-editor-controls" id="text-editor-controls" hidden>
+                        <button class="edit-btn active" id="btn-select-main" type="button" aria-label="Editar texto principal"><i class="fa-solid fa-heading" aria-hidden="true"></i></button>
+                        <button class="edit-btn" id="btn-select-secondary" type="button" aria-label="Editar texto secundario"><i class="fa-solid fa-font" aria-hidden="true"></i></button>
+                        <span class="divider" aria-hidden="true"></span>
+                        <button class="edit-btn" id="btn-text-zoom-in" type="button" aria-label="Agrandar texto"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                        <button class="edit-btn" id="btn-text-zoom-out" type="button" aria-label="Achicar texto"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                        <button class="edit-btn" id="btn-text-rotate-left" type="button" aria-label="Rotar texto"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+                        <button class="edit-btn" id="btn-text-color" type="button" aria-label="Cambiar color del texto"><i class="fa-solid fa-palette" aria-hidden="true"></i></button>
+                        <button class="edit-btn" id="btn-text-reset" type="button" aria-label="Restablecer texto"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i></button>
+                    </div>
+
+                    <div class="text-fields">
+                        <div class="field-group">
+                            <label for="texto-principal">Texto principal</label>
+                            <input type="text" id="texto-principal" maxlength="60" placeholder="Ej.: Nombre o frase" />
+                            <span class="char-count" id="count-principal">0 / 60</span>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="texto-secundario">Texto secundario (opcional)</label>
+                            <input type="text" id="texto-secundario" maxlength="80" placeholder="Ej.: Fecha o dedicatoria" />
+                            <span class="char-count" id="count-secundario">0 / 80</span>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="instrucciones">Instrucciones adicionales</label>
+                            <textarea id="instrucciones" rows="4" maxlength="300" placeholder="Indica detalles que debamos considerar."></textarea>
+                            <span class="char-count" id="count-instrucciones">0 / 300</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <section class="modal-summary" id="modal-summary" hidden>
+            <div class="summary-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+            <h3>Revisa tu personalización</h3>
+            <ul id="summary-list"></ul>
+
+            <div class="customization-price-summary">
+                <h4>Detalle del precio</h4>
+                <dl id="customization-price-breakdown"></dl>
+                <div class="customization-final-total">
+                    <span>Total</span>
+                    <strong id="customization-final-total">$0</strong>
+                </div>
+            </div>
+
+            <div class="summary-actions">
+                <button class="btn-secondary" id="btn-editar" type="button">Editar</button>
+                <button class="btn-primary" id="btn-enviar" type="button">Agregar al carrito</button>
+            </div>
+        </section>
+
+        <footer class="modal-footer" id="modal-footer">
+            <div class="customization-running-total">
+                <span>Total estimado</span>
+                <strong id="customization-running-total">$0</strong>
+            </div>
+
+            <div class="modal-footer-actions">
+                <button class="btn-secondary" id="btn-prev" type="button" disabled>Anterior</button>
+                <button class="btn-primary" id="btn-next" type="button">Siguiente</button>
+            </div>
+        </footer>
+    </section>
+</div>
+
+
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <noscript>
+        <p class="noscript-message">Necesitas habilitar JavaScript para administrar el carrito.</p>
+    </noscript>
+
+    <script src="js/config.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/cart.js" defer></script>
+    <script src="js/products.js" defer></script>
+    <script src="js/ui.js" defer></script>
+    <script src="js/customization.js" defer></script>
+</body>
+</html>

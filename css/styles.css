@@ -1,0 +1,22 @@
+/*
+ * Archivo de compatibilidad.
+ *
+ * Los HTML nuevos cargan únicamente los CSS necesarios para cada página:
+ *
+ * index.html:
+ *   main.css + home.css + products.css
+ *
+ * producto.html:
+ *   main.css + products.css + modal.css
+ *
+ * carrito.html:
+ *   main.css + cart.css + modal.css
+ *
+ * No es necesario enlazar este archivo en los HTML.
+ * Puede usarse temporalmente para cargar todo el diseño en una página de pruebas.
+ */
+@import url("./main.css");
+@import url("./home.css");
+@import url("./products.css");
+@import url("./modal.css");
+@import url("./cart.css");

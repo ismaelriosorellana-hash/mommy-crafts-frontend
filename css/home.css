@@ -1,0 +1,336 @@
+.banner {
+    position: relative;
+    min-height: min(64rem, 78vh);
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+    background:
+        linear-gradient(90deg, rgba(31, 24, 27, 0.84), rgba(31, 24, 27, 0.22)),
+        linear-gradient(135deg, #6f5059, #e9a8b5);
+    color: #fff;
+}
+
+.banner-background {
+    position: absolute;
+    inset: -3rem;
+    z-index: 0;
+    background:
+        linear-gradient(90deg, rgba(35, 26, 29, 0.74), rgba(35, 26, 29, 0.08)),
+        url("../assets/imagenes/banner.jpg") center / cover no-repeat;
+    transform: scale(1.04);
+    transition: transform 400ms ease;
+}
+
+.content-banner {
+    position: relative;
+    z-index: 1;
+    padding-block: 10rem;
+}
+
+.content-banner p {
+    margin: 0 0 1rem;
+    color: #ffdbe3;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.content-banner h1 {
+    max-width: 75rem;
+    margin: 0 0 3rem;
+    font-size: clamp(3.6rem, 7vw, 7.2rem);
+    line-height: 1.02;
+    text-wrap: balance;
+}
+
+.content-banner .btn-primary {
+    background: #fff;
+    color: var(--color-primary-dark);
+    box-shadow: var(--shadow-lg);
+}
+
+.content-banner .btn-primary:hover,
+.content-banner .btn-primary:focus-visible {
+    background: var(--color-primary-soft);
+}
+
+.categories-section,
+.trending-section,
+.new-section {
+    padding-top: 8rem;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+}
+
+.category-card {
+    position: relative;
+    min-height: 25rem;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    isolation: isolate;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.category-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, transparent 30%, rgba(31, 24, 27, 0.8));
+}
+
+.category-card:hover,
+.category-card:focus-within {
+    transform: translateY(-0.5rem);
+    box-shadow: var(--shadow-md);
+}
+
+.category-card img {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms ease;
+}
+
+.category-card:hover img {
+    transform: scale(1.06);
+}
+
+.category-card-content {
+    width: 100%;
+    padding: 2rem;
+    color: #fff;
+}
+
+.category-card-content h3 {
+    margin: 0;
+    font-size: 2.2rem;
+}
+
+.category-card-content p {
+    margin: 0.4rem 0 0;
+    color: #f1e9ec;
+    font-size: 1.25rem;
+}
+
+.carousel-wrapper {
+    position: relative;
+}
+
+.carousel-container {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    cursor: grab;
+}
+
+.carousel-container::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-container:active {
+    cursor: grabbing;
+}
+
+.carousel-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(24rem, 27rem);
+    gap: 2rem;
+    padding: 0.4rem 0.4rem 2rem;
+}
+
+.carousel-track > * {
+    scroll-snap-align: start;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 44%;
+    z-index: 5;
+    width: 4.6rem;
+    height: 4.6rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--color-primary-dark);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform var(--transition), background var(--transition);
+}
+
+.carousel-arrow:hover,
+.carousel-arrow:focus-visible {
+    background: var(--color-primary-soft);
+    transform: scale(1.06);
+}
+
+.carousel-arrow-prev {
+    left: -2.3rem;
+}
+
+.carousel-arrow-next {
+    right: -2.3rem;
+}
+
+.loading-products {
+    min-height: 16rem;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-soft);
+    color: var(--color-text-soft);
+    font-size: 1.35rem;
+}
+
+.main-content {
+    margin-top: 8rem;
+    padding-block: 6rem;
+    background: var(--color-primary-soft);
+}
+
+.container-features {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+}
+
+.card-feature {
+    min-height: 18rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 2.4rem;
+    border: 1px solid rgba(233, 168, 181, 0.35);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.78);
+}
+
+.card-feature > i {
+    width: 4.8rem;
+    height: 4.8rem;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--color-primary-dark);
+    font-size: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.feature-content h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.65rem;
+}
+
+.feature-content p {
+    margin: 0;
+    color: var(--color-text-soft);
+    font-size: 1.3rem;
+}
+
+@media (max-width: 1024px) {
+    .categories-grid,
+    .container-features {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .carousel-arrow-prev {
+        left: -1rem;
+    }
+
+    .carousel-arrow-next {
+        right: -1rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .banner {
+        min-height: 55rem;
+    }
+
+    .content-banner {
+        padding-block: 8rem;
+    }
+
+    .categories-section,
+    .trending-section,
+    .new-section {
+        padding-top: 6rem;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+    }
+
+    .category-card {
+        min-height: 20rem;
+    }
+
+    .carousel-track {
+        grid-auto-columns: minmax(23rem, 78vw);
+    }
+
+    .carousel-arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .categories-grid,
+    .container-features {
+        grid-template-columns: 1fr;
+    }
+
+    .category-card {
+        min-height: 22rem;
+    }
+
+    .main-content {
+        margin-top: 6rem;
+        padding-block: 4rem;
+    }
+
+    .card-feature {
+        min-height: 0;
+    }
+}
+
+
+.all-products-section {
+    padding-top: 8rem;
+}
+
+#all-products-title a {
+    transition: color var(--transition);
+}
+
+#all-products-title a:hover,
+#all-products-title a:focus-visible {
+    color: var(--color-primary-dark);
+}
+
+
+.best-sellers-section {
+    padding-top: 8rem;
+}
