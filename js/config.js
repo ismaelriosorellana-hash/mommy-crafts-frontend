@@ -1,7 +1,7 @@
 "use strict";
 
 window.CONFIG = Object.freeze({
-    API_BASE_URL: "https://mommy-crafts-backend.onrender.com/",
+    API_BASE_URL: "https://mommy-crafts-backend.onrender.com/api",
 
     ENDPOINTS: Object.freeze({
         productos: "/productos",

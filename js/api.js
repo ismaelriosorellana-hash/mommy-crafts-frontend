@@ -10,12 +10,15 @@
         }
     }
 
-    function buildUrl(endpoint) {
-        const base = String(CONFIG.API_BASE_URL || "").replace(/\/+$/, "");
-        const path = String(endpoint || "").replace(/^\/+/, "");
+    function getApiBaseUrl() {
+        let base = String(
+            CONFIG.API_BASE_URL || ""
+        ).replace(/\/+$/, "");
 
         if (!base) {
-            throw new ApiError("La dirección del servidor no está configurada.");
+            throw new ApiError(
+                "La dirección del servidor no está configurada."
+            );
         }
 
         if (
@@ -28,12 +31,24 @@
             );
         }
 
+        if (!/\/api$/i.test(base)) {
+            base = `${base}/api`;
+        }
+
+        return base;
+    }
+
+    function buildUrl(endpoint) {
+        const base = getApiBaseUrl();
+        const path = String(endpoint || "")
+            .replace(/^\/+/, "");
+
         return `${base}/${path}`;
     }
 
     function isRenderApi() {
         return /\.onrender\.com(?:\/|$)/i.test(
-            String(CONFIG.API_BASE_URL || "")
+            getApiBaseUrl()
         );
     }
 

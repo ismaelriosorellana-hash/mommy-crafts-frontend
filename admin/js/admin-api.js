@@ -18,8 +18,14 @@
             window.CONFIG?.API_BASE_URL ||
             "http://localhost:3000/api";
 
-        return String(configured)
+        let base = String(configured)
             .replace(/\/+$/, "");
+
+        if (!/\/api$/i.test(base)) {
+            base = `${base}/api`;
+        }
+
+        return base;
     }
 
     function getToken() {
