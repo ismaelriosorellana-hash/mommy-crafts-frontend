@@ -26,6 +26,37 @@ document.addEventListener(
                 "admin-login-error"
             );
 
+        const siteHost =
+            document.getElementById(
+                "admin-site-host"
+            );
+
+        const connectionStatus =
+            document.getElementById(
+                "admin-connection-status"
+            );
+
+        if (siteHost) {
+            siteHost.textContent =
+                location.hostname ||
+                "Mommy Crafts";
+        }
+
+        if (connectionStatus) {
+            const isLocal =
+                ["localhost", "127.0.0.1"]
+                    .includes(
+                        location.hostname
+                    );
+
+            connectionStatus.textContent =
+                location.protocol === "https:"
+                    ? "Conexión HTTPS activa"
+                    : isLocal
+                        ? "Entorno local de desarrollo"
+                        : "Conexión sin HTTPS";
+        }
+
         const params =
             new URLSearchParams(
                 location.search

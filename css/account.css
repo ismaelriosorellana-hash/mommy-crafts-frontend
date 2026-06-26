@@ -413,3 +413,45 @@
     gap: 10px;
     margin-top: 24px;
 }
+
+
+/* V3.21: claridad del acceso oficial de clientes */
+.account-security-note {
+    display: flex;
+    gap: 16px;
+    width: min(92vw, 760px);
+    margin: 18px auto 0;
+    padding: 20px 22px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: rgba(255, 249, 253, .94);
+    box-shadow: var(--shadow-sm);
+}
+
+.account-security-note > i {
+    margin-top: 2px;
+    color: var(--color-primary-dark);
+    font-size: 1.5rem;
+}
+
+.account-security-note strong {
+    color: var(--color-primary-deep);
+}
+
+.account-security-note p {
+    margin: 6px 0 8px;
+    color: var(--color-text-soft);
+    line-height: 1.55;
+}
+
+.account-security-note a {
+    color: var(--color-primary-dark);
+    font-weight: 750;
+}
+
+@media (max-width: 620px) {
+    .account-security-note {
+        align-items: flex-start;
+        padding: 18px;
+    }
+}

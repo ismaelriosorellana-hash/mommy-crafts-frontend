@@ -3,76 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Acceso privado para la administración interna de Mommy Crafts.">
+
+    <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    <meta name="theme-color" content="#FFF9FD">
     <title>Administración | Mommy Crafts</title>
     <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
-    <main class="admin-login-page">
-        <section class="admin-login-card">
+    <main class="admin-login-page" id="main-content">
+        <section class="admin-login-card" aria-labelledby="admin-login-title">
+            <a class="admin-login-back" href="../index.html">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                Volver a la tienda
+            </a>
+
             <div class="admin-login-brand">
                 <img
                     src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png"
-                    alt="Mommy Crafts"
+                    alt="Logotipo de Mommy Crafts"
                 >
                 <div>
-                    <h1>Panel administrativo</h1>
-                    <p>Acceso exclusivo para administradores.</p>
+                    <p class="admin-login-eyebrow">Mommy Crafts</p>
+                    <h1 id="admin-login-title">Administración interna</h1>
+                    <p>Acceso privado para personal autorizado.</p>
                 </div>
             </div>
 
-            <form id="admin-login-form" novalidate>
+            <div class="admin-login-identity" aria-label="Identidad del sitio">
+                <div>
+                    <i class="fa-solid fa-store" aria-hidden="true"></i>
+                    <span>
+                        Sitio:
+                        <strong id="admin-site-host">Mommy Crafts</strong>
+                    </span>
+                </div>
+                <div>
+                    <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                    <span id="admin-connection-status">Comprobando la conexión...</span>
+                </div>
+            </div>
+
+            <div class="admin-login-intro">
+                <strong>Acceso oficial de Mommy Crafts</strong>
+                <p>
+                    Este formulario solicita únicamente las credenciales
+                    administrativas creadas para gestionar productos, pedidos,
+                    inventario y contenido de esta tienda.
+                </p>
+            </div>
+
+            <form id="admin-login-form" autocomplete="on" novalidate>
                 <div class="admin-field">
-                    <label for="admin-email">Correo</label>
+                    <label for="admin-email">Correo administrativo</label>
                     <input
                         id="admin-email"
                         name="email"
                         type="email"
+                        inputmode="email"
                         autocomplete="username"
+                        aria-describedby="admin-email-help"
                         required
                     >
+                    <small id="admin-email-help">
+                        Usa exclusivamente la cuenta administrativa de Mommy Crafts.
+                    </small>
                 </div>
 
                 <div class="admin-field">
-                    <label for="admin-password">Contraseña</label>
+                    <label for="admin-password">Contraseña administrativa</label>
                     <input
                         id="admin-password"
                         name="password"
                         type="password"
                         autocomplete="current-password"
+                        aria-describedby="admin-password-help"
                         required
                     >
+                    <small id="admin-password-help">
+                        No ingreses aquí contraseñas de Google, correo, Netlify,
+                        Render u otros servicios.
+                    </small>
                 </div>
 
-                <label class="admin-checkbox" style="margin:4px 0 18px">
+                <label class="admin-checkbox admin-login-remember">
                     <input id="admin-remember" type="checkbox">
-                    <span>Mantener sesión en este computador</span>
+                    <span>Mantener la sesión en este computador</span>
                 </label>
 
                 <button
-                    class="admin-button"
+                    class="admin-button admin-login-submit"
                     id="admin-login-button"
                     type="submit"
-                    style="width:100%"
                 >
-                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
                     Iniciar sesión
                 </button>
 
                 <p
                     id="admin-login-error"
-                    class="admin-login-help"
+                    class="admin-login-error"
                     role="alert"
+                    aria-live="polite"
                     hidden
-                    style="color:var(--admin-danger)"
                 ></p>
             </form>
 
-            <p class="admin-login-help">
-                Utiliza el correo y la contraseña que configuraste al ejecutar
-                <strong>npm run create-admin</strong>.
-            </p>
+            <footer class="admin-login-footer">
+                <p>
+                    ¿Tienes dudas sobre este acceso?
+                    <a
+                        href="https://wa.me/56954633848?text=Necesito%20ayuda%20con%20el%20acceso%20administrativo%20de%20Mommy%20Crafts"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Contactar a Mommy Crafts
+                    </a>
+                </p>
+                <p>© 2026 Mommy Crafts. Acceso de uso interno.</p>
+            </footer>
         </section>
     </main>
 

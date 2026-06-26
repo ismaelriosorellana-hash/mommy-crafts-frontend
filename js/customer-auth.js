@@ -170,7 +170,7 @@
             <div class="customer-account-dropdown">
                 <div class="customer-account-heading">
                     <strong>${loggedIn ? `Hola, ${escapeHtml(firstName)}` : "Acceso de usuarios"}</strong>
-                    <span>${loggedIn ? escapeHtml(user.email) : "Clientes y administración"}</span>
+                    <span>${loggedIn ? escapeHtml(user.email) : "Cuenta de clientes"}</span>
                 </div>
                 ${loggedIn ? `
                     <a href="cuenta.html#perfil">
@@ -195,11 +195,6 @@
                         Crear cuenta
                     </a>
                 `}
-                <div class="customer-account-divider"></div>
-                <a href="admin/login.html">
-                    <i class="fa-solid fa-user-shield"></i>
-                    Administración
-                </a>
             </div>
         `;
 

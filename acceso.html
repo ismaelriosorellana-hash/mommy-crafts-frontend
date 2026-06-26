@@ -3,7 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Cuenta de clientes de Mommy Crafts.">
+        <meta name="description" content="Acceso oficial para clientes de Mommy Crafts.">
+        <meta name="robots" content="noindex, nofollow, noarchive">
+        <meta name="referrer" content="strict-origin-when-cross-origin">
+        <meta name="theme-color" content="#FFF9FD">
         <title>Acceso de clientes | Mommy Crafts</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
         <link rel="stylesheet" href="css/main.css">
@@ -45,11 +48,11 @@
             <div class="account-form-grid">
                 <div class="account-field full">
                     <label for="customer-login-email">Correo electrónico</label>
-                    <input id="customer-login-email" type="email" autocomplete="email" required>
+                    <input id="customer-login-email" name="email" type="email" inputmode="email" autocomplete="username" required>
                 </div>
                 <div class="account-field full">
                     <label for="customer-login-password">Contraseña</label>
-                    <input id="customer-login-password" type="password" autocomplete="current-password" required>
+                    <input id="customer-login-password" name="password" type="password" autocomplete="current-password" required>
                 </div>
             </div>
             <label class="account-check">
@@ -69,29 +72,47 @@
             <div class="account-form-grid">
                 <div class="account-field full">
                     <label for="customer-register-name">Nombre completo</label>
-                    <input id="customer-register-name" type="text" autocomplete="name" maxlength="120" required>
+                    <input id="customer-register-name" name="name" type="text" autocomplete="name" maxlength="120" required>
                 </div>
                 <div class="account-field">
                     <label for="customer-register-email">Correo electrónico</label>
-                    <input id="customer-register-email" type="email" autocomplete="email" required>
+                    <input id="customer-register-email" name="email" type="email" inputmode="email" autocomplete="email" required>
                 </div>
                 <div class="account-field">
                     <label for="customer-register-phone">Teléfono</label>
-                    <input id="customer-register-phone" type="tel" autocomplete="tel">
+                    <input id="customer-register-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel">
                 </div>
                 <div class="account-field">
                     <label for="customer-register-password">Contraseña</label>
-                    <input id="customer-register-password" type="password" autocomplete="new-password" minlength="10" required>
+                    <input id="customer-register-password" name="password" type="password" autocomplete="new-password" minlength="10" required>
                 </div>
                 <div class="account-field">
                     <label for="customer-register-confirm">Confirmar contraseña</label>
-                    <input id="customer-register-confirm" type="password" autocomplete="new-password" minlength="10" required>
+                    <input id="customer-register-confirm" name="password-confirmation" type="password" autocomplete="new-password" minlength="10" required>
                 </div>
             </div>
             <p><small>La contraseña debe tener al menos 10 caracteres.</small></p>
             <button class="btn-primary" id="customer-register-submit" type="submit">Crear mi cuenta</button>
         </form>
     </section>
+</section>
+
+<section class="account-security-note" aria-label="Información de seguridad">
+    <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+    <div>
+        <strong>Acceso oficial de Mommy Crafts</strong>
+        <p>
+            Usa aquí solamente la contraseña creada para tu cuenta de Mommy Crafts.
+            Nunca te pediremos la contraseña de tu correo, Google, banco u otro servicio.
+        </p>
+        <a
+            href="https://wa.me/56954633848?text=Necesito%20ayuda%20con%20mi%20cuenta%20de%20Mommy%20Crafts"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Contactar por WhatsApp
+        </a>
+    </div>
 </section>
 
         </main>
