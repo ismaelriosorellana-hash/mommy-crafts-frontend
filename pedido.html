@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Cuenta de clientes de Mommy Crafts.">
+        <title>Detalle del pedido | Mommy Crafts</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/account.css">
+    </head>
+    <body class="account-page" data-account-page="order">
+        <a class="skip-link" href="#main-content">Saltar al contenido</a>
+        <header class="account-header">
+            <div class="container account-header-inner">
+                <a class="account-brand" href="index.html" aria-label="Ir a Mommy Crafts">
+                    <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png" alt="">
+                    <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png" alt="Mommy Crafts">
+                </a>
+                <div class="account-header-links">
+                    <a href="catalogo.html">Ver productos</a>
+                    <div class="navbar-actions">
+                        <a class="icon-btn cart-button" href="carrito.html" aria-label="Ver carrito">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span class="badge" id="cart-count">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main id="main-content" class="account-main">
+
+<nav class="breadcrumb" aria-label="Migas de pan">
+    <a href="cuenta.html#pedidos">Mi cuenta</a>
+    <span aria-hidden="true">/</span>
+    <span>Detalle del pedido</span>
+</nav>
+<section class="account-hero">
+    <p class="section-kicker">Seguimiento</p>
+    <h1 class="section-title" id="customer-order-title">Pedido</h1>
+    <p id="customer-order-date">Cargando información...</p>
+</section>
+<div id="customer-order-detail" class="account-detail-layout">
+    <section class="account-detail-card"><p>Cargando pedido...</p></section>
+</div>
+
+        </main>
+        <script src="js/config.js" defer></script>
+        <script src="js/api.js" defer></script>
+        <script src="js/customer-auth.js" defer></script>
+        <script src="js/cart.js" defer></script>
+        <script src="js/account-pages.js" defer></script>
+    </body>
+    </html>

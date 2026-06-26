@@ -601,6 +601,47 @@
         }
     }
 
+
+    function prefillCheckoutWithAccount() {
+        const user = window.CustomerAuth?.getUser?.();
+        const note = document.getElementById("checkout-account-note");
+        const fields = {
+            "pedido-nombre": user?.nombre,
+            "pedido-rut": user?.rut,
+            "pedido-email": user?.email,
+            "pedido-telefono": user?.telefono,
+            "pedido-direccion": user?.direccion,
+            "pedido-comuna": user?.comuna
+        };
+
+        if (user?.rol === "cliente" && CustomerAuth.getToken()) {
+            for (const [id, value] of Object.entries(fields)) {
+                const input = document.getElementById(id);
+                if (input && value && !input.value) input.value = value;
+            }
+
+            const email = document.getElementById("pedido-email");
+            if (email) email.readOnly = true;
+
+            if (note) {
+                note.innerHTML = `
+                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                    <span>Este pedido quedará guardado en <a href="cuenta.html#pedidos">Mi cuenta</a>.</span>
+                `;
+            }
+        } else {
+            const email = document.getElementById("pedido-email");
+            if (email) email.readOnly = false;
+
+            if (note) {
+                note.innerHTML = `
+                    <i class="fa-regular fa-circle-user" aria-hidden="true"></i>
+                    <span><a href="acceso.html?modo=login&next=carrito.html">Inicia sesión</a> antes de confirmar para consultar este pedido desde tu cuenta.</span>
+                `;
+            }
+        }
+    }
+
     function openCheckout() {
         const overlay = document.getElementById("modal-pedido");
         if (!overlay || read().length === 0) return;
@@ -618,6 +659,7 @@
         }
 
         updateDeliveryForm();
+        prefillCheckoutWithAccount();
     }
 
     function closeCheckout() {

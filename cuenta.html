@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Cuenta de clientes de Mommy Crafts.">
+        <title>Mi cuenta | Mommy Crafts</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/account.css">
+    </head>
+    <body class="account-page" data-account-page="account">
+        <a class="skip-link" href="#main-content">Saltar al contenido</a>
+        <header class="account-header">
+            <div class="container account-header-inner">
+                <a class="account-brand" href="index.html" aria-label="Ir a Mommy Crafts">
+                    <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png" alt="">
+                    <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png" alt="Mommy Crafts">
+                </a>
+                <div class="account-header-links">
+                    <a href="catalogo.html">Ver productos</a>
+                    <div class="navbar-actions">
+                        <a class="icon-btn cart-button" href="carrito.html" aria-label="Ver carrito">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span class="badge" id="cart-count">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main id="main-content" class="account-main">
+
+<section class="account-hero">
+    <p class="section-kicker">Tu espacio personal</p>
+    <h1 class="section-title" id="account-welcome">Mi cuenta</h1>
+    <p>Revisa tus compras y mantén actualizados tus datos.</p>
+</section>
+<div class="account-dashboard-grid">
+    <section class="account-panel" id="perfil">
+        <h2>Mis datos</h2>
+        <p class="account-profile-email" id="profile-email"></p>
+        <div class="account-alert success" id="profile-success" hidden></div>
+        <div class="account-alert" id="profile-error" hidden></div>
+        <form id="customer-profile-form">
+            <div class="account-form-grid">
+                <div class="account-field full">
+                    <label for="profile-name">Nombre completo</label>
+                    <input id="profile-name" name="nombre" type="text" required>
+                </div>
+                <div class="account-field">
+                    <label for="profile-rut">RUT</label>
+                    <input id="profile-rut" name="rut" type="text">
+                </div>
+                <div class="account-field">
+                    <label for="profile-phone">Teléfono</label>
+                    <input id="profile-phone" name="telefono" type="tel">
+                </div>
+                <div class="account-field full">
+                    <label for="profile-address">Dirección</label>
+                    <input id="profile-address" name="direccion" type="text">
+                </div>
+                <div class="account-field full">
+                    <label for="profile-commune">Comuna</label>
+                    <input id="profile-commune" name="comuna" type="text">
+                </div>
+            </div>
+            <button class="btn-primary" id="profile-submit" type="submit">Guardar cambios</button>
+        </form>
+    </section>
+    <section class="account-panel" id="pedidos">
+        <div class="section-header">
+            <div>
+                <p class="section-kicker">Historial</p>
+                <h2>Mis pedidos</h2>
+            </div>
+        </div>
+        <div id="customer-orders-list" class="account-orders-list">
+            <p class="account-empty">Cargando pedidos...</p>
+        </div>
+    </section>
+</div>
+
+        </main>
+        <script src="js/config.js" defer></script>
+        <script src="js/api.js" defer></script>
+        <script src="js/customer-auth.js" defer></script>
+        <script src="js/cart.js" defer></script>
+        <script src="js/account-pages.js" defer></script>
+    </body>
+    </html>

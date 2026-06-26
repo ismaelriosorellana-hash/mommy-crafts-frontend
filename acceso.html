@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Cuenta de clientes de Mommy Crafts.">
+        <title>Acceso de clientes | Mommy Crafts</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/account.css">
+    </head>
+    <body class="account-page" data-account-page="access">
+        <a class="skip-link" href="#main-content">Saltar al contenido</a>
+        <header class="account-header">
+            <div class="container account-header-inner">
+                <a class="account-brand" href="index.html" aria-label="Ir a Mommy Crafts">
+                    <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png" alt="">
+                    <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png" alt="Mommy Crafts">
+                </a>
+                <div class="account-header-links">
+                    <a href="catalogo.html">Ver productos</a>
+                    <div class="navbar-actions">
+                        <a class="icon-btn cart-button" href="carrito.html" aria-label="Ver carrito">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span class="badge" id="cart-count">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main id="main-content" class="account-main">
+
+<section class="account-auth-card">
+    <div class="account-tabs" role="tablist" aria-label="Acceso de clientes">
+        <button class="account-tab active" id="login-tab" type="button" data-auth-tab="login">Iniciar sesión</button>
+        <button class="account-tab" id="register-tab" type="button" data-auth-tab="registro">Crear cuenta</button>
+    </div>
+
+    <section class="account-form-panel" id="login-panel">
+        <p class="section-kicker">Bienvenido nuevamente</p>
+        <h1>Ingresa a tu cuenta</h1>
+        <p>Consulta tus pedidos y mantén actualizados tus datos de compra.</p>
+        <div class="account-alert" id="login-error" hidden></div>
+        <form id="customer-login-form">
+            <div class="account-form-grid">
+                <div class="account-field full">
+                    <label for="customer-login-email">Correo electrónico</label>
+                    <input id="customer-login-email" type="email" autocomplete="email" required>
+                </div>
+                <div class="account-field full">
+                    <label for="customer-login-password">Contraseña</label>
+                    <input id="customer-login-password" type="password" autocomplete="current-password" required>
+                </div>
+            </div>
+            <label class="account-check">
+                <input id="customer-login-remember" type="checkbox">
+                Mantener la sesión iniciada en este equipo
+            </label>
+            <button class="btn-primary" id="customer-login-submit" type="submit">Iniciar sesión</button>
+        </form>
+    </section>
+
+    <section class="account-form-panel" id="register-panel" hidden>
+        <p class="section-kicker">Primera compra</p>
+        <h2>Crea tu cuenta</h2>
+        <p>Los pedidos que realices con la sesión iniciada aparecerán automáticamente en tu cuenta.</p>
+        <div class="account-alert" id="register-error" hidden></div>
+        <form id="customer-register-form">
+            <div class="account-form-grid">
+                <div class="account-field full">
+                    <label for="customer-register-name">Nombre completo</label>
+                    <input id="customer-register-name" type="text" autocomplete="name" maxlength="120" required>
+                </div>
+                <div class="account-field">
+                    <label for="customer-register-email">Correo electrónico</label>
+                    <input id="customer-register-email" type="email" autocomplete="email" required>
+                </div>
+                <div class="account-field">
+                    <label for="customer-register-phone">Teléfono</label>
+                    <input id="customer-register-phone" type="tel" autocomplete="tel">
+                </div>
+                <div class="account-field">
+                    <label for="customer-register-password">Contraseña</label>
+                    <input id="customer-register-password" type="password" autocomplete="new-password" minlength="10" required>
+                </div>
+                <div class="account-field">
+                    <label for="customer-register-confirm">Confirmar contraseña</label>
+                    <input id="customer-register-confirm" type="password" autocomplete="new-password" minlength="10" required>
+                </div>
+            </div>
+            <p><small>La contraseña debe tener al menos 10 caracteres.</small></p>
+            <button class="btn-primary" id="customer-register-submit" type="submit">Crear mi cuenta</button>
+        </form>
+    </section>
+</section>
+
+        </main>
+        <script src="js/config.js" defer></script>
+        <script src="js/api.js" defer></script>
+        <script src="js/customer-auth.js" defer></script>
+        <script src="js/cart.js" defer></script>
+        <script src="js/account-pages.js" defer></script>
+    </body>
+    </html>

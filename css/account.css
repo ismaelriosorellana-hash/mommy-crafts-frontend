@@ -1,0 +1,348 @@
+.account-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(246, 220, 229, .72), transparent 34rem),
+        var(--color-background);
+}
+
+.account-header {
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(12px);
+}
+
+.account-header-inner {
+    min-height: 8.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.account-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.account-brand img:first-child {
+    width: 5rem;
+    height: 5rem;
+    object-fit: contain;
+}
+
+.account-brand img:last-child {
+    width: min(22rem, 42vw);
+    max-height: 4.8rem;
+    object-fit: contain;
+}
+
+.account-header-links,
+.account-header .navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.account-header-links > a:not(.icon-btn) {
+    color: var(--color-secondary);
+    font-weight: 700;
+}
+
+.account-main {
+    width: min(calc(100% - 4rem), 112rem);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+}
+
+.account-hero {
+    margin-bottom: 3rem;
+}
+
+.account-hero p {
+    margin: .4rem 0 0;
+    color: var(--color-muted);
+}
+
+.account-auth-card,
+.account-panel,
+.account-order-card,
+.account-detail-card {
+    border: 1px solid var(--color-border);
+    border-radius: 2rem;
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.account-auth-card {
+    width: min(100%, 62rem);
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.account-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.account-tab {
+    padding: 1.5rem;
+    background: #fff;
+    color: var(--color-muted);
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.account-tab.active {
+    background: var(--color-surface-soft);
+    color: var(--color-primary-dark);
+}
+
+.account-form-panel {
+    padding: clamp(2rem, 5vw, 3.5rem);
+}
+
+.account-form-panel h1,
+.account-form-panel h2 {
+    margin-top: 0;
+}
+
+.account-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+.account-field {
+    display: grid;
+    gap: .6rem;
+}
+
+.account-field.full {
+    grid-column: 1 / -1;
+}
+
+.account-field label {
+    color: var(--color-secondary);
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.account-field input,
+.account-field textarea {
+    width: 100%;
+    min-height: 4.7rem;
+    padding: 1rem 1.3rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    outline: none;
+    background: #fff;
+}
+
+.account-field input:focus,
+.account-field textarea:focus {
+    border-color: var(--color-primary-dark);
+    box-shadow: 0 0 0 .3rem rgba(201, 111, 130, .12);
+}
+
+.account-check {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    margin: 1.5rem 0;
+    font-size: 1.3rem;
+}
+
+.account-alert {
+    margin-bottom: 1.4rem;
+    padding: 1.2rem 1.4rem;
+    border-radius: 1rem;
+    background: #fbe9ed;
+    color: #8a334d;
+}
+
+.account-alert.success {
+    background: #eaf7ee;
+    color: #286b3d;
+}
+
+.account-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.55fr);
+    gap: 2.4rem;
+    align-items: start;
+}
+
+.account-panel {
+    padding: 2.4rem;
+}
+
+.account-panel h2 {
+    margin: 0 0 1.8rem;
+    font-size: 2rem;
+}
+
+.account-profile-email {
+    margin: -1rem 0 1.8rem;
+    color: var(--color-muted);
+    font-size: 1.3rem;
+}
+
+.account-orders-list {
+    display: grid;
+    gap: 1.4rem;
+}
+
+.account-order-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.5rem;
+    padding: 1.8rem;
+}
+
+.account-order-card h3 {
+    margin: 0 0 .4rem;
+    font-size: 1.65rem;
+}
+
+.account-order-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .7rem 1.4rem;
+    color: var(--color-muted);
+    font-size: 1.25rem;
+}
+
+.account-order-total {
+    text-align: right;
+}
+
+.account-order-total strong {
+    display: block;
+    margin-bottom: .7rem;
+    font-size: 1.8rem;
+}
+
+.account-status {
+    display: inline-flex;
+    align-items: center;
+    padding: .45rem .85rem;
+    border-radius: 999px;
+    background: #f4e7ec;
+    color: #82435b;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.account-empty {
+    padding: 3rem 1.5rem;
+    border: 1px dashed var(--color-border);
+    border-radius: 1.4rem;
+    color: var(--color-muted);
+    text-align: center;
+}
+
+.account-detail-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(28rem, .65fr);
+    gap: 2.4rem;
+    align-items: start;
+}
+
+.account-detail-card {
+    padding: 2.2rem;
+}
+
+.customer-order-item {
+    display: grid;
+    grid-template-columns: 9rem 1fr auto;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.customer-order-item:last-child {
+    border-bottom: 0;
+}
+
+.customer-order-item > img {
+    width: 9rem;
+    height: 9rem;
+    border-radius: 1.2rem;
+    object-fit: cover;
+    background: var(--color-surface-soft);
+}
+
+.customer-order-item h3 {
+    margin: 0 0 .5rem;
+    font-size: 1.55rem;
+}
+
+.customer-personalization-preview {
+    width: min(100%, 30rem);
+    margin-top: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1.2rem;
+}
+
+.account-timeline {
+    display: grid;
+    gap: 1.4rem;
+}
+
+.account-timeline-entry {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.account-timeline-entry::before {
+    content: "";
+    position: absolute;
+    top: .5rem;
+    left: 0;
+    width: .9rem;
+    height: .9rem;
+    border-radius: 50%;
+    background: var(--color-primary-dark);
+}
+
+.account-timeline-entry strong,
+.account-timeline-entry span {
+    display: block;
+}
+
+.account-timeline-entry span {
+    color: var(--color-muted);
+    font-size: 1.2rem;
+}
+
+@media (max-width: 860px) {
+    .account-dashboard-grid,
+    .account-detail-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .account-header-links > a:not(.icon-btn) {
+        display: none;
+    }
+
+    .account-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .account-field.full {
+        grid-column: auto;
+    }
+
+    .account-order-card,
+    .customer-order-item {
+        grid-template-columns: 1fr;
+    }
+
+    .account-order-total {
+        text-align: left;
+    }
+}

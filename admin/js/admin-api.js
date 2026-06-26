@@ -218,7 +218,8 @@
                         auth: false,
                         body: {
                             email,
-                            password
+                            password,
+                            area: "admin"
                         }
                     }
                 );

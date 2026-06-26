@@ -406,3 +406,28 @@
         grid-template-columns: 1fr;
     }
 }
+
+
+.checkout-account-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin: 0 0 1.6rem;
+    padding: 1.2rem 1.4rem;
+    border-radius: 1.2rem;
+    background: #f7eef2;
+    color: #674d58;
+    font-size: 1.35rem;
+    line-height: 1.5;
+}
+
+.checkout-account-note i {
+    margin-top: .3rem;
+    color: #98516b;
+}
+
+.checkout-account-note a {
+    color: #8c405d;
+    font-weight: 700;
+    text-decoration: underline;
+}

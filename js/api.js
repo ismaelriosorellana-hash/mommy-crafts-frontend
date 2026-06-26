@@ -35,13 +35,26 @@
         );
 
         try {
+            const headers = {
+                Accept: "application/json",
+                ...(optionHeaders || {})
+            };
+
+            const customerToken =
+                window.CustomerAuth?.getToken?.() || "";
+
+            if (
+                customerToken &&
+                !headers.Authorization
+            ) {
+                headers.Authorization =
+                    `Bearer ${customerToken}`;
+            }
+
             const response = await fetch(buildUrl(endpoint), {
                 method: "GET",
                 ...fetchOptions,
-                headers: {
-                    Accept: "application/json",
-                    ...(optionHeaders || {})
-                },
+                headers,
                 signal: controller.signal
             });
 
