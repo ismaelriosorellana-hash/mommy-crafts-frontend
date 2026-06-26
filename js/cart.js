@@ -11,6 +11,48 @@
         }).format(Number(value) || 0);
     }
 
+
+    function normalizeDelivery(value) {
+        const raw =
+            value &&
+            typeof value === "object"
+                ? value
+                : {};
+
+        const shipping =
+            raw.shipping ??
+            raw.envio ??
+            {};
+
+        const pickup =
+            raw.pickup ??
+            raw.retiro ??
+            {};
+
+        return {
+            shipping: {
+                enabled:
+                    shipping.enabled ??
+                    shipping.habilitado ??
+                    CONFIG.DELIVERY_DEFAULTS.shipping.enabled,
+                instructions:
+                    shipping.instructions ??
+                    shipping.instrucciones ??
+                    CONFIG.DELIVERY_DEFAULTS.shipping.instructions
+            },
+            pickup: {
+                enabled:
+                    pickup.enabled ??
+                    pickup.habilitado ??
+                    CONFIG.DELIVERY_DEFAULTS.pickup.enabled,
+                instructions:
+                    pickup.instructions ??
+                    pickup.instrucciones ??
+                    CONFIG.DELIVERY_DEFAULTS.pickup.instructions
+            }
+        };
+    }
+
     function normalizeItem(item, index = 0) {
         const product = item?.product || {};
         const productId = String(
@@ -56,7 +98,14 @@
                 Number(item?.quantity ?? item?.cantidad ?? 1) || 1
             ),
             customization,
-            customizationKey
+            customizationKey,
+            delivery:
+                normalizeDelivery(
+                    item?.delivery ??
+                    item?.entrega ??
+                    product?.delivery ??
+                    product?.entrega
+                )
         };
     }
 
@@ -119,7 +168,12 @@
                 image: product.imagenPrincipal,
                 quantity: safeQuantity,
                 customization,
-                customizationKey
+                customizationKey,
+                delivery:
+                    normalizeDelivery(
+                        product.delivery ??
+                        product.entrega
+                    )
             });
         }
 
@@ -250,13 +304,46 @@
                 customizationText;
         }
 
-        const customizationImages = Array.isArray(
-            item.customization?.imageDataList
-        )
-            ? item.customization.imageDataList.filter(Boolean)
-            : item.customization?.imageData
-                ? [item.customization.imageData]
-                : [];
+        const customizationImages = [];
+        const finalPreview =
+            item.customization?.assets?.preview?.url ||
+            item.customization?.finalPreview?.asset?.url ||
+            "";
+        const originalImage =
+            item.customization?.assets?.original?.url ||
+            item.customization?.image?.asset?.url ||
+            "";
+
+        if (finalPreview) {
+            customizationImages.push({
+                source: finalPreview,
+                label: "Vista previa final"
+            });
+        }
+
+        if (originalImage) {
+            customizationImages.push({
+                source: originalImage,
+                label: "Archivo original"
+            });
+        }
+
+        if (!customizationImages.length) {
+            const legacyImages = Array.isArray(
+                item.customization?.imageDataList
+            )
+                ? item.customization.imageDataList.filter(Boolean)
+                : item.customization?.imageData
+                    ? [item.customization.imageData]
+                    : [];
+
+            legacyImages.forEach((source, index) => {
+                customizationImages.push({
+                    source,
+                    label: `Imagen de referencia ${index + 1}`
+                });
+            });
+        }
 
         if (customizationImages.length) {
             const gallery =
@@ -265,18 +352,19 @@
             gallery.className =
                 "cart-customization-preview-grid";
 
-            customizationImages.forEach((source, index) => {
-                const preview =
-                    document.createElement("img");
+            customizationImages.forEach(({ source, label }) => {
+                const card = document.createElement("figure");
+                const preview = document.createElement("img");
+                const caption = document.createElement("figcaption");
 
-                preview.className =
-                    "cart-customization-preview";
-
+                card.className = "cart-customization-preview-card";
+                preview.className = "cart-customization-preview";
                 preview.src = source;
-                preview.alt =
-                    `Imagen de referencia ${index + 1} del cliente`;
+                preview.alt = label;
+                caption.textContent = label;
 
-                gallery.appendChild(preview);
+                card.append(preview, caption);
+                gallery.appendChild(card);
             });
 
             customization.after(gallery);
@@ -342,6 +430,177 @@
         checkoutButton.disabled = false;
     }
 
+
+    function deliveryAvailability(items = read()) {
+        return {
+            shipping:
+                items.length > 0 &&
+                items.every(
+                    (item) =>
+                        normalizeDelivery(
+                            item.delivery
+                        ).shipping.enabled !== false
+                ),
+            pickup:
+                items.length > 0 &&
+                items.every(
+                    (item) =>
+                        normalizeDelivery(
+                            item.delivery
+                        ).pickup.enabled !== false
+                )
+        };
+    }
+
+    function selectedDeliveryMethod(form) {
+        return (
+            form?.querySelector(
+                'input[name="metodo-entrega"]:checked'
+            )?.value ||
+            "envio"
+        );
+    }
+
+    function deliveryInstructions(items, method) {
+        const key =
+            method === "retiro"
+                ? "pickup"
+                : "shipping";
+
+        const instructions = [
+            ...new Set(
+                items
+                    .map(
+                        (item) =>
+                            normalizeDelivery(
+                                item.delivery
+                            )[key].instructions
+                    )
+                    .filter(Boolean)
+            )
+        ];
+
+        return instructions.join("\n\n");
+    }
+
+    function updateDeliveryForm() {
+        const form =
+            document.getElementById(
+                "form-pedido"
+            );
+
+        if (!form) return;
+
+        const items = read();
+        const availability =
+            deliveryAvailability(items);
+
+        const shippingInput =
+            form.querySelector(
+                'input[name="metodo-entrega"][value="envio"]'
+            );
+
+        const pickupInput =
+            form.querySelector(
+                'input[name="metodo-entrega"][value="retiro"]'
+            );
+
+        const shippingOption =
+            document.getElementById(
+                "delivery-shipping-option"
+            );
+
+        const pickupOption =
+            document.getElementById(
+                "delivery-pickup-option"
+            );
+
+        shippingInput.disabled =
+            !availability.shipping;
+
+        pickupInput.disabled =
+            !availability.pickup;
+
+        shippingOption?.classList.toggle(
+            "is-disabled",
+            !availability.shipping
+        );
+
+        pickupOption?.classList.toggle(
+            "is-disabled",
+            !availability.pickup
+        );
+
+        if (
+            shippingInput.checked &&
+            !availability.shipping
+        ) {
+            pickupInput.checked =
+                availability.pickup;
+        }
+
+        if (
+            pickupInput.checked &&
+            !availability.pickup
+        ) {
+            shippingInput.checked =
+                availability.shipping;
+        }
+
+        const method =
+            selectedDeliveryMethod(form);
+
+        const addressFields =
+            document.getElementById(
+                "shipping-address-fields"
+            );
+
+        const address =
+            document.getElementById(
+                "pedido-direccion"
+            );
+
+        const commune =
+            document.getElementById(
+                "pedido-comuna"
+            );
+
+        const isShipping =
+            method === "envio";
+
+        if (addressFields) {
+            addressFields.hidden =
+                !isShipping;
+        }
+
+        if (address) {
+            address.required =
+                isShipping;
+        }
+
+        if (commune) {
+            commune.required =
+                isShipping;
+        }
+
+        const instructions =
+            document.getElementById(
+                "delivery-instructions"
+            );
+
+        if (instructions) {
+            const methodLabel =
+                isShipping
+                    ? "Instrucciones de envío"
+                    : "Instrucciones de retiro";
+
+            instructions.innerHTML = `
+                <strong>${methodLabel}</strong>
+                ${deliveryInstructions(items, method)}
+            `;
+        }
+    }
+
     function openCheckout() {
         const overlay = document.getElementById("modal-pedido");
         if (!overlay || read().length === 0) return;
@@ -357,6 +616,8 @@
                 <p>Total estimado: ${formatPrice(total())}</p>
             `;
         }
+
+        updateDeliveryForm();
     }
 
     function closeCheckout() {
@@ -387,15 +648,23 @@
             lines.push("");
         });
 
+        const deliveryMethod =
+            formData.get("metodo-entrega") === "retiro"
+                ? "retiro"
+                : "envio";
+
         lines.push(
             `Total estimado: ${formatPrice(total())}`,
+            "",
+            `Entrega: ${deliveryMethod === "envio" ? "Envío" : "Retiro"}`,
+            `Instrucciones: ${deliveryInstructions(read(), deliveryMethod)}`,
             "",
             `Nombre: ${formData.get("nombre")}`,
             `RUT: ${formData.get("rut")}`,
             `Correo: ${formData.get("email")}`,
             `Teléfono: ${formData.get("telefono")}`,
-            `Dirección: ${formData.get("direccion")}`,
-            `Comuna: ${formData.get("comuna")}`,
+            `Dirección: ${deliveryMethod === "envio" ? formData.get("direccion") : "No aplica"}`,
+            `Comuna: ${deliveryMethod === "envio" ? formData.get("comuna") : "No aplica"}`,
             `Forma de pago: ${formData.get("pedido-pago")}`,
             `Observaciones: ${formData.get("observaciones") || "Sin observaciones"}`
         );
@@ -418,6 +687,17 @@
                 if (event.target.id === "modal-pedido") closeCheckout();
             }
         );
+        document
+            .querySelectorAll(
+                'input[name="metodo-entrega"]'
+            )
+            .forEach((input) => {
+                input.addEventListener(
+                    "change",
+                    updateDeliveryForm
+                );
+            });
+
         document.getElementById("form-pedido")?.addEventListener(
             "submit",
             async (event) => {
@@ -521,9 +801,33 @@
                                                         ?.sku ||
                                                     "",
                                                 personalizacion:
-                                                    item.customization
+                                                    item.customization,
+                                                entrega:
+                                                    item.delivery
                                             })
                                         ),
+                                    entrega: {
+                                        metodo:
+                                            formData.get(
+                                                "metodo-entrega"
+                                            ),
+                                        direccion:
+                                            formData.get(
+                                                "metodo-entrega"
+                                            ) === "envio"
+                                                ? formData.get(
+                                                    "direccion"
+                                                )
+                                                : "",
+                                        comuna:
+                                            formData.get(
+                                                "metodo-entrega"
+                                            ) === "envio"
+                                                ? formData.get(
+                                                    "comuna"
+                                                )
+                                                : ""
+                                    },
                                     metodoPago:
                                         formData.get(
                                             "pedido-pago"

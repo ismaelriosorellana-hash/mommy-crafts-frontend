@@ -306,6 +306,54 @@ function normalizeLightCustomization(rawProduct) {
     };
 }
 
+
+function normalizeDelivery(rawProduct) {
+    const raw =
+        rawProduct?.entrega &&
+        typeof rawProduct.entrega === "object"
+            ? rawProduct.entrega
+            : {};
+
+    const shipping =
+        raw.envio &&
+        typeof raw.envio === "object"
+            ? raw.envio
+            : {};
+
+    const pickup =
+        raw.retiro &&
+        typeof raw.retiro === "object"
+            ? raw.retiro
+            : {};
+
+    return {
+        shipping: {
+            enabled: booleanValue(
+                shipping.habilitado ??
+                raw.envioHabilitado,
+                CONFIG.DELIVERY_DEFAULTS.shipping.enabled
+            ),
+            instructions: stringValue(
+                shipping.instrucciones ??
+                raw.instruccionesEnvio,
+                CONFIG.DELIVERY_DEFAULTS.shipping.instructions
+            )
+        },
+        pickup: {
+            enabled: booleanValue(
+                pickup.habilitado ??
+                raw.retiroHabilitado,
+                CONFIG.DELIVERY_DEFAULTS.pickup.enabled
+            ),
+            instructions: stringValue(
+                pickup.instrucciones ??
+                raw.instruccionesRetiro,
+                CONFIG.DELIVERY_DEFAULTS.pickup.instructions
+            )
+        }
+    };
+}
+
 function normalizeColorCode(value) {
     const color = stringValue(value);
     if (!color) return "";
@@ -529,6 +577,11 @@ function normalizeVariants(rawProduct, defaultImage, defaultImages = []) {
 
             lightCustomization:
                 normalizeLightCustomization(
+                    rawProduct
+                ),
+
+            delivery:
+                normalizeDelivery(
                     rawProduct
                 ),
 
@@ -1955,6 +2008,56 @@ function setDetailImage(
     }
 
 
+
+function renderProductDelivery(product) {
+    const section =
+        document.getElementById(
+            "product-delivery-info"
+        );
+
+    if (!section) return;
+
+    const delivery =
+        product.delivery || {
+            shipping:
+                CONFIG.DELIVERY_DEFAULTS.shipping,
+            pickup:
+                CONFIG.DELIVERY_DEFAULTS.pickup
+        };
+
+    const cards = [];
+
+    if (delivery.shipping?.enabled) {
+        cards.push(`
+            <article class="product-delivery-card">
+                <i class="fa-solid fa-truck-fast" aria-hidden="true"></i>
+                <div>
+                    <strong>Envío</strong>
+                    <p>${escapeHtml(delivery.shipping.instructions)}</p>
+                </div>
+            </article>
+        `);
+    }
+
+    if (delivery.pickup?.enabled) {
+        cards.push(`
+            <article class="product-delivery-card">
+                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                <div>
+                    <strong>Retiro</strong>
+                    <p>${escapeHtml(delivery.pickup.instructions)}</p>
+                </div>
+            </article>
+        `);
+    }
+
+    section.hidden =
+        cards.length === 0;
+
+    section.innerHTML =
+        cards.join("");
+}
+
 function updateDetailPrice(product, variant) {
     const price = getVariantPrice(product, variant);
     const originalPrice = getVariantOriginalPrice(product, variant);
@@ -2353,6 +2456,8 @@ function renderColorSelector(product) {
                     );
                 });
         }
+
+        renderProductDelivery(product);
 
         const quantityInput =
             document.getElementById(

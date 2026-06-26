@@ -21,6 +21,9 @@
         variant: null,
         style: "",
         imageName: "",
+        imageFile: null,
+        uploading: false,
+        previewWidth: 420,
         activeText: "main",
         selectedObject: null,
         image: { x: 0, y: 0, scale: 1, rotation: 0 },
@@ -652,6 +655,9 @@ function advanceToStep(nextStep, delay = 180) {
             variant: null,
             style: "",
             imageName: "",
+            imageFile: null,
+            uploading: false,
+            previewWidth: 420,
             activeText: "main",
             selectedObject: null
         });
@@ -1129,6 +1135,7 @@ function advanceToStep(nextStep, delay = 180) {
             if (current.imageControls) current.imageControls.hidden = false;
 
             state.imageName = file.name;
+            state.imageFile = file;
 
             Object.assign(state.image, {
                 x: 0,
@@ -1159,6 +1166,7 @@ function advanceToStep(nextStep, delay = 180) {
         if (current.imageControls) current.imageControls.hidden = true;
 
         state.imageName = "";
+        state.imageFile = null;
 
         if (state.selectedObject === "image") {
             state.selectedObject = null;
@@ -1207,54 +1215,471 @@ function advanceToStep(nextStep, delay = 180) {
 
         renderBreakdown();
 
+        const previewShape = current.preview?.querySelector(
+            ".preview-product-shape"
+        );
+        const measuredWidth = previewShape?.getBoundingClientRect().width;
+
+        if (measuredWidth) {
+            state.previewWidth = measuredWidth;
+        }
+
         if (current.body) current.body.hidden = true;
         if (current.footer) current.footer.hidden = true;
         if (current.summary) current.summary.hidden = false;
     }
 
-    function addToCart() {
-        if (!state.product) return;
+    function createCustomizationId() {
+        return window.crypto?.randomUUID?.() ||
+            `personalizacion-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
 
-        const result = priceSummary();
+    function blobFromCanvas(canvas, type = "image/png", quality = 0.96) {
+        return new Promise((resolve, reject) => {
+            canvas.toBlob(
+                (blob) => {
+                    if (blob) {
+                        resolve(blob);
+                        return;
+                    }
 
-        const customization = {
-            category: state.category,
-            productVariant: state.variant?.nombre || "Estándar",
-            style: state.style,
-            imageName: state.imageName,
-            mainText: $("#texto-principal")?.value.trim() || "",
-            secondaryText: $("#texto-secundario")?.value.trim() || "",
-            instructions: $("#instrucciones")?.value.trim() || "",
-            basePrice: result.costs.base,
-            priceBreakdown: result.lines,
-            totalPrice: result.total,
-            imageTransform: { ...state.image },
-            mainTextTransform: { ...state.main },
-            secondaryTextTransform: { ...state.secondary },
-            mainTextFont: state.main.fontFamily,
-            secondaryTextFont: state.secondary.fontFamily
+                    reject(
+                        new Error(
+                            "No fue posible generar la vista previa final."
+                        )
+                    );
+                },
+                type,
+                quality
+            );
+        });
+    }
+
+    async function loadCanvasImage(source) {
+        if (!source) {
+            throw new Error("No se encontró la imagen del producto.");
+        }
+
+        let objectUrl = "";
+
+        try {
+            if (!source.startsWith("data:") && !source.startsWith("blob:")) {
+                const response = await fetch(source, {
+                    mode: "cors",
+                    cache: "force-cache"
+                });
+
+                if (!response.ok) {
+                    throw new Error(
+                        `No fue posible cargar una imagen de referencia (${response.status}).`
+                    );
+                }
+
+                objectUrl = URL.createObjectURL(await response.blob());
+                source = objectUrl;
+            }
+
+            const image = new Image();
+            image.decoding = "async";
+
+            await new Promise((resolve, reject) => {
+                image.onload = resolve;
+                image.onerror = () => reject(
+                    new Error("Una de las imágenes no pudo procesarse.")
+                );
+                image.src = source;
+            });
+
+            return {
+                image,
+                release() {
+                    if (objectUrl) URL.revokeObjectURL(objectUrl);
+                }
+            };
+        } catch (error) {
+            if (objectUrl) URL.revokeObjectURL(objectUrl);
+            throw error;
+        }
+    }
+
+    function drawContainedImage(context, image, box) {
+        const ratio = Math.min(
+            box.width / image.naturalWidth,
+            box.height / image.naturalHeight
+        );
+
+        const width = image.naturalWidth * ratio;
+        const height = image.naturalHeight * ratio;
+        const x = box.x + (box.width - width) / 2;
+        const y = box.y + (box.height - height) / 2;
+
+        context.drawImage(image, x, y, width, height);
+    }
+
+    function splitTextLines(context, text, maxWidth) {
+        const words = String(text || "").split(/\s+/).filter(Boolean);
+        const lines = [];
+        let line = "";
+
+        for (const word of words) {
+            const candidate = line ? `${line} ${word}` : word;
+
+            if (
+                line &&
+                context.measureText(candidate).width > maxWidth
+            ) {
+                lines.push(line);
+                line = word;
+            } else {
+                line = candidate;
+            }
+        }
+
+        if (line) lines.push(line);
+        return lines.length ? lines : [""];
+    }
+
+    function textSpecification(type, value) {
+        const transform = textState(type);
+        const element = textElement(type);
+        const computed = element
+            ? window.getComputedStyle(element)
+            : null;
+
+        const baseSize = Number.parseFloat(
+            computed?.fontSize || (type === "main" ? "24" : "17")
+        ) || (type === "main" ? 24 : 17);
+
+        return {
+            value,
+            fontFamily: transform.fontFamily || "Arial, sans-serif",
+            baseFontSizePx: Math.round(baseSize * 100) / 100,
+            fontSizePx:
+                Math.round(baseSize * transform.scale * 100) / 100,
+            colorHex: transform.color || "#2f292c",
+            x: Math.round(transform.x * 100) / 100,
+            y: Math.round(transform.y * 100) / 100,
+            scale: Math.round(transform.scale * 1000) / 1000,
+            rotation: Math.round(transform.rotation * 100) / 100
         };
+    }
 
-        const pricedProduct = {
-            ...state.product,
-            precio: result.total,
-            precioOriginal: 0,
-            imagenPrincipal:
-                state.variant?.imagen ||
-                state.product.imagenPrincipal
-        };
+    function drawTextOnCanvas(
+        context,
+        canvas,
+        previewWidth,
+        type,
+        specification
+    ) {
+        if (!specification.value) return;
 
-        window.Cart.add(
-            pricedProduct,
+        const ratio = canvas.width / previewWidth;
+        const baseY = type === "main" ? 0.36 : 0.52;
+        const element = textElement(type);
+        const computed = element
+            ? window.getComputedStyle(element)
+            : null;
+        const weight = computed?.fontWeight || (type === "main" ? "700" : "500");
+        const outputFontSize = Math.max(
+            18,
+            specification.fontSizePx * ratio
+        );
+        const maxWidth = canvas.width * 0.70;
+
+        context.save();
+        context.translate(
+            canvas.width / 2 + specification.x * ratio,
+            canvas.height * baseY + specification.y * ratio
+        );
+        context.rotate(specification.rotation * Math.PI / 180);
+        context.fillStyle = specification.colorHex;
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.font = `${weight} ${outputFontSize}px ${specification.fontFamily}`;
+
+        const lines = splitTextLines(
+            context,
+            specification.value,
+            maxWidth
+        );
+        const lineHeight = outputFontSize * 1.16;
+        const firstY = -((lines.length - 1) * lineHeight) / 2;
+
+        lines.forEach((line, index) => {
+            context.fillText(
+                line,
+                0,
+                firstY + index * lineHeight,
+                maxWidth
+            );
+        });
+
+        context.restore();
+    }
+
+    async function createFinalPreviewBlob(mainText, secondaryText) {
+        const current = els();
+        const shape = current.preview?.querySelector(".preview-product-shape");
+        const previewWidth = Math.max(
             1,
-            customization
+            shape?.getBoundingClientRect().width ||
+            state.previewWidth ||
+            420
+        );
+        const size = 1254;
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d", {
+            alpha: false
+        });
+
+        canvas.width = size;
+        canvas.height = size;
+
+        const background = context.createRadialGradient(
+            size * 0.5,
+            size * 0.38,
+            0,
+            size * 0.5,
+            size * 0.5,
+            size * 0.72
+        );
+        background.addColorStop(0, "#ffffff");
+        background.addColorStop(0.66, "#f8eff2");
+        background.addColorStop(1, "#ecdbe1");
+        context.fillStyle = background;
+        context.fillRect(0, 0, size, size);
+
+        const productSource =
+            current.productImage?.currentSrc ||
+            current.productImage?.src ||
+            state.variant?.imagen ||
+            state.product?.imagenPrincipal;
+
+        const product = await loadCanvasImage(productSource);
+
+        try {
+            drawContainedImage(
+                context,
+                product.image,
+                {
+                    x: 0,
+                    y: 0,
+                    width: size,
+                    height: size
+                }
+            );
+        } finally {
+            product.release();
+        }
+
+        const ratio = size / previewWidth;
+
+        if (state.imageFile && current.userImage?.src) {
+            const customerImage = await loadCanvasImage(current.userImage.src);
+
+            try {
+                const maxSide = size * 0.45;
+                const baseRatio = Math.min(
+                    maxSide / customerImage.image.naturalWidth,
+                    maxSide / customerImage.image.naturalHeight
+                );
+                const width =
+                    customerImage.image.naturalWidth *
+                    baseRatio *
+                    state.image.scale;
+                const height =
+                    customerImage.image.naturalHeight *
+                    baseRatio *
+                    state.image.scale;
+
+                context.save();
+                context.translate(
+                    size * 0.50 + state.image.x * ratio,
+                    size * 0.45 + state.image.y * ratio
+                );
+                context.rotate(state.image.rotation * Math.PI / 180);
+                context.drawImage(
+                    customerImage.image,
+                    -width / 2,
+                    -height / 2,
+                    width,
+                    height
+                );
+                context.restore();
+            } finally {
+                customerImage.release();
+            }
+        }
+
+        const mainSpec = textSpecification("main", mainText);
+        const secondarySpec = textSpecification("secondary", secondaryText);
+
+        drawTextOnCanvas(
+            context,
+            canvas,
+            previewWidth,
+            "main",
+            mainSpec
+        );
+        drawTextOnCanvas(
+            context,
+            canvas,
+            previewWidth,
+            "secondary",
+            secondarySpec
         );
 
-        window.Products.showToast(
-            `${state.product.nombre} fue agregado por ${money(result.total)}.`
+        return {
+            blob: await blobFromCanvas(canvas),
+            width: size,
+            height: size,
+            mainSpec,
+            secondarySpec
+        };
+    }
+
+    async function uploadCustomizationAssets(
+        customizationId,
+        previewBlob
+    ) {
+        const formData = new FormData();
+        formData.append("customizationId", customizationId);
+        formData.append(
+            "preview",
+            previewBlob,
+            `vista-previa-${customizationId}.png`
         );
 
-        close();
+        if (state.imageFile) {
+            formData.append(
+                "original",
+                state.imageFile,
+                state.imageFile.name
+            );
+        }
+
+        return API.request(
+            "/uploads/personalizacion",
+            {
+                method: "POST",
+                body: formData,
+                timeoutMs: 60000
+            }
+        );
+    }
+
+    async function addToCart() {
+        if (!state.product || state.uploading) return;
+
+        const current = els();
+        const originalButtonText = current.send?.textContent || "Agregar al carrito";
+        const mainText = $("#texto-principal")?.value.trim() || "";
+        const secondaryText = $("#texto-secundario")?.value.trim() || "";
+        const instructions = $("#instrucciones")?.value.trim() || "";
+        const result = priceSummary();
+        const customizationId = createCustomizationId();
+
+        state.uploading = true;
+        deselectObject();
+
+        if (current.send) {
+            current.send.disabled = true;
+            current.send.textContent = "Preparando personalización...";
+        }
+
+        try {
+            await document.fonts?.ready;
+
+            const rendered = await createFinalPreviewBlob(
+                mainText,
+                secondaryText
+            );
+
+            if (current.send) {
+                current.send.textContent = "Guardando imágenes...";
+            }
+
+            const upload = await uploadCustomizationAssets(
+                customizationId,
+                rendered.blob
+            );
+
+            const customization = {
+                version: 2,
+                customizationId: upload.customizationId || customizationId,
+                category: state.category,
+                productVariant: state.variant?.nombre || "Estándar",
+                variantId: state.variant?.id || "",
+                sku: state.variant?.sku || "",
+                style: state.style,
+                imageName: state.imageName,
+                mainText,
+                secondaryText,
+                instructions,
+                basePrice: result.costs.base,
+                priceBreakdown: result.lines,
+                totalPrice: result.total,
+                imageTransform: { ...state.image },
+                mainTextTransform: { ...state.main },
+                secondaryTextTransform: { ...state.secondary },
+                mainTextFont: state.main.fontFamily,
+                secondaryTextFont: state.secondary.fontFamily,
+                assets: {
+                    original: upload.assets?.original || null,
+                    preview: upload.assets?.preview || null
+                },
+                image: {
+                    fileName: state.imageName,
+                    transform: { ...state.image },
+                    asset: upload.assets?.original || null
+                },
+                texts: {
+                    main: rendered.mainSpec,
+                    secondary: rendered.secondarySpec
+                },
+                finalPreview: {
+                    width: rendered.width,
+                    height: rendered.height,
+                    asset: upload.assets?.preview || null
+                },
+                createdAt: new Date().toISOString()
+            };
+
+            const pricedProduct = {
+                ...state.product,
+                precio: result.total,
+                precioOriginal: 0,
+                imagenPrincipal:
+                    upload.assets?.preview?.url ||
+                    state.variant?.imagen ||
+                    state.product.imagenPrincipal
+            };
+
+            window.Cart.add(
+                pricedProduct,
+                1,
+                customization
+            );
+
+            window.Products.showToast(
+                `${state.product.nombre} fue agregado por ${money(result.total)}.`
+            );
+
+            close();
+        } catch (error) {
+            console.error("No fue posible guardar la personalización:", error);
+            alert(
+                error.message ||
+                "No fue posible preparar la personalización. Revisa la conexión con el backend y Cloudinary."
+            );
+        } finally {
+            state.uploading = false;
+
+            if (current.send) {
+                current.send.disabled = false;
+                current.send.textContent = originalButtonText;
+            }
+        }
     }
 
     function categoryFor(product) {

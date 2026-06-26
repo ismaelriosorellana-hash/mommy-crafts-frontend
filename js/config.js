@@ -86,6 +86,18 @@ HOME_BANNERS: Object.freeze([
     })
 ]),
 
+
+    DELIVERY_DEFAULTS: Object.freeze({
+        shipping: Object.freeze({
+            enabled: true,
+            instructions: "El envío se realizará dentro de 3 días hábiles después de la confirmación del pedido. Esta confirmación será notificada al cliente por correo electrónico o WhatsApp."
+        }),
+        pickup: Object.freeze({
+            enabled: true,
+            instructions: "El lugar definido para retiros es la salida norte de la estación Macul, Línea 4 del Metro de Santiago. La fecha y hora de entrega serán coordinadas una vez confirmado el pedido."
+        })
+    }),
+
     soporteTelefono: "+56 9 5463 3848",
     whatsapp: "56954633848",
     soporteMensaje: "Necesito ayuda con un producto",

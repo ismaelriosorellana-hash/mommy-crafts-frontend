@@ -1499,3 +1499,38 @@ body.product-zoom-open {
     object-fit: contain;
     object-position: center center !important;
 }
+/* Opciones de entrega del producto */
+.product-delivery-info {
+    display: grid;
+    gap: 12px;
+    margin: 18px 0;
+}
+
+.product-delivery-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1px solid rgba(146, 75, 103, .18);
+    border-radius: 14px;
+    background: rgba(255, 249, 251, .85);
+}
+
+.product-delivery-card > i {
+    flex: 0 0 auto;
+    margin-top: 3px;
+    color: #9d526f;
+    font-size: 1.05rem;
+}
+
+.product-delivery-card strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #5d3344;
+}
+
+.product-delivery-card p {
+    margin: 0;
+    color: #6f5962;
+    line-height: 1.55;
+}

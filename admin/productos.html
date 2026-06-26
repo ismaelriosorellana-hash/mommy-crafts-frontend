@@ -156,6 +156,35 @@
                     </div>
                 </div>
 
+
+                <h4 class="admin-section-title">Envío y retiro</h4>
+
+                <div class="admin-checkbox-row">
+                    <label class="admin-checkbox">
+                        <input id="shipping-enabled" type="checkbox" checked>
+                        Permitir envío
+                    </label>
+
+                    <label class="admin-checkbox">
+                        <input id="pickup-enabled" type="checkbox" checked>
+                        Permitir retiro
+                    </label>
+                </div>
+
+                <div class="admin-form-grid" style="margin-top:14px">
+                    <div class="admin-field full">
+                        <label for="shipping-instructions">Instrucciones de envío</label>
+                        <textarea id="shipping-instructions" rows="4">El envío se realizará dentro de 3 días hábiles después de la confirmación del pedido. Esta confirmación será notificada al cliente por correo electrónico o WhatsApp.</textarea>
+                        <small>Se mostrarán al cliente y quedarán guardadas en el pedido.</small>
+                    </div>
+
+                    <div class="admin-field full">
+                        <label for="pickup-instructions">Instrucciones de retiro</label>
+                        <textarea id="pickup-instructions" rows="4">El lugar definido para retiros es la salida norte de la estación Macul, Línea 4 del Metro de Santiago. La fecha y hora de entrega serán coordinadas una vez confirmado el pedido.</textarea>
+                        <small>Puedes modificar el lugar o la forma de coordinación para este producto.</small>
+                    </div>
+                </div>
+
                 <h4 class="admin-section-title">Variantes de color</h4>
 
                 <div id="product-variants" class="admin-variant-list"></div>

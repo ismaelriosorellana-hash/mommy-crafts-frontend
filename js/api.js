@@ -22,21 +22,27 @@
     }
 
     async function request(endpoint, options = {}) {
+        const {
+            timeoutMs,
+            headers: optionHeaders,
+            ...fetchOptions
+        } = options;
+
         const controller = new AbortController();
         const timeoutId = window.setTimeout(
             () => controller.abort(),
-            CONFIG.requestTimeoutMs || 12000
+            timeoutMs || CONFIG.requestTimeoutMs || 12000
         );
 
         try {
             const response = await fetch(buildUrl(endpoint), {
                 method: "GET",
+                ...fetchOptions,
                 headers: {
                     Accept: "application/json",
-                    ...(options.headers || {})
+                    ...(optionHeaders || {})
                 },
-                signal: controller.signal,
-                ...options
+                signal: controller.signal
             });
 
             const contentType = response.headers.get("content-type") || "";

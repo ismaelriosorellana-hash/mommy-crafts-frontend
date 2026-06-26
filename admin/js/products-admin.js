@@ -470,6 +470,46 @@ function openProductForm(product = null) {
             product?.personalizable
         );
 
+    const delivery =
+        product?.entrega &&
+        typeof product.entrega === "object"
+            ? product.entrega
+            : {};
+
+    const shipping =
+        delivery.envio &&
+        typeof delivery.envio === "object"
+            ? delivery.envio
+            : {};
+
+    const pickup =
+        delivery.retiro &&
+        typeof delivery.retiro === "object"
+            ? delivery.retiro
+            : {};
+
+    document.getElementById(
+        "shipping-enabled"
+    ).checked =
+        shipping.habilitado !== false;
+
+    document.getElementById(
+        "shipping-instructions"
+    ).value =
+        shipping.instrucciones ||
+        CONFIG.DELIVERY_DEFAULTS.shipping.instructions;
+
+    document.getElementById(
+        "pickup-enabled"
+    ).checked =
+        pickup.habilitado !== false;
+
+    document.getElementById(
+        "pickup-instructions"
+    ).value =
+        pickup.instrucciones ||
+        CONFIG.DELIVERY_DEFAULTS.pickup.instructions;
+
     const light =
         product?.personalizacionLigera &&
         typeof product.personalizacionLigera ===
@@ -849,6 +889,30 @@ async function saveProduct(event) {
             document.getElementById(
                 "product-customizable"
             ).checked,
+        entrega: {
+            envio: {
+                habilitado:
+                    document.getElementById(
+                        "shipping-enabled"
+                    ).checked,
+                instrucciones:
+                    document.getElementById(
+                        "shipping-instructions"
+                    ).value.trim() ||
+                    CONFIG.DELIVERY_DEFAULTS.shipping.instructions
+            },
+            retiro: {
+                habilitado:
+                    document.getElementById(
+                        "pickup-enabled"
+                    ).checked,
+                instrucciones:
+                    document.getElementById(
+                        "pickup-instructions"
+                    ).value.trim() ||
+                    CONFIG.DELIVERY_DEFAULTS.pickup.instructions
+            }
+        },
         variantes:
             collectVariants(),
         personalizacionLigera:
