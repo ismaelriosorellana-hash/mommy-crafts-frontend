@@ -6,7 +6,7 @@
     overflow: hidden;
     background:
         linear-gradient(90deg, rgba(31, 24, 27, 0.84), rgba(31, 24, 27, 0.22)),
-        linear-gradient(135deg, #6f5059, #e9a8b5);
+        linear-gradient(135deg, #6f5059, #fcc0e6);
     color: #fff;
 }
 
@@ -16,7 +16,7 @@
     z-index: 0;
     background:
         linear-gradient(90deg, rgba(35, 26, 29, 0.74), rgba(35, 26, 29, 0.08)),
-        linear-gradient(135deg, #6f5059, #e9a8b5);
+        linear-gradient(135deg, #6f5059, #fcc0e6);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -233,7 +233,7 @@
     align-items: flex-start;
     gap: 1.5rem;
     padding: 2.4rem;
-    border: 1px solid rgba(233, 168, 181, 0.35);
+    border: 1px solid rgba(252, 192, 230, 0.35);
     border-radius: var(--radius-lg);
     background: rgba(255, 255, 255, 0.78);
 }

@@ -2,6 +2,7 @@
 
 (function () {
     const STORAGE_KEY = "mommyCraftsCart";
+    let mercadoPagoStatus = null;
 
     function formatPrice(value) {
         return new Intl.NumberFormat(CONFIG.locale || "es-CL", {
@@ -714,6 +715,70 @@
         return lines.join("\n");
     }
 
+
+    async function loadMercadoPagoStatus() {
+        const input = document.querySelector(
+            'input[name="pedido-pago"][value="mercadopago"]'
+        );
+        const option = document.getElementById(
+            "mercadopago-payment-option"
+        );
+        const note = document.getElementById(
+            "payment-method-note"
+        );
+
+        if (!input || !note) return;
+
+        try {
+            mercadoPagoStatus = await API.request(
+                CONFIG.ENDPOINTS.mercadoPagoEstado
+            );
+
+            input.disabled = !mercadoPagoStatus.configured;
+            option?.classList.toggle(
+                "is-disabled",
+                !mercadoPagoStatus.configured
+            );
+
+            if (mercadoPagoStatus.configured) {
+                note.classList.remove("error");
+                note.textContent =
+                    mercadoPagoStatus.environment === "production"
+                        ? "Serás redirigido a Mercado Pago para completar un pago real."
+                        : "Modo de prueba activo: serás redirigido al entorno de pruebas de Mercado Pago.";
+            } else {
+                const transfer = document.querySelector(
+                    'input[name="pedido-pago"][value="transferencia"]'
+                );
+                transfer.checked = true;
+                note.classList.add("error");
+                note.textContent =
+                    "Mercado Pago todavía no está configurado. Puedes continuar mediante transferencia.";
+            }
+        } catch (error) {
+            input.disabled = true;
+            option?.classList.add("is-disabled");
+            const transfer = document.querySelector(
+                'input[name="pedido-pago"][value="transferencia"]'
+            );
+            transfer.checked = true;
+            note.classList.add("error");
+            note.textContent =
+                "No fue posible comprobar Mercado Pago. Comprueba que el backend esté encendido.";
+        }
+    }
+
+    function savePendingPayment(orderResponse) {
+        sessionStorage.setItem(
+            "mommycrafts_pending_payment",
+            JSON.stringify({
+                pedidoId: orderResponse.pedidoId,
+                numeroPedido: orderResponse.numeroPedido,
+                token: orderResponse.consultaToken
+            })
+        );
+    }
+
     function initCheckout() {
         document.getElementById("btn-open-checkout")?.addEventListener(
             "click",
@@ -766,11 +831,16 @@
                     return;
                 }
 
+                const paymentMethod =
+                    formData.get("pedido-pago");
+
                 const whatsappWindow =
-                    window.open(
-                        "about:blank",
-                        "_blank"
-                    );
+                    paymentMethod === "transferencia"
+                        ? window.open(
+                            "about:blank",
+                            "_blank"
+                        )
+                        : null;
 
                 if (submitButton) {
                     submitButton.disabled = true;
@@ -883,6 +953,24 @@
                             }
                         );
 
+                    if (paymentMethod === "mercadopago") {
+                        if (!response.pago?.checkoutUrl) {
+                            throw new Error(
+                                response.pago?.error ||
+                                "El pedido fue guardado, pero no fue posible iniciar el pago."
+                            );
+                        }
+
+                        savePendingPayment(response);
+                        clear();
+                        closeCheckout();
+                        form.reset();
+                        window.location.assign(
+                            response.pago.checkoutUrl
+                        );
+                        return;
+                    }
+
                     const message =
                         buildWhatsAppOrder(
                             formData,
@@ -943,5 +1031,6 @@
         updateCount();
         renderCartPage();
         initCheckout();
+        loadMercadoPagoStatus();
     });
 })();

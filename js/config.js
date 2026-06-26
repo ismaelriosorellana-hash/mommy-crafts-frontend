@@ -4,7 +4,8 @@ window.CONFIG = Object.freeze({
     API_BASE_URL: "http://localhost:3000/api",
 
     ENDPOINTS: Object.freeze({
-        productos: "/productos"
+        productos: "/productos",
+        mercadoPagoEstado: "/pagos/mercadopago/estado"
     }),
 
     CATEGORIES: Object.freeze([

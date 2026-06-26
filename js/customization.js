@@ -32,16 +32,16 @@
             y: 0,
             scale: 1,
             rotation: 0,
-            fontFamily: "Arial, sans-serif",
-            color: "#2f292c"
+            fontFamily: "'Dancing Script', cursive",
+            color: "#372a32"
         },
         secondary: {
             x: 0,
             y: 0,
             scale: 1,
             rotation: 0,
-            fontFamily: "Georgia, serif",
-            color: "#2f292c"
+            fontFamily: "'Caveat', cursive",
+            color: "#372a32"
         },
         autoAdvanceTimer: 0
     };
@@ -286,11 +286,11 @@ function categoryBase(category) {
 
         element.style.fontFamily =
             transform.fontFamily ||
-            "Arial, sans-serif";
+            "'Dancing Script', cursive";
 
         element.style.color =
             transform.color ||
-            "#2f292c";
+            "#372a32";
     }
 
     function resetTransforms() {
@@ -306,8 +306,8 @@ function categoryBase(category) {
             y: 0,
             scale: 1,
             rotation: 0,
-            fontFamily: "Arial, sans-serif",
-            color: "#2f292c"
+            fontFamily: "'Dancing Script', cursive",
+            color: "#372a32"
         });
 
         Object.assign(state.secondary, {
@@ -315,8 +315,8 @@ function categoryBase(category) {
             y: 0,
             scale: 1,
             rotation: 0,
-            fontFamily: "Georgia, serif",
-            color: "#2f292c"
+            fontFamily: "'Caveat', cursive",
+            color: "#372a32"
         });
 
         applyImage();
@@ -389,7 +389,10 @@ function updateSelectionUI() {
     ) {
         current.fontFamily.value =
             textState(selectedText).fontFamily ||
-            "Arial, sans-serif";
+            "'Dancing Script', cursive";
+
+        current.fontFamily.style.fontFamily =
+            current.fontFamily.value;
     }
 }
 
@@ -458,8 +461,8 @@ function clearTextStep() {
         y: 0,
         scale: 1,
         rotation: 0,
-        fontFamily: "Arial, sans-serif",
-        color: "#2f292c"
+        fontFamily: "'Dancing Script', cursive",
+        color: "#372a32"
     });
 
     Object.assign(state.secondary, {
@@ -467,8 +470,8 @@ function clearTextStep() {
         y: 0,
         scale: 1,
         rotation: 0,
-        fontFamily: "Georgia, serif",
-        color: "#2f292c"
+        fontFamily: "'Caveat', cursive",
+        color: "#372a32"
     });
 
     if (["main", "secondary"].includes(state.selectedObject)) {
@@ -1352,11 +1355,11 @@ function advanceToStep(nextStep, delay = 180) {
 
         return {
             value,
-            fontFamily: transform.fontFamily || "Arial, sans-serif",
+            fontFamily: transform.fontFamily || "'Dancing Script', cursive",
             baseFontSizePx: Math.round(baseSize * 100) / 100,
             fontSizePx:
                 Math.round(baseSize * transform.scale * 100) / 100,
-            colorHex: transform.color || "#2f292c",
+            colorHex: transform.color || "#372a32",
             x: Math.round(transform.x * 100) / 100,
             y: Math.round(transform.y * 100) / 100,
             scale: Math.round(transform.scale * 1000) / 1000,
@@ -1952,8 +1955,8 @@ function drag(
             const transform = textState(type);
             const defaultFont =
                 type === "main"
-                    ? "Arial, sans-serif"
-                    : "Georgia, serif";
+                    ? "'Dancing Script', cursive"
+                    : "'Caveat', cursive";
 
             Object.assign(transform, {
                 x: 0,
@@ -1961,7 +1964,7 @@ function drag(
                 scale: 1,
                 rotation: 0,
                 fontFamily: defaultFont,
-                color: "#2f292c"
+                color: "#372a32"
             });
 
             applyText(type);
@@ -1976,7 +1979,7 @@ function drag(
             input.type = "color";
             input.value =
                 textState(type).color ||
-                "#2f292c";
+                "#372a32";
 
             input.addEventListener("input", () => {
                 textState(type).color = input.value;
@@ -1991,6 +1994,9 @@ function drag(
             if (!type) return;
 
             textState(type).fontFamily =
+                current.fontFamily.value;
+
+            current.fontFamily.style.fontFamily =
                 current.fontFamily.value;
 
             applyText(type);

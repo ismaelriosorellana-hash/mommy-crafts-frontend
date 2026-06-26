@@ -1,23 +1,38 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Allura&family=Caveat:wght@400..700&family=Courgette&family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Kaushan+Script&family=Pacifico&family=Poppins:wght@300;400;500;600;700&family=Sacramento&family=Satisfy&family=Yellowtail&display=swap");
 
 :root {
-    --color-primary: #e9a8b5;
-    --color-primary-dark: #c96f82;
-    --color-primary-soft: #fff2f5;
-    --color-secondary: #7f5963;
-    --color-accent: #f2c66d;
-    --color-background: #fffafa;
+    /* Paleta Mommy Crafts obtenida de la imagen adjunta */
+    --pink-1000: #FCC0E6;
+    --pink-900: #FDC6E9;
+    --pink-800: #FDCDEB;
+    --pink-700: #FED3EE;
+    --pink-600: #FED9F0;
+    --pink-500: #FFE0F3;
+    --pink-400: #FFE6F5;
+    --pink-300: #FFECF8;
+    --pink-200: #FFF2FA;
+    --pink-100: #FFF9FD;
+
+    /* Colores funcionales con contraste accesible */
+    --color-primary: var(--pink-1000);
+    --color-primary-dark: #8E456A;
+    --color-primary-deep: #71364F;
+    --color-primary-soft: var(--pink-200);
+    --color-secondary: #65445A;
+    --color-accent: #F59BCF;
+    --color-background: var(--pink-100);
     --color-surface: #ffffff;
-    --color-surface-soft: #faf7f8;
-    --color-text: #292326;
-    --color-text-soft: #72686c;
-    --color-border: #eadfe2;
+    --color-surface-soft: var(--pink-200);
+    --color-text: #372A32;
+    --color-text-soft: #715F69;
+    --color-border: #F0D6E6;
     --color-success: #2f8f5b;
     --color-danger: #c64646;
     --color-warning: #fff4d6;
-    --shadow-sm: 0 0.4rem 1.4rem rgba(67, 43, 50, 0.08);
-    --shadow-md: 0 1.2rem 3.2rem rgba(67, 43, 50, 0.12);
-    --shadow-lg: 0 2rem 5rem rgba(67, 43, 50, 0.18);
+
+    --shadow-sm: 0 0.4rem 1.4rem rgba(113, 54, 79, 0.08);
+    --shadow-md: 0 1.2rem 3.2rem rgba(113, 54, 79, 0.12);
+    --shadow-lg: 0 2rem 5rem rgba(113, 54, 79, 0.18);
     --radius-sm: 0.8rem;
     --radius-md: 1.4rem;
     --radius-lg: 2.2rem;
@@ -196,15 +211,15 @@ ol {
 .btn-enviar-pedido {
     background: var(--color-primary-dark);
     color: #fff;
-    box-shadow: 0 0.8rem 2rem rgba(201, 111, 130, 0.24);
+    box-shadow: 0 0.8rem 2rem rgba(142, 69, 106, 0.24);
 }
 
 .btn-primary:hover,
 .btn-primary:focus-visible,
 .btn-enviar-pedido:hover,
 .btn-enviar-pedido:focus-visible {
-    background: #b75f72;
-    box-shadow: 0 1rem 2.4rem rgba(201, 111, 130, 0.32);
+    background: #71364f;
+    box-shadow: 0 1rem 2.4rem rgba(142, 69, 106, 0.32);
     transform: translateY(-0.2rem);
 }
 
@@ -231,7 +246,7 @@ button:disabled,
 }
 
 :focus-visible {
-    outline: 0.3rem solid rgba(201, 111, 130, 0.38);
+    outline: 0.3rem solid rgba(142, 69, 106, 0.38);
     outline-offset: 0.3rem;
 }
 
@@ -493,7 +508,7 @@ button:disabled,
 
 .search-form:focus-within {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 0.4rem rgba(233, 168, 181, 0.15);
+    box-shadow: 0 0 0 0.4rem rgba(252, 192, 230, 0.15);
 }
 
 .search-form input {
@@ -1733,4 +1748,54 @@ button:disabled,
     .customer-account-dropdown {
         right: -5.2rem;
     }
+}
+
+
+/* V3.20: identidad visual Mommy Crafts */
+body {
+    background:
+        radial-gradient(circle at 8% 0%, rgba(252, 192, 230, 0.24), transparent 28rem),
+        radial-gradient(circle at 94% 18%, rgba(255, 224, 243, 0.45), transparent 34rem),
+        var(--color-background);
+}
+
+.site-header {
+    background: rgba(255, 249, 253, 0.94);
+    box-shadow: 0 0.2rem 0 rgba(240, 214, 230, 0.88);
+}
+
+.promo-banner {
+    background: linear-gradient(90deg, var(--color-primary-deep), var(--color-primary-dark));
+}
+
+.btn-primary,
+.btn-enviar-pedido {
+    background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary-deep));
+    box-shadow: 0 0.8rem 2rem rgba(142, 69, 106, 0.24);
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible,
+.btn-enviar-pedido:hover,
+.btn-enviar-pedido:focus-visible {
+    background: var(--color-primary-deep);
+    box-shadow: 0 1rem 2.4rem rgba(113, 54, 79, 0.3);
+}
+
+.section-kicker,
+.section-link {
+    color: var(--color-primary-dark);
+}
+
+.card-product,
+.product-detail,
+.cart-item,
+.checkout-panel,
+.account-card {
+    border-color: var(--color-border);
+}
+
+::selection {
+    background: var(--pink-1000);
+    color: var(--color-primary-deep);
 }

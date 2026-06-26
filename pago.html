@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Resultado del pago de tu pedido en Mommy Crafts.">
+    <title>Estado del pago | Mommy Crafts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/account.css">
+</head>
+<body class="account-page payment-result-page">
+    <header class="account-header">
+        <div class="container account-header-inner">
+            <a class="account-brand" href="index.html" aria-label="Ir a Mommy Crafts">
+                <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png" alt="">
+                <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png" alt="Mommy Crafts">
+            </a>
+            <a href="catalogo.html">Volver a la tienda</a>
+        </div>
+    </header>
+
+    <main class="account-main">
+        <section class="payment-result-card" id="payment-result-card" aria-live="polite">
+            <div class="payment-result-icon loading" id="payment-result-icon">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
+            <p class="section-kicker">Mercado Pago</p>
+            <h1 id="payment-result-title">Comprobando tu pago</h1>
+            <p id="payment-result-message">Estamos consultando el estado real del pedido.</p>
+            <div class="payment-result-order" id="payment-result-order" hidden></div>
+            <div class="payment-result-actions">
+                <button class="btn-primary" id="payment-retry" type="button" hidden>
+                    Intentar pago nuevamente
+                </button>
+                <a class="btn-secondary" id="payment-account-link" href="cuenta.html#pedidos" hidden>
+                    Ver mis pedidos
+                </a>
+                <a class="btn-secondary" href="catalogo.html">Seguir comprando</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/config.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/customer-auth.js" defer></script>
+    <script src="js/payment-result.js" defer></script>
+</body>
+</html>

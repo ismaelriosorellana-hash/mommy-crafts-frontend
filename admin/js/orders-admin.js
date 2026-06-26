@@ -24,6 +24,9 @@ document.addEventListener(
         document.getElementById("order-save")
             .addEventListener("click", saveOrder);
 
+        document.getElementById("order-sync-payment")
+            .addEventListener("click", syncPayment);
+
         loadOrders();
     }
 );
@@ -464,6 +467,9 @@ function openOrder(id) {
     currentOrderId = String(order._id);
     document.getElementById("order-modal-title").textContent = order.numeroPedido;
 
+    const syncButton = document.getElementById("order-sync-payment");
+    syncButton.hidden = order.metodoPago !== "mercadopago";
+
     const items = (order.items || [])
         .map(renderOrderItem)
         .join("");
@@ -522,6 +528,20 @@ function openOrder(id) {
             </div>
         </section>
 
+        ${order.metodoPago === "mercadopago" ? `
+            <h4 class="admin-section-title">Mercado Pago</h4>
+            <section class="admin-card">
+                <div class="admin-card-body">
+                    <div class="order-customization-summary">
+                        <div><span>Preferencia</span><strong>${AdminUI.escapeHtml(order.mercadoPago?.preferenceId || "—")}</strong></div>
+                        <div><span>ID del pago</span><strong>${AdminUI.escapeHtml(order.mercadoPago?.paymentId || "Aún no informado")}</strong></div>
+                        <div><span>Estado externo</span><strong>${AdminUI.escapeHtml(order.mercadoPago?.status || "Pendiente")}</strong></div>
+                        <div><span>Detalle</span><strong>${AdminUI.escapeHtml(order.mercadoPago?.statusDetail || "—")}</strong></div>
+                    </div>
+                </div>
+            </section>
+        ` : ""}
+
         <h4 class="admin-section-title">Productos y personalizaciones</h4>
         <div class="order-products-list">
             ${items || '<div class="admin-empty">Sin productos.</div>'}
@@ -573,6 +593,39 @@ function openOrder(id) {
     `;
 
     AdminUI.openModal("order-modal");
+}
+
+async function syncPayment() {
+    if (!currentOrderId) return;
+
+    const button = document.getElementById("order-sync-payment");
+    button.disabled = true;
+    const original = button.innerHTML;
+    button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sincronizando';
+
+    try {
+        const updated = await AdminAPI.request(
+            `/admin/pedidos/${encodeURIComponent(currentOrderId)}/sincronizar-pago`,
+            {
+                method: "POST",
+                body: {}
+            }
+        );
+
+        const index = adminOrders.findIndex(
+            (order) => String(order._id) === String(currentOrderId)
+        );
+
+        if (index >= 0) adminOrders[index] = updated;
+        renderOrders();
+        openOrder(currentOrderId);
+        AdminUI.toast("Pago sincronizado correctamente.");
+    } catch (error) {
+        AdminUI.toast(error.message, "error");
+    } finally {
+        button.disabled = false;
+        button.innerHTML = original;
+    }
 }
 
 async function saveOrder() {

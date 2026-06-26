@@ -341,13 +341,13 @@
     padding: 14px;
     border: 1px solid rgba(146, 75, 103, .22);
     border-radius: 14px;
-    background: #fffafb;
+    background: #fff9fd;
     cursor: pointer;
     transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
 
 .delivery-method-option:has(input:checked) {
-    border-color: #a35370;
+    border-color: #8e456a;
     box-shadow: 0 0 0 3px rgba(163, 83, 112, .12);
     transform: translateY(-1px);
 }
@@ -370,8 +370,8 @@
     height: 42px;
     flex: 0 0 auto;
     border-radius: 50%;
-    background: #f6e5eb;
-    color: #944d68;
+    background: #ffe6f5;
+    color: #8e456a;
 }
 
 .delivery-method-option strong,
@@ -389,7 +389,7 @@
     margin-top: 12px;
     padding: 13px 15px;
     border-radius: 12px;
-    background: #f8eff2;
+    background: #fff2fa;
     color: #654e58;
     line-height: 1.55;
     white-space: pre-line;
@@ -415,7 +415,7 @@
     margin: 0 0 1.6rem;
     padding: 1.2rem 1.4rem;
     border-radius: 1.2rem;
-    background: #f7eef2;
+    background: #ffecf8;
     color: #674d58;
     font-size: 1.35rem;
     line-height: 1.5;
@@ -423,11 +423,64 @@
 
 .checkout-account-note i {
     margin-top: .3rem;
-    color: #98516b;
+    color: #8e456a;
 }
 
 .checkout-account-note a {
-    color: #8c405d;
+    color: #71364f;
     font-weight: 700;
     text-decoration: underline;
+}
+
+
+/* Mercado Pago */
+.payment-options {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.payment-options label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 14px;
+    border: 1px solid rgba(146, 75, 103, .2);
+    border-radius: 13px;
+    background: #fff9fd;
+    cursor: pointer;
+}
+
+.payment-options label:has(input:checked) {
+    border-color: #8e456a;
+    box-shadow: 0 0 0 3px rgba(163, 83, 112, .11);
+}
+
+.payment-options label.is-disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.payment-options strong,
+.payment-options small {
+    display: block;
+}
+
+.payment-options small {
+    margin-top: 2px;
+    color: #75616a;
+}
+
+.payment-method-note {
+    margin-top: 10px;
+    padding: 11px 13px;
+    border-radius: 11px;
+    background: #fff2fa;
+    color: #654e58;
+    line-height: 1.5;
+}
+
+.payment-method-note.error {
+    background: #fff0f0;
+    color: #8a3434;
 }

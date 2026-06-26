@@ -14,7 +14,7 @@
 
 .card-product:hover,
 .card-product:focus-within {
-    border-color: rgba(233, 168, 181, 0.9);
+    border-color: rgba(252, 192, 230, 0.9);
     box-shadow: var(--shadow-md);
     transform: translateY(-0.5rem);
 }
@@ -31,7 +31,7 @@
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background:
-        radial-gradient(circle at 50% 40%, #fff 0, #f7eef1 72%, #efe2e6 100%);
+        radial-gradient(circle at 50% 40%, #fff 0, #ffecf8 72%, #efe2e6 100%);
 }
 
 .product-card-image {
@@ -156,7 +156,7 @@
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background:
-        radial-gradient(circle at 50% 38%, #fff 0, #f8eff2 68%, #efdee4 100%);
+        radial-gradient(circle at 50% 38%, #fff 0, #fff2fa 68%, #ffe0f3 100%);
 }
 
 .detail-main-image-track {
@@ -218,7 +218,7 @@
 
 .detail-thumbnail.active {
     border-color: var(--color-primary-dark);
-    box-shadow: 0 0 0 0.3rem rgba(233, 168, 181, 0.2);
+    box-shadow: 0 0 0 0.3rem rgba(252, 192, 230, 0.2);
 }
 
 .detail-thumbnail img {
@@ -649,7 +649,7 @@
 .light-customization-field input:focus,
 .light-customization-field textarea:focus {
     border-color: var(--color-primary-dark);
-    box-shadow: 0 0 0 0.3rem rgba(233, 168, 181, 0.18);
+    box-shadow: 0 0 0 0.3rem rgba(252, 192, 230, 0.18);
 }
 
 .light-customization-field small {
@@ -1016,7 +1016,7 @@
 .product-color-option.selected {
     border-color: var(--color-primary-dark);
     background: var(--color-primary-soft);
-    box-shadow: 0 0 0 0.3rem rgba(233, 168, 181, 0.18);
+    box-shadow: 0 0 0 0.3rem rgba(252, 192, 230, 0.18);
 }
 
 .product-color-option:disabled {
@@ -1095,7 +1095,7 @@
     border: 2px solid var(--color-primary-dark);
     background: linear-gradient(145deg, #fff 0%, var(--color-primary-soft) 100%);
     box-shadow:
-        0 0 0 0.35rem rgba(233, 168, 181, 0.2),
+        0 0 0 0.35rem rgba(252, 192, 230, 0.2),
         0 1.2rem 2.6rem rgba(83, 53, 63, 0.1);
     transform: translateY(-0.15rem);
 }
@@ -1211,7 +1211,7 @@
 .detail-thumbnail.active {
     border: 2px solid var(--color-primary-dark);
     box-shadow:
-        0 0 0 0.28rem rgba(233, 168, 181, 0.22),
+        0 0 0 0.28rem rgba(252, 192, 230, 0.22),
         0 0.8rem 1.8rem rgba(71, 47, 56, 0.1);
     transform: translateY(-0.1rem);
 }
@@ -1519,7 +1519,7 @@ body.product-zoom-open {
 .product-delivery-card > i {
     flex: 0 0 auto;
     margin-top: 3px;
-    color: #9d526f;
+    color: #8e456a;
     font-size: 1.05rem;
 }
 

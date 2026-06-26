@@ -207,10 +207,10 @@
     place-items: center;
     margin-top: 2rem;
     overflow: hidden;
-    border: 1px solid rgba(233, 168, 181, 0.4);
+    border: 1px solid rgba(252, 192, 230, 0.4);
     border-radius: var(--radius-lg);
     background:
-        radial-gradient(circle at 50% 38%, #fff 0, #f8eff2 66%, #ecdbe1 100%);
+        radial-gradient(circle at 50% 38%, #fff 0, #fff2fa 66%, #ffe0f3 100%);
 }
 
 .preview-product-shape {
@@ -350,7 +350,7 @@
 .option-card:has(input:checked) {
     border-color: var(--color-primary-dark);
     background: var(--color-primary-soft);
-    box-shadow: 0 0 0 0.3rem rgba(233, 168, 181, 0.18);
+    box-shadow: 0 0 0 0.3rem rgba(252, 192, 230, 0.18);
 }
 
 .option-card input {
@@ -393,7 +393,7 @@
 
 .color-option-card.selected {
     border-color: var(--color-primary-dark);
-    box-shadow: 0 0 0 0.3rem rgba(233, 168, 181, 0.2);
+    box-shadow: 0 0 0 0.3rem rgba(252, 192, 230, 0.2);
 }
 
 .upload-area {
@@ -530,7 +530,7 @@
 .form-group input:focus,
 .form-group textarea:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 0.35rem rgba(233, 168, 181, 0.15);
+    box-shadow: 0 0 0 0.35rem rgba(252, 192, 230, 0.15);
 }
 
 .char-count {
@@ -772,7 +772,7 @@
 .customizable-product-card.selected {
     border-color: var(--color-primary-dark);
     background: var(--color-primary-soft);
-    box-shadow: 0 0 0 0.3rem rgba(233, 168, 181, 0.18);
+    box-shadow: 0 0 0 0.3rem rgba(252, 192, 230, 0.18);
     transform: translateY(-0.2rem);
 }
 .customizable-product-card img {
@@ -893,7 +893,7 @@
     border: 2px solid var(--color-primary-dark);
     background: var(--color-primary-soft);
     box-shadow:
-        0 0 0 0.32rem rgba(233, 168, 181, 0.22),
+        0 0 0 0.32rem rgba(252, 192, 230, 0.22),
         0 1rem 2rem rgba(71, 47, 56, 0.1);
     transform: translateY(-0.15rem);
 }
@@ -962,7 +962,7 @@
 #preview-main-text.editor-object-selected,
 #preview-secondary-text.editor-object-selected {
     outline-color: var(--color-primary-dark);
-    filter: drop-shadow(0 0.45rem 0.8rem rgba(233, 168, 181, 0.45));
+    filter: drop-shadow(0 0.45rem 0.8rem rgba(252, 192, 230, 0.45));
 }
 
 .editor-selection-help {
@@ -1025,7 +1025,7 @@
 
 .font-family-control select:focus {
     border-color: var(--color-primary-dark);
-    box-shadow: 0 0 0 0.3rem rgba(233, 168, 181, 0.16);
+    box-shadow: 0 0 0 0.3rem rgba(252, 192, 230, 0.16);
 }
 
 @media (max-width: 650px) {
@@ -1037,4 +1037,25 @@
     .divider {
         display: none;
     }
+}
+
+
+/* V3.20: selector de tipografías manuscritas */
+.font-family-control select {
+    min-width: 19rem;
+    background: var(--pink-100);
+    font-size: 1.35rem;
+}
+
+.font-family-control select option {
+    padding: 0.6rem;
+    font-size: 1.35rem;
+}
+
+#preview-main-text {
+    font-family: "Dancing Script", cursive;
+}
+
+#preview-secondary-text {
+    font-family: "Caveat", cursive;
 }

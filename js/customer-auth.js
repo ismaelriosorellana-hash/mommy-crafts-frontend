@@ -122,6 +122,19 @@
         return authRequest(`/cuenta/pedidos/${encodeURIComponent(id)}`);
     }
 
+    async function createPaymentPreference(orderId) {
+        return authRequest(
+            `/pagos/mercadopago/pedidos/${encodeURIComponent(orderId)}/preferencia`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: "{}"
+            }
+        );
+    }
+
     function escapeHtml(value) {
         return String(value ?? "")
             .replaceAll("&", "&amp;")
@@ -222,6 +235,7 @@
         updateProfile,
         getOrders,
         getOrder,
+        createPaymentPreference,
         renderAccountMenu,
         requireCustomer
     });

@@ -159,6 +159,11 @@
                 <div class="account-order-total">
                     <strong>${money(order.total)}</strong>
                     <a class="btn-secondary" href="pedido.html?id=${encodeURIComponent(order.id)}">Ver detalle</a>
+                    ${order.puedePagar ? `
+                        <button class="btn-primary customer-pay-button" type="button" data-pay-order="${escapeHtml(order.id)}">
+                            Pagar con Mercado Pago
+                        </button>
+                    ` : ""}
                 </div>
             </article>
         `;
@@ -197,6 +202,26 @@
                         <a class="btn-primary" href="catalogo.html">Explorar productos</a>
                     </div>
                 `;
+
+            list.addEventListener("click", async (event) => {
+                const button = event.target.closest("[data-pay-order]");
+                if (!button) return;
+
+                button.disabled = true;
+                const original = button.textContent;
+                button.textContent = "Preparando pago...";
+
+                try {
+                    const result = await CustomerAuth.createPaymentPreference(
+                        button.dataset.payOrder
+                    );
+                    location.href = result.checkoutUrl;
+                } catch (error) {
+                    alert(error.message || "No fue posible iniciar el pago.");
+                    button.disabled = false;
+                    button.textContent = original;
+                }
+            }, { once: true });
         } catch (error) {
             if (error.status === 401) {
                 location.replace("acceso.html?modo=login&sesion=expirada");
@@ -300,6 +325,11 @@
                         ${order.entrega?.metodo === "envio" ? `<p>${escapeHtml(order.entrega?.direccion || "")}, ${escapeHtml(order.entrega?.comuna || "")}</p>` : ""}
                         <p>Subtotal: <strong>${money(order.subtotal)}</strong></p>
                         <p>Total: <strong>${money(order.total)}</strong></p>
+                        ${order.metodoPago === "mercadopago" && order.estadoPago !== "pagado" && order.estadoPedido !== "cancelado" ? `
+                            <button class="btn-primary customer-pay-button" id="customer-retry-payment" type="button">
+                                Pagar con Mercado Pago
+                            </button>
+                        ` : ""}
                     </section>
                     <section class="account-detail-card" style="margin-top:1.6rem">
                         <h2>Seguimiento</h2>
@@ -315,6 +345,22 @@
                     </section>
                 </aside>
             `;
+
+            document.getElementById("customer-retry-payment")
+                ?.addEventListener("click", async (event) => {
+                    const button = event.currentTarget;
+                    button.disabled = true;
+                    button.textContent = "Preparando pago...";
+
+                    try {
+                        const result = await CustomerAuth.createPaymentPreference(id);
+                        location.href = result.checkoutUrl;
+                    } catch (error) {
+                        alert(error.message || "No fue posible iniciar el pago.");
+                        button.disabled = false;
+                        button.textContent = "Pagar con Mercado Pago";
+                    }
+                });
         } catch (error) {
             container.innerHTML = `<section class="account-detail-card"><div class="account-alert">${escapeHtml(error.message)}</div></section>`;
         }
