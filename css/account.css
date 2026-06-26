@@ -415,7 +415,7 @@
 }
 
 
-/* V3.21: claridad del acceso oficial de clientes */
+/* V3.22: claridad del acceso oficial de clientes */
 .account-security-note {
     display: flex;
     gap: 16px;
@@ -439,9 +439,15 @@
 }
 
 .account-security-note p {
-    margin: 6px 0 8px;
+    margin: 6px 0 10px;
     color: var(--color-text-soft);
     line-height: 1.55;
+}
+
+.account-security-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
 }
 
 .account-security-note a {

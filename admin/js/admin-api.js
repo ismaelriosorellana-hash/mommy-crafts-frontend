@@ -108,10 +108,15 @@
         const controller =
             new AbortController();
 
+        const isRenderApi =
+            /\.onrender\.com(?:\/|$)/i.test(
+                getBaseUrl()
+            );
+
         const timeoutId =
             window.setTimeout(
                 () => controller.abort(),
-                15000
+                isRenderApi ? 70000 : 15000
             );
 
         try {
@@ -178,7 +183,9 @@
                 "AbortError"
             ) {
                 throw new AdminApiError(
-                    "El servidor tardó demasiado en responder."
+                    isRenderApi
+                        ? "El servidor se está activando. Espera unos segundos e intenta nuevamente."
+                        : "El servidor tardó demasiado en responder."
                 );
             }
 
@@ -190,7 +197,7 @@
             }
 
             throw new AdminApiError(
-                "No fue posible conectar con el backend. Comprueba que npm run dev esté activo.",
+                "No fue posible conectar con el servidor de Mommy Crafts. Intenta nuevamente en un momento.",
                 0,
                 error
             );

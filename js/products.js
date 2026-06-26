@@ -177,17 +177,49 @@ function normalizeCharacteristics(value) {
             .filter(Boolean);
     }
 
+    function normalizeImageUrl(value) {
+        const raw = stringValue(value);
+
+        if (!raw) return "";
+
+        if (/^http:\/\/res\.cloudinary\.com\//i.test(raw)) {
+            return raw.replace(/^http:\/\//i, "https://");
+        }
+
+        const driveFileMatch =
+            raw.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
+
+        if (driveFileMatch?.[1]) {
+            return `https://drive.google.com/uc?export=view&id=${encodeURIComponent(driveFileMatch[1])}`;
+        }
+
+        try {
+            const parsed = new URL(raw);
+
+            if (
+                parsed.hostname === "drive.google.com" &&
+                parsed.searchParams.get("id")
+            ) {
+                return `https://drive.google.com/uc?export=view&id=${encodeURIComponent(parsed.searchParams.get("id"))}`;
+            }
+        } catch {
+            return raw;
+        }
+
+        return raw;
+    }
+
     function normalizeImages(rawImages) {
         if (!Array.isArray(rawImages)) return [];
 
         return rawImages
             .map((image) => {
                 if (typeof image === "string") {
-                    return image.trim();
+                    return normalizeImageUrl(image);
                 }
 
                 if (image && typeof image === "object") {
-                    return stringValue(
+                    return normalizeImageUrl(
                         image.url ??
                         image.src ??
                         image.imagen ??
@@ -1494,6 +1526,45 @@ function createProductCard(product) {
             inStock.slice(0, 12)
         );
     }
+
+    function showRenderActivationMessage() {
+        const renderApi =
+            /\.onrender\.com(?:\/|$)/i.test(
+                String(CONFIG.API_BASE_URL || "")
+            );
+
+        if (!renderApi) return;
+
+        document
+            .querySelectorAll(".loading-products")
+            .forEach((element) => {
+                if (
+                    !element.dataset.originalLoadingText
+                ) {
+                    element.dataset.originalLoadingText =
+                        element.textContent.trim();
+                }
+
+                element.innerHTML = `
+                    <div class="backend-wakeup-note">
+                        <strong>Activando el catálogo...</strong>
+                        <span>
+                            La primera carga del servidor puede tardar cerca de un minuto.
+                        </span>
+                    </div>
+                `;
+            });
+    }
+
+    window.addEventListener(
+        "api:slow",
+        showRenderActivationMessage
+    );
+
+    window.addEventListener(
+        "api:retry",
+        showRenderActivationMessage
+    );
 
     async function loadProducts(force = false) {
         if (

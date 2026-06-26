@@ -1,3 +1,8 @@
-# Evitar la publicación de documentación técnica
-/README*       /404.html  404
-/*.md          /404.html  404
+# Bloqueo forzado de documentación técnica aunque el archivo exista
+/README*                    /404.html  404!
+/ADMIN_PANEL_PLAN.md        /404.html  404!
+/ADMIN_PANEL_README.md      /404.html  404!
+/MODELO_PRODUCTOS.md        /404.html  404!
+/ARCHIVOS_DEL_PARCHE.txt    /404.html  404!
+/CAMBIOS_V2*.md             /404.html  404!
+/*.md                       /404.html  404!

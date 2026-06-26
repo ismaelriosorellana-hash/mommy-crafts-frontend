@@ -348,3 +348,24 @@
 .best-sellers-section {
     padding-top: 8rem;
 }
+
+
+/* V3.22: estado visible mientras Render activa el catálogo */
+.backend-wakeup-note {
+    display: grid;
+    justify-items: center;
+    gap: .7rem;
+    max-width: 42rem;
+    padding: 1.6rem;
+    text-align: center;
+}
+
+.backend-wakeup-note strong {
+    color: var(--color-primary-deep);
+    font-size: 1.45rem;
+}
+
+.backend-wakeup-note span {
+    color: var(--color-text-soft);
+    line-height: 1.5;
+}

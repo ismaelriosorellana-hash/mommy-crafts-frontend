@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Información sobre los accesos y la seguridad del sitio Mommy Crafts.">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="theme-color" content="#FFF9FD">
+    <title>Seguridad del sitio | Mommy Crafts</title>
+    <link rel="preconnect" href="https://res.cloudinary.com">
+    <style>
+        :root {
+            font-family: Arial, sans-serif;
+            color: #372A32;
+            background: #FFF9FD;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, rgba(252, 192, 230, .35), transparent 30rem),
+                #FFF9FD;
+        }
+        header, main, footer {
+            width: min(92vw, 850px);
+            margin-inline: auto;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 28px 0 18px;
+        }
+        header img {
+            width: 86px;
+            height: 86px;
+            object-fit: contain;
+        }
+        header a, main a {
+            color: #71364F;
+            font-weight: 700;
+        }
+        article {
+            padding: clamp(24px, 5vw, 48px);
+            border: 1px solid #F0D6E6;
+            border-radius: 24px;
+            background: #fff;
+            box-shadow: 0 18px 45px rgba(113, 54, 79, .12);
+        }
+        h1, h2 { color: #71364F; }
+        h1 { margin-top: 0; font-size: clamp(2rem, 5vw, 3rem); }
+        h2 { margin-top: 30px; font-size: 1.25rem; }
+        p, li { line-height: 1.7; color: #715F69; }
+        .identity {
+            padding: 18px;
+            border-left: 4px solid #8E456A;
+            border-radius: 0 14px 14px 0;
+            background: #FFF2FA;
+        }
+        .secure {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 9px 12px;
+            border-radius: 999px;
+            background: #FFE0F3;
+            color: #71364F;
+            font-weight: 700;
+        }
+        footer {
+            padding: 22px 0 36px;
+            color: #715F69;
+            font-size: .9rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" aria-label="Volver a la tienda Mommy Crafts">
+            <img
+                src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png"
+                alt="Logotipo de Mommy Crafts"
+            >
+        </a>
+        <a href="index.html">Volver a la tienda</a>
+    </header>
+
+    <main>
+        <article>
+            <p class="secure">Conexión protegida mediante HTTPS</p>
+            <h1>Seguridad e identidad del sitio</h1>
+
+            <div class="identity">
+                <strong>Mommy Crafts</strong>
+                <p>
+                    Mommy Crafts es un emprendimiento independiente dedicado a
+                    productos personalizados. Este sitio se utiliza para mostrar
+                    productos, recibir pedidos y administrar cuentas propias de
+                    Mommy Crafts.
+                </p>
+            </div>
+
+            <h2>Credenciales que puede solicitar este sitio</h2>
+            <p>
+                Los formularios de acceso solicitan solamente el correo y la
+                contraseña creados específicamente para una cuenta de cliente o
+                una cuenta administrativa de Mommy Crafts.
+            </p>
+
+            <h2>Credenciales que nunca solicitamos</h2>
+            <ul>
+                <li>Contraseñas de Google, Gmail u otros correos.</li>
+                <li>Contraseñas de bancos o medios de pago.</li>
+                <li>Contraseñas de Netlify, Render, GitHub o redes sociales.</li>
+                <li>Códigos privados de autenticación de otras plataformas.</li>
+            </ul>
+
+            <h2>Protección de la conexión</h2>
+            <p>
+                Las páginas públicas se sirven mediante HTTPS. Las claves privadas
+                del servidor no se publican en el frontend ni en el repositorio
+                público del sitio.
+            </p>
+
+            <h2>Contacto</h2>
+            <p>
+                Ante cualquier duda sobre un acceso o pedido, contacta directamente
+                a Mommy Crafts por
+                <a
+                    href="https://wa.me/56954633848?text=Necesito%20verificar%20un%20acceso%20de%20Mommy%20Crafts"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    WhatsApp
+                </a>.
+            </p>
+        </article>
+    </main>
+
+    <footer>
+        © 2026 Mommy Crafts · Emprendimiento independiente
+    </footer>
+</body>
+</html>

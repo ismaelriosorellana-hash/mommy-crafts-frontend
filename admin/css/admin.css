@@ -389,14 +389,14 @@ body {
 }
 
 
-/* V3.21: identidad y transparencia del acceso administrativo */
+/* V3.22: identidad y transparencia del acceso administrativo */
 .admin-login-page {
     align-items: start;
     padding-top: clamp(24px, 6vh, 72px);
 }
 
 .admin-login-card {
-    width: min(100%, 520px);
+    width: min(100%, 540px);
 }
 
 .admin-login-back {
@@ -410,7 +410,9 @@ body {
 }
 
 .admin-login-back:hover,
-.admin-login-back:focus-visible {
+.admin-login-back:focus-visible,
+.admin-login-footer a:hover,
+.admin-login-footer a:focus-visible {
     text-decoration: underline;
 }
 
@@ -506,7 +508,7 @@ body {
 }
 
 .admin-login-footer p {
-    margin: 5px 0;
+    margin: 6px 0;
 }
 
 .admin-login-footer a {
