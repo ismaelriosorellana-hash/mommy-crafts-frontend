@@ -1,4 +1,4 @@
-# Bloqueo forzado de documentación técnica aunque el archivo exista
+# Documentación técnica no pública
 /README*                    /404.html  404!
 /ADMIN_PANEL_PLAN.md        /404.html  404!
 /ADMIN_PANEL_README.md      /404.html  404!

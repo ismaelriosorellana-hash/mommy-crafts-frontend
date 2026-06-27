@@ -1,134 +1,295 @@
 "use strict";
 
 (function () {
-    const TOKEN_KEY = "mommycrafts_customer_token";
-    const USER_KEY = "mommycrafts_customer_user";
+    const TOKEN_KEY =
+        "mommycrafts_customer_token";
+
+    const USER_KEY =
+        "mommycrafts_customer_user";
+
+    function clearLegacyPersistentSession() {
+        localStorage.removeItem(
+            TOKEN_KEY
+        );
+
+        localStorage.removeItem(
+            USER_KEY
+        );
+    }
+
+    clearLegacyPersistentSession();
 
     function getToken() {
         return (
-            localStorage.getItem(TOKEN_KEY) ||
-            sessionStorage.getItem(TOKEN_KEY) ||
-            ""
+            sessionStorage.getItem(
+                TOKEN_KEY
+            ) || ""
         );
     }
 
     function getUser() {
         const raw =
-            localStorage.getItem(USER_KEY) ||
-            sessionStorage.getItem(USER_KEY);
+            sessionStorage.getItem(
+                USER_KEY
+            );
 
         if (!raw) return null;
 
         try {
-            return JSON.parse(raw);
+            return JSON.parse(
+                raw
+            );
         } catch {
+            clearSession();
             return null;
         }
     }
 
-    function activeStorage() {
-        return localStorage.getItem(TOKEN_KEY)
-            ? localStorage
-            : sessionStorage;
-    }
-
     function clearSession() {
-        for (const storage of [localStorage, sessionStorage]) {
-            storage.removeItem(TOKEN_KEY);
-            storage.removeItem(USER_KEY);
-        }
+        sessionStorage.removeItem(
+            TOKEN_KEY
+        );
+
+        sessionStorage.removeItem(
+            USER_KEY
+        );
+
+        localStorage.removeItem(
+            TOKEN_KEY
+        );
+
+        localStorage.removeItem(
+            USER_KEY
+        );
     }
 
-    function saveSession(token, user, remember = false) {
+    function saveSession(
+        token,
+        user
+    ) {
         clearSession();
-        const storage = remember ? localStorage : sessionStorage;
-        storage.setItem(TOKEN_KEY, token);
-        storage.setItem(USER_KEY, JSON.stringify(user));
+
+        sessionStorage.setItem(
+            TOKEN_KEY,
+            token
+        );
+
+        sessionStorage.setItem(
+            USER_KEY,
+            JSON.stringify(
+                user
+            )
+        );
+
         renderAccountMenu();
     }
 
     function saveUser(user) {
-        const storage = activeStorage();
-        storage.setItem(USER_KEY, JSON.stringify(user));
+        if (!getToken()) return;
+
+        sessionStorage.setItem(
+            USER_KEY,
+            JSON.stringify(
+                user
+            )
+        );
+
         renderAccountMenu();
     }
 
-    async function authRequest(endpoint, options = {}) {
+    async function authRequest(
+        endpoint,
+        options = {}
+    ) {
         try {
-            return await API.request(endpoint, options);
+            return await API.request(
+                endpoint,
+                options
+            );
         } catch (error) {
-            if (error.status === 401) {
+            if (
+                error.status ===
+                401
+            ) {
                 clearSession();
                 renderAccountMenu();
             }
+
             throw error;
         }
     }
 
-    async function login(email, password, remember = false) {
-        const data = await API.request("/auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email,
-                password,
-                area: "cliente"
-            })
-        });
+    async function login(
+        email,
+        password
+    ) {
+        const data =
+            await API.request(
+                "/auth/login",
+                {
+                    method:
+                        "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:
+                        JSON.stringify({
+                            email,
+                            password,
+                            area:
+                                "cliente"
+                        })
+                }
+            );
 
-        saveSession(data.token, data.usuario, remember);
+        saveSession(
+            data.token,
+            data.usuario
+        );
+
         return data.usuario;
     }
 
-    async function register(payload, remember = true) {
-        const data = await API.request("/auth/registro", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
+    async function register(
+        payload
+    ) {
+        const data =
+            await API.request(
+                "/auth/registro",
+                {
+                    method:
+                        "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:
+                        JSON.stringify(
+                            payload
+                        )
+                }
+            );
 
-        saveSession(data.token, data.usuario, remember);
+        saveSession(
+            data.token,
+            data.usuario
+        );
+
         return data.usuario;
     }
 
     async function getProfile() {
-        const data = await authRequest("/cuenta/perfil");
-        saveUser(data.usuario);
+        const data =
+            await authRequest(
+                "/cuenta/perfil"
+            );
+
+        saveUser(
+            data.usuario
+        );
+
         return data.usuario;
     }
 
-    async function updateProfile(payload) {
-        const data = await authRequest("/cuenta/perfil", {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
+    async function updateProfile(
+        payload
+    ) {
+        const data =
+            await authRequest(
+                "/cuenta/perfil",
+                {
+                    method:
+                        "PATCH",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:
+                        JSON.stringify(
+                            payload
+                        )
+                }
+            );
 
-        saveUser(data.usuario);
+        saveUser(
+            data.usuario
+        );
+
         return data.usuario;
+    }
+
+    async function changePassword(
+        currentPassword,
+        newPassword
+    ) {
+        const data =
+            await authRequest(
+                "/auth/cambiar-password",
+                {
+                    method:
+                        "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:
+                        JSON.stringify({
+                            passwordActual:
+                                currentPassword,
+                            passwordNueva:
+                                newPassword
+                        })
+                }
+            );
+
+        saveSession(
+            data.token,
+            data.usuario
+        );
+
+        return data;
+    }
+
+    async function revokeSessions() {
+        const data =
+            await authRequest(
+                "/auth/revocar-sesiones",
+                {
+                    method:
+                        "POST"
+                }
+            );
+
+        clearSession();
+        renderAccountMenu();
+
+        return data;
     }
 
     async function getOrders() {
-        return authRequest("/cuenta/pedidos");
+        return authRequest(
+            "/cuenta/pedidos"
+        );
     }
 
     async function getOrder(id) {
-        return authRequest(`/cuenta/pedidos/${encodeURIComponent(id)}`);
+        return authRequest(
+            `/cuenta/pedidos/${encodeURIComponent(id)}`
+        );
     }
 
-    async function createPaymentPreference(orderId) {
+    async function createPaymentPreference(
+        orderId
+    ) {
         return authRequest(
             `/pagos/mercadopago/pedidos/${encodeURIComponent(orderId)}/preferencia`,
             {
-                method: "POST",
+                method:
+                    "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
                 },
                 body: "{}"
             }
@@ -136,31 +297,77 @@
     }
 
     function escapeHtml(value) {
-        return String(value ?? "")
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("'", "&#039;");
+        return String(
+            value ?? ""
+        )
+            .replaceAll(
+                "&",
+                "&amp;"
+            )
+            .replaceAll(
+                "<",
+                "&lt;"
+            )
+            .replaceAll(
+                ">",
+                "&gt;"
+            )
+            .replaceAll(
+                '"',
+                "&quot;"
+            )
+            .replaceAll(
+                "'",
+                "&#039;"
+            );
     }
 
     function renderAccountMenu() {
         document
-            .querySelectorAll("[data-customer-account-menu]")
-            .forEach((element) => element.remove());
+            .querySelectorAll(
+                "[data-customer-account-menu]"
+            )
+            .forEach(
+                (element) =>
+                    element.remove()
+            );
 
-        const actions = document.querySelector(".navbar-actions");
+        const actions =
+            document.querySelector(
+                ".navbar-actions"
+            );
+
         if (!actions) return;
 
-        const user = getUser();
-        const loggedIn = Boolean(getToken() && user?.rol === "cliente");
-        const firstName = String(user?.nombre || "Cliente")
-            .trim()
-            .split(/\s+/)[0];
+        const user =
+            getUser();
 
-        const menu = document.createElement("details");
-        menu.className = "customer-account-menu";
-        menu.dataset.customerAccountMenu = "";
+        const loggedIn =
+            Boolean(
+                getToken() &&
+                user?.rol ===
+                    "cliente"
+            );
+
+        const firstName =
+            String(
+                user?.nombre ||
+                "Cliente"
+            )
+                .trim()
+                .split(/\s+/)[0];
+
+        const menu =
+            document.createElement(
+                "details"
+            );
+
+        menu.className =
+            "customer-account-menu";
+
+        menu.dataset
+            .customerAccountMenu =
+            "";
 
         menu.innerHTML = `
             <summary class="icon-btn account-button" aria-label="Acceso de usuarios">
@@ -181,6 +388,10 @@
                         <i class="fa-solid fa-bag-shopping"></i>
                         Mis pedidos
                     </a>
+                    <a href="cuenta.html#seguridad-cuenta">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        Seguridad
+                    </a>
                     <button type="button" data-customer-logout>
                         <i class="fa-solid fa-right-from-bracket"></i>
                         Cerrar sesión
@@ -198,42 +409,72 @@
             </div>
         `;
 
-        actions.insertBefore(menu, actions.firstChild);
+        actions.insertBefore(
+            menu,
+            actions.firstChild
+        );
 
-        menu.querySelector("[data-customer-logout]")
-            ?.addEventListener("click", () => {
-                clearSession();
-                location.href = "index.html";
-            });
+        menu
+            .querySelector(
+                "[data-customer-logout]"
+            )
+            ?.addEventListener(
+                "click",
+                () => {
+                    clearSession();
+
+                    location.href =
+                        "index.html";
+                }
+            );
     }
 
     function requireCustomer() {
-        if (!getToken() || getUser()?.rol !== "cliente") {
-            const next = encodeURIComponent(
-                location.pathname.split("/").pop() + location.search
+        if (
+            !getToken() ||
+            getUser()?.rol !==
+                "cliente"
+        ) {
+            const next =
+                encodeURIComponent(
+                    location.pathname
+                        .split("/")
+                        .pop() +
+                    location.search
+                );
+
+            location.replace(
+                `acceso.html?modo=login&next=${next}`
             );
-            location.replace(`acceso.html?modo=login&next=${next}`);
+
             return false;
         }
+
         return true;
     }
 
-    window.CustomerAuth = Object.freeze({
-        getToken,
-        getUser,
-        saveSession,
-        saveUser,
-        clearSession,
-        login,
-        register,
-        getProfile,
-        updateProfile,
-        getOrders,
-        getOrder,
-        createPaymentPreference,
-        renderAccountMenu,
-        requireCustomer
-    });
+    window.CustomerAuth =
+        Object.freeze({
+            getToken,
+            getUser,
+            saveSession,
+            saveUser,
+            clearSession,
+            login,
+            register,
+            getProfile,
+            updateProfile,
+            changePassword,
+            revokeSessions,
+            getOrders,
+            getOrder,
+            createPaymentPreference,
+            renderAccountMenu,
+            requireCustomer
+        });
 
-    document.addEventListener("DOMContentLoaded", renderAccountMenu);
+    document.addEventListener(
+        "DOMContentLoaded",
+        renderAccountMenu
+    );
 })();

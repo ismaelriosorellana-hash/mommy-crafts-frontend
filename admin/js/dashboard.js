@@ -13,9 +13,184 @@ document.addEventListener(
             loadDashboard
         );
 
+        bindSecurityControls();
         loadDashboard();
     }
 );
+
+
+function setSecurityMessage(
+    element,
+    message
+) {
+    if (!element) return;
+
+    element.hidden =
+        !message;
+
+    element.textContent =
+        message || "";
+}
+
+function bindSecurityControls() {
+    const form =
+        document.getElementById(
+            "admin-password-form"
+        );
+
+    const errorBox =
+        document.getElementById(
+            "admin-password-error"
+        );
+
+    const successBox =
+        document.getElementById(
+            "admin-password-success"
+        );
+
+    const revokeButton =
+        document.getElementById(
+            "admin-revoke-sessions"
+        );
+
+    form?.addEventListener(
+        "submit",
+        async (event) => {
+            event.preventDefault();
+
+            const currentPassword =
+                document.getElementById(
+                    "admin-password-current"
+                ).value;
+
+            const newPassword =
+                document.getElementById(
+                    "admin-password-new"
+                ).value;
+
+            const confirmation =
+                document.getElementById(
+                    "admin-password-confirm"
+                ).value;
+
+            const button =
+                document.getElementById(
+                    "admin-password-submit"
+                );
+
+            setSecurityMessage(
+                errorBox,
+                ""
+            );
+
+            setSecurityMessage(
+                successBox,
+                ""
+            );
+
+            if (
+                newPassword !==
+                confirmation
+            ) {
+                setSecurityMessage(
+                    errorBox,
+                    "La confirmación no coincide con la nueva contraseña."
+                );
+
+                return;
+            }
+
+            button.disabled =
+                true;
+
+            const original =
+                button.innerHTML;
+
+            button.textContent =
+                "Actualizando...";
+
+            try {
+                const data =
+                    await AdminAPI
+                        .changePassword(
+                            currentPassword,
+                            newPassword
+                        );
+
+                AdminAPI.saveSession(
+                    data.token,
+                    data.usuario
+                );
+
+                form.reset();
+
+                setSecurityMessage(
+                    successBox,
+                    data.mensaje ||
+                    "La contraseña se actualizó correctamente."
+                );
+
+                AdminUI.toast(
+                    "Contraseña actualizada.",
+                    "success"
+                );
+            } catch (error) {
+                setSecurityMessage(
+                    errorBox,
+                    error.message
+                );
+            } finally {
+                button.disabled =
+                    false;
+
+                button.innerHTML =
+                    original;
+            }
+        }
+    );
+
+    revokeButton?.addEventListener(
+        "click",
+        async () => {
+            const confirmed =
+                window.confirm(
+                    "Se cerrarán todas las sesiones administrativas, incluida la actual. ¿Continuar?"
+                );
+
+            if (!confirmed) return;
+
+            revokeButton.disabled =
+                true;
+
+            revokeButton.textContent =
+                "Cerrando sesiones...";
+
+            try {
+                await AdminAPI
+                    .revokeSessions();
+
+                AdminAPI.clearSession();
+
+                location.replace(
+                    "login.html?sesion=revocada"
+                );
+            } catch (error) {
+                setSecurityMessage(
+                    errorBox,
+                    error.message
+                );
+
+                revokeButton.disabled =
+                    false;
+
+                revokeButton.innerHTML = `
+                    <i class="fa-solid fa-user-lock" aria-hidden="true"></i>
+                    Cerrar todas las sesiones
+                `;
+            }
+        }
+    );
+}
 
 async function loadDashboard() {
     const ordersContainer =

@@ -1,28 +1,70 @@
 "use strict";
 
 (function () {
-    const TOKEN_KEY = "mommycrafts_admin_token";
-    const USER_KEY = "mommycrafts_admin_user";
+    const TOKEN_KEY =
+        "mommycrafts_admin_token";
+
+    const USER_KEY =
+        "mommycrafts_admin_user";
 
     class AdminApiError extends Error {
-        constructor(message, status = 0, details = null) {
+        constructor(
+            message,
+            status = 0,
+            details = null
+        ) {
             super(message);
-            this.name = "AdminApiError";
-            this.status = status;
-            this.details = details;
+
+            this.name =
+                "AdminApiError";
+
+            this.status =
+                status;
+
+            this.details =
+                details;
         }
     }
 
+    function clearLegacyPersistentSession() {
+        localStorage.removeItem(
+            TOKEN_KEY
+        );
+
+        localStorage.removeItem(
+            USER_KEY
+        );
+    }
+
+    clearLegacyPersistentSession();
+
     function getBaseUrl() {
         const configured =
-            window.CONFIG?.API_BASE_URL ||
-            "http://localhost:3000/api";
+            window.CONFIG
+                ?.API_BASE_URL ||
+            "";
 
-        let base = String(configured)
-            .replace(/\/+$/, "");
+        let base =
+            String(configured)
+                .trim()
+                .replace(
+                    /\/+$/,
+                    ""
+                );
 
-        if (!/\/api$/i.test(base)) {
-            base = `${base}/api`;
+        if (!base) {
+            throw new AdminApiError(
+                "La dirección del servidor no está configurada."
+            );
+        }
+
+        if (
+            !/\/api$/i.test(
+                base
+            )
+        ) {
+            base =
+                `${base}/api`;
         }
 
         return base;
@@ -30,57 +72,65 @@
 
     function getToken() {
         return (
-            sessionStorage.getItem(TOKEN_KEY) ||
-            localStorage.getItem(TOKEN_KEY) ||
-            ""
+            sessionStorage.getItem(
+                TOKEN_KEY
+            ) || ""
         );
     }
 
     function getUser() {
         const raw =
-            sessionStorage.getItem(USER_KEY) ||
-            localStorage.getItem(USER_KEY);
+            sessionStorage.getItem(
+                USER_KEY
+            );
 
         if (!raw) return null;
 
         try {
-            return JSON.parse(raw);
+            return JSON.parse(
+                raw
+            );
         } catch {
+            clearSession();
             return null;
         }
     }
 
     function saveSession(
         token,
-        user,
-        remember = false
+        user
     ) {
         clearSession();
 
-        const storage =
-            remember
-                ? localStorage
-                : sessionStorage;
-
-        storage.setItem(
+        sessionStorage.setItem(
             TOKEN_KEY,
             token
         );
 
-        storage.setItem(
+        sessionStorage.setItem(
             USER_KEY,
-            JSON.stringify(user)
+            JSON.stringify(
+                user
+            )
         );
     }
 
     function clearSession() {
-        for (const storage of [
-            localStorage,
-            sessionStorage
-        ]) {
-            storage.removeItem(TOKEN_KEY);
-            storage.removeItem(USER_KEY);
-        }
+        sessionStorage.removeItem(
+            TOKEN_KEY
+        );
+
+        sessionStorage.removeItem(
+            USER_KEY
+        );
+
+        localStorage.removeItem(
+            TOKEN_KEY
+        );
+
+        localStorage.removeItem(
+            USER_KEY
+        );
     }
 
     async function request(
@@ -91,21 +141,26 @@
             `${getBaseUrl()}/${String(endpoint).replace(/^\/+/, "")}`;
 
         const headers = {
-            Accept: "application/json",
-            ...(options.body
+            Accept:
+                "application/json",
+            ...(options.body !==
+            undefined
                 ? {
                     "Content-Type":
                         "application/json"
                 }
                 : {}),
-            ...(options.headers || {})
+            ...(options.headers ||
+                {})
         };
 
-        const token = getToken();
+        const token =
+            getToken();
 
         if (
             token &&
-            options.auth !== false
+            options.auth !==
+                false
         ) {
             headers.Authorization =
                 `Bearer ${token}`;
@@ -115,34 +170,40 @@
             new AbortController();
 
         const isRenderApi =
-            /\.onrender\.com(?:\/|$)/i.test(
-                getBaseUrl()
-            );
+            /\.onrender\.com(?:\/|$)/i
+                .test(
+                    getBaseUrl()
+                );
 
         const timeoutId =
             window.setTimeout(
-                () => controller.abort(),
-                isRenderApi ? 70000 : 15000
+                () =>
+                    controller.abort(),
+                isRenderApi
+                    ? 70000
+                    : 15000
             );
 
         try {
-            const response = await fetch(
-                url,
-                {
-                    method:
-                        options.method ||
-                        "GET",
-                    headers,
-                    body:
-                        options.body === undefined
-                            ? undefined
-                            : JSON.stringify(
-                                options.body
-                            ),
-                    signal:
-                        controller.signal
-                }
-            );
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method:
+                            options.method ||
+                            "GET",
+                        headers,
+                        body:
+                            options.body ===
+                            undefined
+                                ? undefined
+                                : JSON.stringify(
+                                    options.body
+                                ),
+                        signal:
+                            controller.signal
+                    }
+                );
 
             const contentType =
                 response.headers.get(
@@ -158,15 +219,18 @@
 
             if (!response.ok) {
                 if (
-                    response.status === 401 &&
-                    options.auth !== false
+                    response.status ===
+                        401 &&
+                    options.auth !==
+                        false
                 ) {
                     clearSession();
 
                     if (
-                        !location.pathname.endsWith(
-                            "/login.html"
-                        )
+                        !location.pathname
+                            .endsWith(
+                                "/login.html"
+                            )
                     ) {
                         location.href =
                             "login.html?sesion=expirada";
@@ -223,16 +287,22 @@
             saveSession,
             clearSession,
 
-            login(email, password) {
+            login(
+                email,
+                password
+            ) {
                 return request(
                     "/auth/login",
                     {
-                        method: "POST",
-                        auth: false,
+                        method:
+                            "POST",
+                        auth:
+                            false,
                         body: {
                             email,
                             password,
-                            area: "admin"
+                            area:
+                                "admin"
                         }
                     }
                 );
@@ -241,6 +311,35 @@
             me() {
                 return request(
                     "/auth/me"
+                );
+            },
+
+            changePassword(
+                currentPassword,
+                newPassword
+            ) {
+                return request(
+                    "/auth/cambiar-password",
+                    {
+                        method:
+                            "POST",
+                        body: {
+                            passwordActual:
+                                currentPassword,
+                            passwordNueva:
+                                newPassword
+                        }
+                    }
+                );
+            },
+
+            revokeSessions() {
+                return request(
+                    "/auth/revocar-sesiones",
+                    {
+                        method:
+                            "POST"
+                    }
                 );
             }
         });

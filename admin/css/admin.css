@@ -515,3 +515,101 @@ body {
     color: var(--admin-primary-dark);
     font-weight: 750;
 }
+
+
+/* V3.24: sesiones temporales y seguridad administrativa */
+.admin-session-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin: 4px 0 18px;
+    padding: 12px 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-sm);
+    background: var(--admin-surface-soft);
+    color: var(--admin-muted);
+    font-size: .84rem;
+    line-height: 1.45;
+}
+
+.admin-session-note i {
+    margin-top: 2px;
+    color: var(--admin-primary-dark);
+}
+
+.admin-security-card {
+    margin-top: 22px;
+}
+
+.admin-section-kicker {
+    margin: 0 0 5px;
+    color: var(--admin-primary);
+    font-size: .75rem;
+    font-weight: 850;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.admin-security-symbol {
+    color: var(--admin-primary-dark);
+    font-size: 1.6rem;
+}
+
+.admin-security-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(260px, .6fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.admin-session-box {
+    padding: 18px;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-sm);
+    background: var(--admin-surface-soft);
+}
+
+.admin-session-box h4 {
+    margin: 0 0 8px;
+}
+
+.admin-session-box p {
+    margin: 0 0 16px;
+    color: var(--admin-muted);
+    line-height: 1.55;
+}
+
+.admin-alert {
+    margin-bottom: 15px;
+    padding: 12px 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-sm);
+    background: var(--admin-surface-soft);
+    color: var(--admin-text);
+    line-height: 1.45;
+}
+
+.admin-alert.success {
+    border-color: rgba(36, 122, 82, .25);
+    background: rgba(36, 122, 82, .08);
+    color: var(--admin-success);
+}
+
+.admin-alert.danger {
+    border-color: rgba(185, 58, 75, .25);
+    background: rgba(185, 58, 75, .08);
+    color: var(--admin-danger);
+}
+
+.admin-help {
+    margin: 0 0 14px;
+    color: var(--admin-muted);
+    font-size: .83rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 860px) {
+    .admin-security-layout {
+        grid-template-columns: 1fr;
+    }
+}

@@ -51,8 +51,17 @@
 
     function nextUrl() {
         const params = new URLSearchParams(location.search);
-        const next = params.get("next") || "cuenta.html";
-        return next.startsWith("http") ? "cuenta.html" : next;
+        const candidate = params.get("next") || "cuenta.html";
+
+        if (
+            candidate.startsWith("//") ||
+            candidate.includes("..") ||
+            !/^[a-z0-9][a-z0-9._/-]*(?:\?[^#]*)?(?:#.*)?$/i.test(candidate)
+        ) {
+            return "cuenta.html";
+        }
+
+        return candidate;
     }
 
     function initAccess() {
@@ -81,7 +90,23 @@
             tab.addEventListener("click", () => select(tab.dataset.authTab));
         });
 
-        select(new URLSearchParams(location.search).get("modo") === "registro" ? "registro" : "login");
+        const accessParams = new URLSearchParams(location.search);
+        select(accessParams.get("modo") === "registro" ? "registro" : "login");
+
+        if (accessParams.get("sesion") === "revocada") {
+            showAlert(
+                document.getElementById("login-error"),
+                "Todas las sesiones fueron cerradas. Inicia sesión nuevamente.",
+                true
+            );
+        }
+
+        if (accessParams.get("sesion") === "expirada") {
+            showAlert(
+                document.getElementById("login-error"),
+                "La sesión expiró o dejó de ser válida. Inicia sesión nuevamente."
+            );
+        }
 
         document.getElementById("customer-login-form")
             ?.addEventListener("submit", async (event) => {
@@ -95,8 +120,7 @@
                 try {
                     await CustomerAuth.login(
                         document.getElementById("customer-login-email").value.trim(),
-                        document.getElementById("customer-login-password").value,
-                        document.getElementById("customer-login-remember").checked
+                        document.getElementById("customer-login-password").value
                     );
                     location.replace(nextUrl());
                 } catch (error) {
@@ -176,6 +200,10 @@
         const form = document.getElementById("customer-profile-form");
         const errorBox = document.getElementById("profile-error");
         const successBox = document.getElementById("profile-success");
+        const passwordForm = document.getElementById("customer-password-form");
+        const passwordError = document.getElementById("password-error");
+        const passwordSuccess = document.getElementById("password-success");
+        const revokeButton = document.getElementById("customer-revoke-sessions");
 
         try {
             const [user, ordersData] = await Promise.all([
@@ -254,6 +282,83 @@
             } finally {
                 button.disabled = false;
                 button.textContent = "Guardar cambios";
+            }
+        });
+
+        passwordForm?.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const currentPassword =
+                document.getElementById("password-current").value;
+
+            const newPassword =
+                document.getElementById("password-new").value;
+
+            const confirmation =
+                document.getElementById("password-confirm").value;
+
+            const button =
+                document.getElementById("password-submit");
+
+            showAlert(passwordError, "");
+            showAlert(passwordSuccess, "");
+
+            if (newPassword !== confirmation) {
+                showAlert(
+                    passwordError,
+                    "La confirmación no coincide con la nueva contraseña."
+                );
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = "Actualizando...";
+
+            try {
+                const data = await CustomerAuth.changePassword(
+                    currentPassword,
+                    newPassword
+                );
+
+                passwordForm.reset();
+
+                showAlert(
+                    passwordSuccess,
+                    data.mensaje ||
+                        "La contraseña se actualizó correctamente.",
+                    true
+                );
+            } catch (error) {
+                showAlert(
+                    passwordError,
+                    error.message
+                );
+            } finally {
+                button.disabled = false;
+                button.textContent = "Cambiar contraseña";
+            }
+        });
+
+        revokeButton?.addEventListener("click", async () => {
+            const confirmed = window.confirm(
+                "Se cerrarán todas las sesiones de esta cuenta, incluida la actual. ¿Continuar?"
+            );
+
+            if (!confirmed) return;
+
+            revokeButton.disabled = true;
+            revokeButton.textContent = "Cerrando sesiones...";
+
+            try {
+                await CustomerAuth.revokeSessions();
+                location.replace("acceso.html?modo=login&sesion=revocada");
+            } catch (error) {
+                showAlert(
+                    passwordError,
+                    error.message
+                );
+                revokeButton.disabled = false;
+                revokeButton.textContent = "Cerrar todas mis sesiones";
             }
         });
     }

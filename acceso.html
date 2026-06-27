@@ -55,10 +55,7 @@
                     <input id="customer-login-password" name="password" type="password" autocomplete="current-password" required>
                 </div>
             </div>
-            <label class="account-check">
-                <input id="customer-login-remember" type="checkbox">
-                Mantener la sesión iniciada en este equipo
-            </label>
+            <p class="account-session-note"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Por seguridad, la sesión termina al cerrar el navegador.</p>
             <button class="btn-primary" id="customer-login-submit" type="submit">Iniciar sesión</button>
         </form>
     </section>
@@ -91,7 +88,13 @@
                     <input id="customer-register-confirm" name="password-confirmation" type="password" autocomplete="new-password" minlength="10" required>
                 </div>
             </div>
-            <p><small>La contraseña debe tener al menos 10 caracteres.</small></p>
+            <p><small>La contraseña debe tener entre 10 y 128 caracteres.</small></p>
+            <p class="account-legal-note">
+                Al crear una cuenta confirmas que leíste la
+                <a href="privacidad.html" target="_blank" rel="noopener">Política de privacidad</a>
+                y los
+                <a href="terminos.html" target="_blank" rel="noopener">Términos de uso</a>.
+            </p>
             <button class="btn-primary" id="customer-register-submit" type="submit">Crear mi cuenta</button>
         </form>
     </section>
@@ -119,6 +122,12 @@
 </section>
 
         </main>
+
+        <footer class="account-legal-footer">
+            <a href="privacidad.html">Política de privacidad</a>
+            <a href="terminos.html">Términos de uso</a>
+            <a href="seguridad.html">Seguridad del sitio</a>
+        </footer>
         <script src="js/config.js" defer></script>
         <script src="js/api.js" defer></script>
         <script src="js/customer-auth.js" defer></script>

@@ -79,6 +79,91 @@
     </section>
 </div>
 
+<section class="admin-card admin-security-card" id="admin-security">
+    <div class="admin-card-header">
+        <div>
+            <p class="admin-section-kicker">Protección de la cuenta</p>
+            <h3>Seguridad de acceso</h3>
+        </div>
+        <i class="fa-solid fa-shield-halved admin-security-symbol" aria-hidden="true"></i>
+    </div>
+
+    <div class="admin-card-body admin-security-layout">
+        <div>
+            <div class="admin-alert success" id="admin-password-success" hidden></div>
+            <div class="admin-alert danger" id="admin-password-error" hidden></div>
+
+            <form id="admin-password-form" class="admin-form-grid" autocomplete="off">
+                <label class="admin-field full">
+                    <span>Contraseña actual</span>
+                    <input
+                        id="admin-password-current"
+                        name="current-password"
+                        type="password"
+                        autocomplete="current-password"
+                        maxlength="128"
+                        required
+                    >
+                </label>
+
+                <label class="admin-field">
+                    <span>Nueva contraseña</span>
+                    <input
+                        id="admin-password-new"
+                        name="new-password"
+                        type="password"
+                        autocomplete="new-password"
+                        minlength="10"
+                        maxlength="128"
+                        required
+                    >
+                </label>
+
+                <label class="admin-field">
+                    <span>Confirmar nueva contraseña</span>
+                    <input
+                        id="admin-password-confirm"
+                        name="new-password-confirmation"
+                        type="password"
+                        autocomplete="new-password"
+                        minlength="10"
+                        maxlength="128"
+                        required
+                    >
+                </label>
+
+                <div class="full">
+                    <p class="admin-help">
+                        La nueva contraseña debe tener entre 10 y 128 caracteres.
+                        Al cambiarla se cerrarán las demás sesiones.
+                    </p>
+
+                    <button class="admin-button" id="admin-password-submit" type="submit">
+                        <i class="fa-solid fa-key" aria-hidden="true"></i>
+                        Cambiar contraseña
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <aside class="admin-session-box">
+            <h4>Cerrar todas las sesiones</h4>
+            <p>
+                Utiliza esta opción cuando no reconozcas un acceso o hayas usado
+                un computador compartido. También cerrará esta sesión.
+            </p>
+            <button
+                class="admin-button danger"
+                id="admin-revoke-sessions"
+                type="button"
+            >
+                <i class="fa-solid fa-user-lock" aria-hidden="true"></i>
+                Cerrar todas las sesiones
+            </button>
+        </aside>
+    </div>
+</section>
+
     </section>
 
     <script src="../js/config.js"></script>

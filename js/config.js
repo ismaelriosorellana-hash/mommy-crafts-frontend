@@ -1,7 +1,18 @@
 "use strict";
 
+const IS_LOCAL_ENVIRONMENT =
+    ["localhost", "127.0.0.1"]
+        .includes(window.location.hostname);
+
+const API_BASE_URL =
+    IS_LOCAL_ENVIRONMENT
+        ? "http://localhost:3000/api"
+        : "https://mommy-crafts-backend.onrender.com/api";
+
 window.CONFIG = Object.freeze({
-    API_BASE_URL: "https://mommy-crafts-backend.onrender.com/api",
+    APP_VERSION: "3.24.0",
+
+    API_BASE_URL,
 
     ENDPOINTS: Object.freeze({
         productos: "/productos",
@@ -112,6 +123,10 @@ HOME_BANNERS: Object.freeze([
 
     locale: "es-CL",
     currency: "CLP",
+    environment:
+        IS_LOCAL_ENVIRONMENT
+            ? "development"
+            : "production",
     requestTimeoutMs: 12000,
 
     placeholderImage:

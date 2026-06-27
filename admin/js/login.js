@@ -71,6 +71,15 @@ document.addEventListener(
                 "Tu sesión expiró. Vuelve a iniciar sesión.";
         }
 
+        if (
+            params.get("sesion") ===
+            "revocada"
+        ) {
+            errorBox.hidden = false;
+            errorBox.textContent =
+                "Todas las sesiones fueron cerradas. Inicia sesión nuevamente.";
+        }
+
         form.addEventListener(
             "submit",
             async (event) => {
@@ -85,11 +94,6 @@ document.addEventListener(
                     document.getElementById(
                         "admin-password"
                     ).value;
-
-                const remember =
-                    document.getElementById(
-                        "admin-remember"
-                    ).checked;
 
                 errorBox.hidden = true;
                 button.disabled = true;
@@ -107,8 +111,7 @@ document.addEventListener(
 
                     AdminAPI.saveSession(
                         data.token,
-                        data.usuario,
-                        remember
+                        data.usuario
                     );
 
                     location.replace(

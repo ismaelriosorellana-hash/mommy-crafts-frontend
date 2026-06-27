@@ -461,3 +461,97 @@
         padding: 18px;
     }
 }
+
+
+/* V3.24: sesiones temporales, seguridad de cuenta y enlaces legales */
+.account-session-note,
+.account-legal-note,
+.account-help-text {
+    color: var(--color-text-soft);
+    font-size: 1.28rem;
+    line-height: 1.55;
+}
+
+.account-session-note {
+    display: flex;
+    align-items: flex-start;
+    gap: .8rem;
+    margin: 1.4rem 0;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-soft);
+}
+
+.account-session-note i {
+    margin-top: .2rem;
+    color: var(--color-primary-dark);
+}
+
+.account-legal-note {
+    margin: 1.2rem 0 1.6rem;
+}
+
+.account-legal-note a,
+.account-legal-footer a {
+    color: var(--color-primary-dark);
+    font-weight: 700;
+}
+
+.account-security-panel {
+    align-self: start;
+}
+
+.account-security-icon {
+    color: var(--color-primary-dark);
+    font-size: 2.4rem;
+}
+
+.account-session-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.6rem;
+    margin-top: 2rem;
+    padding-top: 1.8rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.account-session-actions p {
+    margin: .5rem 0 0;
+    color: var(--color-text-soft);
+}
+
+.account-legal-footer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    width: min(92vw, 110rem);
+    margin: 0 auto;
+    padding: 2rem 0 3rem;
+    color: var(--color-text-soft);
+    font-size: 1.25rem;
+}
+
+@media (max-width: 640px) {
+    .account-session-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .account-session-actions .btn-secondary {
+        width: 100%;
+    }
+}
+
+
+.account-dashboard-grid > #pedidos {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 860px) {
+    .account-dashboard-grid > #pedidos {
+        grid-column: auto;
+    }
+}

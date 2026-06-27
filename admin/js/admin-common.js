@@ -431,17 +431,9 @@
             const data =
                 await AdminAPI.me();
 
-            const remembered =
-                Boolean(
-                    localStorage.getItem(
-                        "mommycrafts_admin_token"
-                    )
-                );
-
             AdminAPI.saveSession(
                 AdminAPI.getToken(),
-                data.usuario,
-                remembered
+                data.usuario
             );
 
             return true;

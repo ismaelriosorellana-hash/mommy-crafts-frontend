@@ -49,28 +49,104 @@
             <div class="account-form-grid">
                 <div class="account-field full">
                     <label for="profile-name">Nombre completo</label>
-                    <input id="profile-name" name="nombre" type="text" required>
+                    <input id="profile-name" name="nombre" type="text" autocomplete="name" maxlength="120" required>
                 </div>
                 <div class="account-field">
                     <label for="profile-rut">RUT</label>
-                    <input id="profile-rut" name="rut" type="text">
+                    <input id="profile-rut" name="rut" type="text" inputmode="text" maxlength="30">
                 </div>
                 <div class="account-field">
                     <label for="profile-phone">Teléfono</label>
-                    <input id="profile-phone" name="telefono" type="tel">
+                    <input id="profile-phone" name="telefono" type="tel" inputmode="tel" autocomplete="tel" maxlength="40">
                 </div>
                 <div class="account-field full">
                     <label for="profile-address">Dirección</label>
-                    <input id="profile-address" name="direccion" type="text">
+                    <input id="profile-address" name="direccion" type="text" autocomplete="street-address" maxlength="300">
                 </div>
                 <div class="account-field full">
                     <label for="profile-commune">Comuna</label>
-                    <input id="profile-commune" name="comuna" type="text">
+                    <input id="profile-commune" name="comuna" type="text" autocomplete="address-level2" maxlength="120">
                 </div>
             </div>
             <button class="btn-primary" id="profile-submit" type="submit">Guardar cambios</button>
         </form>
     </section>
+
+    <section class="account-panel account-security-panel" id="seguridad-cuenta">
+        <div class="section-header">
+            <div>
+                <p class="section-kicker">Protección de la cuenta</p>
+                <h2>Seguridad</h2>
+            </div>
+            <i class="fa-solid fa-shield-halved account-security-icon" aria-hidden="true"></i>
+        </div>
+
+        <div class="account-alert success" id="password-success" hidden></div>
+        <div class="account-alert" id="password-error" hidden></div>
+
+        <form id="customer-password-form" autocomplete="off">
+            <div class="account-form-grid">
+                <div class="account-field full">
+                    <label for="password-current">Contraseña actual</label>
+                    <input
+                        id="password-current"
+                        name="current-password"
+                        type="password"
+                        autocomplete="current-password"
+                        maxlength="128"
+                        required
+                    >
+                </div>
+                <div class="account-field">
+                    <label for="password-new">Nueva contraseña</label>
+                    <input
+                        id="password-new"
+                        name="new-password"
+                        type="password"
+                        autocomplete="new-password"
+                        minlength="10"
+                        maxlength="128"
+                        required
+                    >
+                </div>
+                <div class="account-field">
+                    <label for="password-confirm">Confirmar nueva contraseña</label>
+                    <input
+                        id="password-confirm"
+                        name="new-password-confirmation"
+                        type="password"
+                        autocomplete="new-password"
+                        minlength="10"
+                        maxlength="128"
+                        required
+                    >
+                </div>
+            </div>
+
+            <p class="account-help-text">
+                Al cambiar la contraseña se cerrarán las demás sesiones de la cuenta.
+            </p>
+
+            <button class="btn-primary" id="password-submit" type="submit">
+                Cambiar contraseña
+            </button>
+        </form>
+
+        <div class="account-session-actions">
+            <div>
+                <strong>¿No reconoces una sesión?</strong>
+                <p>Cierra todas las sesiones y vuelve a ingresar con tu contraseña.</p>
+            </div>
+            <button
+                class="btn-secondary"
+                id="customer-revoke-sessions"
+                type="button"
+            >
+                Cerrar todas mis sesiones
+            </button>
+        </div>
+    </section>
+
     <section class="account-panel" id="pedidos">
         <div class="section-header">
             <div>
@@ -85,6 +161,13 @@
 </div>
 
         </main>
+
+        <footer class="account-legal-footer">
+            <a href="privacidad.html">Política de privacidad</a>
+            <a href="terminos.html">Términos de uso</a>
+            <a href="seguridad.html">Seguridad del sitio</a>
+        </footer>
+
         <script src="js/config.js" defer></script>
         <script src="js/api.js" defer></script>
         <script src="js/customer-auth.js" defer></script>
