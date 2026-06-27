@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="theme-color" content="#FFF9FD">
+    <title>Apariencia del sitio | Mommy Crafts</title>
+    <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/admin-experience-v327.css">
+</head>
+<body data-admin-page="apariencia" data-admin-title="Apariencia del sitio">
+    <div id="admin-page-content">
+        <section class="site-settings-manager">
+            <div class="admin-toolbar content-manager-toolbar">
+                <div class="admin-toolbar-group">
+                    <div class="content-status-stack">
+                        <span class="admin-status info" id="site-settings-status">Cargando</span>
+                        <small id="site-settings-meta">Leyendo configuración visual</small>
+                    </div>
+                </div>
+                <div class="admin-toolbar-group">
+                    <a class="admin-button secondary" href="../index.html" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        Vista pública
+                    </a>
+                    <button class="admin-button secondary" id="site-settings-reset" type="button">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                        Restaurar
+                    </button>
+                    <button class="admin-button" id="site-settings-save" type="button">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Guardar cambios
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-alert" id="site-settings-message" hidden></div>
+
+            <div class="site-settings-layout">
+                <div class="site-settings-controls">
+                    <section class="admin-card" data-settings-section>
+                        <div class="admin-card-header">
+                            <div>
+                                <p class="admin-section-kicker">Identidad</p>
+                                <h3>Logo principal</h3>
+                            </div>
+                        </div>
+                        <div class="admin-card-body">
+                            <div class="admin-form-grid">
+                                <label class="admin-field full">
+                                    <span>Cargar nuevo logo</span>
+                                    <input id="site-logo-file" type="file" accept="image/jpeg,image/png,image/webp">
+                                    <small>PNG, JPG o WEBP. Se recomienda fondo transparente.</small>
+                                </label>
+                                <label class="admin-field full">
+                                    <span>Texto alternativo</span>
+                                    <input id="site-logo-alt" type="text" maxlength="160">
+                                </label>
+                                <label class="admin-field">
+                                    <span>Ancho del logo</span>
+                                    <input id="site-logo-width" type="range" min="24" max="240" step="1">
+                                    <output id="site-logo-width-output"></output>
+                                </label>
+                                <label class="admin-field">
+                                    <span>Posición horizontal</span>
+                                    <input id="site-logo-x" type="range" min="-300" max="300" step="1">
+                                    <output id="site-logo-x-output"></output>
+                                </label>
+                                <label class="admin-field">
+                                    <span>Posición vertical</span>
+                                    <input id="site-logo-y" type="range" min="-160" max="160" step="1">
+                                    <output id="site-logo-y-output"></output>
+                                </label>
+                                <div class="admin-field site-settings-inline-action">
+                                    <span>Imagen actual</span>
+                                    <button class="admin-button secondary small" id="site-logo-default" type="button">Usar logo predeterminado</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="admin-card" data-settings-section>
+                        <div class="admin-card-header">
+                            <div>
+                                <p class="admin-section-kicker">Identidad</p>
+                                <h3>Título de la marca</h3>
+                            </div>
+                        </div>
+                        <div class="admin-card-body">
+                            <div class="admin-form-grid">
+                                <label class="admin-field">
+                                    <span>Mostrar como</span>
+                                    <select id="site-title-mode">
+                                        <option value="image">Imagen</option>
+                                        <option value="text">Texto escrito</option>
+                                    </select>
+                                </label>
+                                <label class="admin-field">
+                                    <span>Texto del título</span>
+                                    <input id="site-title-text" type="text" maxlength="120">
+                                </label>
+                                <label class="admin-field full" id="site-title-file-field">
+                                    <span>Cargar imagen del título</span>
+                                    <input id="site-title-file" type="file" accept="image/jpeg,image/png,image/webp">
+                                </label>
+                                <label class="admin-field">
+                                    <span>Ancho de la imagen</span>
+                                    <input id="site-title-width" type="range" min="60" max="520" step="1">
+                                    <output id="site-title-width-output"></output>
+                                </label>
+                                <label class="admin-field">
+                                    <span>Tamaño del texto</span>
+                                    <input id="site-title-font-size" type="range" min="14" max="92" step="1">
+                                    <output id="site-title-font-size-output"></output>
+                                </label>
+                                <label class="admin-field">
+                                    <span>Posición horizontal</span>
+                                    <input id="site-title-x" type="range" min="-300" max="300" step="1">
+                                    <output id="site-title-x-output"></output>
+                                </label>
+                                <label class="admin-field">
+                                    <span>Posición vertical</span>
+                                    <input id="site-title-y" type="range" min="-160" max="160" step="1">
+                                    <output id="site-title-y-output"></output>
+                                </label>
+                                <label class="admin-field">
+                                    <span>Separación del logo</span>
+                                    <input id="site-title-gap" type="range" min="0" max="120" step="1">
+                                    <output id="site-title-gap-output"></output>
+                                </label>
+                                <div class="admin-field site-settings-inline-action">
+                                    <span>Imagen actual</span>
+                                    <button class="admin-button secondary small" id="site-title-default" type="button">Usar título predeterminado</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="admin-card" data-settings-section>
+                        <div class="admin-card-header">
+                            <div>
+                                <p class="admin-section-kicker">Paleta global</p>
+                                <h3>Colores del sitio completo</h3>
+                            </div>
+                        </div>
+                        <div class="admin-card-body">
+                            <p class="site-settings-help">Los cambios se muestran en la vista previa. La tienda pública solo cambia al presionar Guardar cambios.</p>
+                            <div class="site-color-grid" id="site-color-grid"></div>
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="admin-card site-settings-preview-card">
+                    <div class="admin-card-header">
+                        <div>
+                            <p class="admin-section-kicker">Vista previa</p>
+                            <h3>Encabezado y paleta</h3>
+                        </div>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="site-brand-preview" id="site-brand-preview">
+                            <div class="site-brand-preview-header">
+                                <div class="site-brand-preview-brand" id="site-brand-preview-brand">
+                                    <img id="site-preview-logo" alt="">
+                                    <img id="site-preview-title-image" alt="Mommy Crafts">
+                                    <strong id="site-preview-title-text" hidden>Mommy Crafts</strong>
+                                </div>
+                            </div>
+                            <div class="site-brand-preview-body">
+                                <span class="site-brand-preview-kicker">Mommy Crafts</span>
+                                <h4>Así se verá la identidad visual</h4>
+                                <p>Revisa contraste, tamaños y posiciones antes de guardar.</p>
+                                <button type="button">Botón de ejemplo</button>
+                                <div class="site-brand-preview-surface">Tarjeta de ejemplo</div>
+                            </div>
+                            <div class="site-brand-preview-footer">Pie de página</div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <div class="content-mobile-save-bar">
+                <button class="admin-button" id="site-settings-mobile-save" type="button">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar apariencia
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script src="../js/config.js" defer></script>
+    <script src="js/admin-api.js" defer></script>
+    <script src="js/admin-common.js" defer></script>
+    <script src="js/site-settings-admin.js" defer></script>
+    <script src="js/admin-experience-v327.js"></script>
+</body>
+</html>

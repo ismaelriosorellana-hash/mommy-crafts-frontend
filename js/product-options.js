@@ -331,6 +331,7 @@
             preview.src = image.data;
             preview.alt = `Vista previa ${index + 1}: ${image.name}`;
             name.textContent = image.name;
+            name.title = image.name;
 
             remove.type = "button";
             remove.className = "light-image-remove";

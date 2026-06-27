@@ -46,6 +46,12 @@
             label: "Contenido",
             href: "contenido.html",
             icon: "fa-file-pen"
+        },
+        {
+            id: "apariencia",
+            label: "Apariencia",
+            href: "apariencia.html",
+            icon: "fa-palette"
         }
     ];
 

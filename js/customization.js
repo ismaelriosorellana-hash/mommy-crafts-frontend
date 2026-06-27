@@ -45,6 +45,8 @@
         },
         autoAdvanceTimer: 0,
         summaryPreviewUrl: "",
+        summaryPreviewBlob: null,
+        summaryPreviewRender: null,
         summaryPreviewGeneration: 0
     };
 
@@ -1190,6 +1192,9 @@ function advanceToStep(nextStep, delay = 180) {
             state.summaryPreviewUrl = "";
         }
 
+        state.summaryPreviewBlob = null;
+        state.summaryPreviewRender = null;
+
         document
             .querySelector(".customization-summary-preview")
             ?.remove();
@@ -1282,6 +1287,8 @@ function advanceToStep(nextStep, delay = 180) {
             }
 
             state.summaryPreviewUrl = generatedUrl;
+            state.summaryPreviewBlob = rendered.blob;
+            state.summaryPreviewRender = rendered;
 
             const image = document.createElement("img");
             image.src = state.summaryPreviewUrl;
@@ -1501,6 +1508,10 @@ function advanceToStep(nextStep, delay = 180) {
             alpha: false
         });
 
+        if (!context) {
+            throw new Error("El navegador no pudo preparar la imagen resumen.");
+        }
+
         canvas.width = size;
         canvas.height = size;
 
@@ -1524,21 +1535,47 @@ function advanceToStep(nextStep, delay = 180) {
             state.variant?.imagen ||
             state.product?.imagenPrincipal;
 
-        const product = await loadCanvasImage(productSource);
-
         try {
-            drawContainedImage(
-                context,
-                product.image,
-                {
-                    x: 0,
-                    y: 0,
-                    width: size,
-                    height: size
-                }
-            );
-        } finally {
-            product.release();
+            const product = await loadCanvasImage(productSource);
+
+            try {
+                drawContainedImage(
+                    context,
+                    product.image,
+                    {
+                        x: 0,
+                        y: 0,
+                        width: size,
+                        height: size
+                    }
+                );
+            } finally {
+                product.release();
+            }
+        } catch (error) {
+            // Algunas imágenes externas bloquean CORS. Aun así generamos un resumen útil.
+            console.warn("Se generará el resumen sin la foto base del producto:", error);
+            context.save();
+            context.fillStyle = "rgba(255,255,255,.82)";
+            context.strokeStyle = "#d7b8c5";
+            context.lineWidth = 5;
+            context.beginPath();
+            if (typeof context.roundRect === "function") {
+                context.roundRect(size * .16, size * .16, size * .68, size * .68, 52);
+            } else {
+                context.rect(size * .16, size * .16, size * .68, size * .68);
+            }
+            context.fill();
+            context.stroke();
+            context.fillStyle = "#71364f";
+            context.textAlign = "center";
+            context.textBaseline = "middle";
+            context.font = "700 44px Poppins, sans-serif";
+            const fallbackLines = splitTextLines(context, state.product?.nombre || "Producto personalizado", size * .54);
+            fallbackLines.slice(0, 3).forEach((line, index) => {
+                context.fillText(line, size / 2, size * .76 + index * 52, size * .54);
+            });
+            context.restore();
         }
 
         const ratio = size / previewWidth;
@@ -1659,10 +1696,16 @@ function advanceToStep(nextStep, delay = 180) {
         try {
             await document.fonts?.ready;
 
-            const rendered = await createFinalPreviewBlob(
-                mainText,
-                secondaryText
-            );
+            const rendered = state.summaryPreviewBlob && state.summaryPreviewRender
+                ? state.summaryPreviewRender
+                : await createFinalPreviewBlob(
+                    mainText,
+                    secondaryText
+                );
+
+            if (!rendered?.blob) {
+                throw new Error("No fue posible generar la imagen resumen de la personalización.");
+            }
 
             if (current.send) {
                 current.send.textContent = "Guardando imágenes...";
@@ -1672,6 +1715,10 @@ function advanceToStep(nextStep, delay = 180) {
                 customizationId,
                 rendered.blob
             );
+
+            if (!upload?.assets?.preview?.url) {
+                throw new Error("La imagen resumen no pudo guardarse. Intenta nuevamente.");
+            }
 
             const customization = {
                 version: 2,
@@ -1724,11 +1771,15 @@ function advanceToStep(nextStep, delay = 180) {
                     state.product.imagenPrincipal
             };
 
-            window.Cart.add(
+            const added = window.Cart?.add(
                 pricedProduct,
                 1,
                 customization
             );
+
+            if (!added) {
+                throw new Error("La personalización fue preparada, pero no pudo incorporarse al carrito.");
+            }
 
             window.Products.showToast(
                 `${state.product.nombre} fue agregado por ${money(result.total)}.`

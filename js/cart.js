@@ -148,7 +148,7 @@
     function add(product, quantity = 1, customization = null) {
         if (!product?.id) {
             console.error("No se puede agregar un producto sin ID.");
-            return;
+            return false;
         }
 
         const items = read();
@@ -187,6 +187,7 @@
         }
 
         write(items);
+        return true;
     }
 
     function remove(lineId) {

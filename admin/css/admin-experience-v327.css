@@ -1,46 +1,6 @@
 /* ==========================================================
-   V3.27 · panel administrativo más compacto e intuitivo
+   V3.29 · panel estable y secciones internas contraíbles
    ========================================================== */
-
-.admin-shell {
-    transition: grid-template-columns 180ms ease;
-}
-
-.admin-sidebar-toggle {
-    width: 3.8rem;
-    height: 3.8rem;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--admin-border);
-    border-radius: 1rem;
-    background: #fff;
-    color: var(--admin-primary-dark);
-    cursor: pointer;
-}
-
-body.admin-sidebar-compact .admin-shell {
-    grid-template-columns: 8.2rem minmax(0, 1fr);
-}
-
-body.admin-sidebar-compact .admin-brand > div,
-body.admin-sidebar-compact .admin-nav a span,
-body.admin-sidebar-compact .admin-sidebar-footer {
-    display: none;
-}
-
-body.admin-sidebar-compact .admin-brand,
-body.admin-sidebar-compact .admin-nav a {
-    justify-content: center;
-}
-
-body.admin-sidebar-compact .admin-nav a {
-    min-height: 4.8rem;
-    padding-inline: .8rem;
-}
-
-body.admin-sidebar-compact .admin-brand img {
-    margin: 0;
-}
 
 .admin-card-collapse {
     width: 3.4rem;
@@ -59,12 +19,34 @@ body.admin-sidebar-compact .admin-brand img {
     transition: transform 160ms ease;
 }
 
-.admin-card.is-collapsed .admin-card-collapse i {
+.admin-card.is-collapsed .admin-card-collapse i,
+.admin-repeatable-card.is-collapsed .admin-repeatable-collapse i {
     transform: rotate(-90deg);
 }
 
-.admin-card.is-collapsed > :not(.admin-card-header) {
+.admin-card.is-collapsed > :not(.admin-card-header),
+.admin-repeatable-card.is-collapsed > :not(.admin-repeatable-header) {
     display: none !important;
+}
+
+.admin-card-header-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .8rem;
+}
+
+.admin-repeatable-collapse {
+    width: 3.4rem;
+    height: 3.4rem;
+}
+
+.admin-repeatable-card.is-collapsed {
+    padding-bottom: .8rem;
+}
+
+.admin-repeatable-card.is-collapsed .admin-repeatable-header {
+    margin-bottom: 0;
 }
 
 .admin-page-intro h2 {
@@ -76,10 +58,6 @@ body.admin-sidebar-compact .admin-brand img {
 }
 
 @media (max-width: 820px) {
-    .admin-sidebar-toggle {
-        display: none;
-    }
-
     .admin-topbar {
         min-height: 6rem;
     }
@@ -92,8 +70,7 @@ body.admin-sidebar-compact .admin-brand img {
         white-space: nowrap;
     }
 
-    .admin-topbar-actions .admin-button span,
-    .admin-topbar-actions .admin-button:not(.admin-sidebar-toggle) {
+    .admin-topbar-actions .admin-button {
         font-size: .92rem;
     }
 
@@ -115,6 +92,14 @@ body.admin-sidebar-compact .admin-brand img {
     .admin-card-header,
     .admin-card-body {
         padding: 1rem;
+    }
+
+    .admin-card-header {
+        align-items: flex-start;
+    }
+
+    .admin-card-header-controls {
+        flex-wrap: wrap;
     }
 
     .admin-grid.two,

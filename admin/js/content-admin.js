@@ -181,6 +181,8 @@
             "Esta página no tiene tarjetas de contacto."
         );
 
+        document.dispatchEvent(new CustomEvent("admin:content-rendered"));
+
         setStatus(
             customized,
             content.revision,
@@ -302,6 +304,15 @@
         if (empty) empty.remove();
         const index = container.children.length;
         container.insertAdjacentHTML("beforeend", template({}, index));
+
+        const parentCard = container.closest(".admin-card");
+        if (parentCard?.classList.contains("is-collapsed")) {
+            parentCard.classList.remove("is-collapsed");
+            parentCard.querySelector(":scope > .admin-card-header .admin-card-collapse")
+                ?.setAttribute("aria-expanded", "true");
+        }
+
+        document.dispatchEvent(new CustomEvent("admin:content-rendered"));
         container.lastElementChild?.querySelector("input, textarea")?.focus();
     }
 
