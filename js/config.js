@@ -10,7 +10,7 @@ const API_BASE_URL =
         : "https://mommy-crafts-backend.onrender.com/api";
 
 window.CONFIG = Object.freeze({
-    APP_VERSION: "3.26.0",
+    APP_VERSION: "3.27.0",
 
     PAYMENT: Object.freeze({
         receiptHours: 3,

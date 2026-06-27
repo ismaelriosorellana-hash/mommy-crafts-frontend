@@ -1,0 +1,818 @@
+/* ==========================================================
+   V3.27 · experiencia móvil, tarjetas, cuenta y navegación
+   ========================================================== */
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    max-width: 100%;
+}
+
+button,
+a,
+input,
+select,
+textarea,
+summary {
+    touch-action: manipulation;
+}
+
+/* Cuenta del cliente: navegación compacta por secciones */
+.account-dashboard-grid.account-hub {
+    grid-template-columns: minmax(18rem, 22rem) minmax(0, 1fr);
+    gap: 2rem;
+}
+
+.account-hub-nav {
+    position: sticky;
+    top: 2rem;
+    display: grid;
+    gap: .7rem;
+    align-self: start;
+    padding: .8rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1.6rem;
+    background: rgba(255, 255, 255, .94);
+    box-shadow: var(--shadow-sm);
+}
+
+.account-hub-nav button {
+    width: 100%;
+    min-height: 4.6rem;
+    display: grid;
+    grid-template-columns: 3.6rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: .9rem;
+    padding: .7rem .9rem;
+    border: 0;
+    border-radius: 1.1rem;
+    background: transparent;
+    color: var(--color-text-soft);
+    cursor: pointer;
+    text-align: left;
+}
+
+.account-hub-nav button:hover,
+.account-hub-nav button:focus-visible,
+.account-hub-nav button.is-active {
+    background: var(--color-primary-soft);
+    color: var(--color-primary-dark);
+}
+
+.account-hub-nav button > i:first-child {
+    width: 3.6rem;
+    height: 3.6rem;
+    display: grid;
+    place-items: center;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
+.account-hub-nav button strong {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 1.25rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.account-hub-nav button .fa-chevron-right {
+    font-size: .9rem;
+}
+
+.account-hub > .account-panel {
+    grid-column: 2;
+    min-width: 0;
+    margin: 0;
+}
+
+.account-hub > .account-panel[hidden] {
+    display: none !important;
+}
+
+.account-hub > .account-panel.is-active {
+    animation: account-panel-enter 180ms ease both;
+}
+
+@keyframes account-panel-enter {
+    from { opacity: 0; transform: translateY(.5rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.account-panel > h2,
+.account-panel .section-header h2 {
+    font-size: 1.75rem;
+}
+
+/* Menú de usuario siempre visible dentro del viewport */
+.customer-account-dropdown {
+    max-width: calc(100vw - 2rem);
+}
+
+/* Tarjetas de productos: acción consistente */
+.card-product .add-cart {
+    width: calc(100% - 2.2rem);
+    min-width: 0;
+    min-height: 4.2rem;
+    height: auto;
+    margin: .4rem 1.1rem 1.1rem;
+    padding: .75rem .9rem;
+    border-radius: 1.1rem;
+    line-height: 1.15;
+}
+
+.card-product .add-cart span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* El detalle nunca debe exceder el ancho disponible */
+.product-detail-grid,
+.product-detail-images,
+.product-detail-info,
+.detail-main-image-container,
+.detail-main-image-track,
+.light-customization-panel,
+.product-actions,
+.product-delivery-info {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Checkout: forma de pago legible */
+.payment-options.single-option,
+.payment-options.single-option label,
+.payment-options.single-option label > span {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.payment-options.single-option label > span {
+    flex: 1;
+}
+
+.payment-options.single-option small {
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+    /* Evita el zoom automático de iOS al enfocar campos */
+    input,
+    select,
+    textarea,
+    .field-group input,
+    .field-group textarea,
+    .form-group input,
+    .form-group textarea,
+    .account-field input,
+    .account-field textarea {
+        font-size: 16px !important;
+    }
+
+    body {
+        overscroll-behavior-x: none;
+    }
+
+    /* Menú de cuenta como panel superior seguro */
+    .customer-account-dropdown {
+        position: fixed;
+        z-index: 30000;
+        top: max(7.2rem, calc(env(safe-area-inset-top) + 5.8rem));
+        right: .8rem;
+        bottom: auto;
+        left: .8rem;
+        width: auto;
+        max-height: calc(100dvh - max(8.4rem, calc(env(safe-area-inset-top) + 7rem)));
+        overflow-y: auto;
+        border-radius: 1.5rem;
+        box-shadow: 0 2.2rem 5rem rgba(40, 25, 31, .24);
+        overscroll-behavior: contain;
+    }
+
+    .customer-account-heading {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        padding: 1.1rem 1.3rem .9rem;
+    }
+
+    .customer-account-dropdown a,
+    .customer-account-dropdown button {
+        min-height: 4.6rem;
+        padding: .9rem 1.3rem;
+        font-size: 1.2rem;
+    }
+
+    /* Personalizador estilo app móvil */
+    .modal-overlay,
+    .modal-pedido-overlay {
+        align-items: stretch;
+        padding: 0;
+    }
+
+    .modal-box,
+    .modal-pedido-box {
+        width: 100%;
+        max-width: none;
+        height: 100dvh;
+        max-height: 100dvh;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .modal-header,
+    .modal-pedido-header {
+        min-height: 5.2rem;
+        gap: .8rem;
+        padding: calc(.7rem + env(safe-area-inset-top)) 1rem .7rem;
+    }
+
+    .modal-eyebrow {
+        display: none;
+    }
+
+    .modal-header h2,
+    .modal-pedido-header h2 {
+        gap: .55rem;
+        font-size: 1.35rem;
+        line-height: 1.2;
+    }
+
+    .modal-close,
+    .modal-pedido-close {
+        width: 3.4rem;
+        height: 3.4rem;
+        font-size: 1.2rem;
+    }
+
+    .modal-steps {
+        min-height: 4.2rem;
+        gap: .25rem;
+        padding: .65rem .8rem;
+    }
+
+    .modal-steps .step {
+        min-width: auto;
+        gap: .35rem;
+        font-size: .78rem;
+        letter-spacing: .01em;
+    }
+
+    .modal-steps .step span {
+        width: 2.15rem;
+        height: 2.15rem;
+        font-size: .82rem;
+    }
+
+    .step-line {
+        width: .9rem;
+        min-width: .9rem;
+        margin-inline: .15rem;
+    }
+
+    .modal-body,
+    .modal-pedido-body {
+        padding: 0;
+    }
+
+    .modal-body-preview {
+        display: block;
+    }
+
+    .live-preview-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: .65rem;
+        min-height: 0;
+        padding: .9rem 1rem 1rem;
+        border: 0;
+        border-bottom: 1px solid var(--color-border);
+        border-radius: 0;
+        background: linear-gradient(180deg, #fff9fc, #fff);
+    }
+
+    .live-preview-panel h3 {
+        margin: 0;
+        font-size: 1.35rem;
+    }
+
+    .preview-note,
+    .style-info-box,
+    .upload-info-box {
+        gap: .6rem;
+        padding: .7rem .8rem;
+        border-radius: 1rem;
+        font-size: 1rem;
+        line-height: 1.35;
+    }
+
+    .product-preview {
+        width: 100%;
+        min-height: 15rem;
+        max-height: 19rem;
+        margin-top: 0;
+        border-radius: 1.2rem;
+    }
+
+    .preview-product-shape {
+        width: min(100%, 19rem);
+        max-height: 19rem;
+    }
+
+    .customization-form {
+        padding: 1rem !important;
+    }
+
+    .modal-step-content > h3 {
+        margin: 0 0 .45rem;
+        font-size: 1.5rem;
+        line-height: 1.25;
+    }
+
+    .customization-step-description {
+        margin: 0 0 1rem;
+        font-size: 1.05rem;
+        line-height: 1.4;
+    }
+
+    .customization-category-grid,
+    .customizable-products-grid,
+    .option-grid,
+    .color-options-grid {
+        grid-template-columns: 1fr;
+        gap: .65rem;
+        margin-top: .8rem;
+    }
+
+    .customization-category-card {
+        min-height: 6.6rem;
+        grid-template-columns: 3.6rem minmax(0, 1fr);
+        gap: .8rem;
+        padding: .75rem .85rem;
+        border-radius: 1.1rem;
+    }
+
+    .customization-category-card > i {
+        width: 3.6rem;
+        height: 3.6rem;
+        font-size: 1.4rem;
+    }
+
+    .customization-category-content {
+        gap: .1rem;
+    }
+
+    .customization-category-content strong {
+        font-size: 1.15rem;
+    }
+
+    .customization-category-count,
+    .customization-category-price {
+        font-size: .95rem;
+    }
+
+    .customizable-product-card {
+        min-height: 7rem;
+        grid-template-columns: 5.4rem minmax(0, 1fr);
+        gap: .8rem;
+        padding: .75rem;
+        border-radius: 1.1rem;
+    }
+
+    .customizable-product-card img,
+    .color-option-card img {
+        width: 5.4rem;
+        height: 5.4rem;
+    }
+
+    .customizable-product-card strong {
+        font-size: 1.1rem;
+    }
+
+    .option-card {
+        min-height: 6rem;
+        gap: .45rem;
+        padding: .8rem;
+        border-radius: 1rem;
+    }
+
+    .option-card i {
+        font-size: 1.55rem;
+    }
+
+    .option-card span {
+        font-size: 1.05rem;
+    }
+
+    .color-option-card {
+        grid-template-columns: 5rem minmax(0, 1fr);
+        align-items: center;
+        justify-items: start;
+        gap: .8rem;
+        padding: .7rem;
+    }
+
+    .upload-area {
+        min-height: 12rem;
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 1.2rem;
+    }
+
+    .upload-area > i {
+        font-size: 2.4rem;
+    }
+
+    .image-editor-controls,
+    .text-editor-controls {
+        gap: .5rem;
+        margin-top: .8rem;
+        padding: .6rem;
+    }
+
+    .edit-btn {
+        width: 3.7rem;
+        height: 3.7rem;
+        flex-basis: 3.7rem;
+    }
+
+    .text-fields {
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .field-group,
+    .form-group {
+        gap: .45rem;
+    }
+
+    .field-group textarea,
+    .form-group textarea {
+        min-height: 8rem;
+    }
+
+    .modal-summary {
+        min-height: 0;
+        padding: 1.4rem 1rem;
+    }
+
+    .summary-icon {
+        font-size: 3.4rem;
+    }
+
+    .modal-summary h3 {
+        font-size: 1.7rem;
+    }
+
+    .customization-summary-preview,
+    .customer-design-review > a > img {
+        max-height: 24rem;
+        object-fit: contain;
+    }
+
+    .modal-footer {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: .7rem;
+        padding: .65rem .8rem calc(.65rem + env(safe-area-inset-bottom));
+    }
+
+    .customization-running-total {
+        min-width: 6.8rem;
+        justify-items: start;
+    }
+
+    .customization-running-total span {
+        font-size: .82rem;
+    }
+
+    .customization-running-total strong {
+        font-size: 1.35rem;
+    }
+
+    .modal-footer-actions,
+    .summary-actions {
+        display: flex;
+        gap: .55rem;
+    }
+
+    .modal-footer-actions .btn-primary,
+    .modal-footer-actions .btn-secondary,
+    .summary-actions .btn-primary,
+    .summary-actions .btn-secondary {
+        min-height: 4rem;
+        padding: .65rem .85rem;
+        font-size: 1.1rem;
+        white-space: nowrap;
+    }
+
+    /* Productos y fichas */
+    .container-products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .8rem;
+    }
+
+    .card-product {
+        border-radius: 1.2rem;
+    }
+
+    .container-img {
+        aspect-ratio: 1 / 1;
+    }
+
+    .product-card-image {
+        object-fit: contain !important;
+        padding: .65rem;
+    }
+
+    .content-card-product {
+        min-height: 10rem;
+        padding: .85rem .85rem .5rem;
+    }
+
+    .product-category {
+        margin-bottom: .2rem;
+        font-size: .82rem;
+    }
+
+    .product-name {
+        min-height: 3.2rem;
+        font-size: 1.08rem;
+        line-height: 1.28;
+    }
+
+    .product-card-color-row {
+        gap: .35rem;
+        margin-top: .5rem;
+    }
+
+    .product-price-row {
+        gap: .45rem;
+        padding-top: .7rem;
+    }
+
+    .product-price {
+        font-size: 1.3rem;
+    }
+
+    .product-original-price {
+        font-size: .9rem;
+    }
+
+    .card-product .add-cart {
+        width: calc(100% - 1.4rem);
+        min-height: 3.8rem;
+        margin: .35rem .7rem .7rem;
+        padding: .6rem .55rem;
+        border-radius: .9rem;
+        gap: .4rem;
+        font-size: .98rem;
+    }
+
+    .card-product .add-cart i {
+        flex: none;
+        font-size: 1rem;
+    }
+
+    .product-page {
+        padding-top: 1.2rem;
+    }
+
+    .product-page > .container {
+        width: min(calc(100% - 1.6rem), var(--container));
+    }
+
+    .breadcrumb {
+        margin-bottom: .8rem;
+        overflow-x: auto;
+        font-size: 1rem;
+        white-space: nowrap;
+        scrollbar-width: none;
+    }
+
+    .product-detail-grid {
+        gap: 1.25rem;
+    }
+
+    .product-detail-images {
+        position: static;
+        width: 100%;
+    }
+
+    .detail-main-image-container,
+    .detail-main-image-track {
+        width: 100%;
+        min-height: 0;
+        aspect-ratio: 1 / 1;
+        border-radius: 1.3rem;
+    }
+
+    .detail-main-img {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100%;
+        padding: .8rem !important;
+        object-fit: contain !important;
+    }
+
+    .detail-arrow {
+        width: 3.6rem;
+        height: 3.6rem;
+    }
+
+    .prev-detail { left: .6rem; }
+    .next-detail { right: .6rem; }
+
+    .detail-thumbnail {
+        width: 5.8rem;
+        height: 5.8rem;
+        flex-basis: 5.8rem;
+    }
+
+    .product-detail-info {
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .detail-title {
+        font-size: clamp(2rem, 7vw, 2.7rem);
+    }
+
+    .current-price {
+        font-size: 2.2rem;
+    }
+
+    .product-color-selector,
+    .light-customization-panel,
+    .product-delivery-card,
+    .accordion-item {
+        border-radius: 1.2rem;
+    }
+
+    .product-actions {
+        grid-template-columns: 6.6rem minmax(0, 1fr);
+        gap: .65rem;
+        margin: 1.2rem -.8rem 0;
+        padding: .7rem .8rem calc(.7rem + env(safe-area-inset-bottom));
+    }
+
+    .quantity-control input,
+    .product-actions .btn-primary,
+    .product-actions .btn-secondary {
+        min-height: 4.2rem;
+    }
+
+    .product-actions .btn-primary,
+    .product-actions .btn-secondary {
+        min-width: 0;
+        padding: .75rem .8rem;
+        font-size: 1.05rem;
+        line-height: 1.15;
+    }
+
+    .product-actions .btn-secondary {
+        grid-column: 1 / -1;
+    }
+
+    .related-products {
+        margin-top: 2.4rem;
+    }
+
+    /* Finalizar compra */
+    .modal-pedido-body {
+        padding: 1rem;
+    }
+
+    .form-pedido {
+        gap: 1rem;
+    }
+
+    .payment-options.single-option {
+        margin-top: .55rem;
+    }
+
+    .payment-options.single-option label {
+        width: 100%;
+        align-items: flex-start;
+        gap: .75rem;
+        padding: .9rem;
+        border-radius: 1.1rem;
+    }
+
+    .payment-options.single-option input[type="radio"] {
+        width: 1.8rem;
+        height: 1.8rem;
+        flex: 0 0 1.8rem;
+        margin-top: .1rem;
+    }
+
+    .payment-options.single-option strong {
+        font-size: 1.15rem;
+        line-height: 1.25;
+    }
+
+    .payment-options.single-option small {
+        margin-top: .25rem;
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    .payment-method-note {
+        margin-top: .65rem;
+        padding: .75rem .85rem;
+        border-radius: 1rem;
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    /* Mi cuenta: lista horizontal y un panel visible */
+    .account-dashboard-grid.account-hub {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .account-hub-nav {
+        position: static;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(13rem, 1fr);
+        overflow-x: auto;
+        padding: .55rem;
+        border-radius: 1.3rem;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+    }
+
+    .account-hub-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .account-hub-nav button {
+        min-height: 4.2rem;
+        grid-template-columns: 3rem minmax(0, 1fr);
+        scroll-snap-align: start;
+    }
+
+    .account-hub-nav button > i:first-child {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .account-hub-nav button .fa-chevron-right {
+        display: none;
+    }
+
+    .account-hub > .account-panel {
+        grid-column: 1;
+    }
+
+    .account-hero {
+        margin-bottom: 1.3rem;
+    }
+
+    .account-hero .section-title {
+        font-size: 2.2rem;
+    }
+
+    .account-panel > h2,
+    .account-panel .section-header h2 {
+        font-size: 1.45rem;
+    }
+}
+
+@media (max-width: 390px) {
+    .modal-steps .step {
+        font-size: 0;
+    }
+
+    .modal-steps .step.active {
+        font-size: .78rem;
+    }
+
+    .container-products {
+        gap: .6rem;
+    }
+
+    .content-card-product {
+        padding-inline: .7rem;
+    }
+
+    .card-product .add-cart {
+        font-size: .92rem;
+    }
+
+    .product-actions {
+        grid-template-columns: 5.8rem minmax(0, 1fr);
+    }
+}
