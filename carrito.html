@@ -380,26 +380,92 @@
                     </div>
                 </div>
 
+                <div class="form-group checkout-date-field">
+                    <label for="pedido-fecha-preferida">
+                        Fecha preferida para recibir o retirar <span aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="date"
+                        id="pedido-fecha-preferida"
+                        name="fecha-preferida"
+                        required
+                    >
+                    <small id="pedido-fecha-ayuda">
+                        Calcularemos la primera fecha disponible según los productos del carrito.
+                    </small>
+                </div>
+
+                <label class="checkout-recipient-toggle">
+                    <input type="checkbox" id="pedido-tercero" name="receptor-tercero">
+                    <span>
+                        <strong>Recibirá otra persona</strong>
+                        <small>Actívalo cuando el comprador no será quien reciba o retire.</small>
+                    </span>
+                </label>
+
+                <div class="checkout-recipient-fields" id="third-party-fields" hidden>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tercero-nombre">
+                                Nombre completo <span aria-hidden="true">*</span>
+                            </label>
+                            <input
+                                id="tercero-nombre"
+                                name="tercero-nombre"
+                                maxlength="120"
+                                autocomplete="off"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tercero-telefono">
+                                Teléfono <span aria-hidden="true">*</span>
+                            </label>
+                            <input
+                                id="tercero-telefono"
+                                name="tercero-telefono"
+                                type="tel"
+                                maxlength="40"
+                                autocomplete="off"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tercero-relacion">
+                            Relación o referencia <span aria-hidden="true">*</span>
+                        </label>
+                        <input
+                            id="tercero-relacion"
+                            name="tercero-relacion"
+                            maxlength="120"
+                            placeholder="Ej.: familiar, conserjería, compañero de trabajo"
+                        >
+                    </div>
+                </div>
+
                 <fieldset class="form-group">
                     <legend>Forma de pago</legend>
-                    <div class="payment-options">
-                        <label id="mercadopago-payment-option">
-                            <input type="radio" name="pedido-pago" value="mercadopago" checked />
-                            <span>
-                                <strong>Mercado Pago</strong>
-                                <small>Pago seguro en el sitio de Mercado Pago.</small>
-                            </span>
-                        </label>
-                        <label>
-                            <input type="radio" name="pedido-pago" value="transferencia" />
+
+                    <div class="payment-options single-option">
+                        <label class="is-selected">
+                            <input
+                                type="radio"
+                                name="pedido-pago"
+                                value="transferencia"
+                                checked
+                            />
                             <span>
                                 <strong>Transferencia bancaria</strong>
-                                <small>Coordinación y datos por WhatsApp.</small>
+                                <small>
+                                    El stock se reserva durante 3 horas mientras envías el comprobante.
+                                </small>
                             </span>
                         </label>
                     </div>
+
                     <div class="payment-method-note" id="payment-method-note" aria-live="polite">
-                        Comprobando disponibilidad de Mercado Pago...
+                        El comprobante no confirma el pago automáticamente. Mommy Crafts validará que la transferencia haya sido recibida.
                     </div>
                 </fieldset>
 
@@ -411,7 +477,7 @@
                 <div class="form-checkbox">
                     <input type="checkbox" id="pedido-terminos" required />
                     <label for="pedido-terminos">
-                        Acepto los <a href="#">términos y condiciones</a> y la política de privacidad.
+                        Acepto los <a href="terminos.html" target="_blank" rel="noopener">términos y condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.
                     </label>
                 </div>
 

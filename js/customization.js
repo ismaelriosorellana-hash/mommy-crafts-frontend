@@ -43,7 +43,9 @@
             fontFamily: "'Caveat', cursive",
             color: "#372a32"
         },
-        autoAdvanceTimer: 0
+        autoAdvanceTimer: 0,
+        summaryPreviewUrl: "",
+        summaryPreviewGeneration: 0
     };
 
     const $ = (selector) => document.querySelector(selector);
@@ -648,6 +650,7 @@ function advanceToStep(nextStep, delay = 180) {
 
     function reset() {
         const current = els();
+        clearSummaryPreview();
         window.clearTimeout(state.autoAdvanceTimer);
 
         Object.assign(state, {
@@ -1179,6 +1182,19 @@ function advanceToStep(nextStep, delay = 180) {
         updatePrice();
     }
 
+    function clearSummaryPreview() {
+        state.summaryPreviewGeneration += 1;
+
+        if (state.summaryPreviewUrl) {
+            URL.revokeObjectURL(state.summaryPreviewUrl);
+            state.summaryPreviewUrl = "";
+        }
+
+        document
+            .querySelector(".customization-summary-preview")
+            ?.remove();
+    }
+
     function addSummary(list, label, value) {
         const item = document.createElement("li");
         const strong = document.createElement("strong");
@@ -1188,7 +1204,7 @@ function advanceToStep(nextStep, delay = 180) {
         list.appendChild(item);
     }
 
-    function showSummary() {
+    async function showSummary() {
         const current = els();
 
         if (!current.summaryList || !state.product) return;
@@ -1227,10 +1243,60 @@ function advanceToStep(nextStep, delay = 180) {
             state.previewWidth = measuredWidth;
         }
 
+        clearSummaryPreview();
+        const previewGeneration = state.summaryPreviewGeneration;
+
+        const previewCard = document.createElement("figure");
+        previewCard.className = "customization-summary-preview";
+        previewCard.innerHTML = `
+            <div class="customization-summary-preview-loading">
+                Preparando la vista previa final...
+            </div>
+            <figcaption>
+                Vista previa referencial. Mommy Crafts enviará el diseño modelado para tu aprobación antes de producir.
+            </figcaption>
+        `;
+
+        current.summaryList.before(previewCard);
+
         if (current.body) current.body.hidden = true;
         if (current.footer) current.footer.hidden = true;
         if (current.summary) current.summary.hidden = false;
+
+        try {
+            await document.fonts?.ready;
+
+            const rendered = await createFinalPreviewBlob(
+                $("#texto-principal")?.value.trim() || "",
+                $("#texto-secundario")?.value.trim() || ""
+            );
+
+            const generatedUrl = URL.createObjectURL(rendered.blob);
+
+            if (
+                previewGeneration !== state.summaryPreviewGeneration ||
+                !previewCard.isConnected
+            ) {
+                URL.revokeObjectURL(generatedUrl);
+                return;
+            }
+
+            state.summaryPreviewUrl = generatedUrl;
+
+            const image = document.createElement("img");
+            image.src = state.summaryPreviewUrl;
+            image.alt = `Vista previa final de ${state.product.nombre}`;
+
+            previewCard.querySelector(".customization-summary-preview-loading")?.replaceWith(image);
+        } catch (error) {
+            console.warn("No fue posible generar la vista previa del resumen:", error);
+            const loading = previewCard.querySelector(".customization-summary-preview-loading");
+            if (loading) {
+                loading.textContent = "No fue posible generar la imagen del resumen. Puedes volver a editar o intentar agregar el producto nuevamente.";
+            }
+        }
     }
+
 
     function createCustomizationId() {
         return window.crypto?.randomUUID?.() ||
@@ -1736,6 +1802,7 @@ function advanceToStep(nextStep, delay = 180) {
 
     function close() {
         window.clearTimeout(state.autoAdvanceTimer);
+        clearSummaryPreview();
         const overlay = els().overlay;
         if (!overlay) return;
 
@@ -1845,7 +1912,7 @@ function drag(
                     updateText();
                 }
             } else {
-                showSummary();
+                void showSummary();
             }
         });
 
@@ -1861,6 +1928,7 @@ function drag(
         });
 
         current.edit?.addEventListener("click", () => {
+            clearSummaryPreview();
             if (current.body) current.body.hidden = false;
             if (current.footer) current.footer.hidden = false;
             if (current.summary) current.summary.hidden = true;

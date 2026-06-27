@@ -10,7 +10,16 @@ const API_BASE_URL =
         : "https://mommy-crafts-backend.onrender.com/api";
 
 window.CONFIG = Object.freeze({
-    APP_VERSION: "3.24.0",
+    APP_VERSION: "3.25.0",
+
+    PAYMENT: Object.freeze({
+        receiptHours: 3,
+        emailEnabled: false,
+        paymentsEmail: "",
+        designsEmail: "",
+        bankDetailsConfigured: false,
+        bankDetailsMessage: "Los datos bancarios se entregarán únicamente mediante un canal oficial de Mommy Crafts. Verifica siempre el nombre del destinatario antes de transferir."
+    }),
 
     API_BASE_URL,
 

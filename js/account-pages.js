@@ -26,10 +26,22 @@
         }).format(new Date(value));
     }
 
+    function dateOnlyDisplay(value) {
+        if (!value) return "—";
+        return new Intl.DateTimeFormat("es-CL", {
+            dateStyle: "long",
+            timeZone: "America/Santiago"
+        }).format(new Date(value));
+    }
+
     function statusLabel(value) {
         const labels = {
             pendiente: "Pendiente",
+            pendiente_comprobante: "Pendiente de comprobante",
+            comprobante_recibido: "Comprobante recibido",
+            en_revision: "Comprobante en revisión",
             confirmado: "Confirmado",
+            validacion_diseno: "Validación de diseño",
             en_produccion: "En producción",
             listo: "Listo para entrega",
             enviado: "Enviado",
@@ -37,7 +49,17 @@
             cancelado: "Cancelado",
             pagado: "Pagado",
             rechazado: "Pago rechazado",
-            reembolsado: "Reembolsado"
+            vencido: "Plazo vencido",
+            reembolsado: "Reembolsado",
+            enviado_diseno: "Diseño enviado",
+            diseno_enviado: "Diseño enviado",
+            diseno_aprobado: "Diseño aprobado",
+            cambios_solicitados: "Cambios solicitados",
+            corregido: "Diseño corregido",
+            aprobado: "Aprobado",
+            stock_reservado: "Stock reservado",
+            comprobante_rechazado: "Comprobante rechazado",
+            plazo_extendido: "Plazo extendido"
         };
         return labels[value] || value || "Pendiente";
     }
@@ -179,6 +201,11 @@
                         <span class="account-status">${statusLabel(order.estadoPedido)}</span>
                         <span class="account-status">${statusLabel(order.estadoPago)}</span>
                     </p>
+                    ${order.venceAt && order.estadoPago === "pendiente_comprobante" ? `
+                        <p class="account-order-deadline">
+                            Comprobante hasta ${dateTime(order.venceAt)}
+                        </p>
+                    ` : ""}
                 </div>
                 <div class="account-order-total">
                     <strong>${money(order.total)}</strong>
@@ -363,24 +390,167 @@
         });
     }
 
-    function customizationBlock(customization) {
+    function customizationType(customization) {
+        if (!customization || typeof customization !== "object") {
+            return { type: "ninguna", label: "Sin personalización" };
+        }
+
+        const type = customization.type === "light" ? "simple" : "avanzada";
+        const texts = [
+            customization.requestedName,
+            customization.mainText,
+            customization.secondaryText,
+            customization.texts?.main?.value,
+            customization.texts?.secondary?.value
+        ].filter((value) => String(value || "").trim());
+
+        const simpleAssets = Array.isArray(customization.assets?.images)
+            ? customization.assets.images
+            : [];
+
+        const imageCount =
+            simpleAssets.length ||
+            (customization.assets?.original || customization.image?.asset ? 1 : 0) ||
+            (Array.isArray(customization.imageNames) ? customization.imageNames.length : 0) ||
+            (customization.imageName ? 1 : 0);
+
+        const elements = [];
+        if (texts.length) elements.push(texts.length > 1 ? `${texts.length} textos` : "Texto");
+        if (imageCount) elements.push(imageCount > 1 ? `${imageCount} imágenes` : "Imagen");
+        if (customization.observation || customization.instructions) elements.push("Indicaciones");
+
+        return {
+            type,
+            label: elements.join(" + ") || "Opciones seleccionadas"
+        };
+    }
+
+    function customizationBlock(customization, summary) {
         if (!customization || typeof customization !== "object") return "";
+
+        const info = summary?.tipo
+            ? {
+                type: summary.tipo,
+                label: summary.descripcion
+            }
+            : customizationType(customization);
+
         const preview =
-            customization.assets?.finalPreview?.secureUrl ||
+            summary?.vistaPrevia ||
+            customization.assets?.preview?.url ||
             customization.assets?.finalPreview?.url ||
+            customization.finalPreview?.asset?.url ||
             customization.finalPreviewUrl ||
             "";
-        const mainText =
-            customization.texts?.main?.value ||
-            customization.mainText ||
-            "";
+
+        const simpleAssets = Array.isArray(customization.assets?.images)
+            ? customization.assets.images
+            : [];
+
+        const original =
+            customization.assets?.original ||
+            customization.image?.asset;
+
+        const textValues = [
+            customization.requestedName,
+            customization.mainText,
+            customization.secondaryText,
+            customization.texts?.main?.value,
+            customization.texts?.secondary?.value
+        ].filter((value) => String(value || "").trim());
 
         return `
-            <div>
-                <p><strong>Personalización</strong></p>
-                ${mainText ? `<p>Texto: ${escapeHtml(mainText)}</p>` : ""}
-                ${preview ? `<img class="customer-personalization-preview" src="${escapeHtml(preview)}" alt="Vista previa de la personalización">` : ""}
+            <div class="customer-personalization-block">
+                <p>
+                    <strong>
+                        Personalización ${escapeHtml(info.type)}: ${escapeHtml(info.label)}
+                    </strong>
+                </p>
+
+                ${textValues.map((value) => `
+                    <p>Texto: ${escapeHtml(value)}</p>
+                `).join("")}
+
+                ${customization.observation ? `
+                    <p>Indicaciones: ${escapeHtml(customization.observation)}</p>
+                ` : ""}
+
+                ${customization.instructions ? `
+                    <p>Indicaciones: ${escapeHtml(customization.instructions)}</p>
+                ` : ""}
+
+                <div class="customer-personalization-assets">
+                    ${preview ? `
+                        <a href="${escapeHtml(preview)}" target="_blank" rel="noopener">
+                            <img class="customer-personalization-preview" src="${escapeHtml(preview)}" alt="Vista previa de la personalización">
+                        </a>
+                    ` : ""}
+
+                    ${simpleAssets.map((asset) => `
+                        <a href="${escapeHtml(asset.url)}" target="_blank" rel="noopener">
+                            <img class="customer-personalization-preview" src="${escapeHtml(asset.url)}" alt="Imagen enviada por el cliente">
+                        </a>
+                    `).join("")}
+
+                    ${original?.url && !simpleAssets.length ? `
+                        <a href="${escapeHtml(original.url)}" target="_blank" rel="noopener">
+                            <img class="customer-personalization-preview" src="${escapeHtml(original.url)}" alt="Imagen enviada por el cliente">
+                        </a>
+                    ` : ""}
+                </div>
             </div>
+        `;
+    }
+
+    function designApprovalBlock(item) {
+        const design = item.disenoFinal || {};
+        const personalized = item.personalizacionResumen?.tipo !== "ninguna";
+
+        if (!personalized) return "";
+
+        if (!design.asset?.url) {
+            return `
+                <div class="customer-design-status">
+                    <strong>Diseño final:</strong>
+                    pendiente de envío por Mommy Crafts.
+                </div>
+            `;
+        }
+
+        const canRespond = ["enviado", "corregido"].includes(design.estado);
+
+        return `
+            <section class="customer-design-review" data-line-id="${escapeHtml(item.lineaId)}">
+                <h4>Diseño final para aprobación</h4>
+
+                <a href="${escapeHtml(design.asset.url)}" target="_blank" rel="noopener">
+                    <img src="${escapeHtml(design.asset.url)}" alt="Diseño final enviado por Mommy Crafts">
+                </a>
+
+                <p>${escapeHtml(design.mensaje || "Revisa el diseño y confirma si está correcto.")}</p>
+                <p>Estado: <strong>${statusLabel(design.estado || "pendiente")}</strong></p>
+
+                ${design.observacionesCliente ? `
+                    <p>Tu respuesta: ${escapeHtml(design.observacionesCliente)}</p>
+                ` : ""}
+
+                ${canRespond ? `
+                    <textarea
+                        class="design-observations"
+                        maxlength="1500"
+                        placeholder="Describe aquí los cambios que necesitas"
+                    ></textarea>
+
+                    <div class="customer-design-actions">
+                        <button class="btn-primary design-response" data-action="aprobar" type="button">
+                            Aprobar diseño
+                        </button>
+                        <button class="btn-secondary design-response" data-action="solicitar_cambios" type="button">
+                            Solicitar cambios
+                        </button>
+                    </div>
+                ` : ""}
+            </section>
         `;
     }
 
@@ -388,86 +558,277 @@
         return `
             <article class="customer-order-item">
                 <img src="${escapeHtml(item.imagen || CONFIG.placeholderImage)}" alt="${escapeHtml(item.nombre)}">
+
                 <div>
                     <h3>${escapeHtml(item.nombre)}</h3>
                     <p>Cantidad: ${Number(item.cantidad) || 1}</p>
                     ${item.color ? `<p>Color: ${escapeHtml(item.color)}</p>` : ""}
-                    ${customizationBlock(item.personalizacion)}
+                    ${customizationBlock(item.personalizacion, item.personalizacionResumen)}
+                    ${designApprovalBlock(item)}
                 </div>
+
                 <strong>${money(item.subtotal)}</strong>
             </article>
         `;
     }
 
+    function transferBlock(order) {
+        if (order.metodoPago !== "transferencia") return "";
+
+        const pending =
+            ["pendiente_comprobante", "rechazado"].includes(order.estadoPago) &&
+            order.estadoPedido !== "cancelado";
+
+        const receipt = order.transferencia?.comprobante;
+        const whatsappMessage = encodeURIComponent(
+            `Hola, necesito ayuda con el pago del pedido ${order.numeroPedido}.`
+        );
+        const whatsappUrl = `${CONFIG.social?.whatsapp || "https://wa.me/56954633848"}?text=${whatsappMessage}`;
+
+        return `
+            <section class="account-detail-card customer-transfer-card">
+                <h2>Pago por transferencia</h2>
+                <p>Estado: <span class="account-status">${statusLabel(order.estadoPago)}</span></p>
+
+                ${order.transferencia?.venceAt && pending ? `
+                    <p class="transfer-deadline">
+                        Tienes plazo para cargar el comprobante hasta:
+                        <strong>${dateTime(order.transferencia.venceAt)}</strong>
+                    </p>
+                ` : ""}
+
+                <div class="transfer-security-notice">
+                    <strong>Antes de transferir</strong>
+                    <p>
+                        ${escapeHtml(
+                            CONFIG.PAYMENT?.bankDetailsMessage ||
+                            "Los datos bancarios se entregarán únicamente mediante un canal oficial de Mommy Crafts."
+                        )}
+                    </p>
+                    <p>
+                        El comprobante no confirma el pago automáticamente. La tienda verificará el abono antes de iniciar la preparación o validación del diseño.
+                    </p>
+                </div>
+
+                ${receipt?.url ? `
+                    <p class="receipt-file-link">
+                        <a href="${escapeHtml(receipt.url)}" target="_blank" rel="noopener">
+                            Ver comprobante enviado
+                        </a>
+                    </p>
+                ` : ""}
+
+                ${pending ? `
+                    <form class="receipt-upload-form" enctype="multipart/form-data">
+                        <label for="receipt-file">Subir comprobante</label>
+                        <input
+                            id="receipt-file"
+                            type="file"
+                            name="archivo"
+                            accept="image/jpeg,image/png,image/webp,application/pdf"
+                            required
+                        >
+                        <small>JPG, PNG, WEBP o PDF. Máximo 8 MB.</small>
+                        <button class="btn-primary" type="submit">
+                            Enviar comprobante
+                        </button>
+                    </form>
+                ` : ""}
+
+                <div class="transfer-help-actions">
+                    <a class="btn-secondary" href="${escapeHtml(whatsappUrl)}" target="_blank" rel="noopener">
+                        Coordinar por WhatsApp
+                    </a>
+                </div>
+
+                <p class="account-help-text">
+                    Cuando el comprobante sea validado, el estado cambiará a “Pagado”. Los productos personalizados pasarán luego a revisión del diseño.
+                </p>
+            </section>
+        `;
+    }
+
+
+    function bindOrderActions(order, container) {
+        container.querySelector(".receipt-upload-form")?.addEventListener(
+            "submit",
+            async (event) => {
+                event.preventDefault();
+
+                const button = event.currentTarget.querySelector("button");
+                button.disabled = true;
+                button.textContent = "Enviando comprobante...";
+
+                try {
+                    const formData = new FormData(event.currentTarget);
+
+                    await API.request(
+                        `/cuenta/pedidos/${encodeURIComponent(order.id || order._id)}/comprobante`,
+                        {
+                            method: "POST",
+                            body: formData,
+                            timeoutMs: 70000
+                        }
+                    );
+
+                    alert("Comprobante recibido. Mommy Crafts revisará la transferencia.");
+                    await initOrder();
+                } catch (error) {
+                    alert(error.message || "No fue posible enviar el comprobante.");
+                    button.disabled = false;
+                    button.textContent = "Enviar comprobante";
+                }
+            }
+        );
+
+        container.querySelectorAll(".design-response").forEach((button) => {
+            button.addEventListener("click", async () => {
+                const block = button.closest("[data-line-id]");
+                const observations =
+                    block.querySelector(".design-observations")?.value.trim() || "";
+
+                if (
+                    button.dataset.action === "solicitar_cambios" &&
+                    !observations
+                ) {
+                    alert("Describe los cambios que necesitas.");
+                    return;
+                }
+
+                button.disabled = true;
+
+                try {
+                    await API.request(
+                        `/cuenta/pedidos/${encodeURIComponent(order.id || order._id)}/items/${encodeURIComponent(block.dataset.lineId)}/diseno-respuesta`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                accion: button.dataset.action,
+                                observaciones
+                            })
+                        }
+                    );
+
+                    await initOrder();
+                } catch (error) {
+                    alert(error.message || "No fue posible enviar tu respuesta.");
+                    button.disabled = false;
+                }
+            });
+        });
+    }
+
     async function initOrder() {
         if (!CustomerAuth.requireCustomer()) return;
-        const id = new URLSearchParams(location.search).get("id");
+
+        const params = new URLSearchParams(location.search);
+        const id = params.get("id") || params.get("pedido");
         const container = document.getElementById("customer-order-detail");
 
         if (!id) {
-            container.innerHTML = '<section class="account-detail-card"><p>Falta el identificador del pedido.</p></section>';
+            container.innerHTML = `
+                <section class="account-detail-card">
+                    <p>Falta el identificador del pedido.</p>
+                </section>
+            `;
             return;
         }
 
         try {
             const data = await CustomerAuth.getOrder(id);
             const order = data.pedido;
-            document.getElementById("customer-order-title").textContent = order.numeroPedido;
-            document.getElementById("customer-order-date").textContent = `Creado el ${dateTime(order.createdAt)}`;
 
-            const history = Array.isArray(order.historial) ? order.historial : [];
+            document.getElementById("customer-order-title").textContent =
+                order.numeroPedido;
+
+            document.getElementById("customer-order-date").textContent =
+                `Creado el ${dateTime(order.createdAt)}`;
+
+            const history = Array.isArray(order.historial)
+                ? order.historial
+                : [];
+
+            const receiver = order.entrega?.receptorTercero;
+
             container.innerHTML = `
-                <section class="account-detail-card">
-                    <h2>Productos</h2>
-                    ${(order.items || []).map(itemBlock).join("")}
+                <section>
+                    <section class="account-detail-card">
+                        <h2>Productos y personalizaciones</h2>
+                        ${(order.items || []).map(itemBlock).join("")}
+                    </section>
+
+                    ${transferBlock(order)}
                 </section>
+
                 <aside>
                     <section class="account-detail-card">
                         <h2>Resumen</h2>
                         <p>Estado: <span class="account-status">${statusLabel(order.estadoPedido)}</span></p>
                         <p>Pago: <span class="account-status">${statusLabel(order.estadoPago)}</span></p>
                         <p>Entrega: <strong>${order.entrega?.metodo === "retiro" ? "Retiro" : "Envío"}</strong></p>
-                        ${order.entrega?.metodo === "envio" ? `<p>${escapeHtml(order.entrega?.direccion || "")}, ${escapeHtml(order.entrega?.comuna || "")}</p>` : ""}
+
+                        ${order.entrega?.metodo === "envio" ? `
+                            <p>
+                                ${escapeHtml(order.entrega?.direccion || "")},
+                                ${escapeHtml(order.entrega?.comuna || "")}
+                            </p>
+                        ` : ""}
+
+                        ${order.entrega?.fechaPreferida ? `
+                            <p>
+                                Fecha preferida:
+                                <strong>${dateOnlyDisplay(order.entrega.fechaPreferida)}</strong>
+                            </p>
+                        ` : ""}
+
+                        ${receiver?.habilitado ? `
+                            <div class="customer-order-receiver">
+                                <strong>Recibe un tercero</strong>
+                                <p>${escapeHtml(receiver.nombre)}</p>
+                                <p>${escapeHtml(receiver.telefono)}</p>
+                                <p>${escapeHtml(receiver.relacion)}</p>
+                            </div>
+                        ` : ""}
+
+                        ${order.observaciones ? `
+                            <div class="customer-order-note">
+                                <strong>Nota del pedido</strong>
+                                <p>${escapeHtml(order.observaciones)}</p>
+                            </div>
+                        ` : ""}
+
                         <p>Subtotal: <strong>${money(order.subtotal)}</strong></p>
                         <p>Total: <strong>${money(order.total)}</strong></p>
-                        ${order.metodoPago === "mercadopago" && order.estadoPago !== "pagado" && order.estadoPedido !== "cancelado" ? `
-                            <button class="btn-primary customer-pay-button" id="customer-retry-payment" type="button">
-                                Pagar con Mercado Pago
-                            </button>
-                        ` : ""}
                     </section>
+
                     <section class="account-detail-card" style="margin-top:1.6rem">
                         <h2>Seguimiento</h2>
                         <div class="account-timeline">
-                            ${history.length ? history.slice().reverse().map((entry) => `
-                                <div class="account-timeline-entry">
-                                    <strong>${statusLabel(entry.estado)}</strong>
-                                    ${entry.detalle ? `<p>${escapeHtml(entry.detalle)}</p>` : ""}
-                                    <span>${dateTime(entry.fecha)}</span>
-                                </div>
-                            `).join("") : "<p>El pedido todavía no tiene actualizaciones.</p>"}
+                            ${history.length
+                                ? history.slice().reverse().map((entry) => `
+                                    <div class="account-timeline-entry">
+                                        <strong>${statusLabel(entry.estado)}</strong>
+                                        ${entry.detalle ? `<p>${escapeHtml(entry.detalle)}</p>` : ""}
+                                        <span>${dateTime(entry.fecha)}</span>
+                                    </div>
+                                `).join("")
+                                : "<p>El pedido todavía no tiene actualizaciones.</p>"
+                            }
                         </div>
                     </section>
                 </aside>
             `;
 
-            document.getElementById("customer-retry-payment")
-                ?.addEventListener("click", async (event) => {
-                    const button = event.currentTarget;
-                    button.disabled = true;
-                    button.textContent = "Preparando pago...";
-
-                    try {
-                        const result = await CustomerAuth.createPaymentPreference(id);
-                        location.href = result.checkoutUrl;
-                    } catch (error) {
-                        alert(error.message || "No fue posible iniciar el pago.");
-                        button.disabled = false;
-                        button.textContent = "Pagar con Mercado Pago";
-                    }
-                });
+            bindOrderActions(order, container);
         } catch (error) {
-            container.innerHTML = `<section class="account-detail-card"><div class="account-alert">${escapeHtml(error.message)}</div></section>`;
+            container.innerHTML = `
+                <section class="account-detail-card">
+                    <div class="account-alert">${escapeHtml(error.message)}</div>
+                </section>
+            `;
         }
     }
 

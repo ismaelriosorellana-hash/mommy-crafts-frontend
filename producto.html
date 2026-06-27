@@ -227,13 +227,6 @@
 
                     <p class="stock-status" id="detalle-stock"></p>
 
-                    <section
-                        class="product-delivery-info"
-                        id="product-delivery-info"
-                        aria-label="Opciones de entrega"
-                        hidden
-                    ></section>
-
 <section class="product-color-selector" id="product-color-selector" aria-labelledby="product-color-title" hidden>
     <div class="product-color-selector-header">
         <div>
@@ -354,6 +347,13 @@
                         </button>
                     </div>
 
+                    <section
+                        class="product-delivery-info product-delivery-near-actions"
+                        id="product-delivery-info"
+                        aria-label="Opciones de entrega"
+                        hidden
+                    ></section>
+
                     <div class="detail-accordion">
                         <article class="accordion-item">
                             <button class="accordion-header active" type="button" aria-expanded="true" aria-controls="detalle-descripcion">
@@ -370,17 +370,6 @@
                             </button>
                             <div class="accordion-content" id="detalle-caracteristicas-panel">
                                 <ul id="detalle-caracteristicas"></ul>
-                            </div>
-                        </article>
-
-                        <article class="accordion-item">
-                            <button class="accordion-header" type="button" aria-expanded="false" aria-controls="shipping-panel">
-                                <span>Envíos y retiro</span>
-                                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                            </button>
-                            <div class="accordion-content" id="shipping-panel">
-                                <p><strong>Envío:</strong> disponibilidad y valor calculados según destino.</p>
-                                <p><strong>Retiro:</strong> sujeto a coordinación previa.</p>
                             </div>
                         </article>
                     </div>

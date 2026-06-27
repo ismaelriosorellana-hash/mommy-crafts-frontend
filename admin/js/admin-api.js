@@ -140,18 +140,11 @@
         const url =
             `${getBaseUrl()}/${String(endpoint).replace(/^\/+/, "")}`;
 
+        const isFormData = options.body instanceof FormData;
         const headers = {
-            Accept:
-                "application/json",
-            ...(options.body !==
-            undefined
-                ? {
-                    "Content-Type":
-                        "application/json"
-                }
-                : {}),
-            ...(options.headers ||
-                {})
+            Accept: "application/json",
+            ...(!isFormData && options.body !== undefined ? { "Content-Type": "application/json" } : {}),
+            ...(options.headers || {})
         };
 
         const token =
@@ -194,12 +187,11 @@
                             "GET",
                         headers,
                         body:
-                            options.body ===
-                            undefined
+                            options.body === undefined
                                 ? undefined
-                                : JSON.stringify(
-                                    options.body
-                                ),
+                                : isFormData
+                                    ? options.body
+                                    : JSON.stringify(options.body),
                         signal:
                             controller.signal
                     }

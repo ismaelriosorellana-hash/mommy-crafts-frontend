@@ -656,6 +656,18 @@ function normalizeVariants(rawProduct, defaultImage, defaultImages = []) {
                 0
             ),
 
+            diasPreparacion: Math.min(
+                90,
+                Math.max(
+                    1,
+                    numberValue(
+                        rawProduct.diasPreparacion ??
+                        rawProduct.plazoPreparacionDias,
+                        3
+                    )
+                )
+            ),
+
             orden: numberValue(rawProduct.orden, 9999),
 
             ventas: numberValue(
@@ -2097,6 +2109,20 @@ function renderProductDelivery(product) {
         };
 
     const cards = [];
+    const preparationDays = Math.min(
+        90,
+        Math.max(1, Number(product.diasPreparacion) || 3)
+    );
+
+    cards.push(`
+        <article class="product-delivery-card preparation-card">
+            <i class="fa-regular fa-calendar-check" aria-hidden="true"></i>
+            <div>
+                <strong>Preparación mínima</strong>
+                <p>${preparationDays} día${preparationDays === 1 ? "" : "s"} hábil${preparationDays === 1 ? "" : "es"}. La fecha final se elige al terminar la compra.</p>
+            </div>
+        </article>
+    `);
 
     if (delivery.shipping?.enabled) {
         cards.push(`

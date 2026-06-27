@@ -279,6 +279,47 @@ function renderCustomization(item) {
     const customization = customizationOf(item);
     if (!customization) return "";
 
+    if (customization.type === "light") {
+        const assets = Array.isArray(customization.assets?.images)
+            ? customization.assets.images
+            : [];
+        const summary = item.personalizacionResumen?.descripcion || "Opciones seleccionadas";
+
+        return `
+            <section class="order-customization-panel simple">
+                <header class="order-customization-header">
+                    <div>
+                        <span>Personalización simple</span>
+                        <strong>${AdminUI.escapeHtml(summary)}</strong>
+                    </div>
+                </header>
+
+                ${customization.requestedName ? `
+                    <div class="order-instructions">
+                        <strong>Texto</strong>
+                        <p>${AdminUI.escapeHtml(customization.requestedName)}</p>
+                    </div>
+                ` : ""}
+
+                ${customization.observation ? `
+                    <div class="order-instructions">
+                        <strong>Indicaciones</strong>
+                        <p>${AdminUI.escapeHtml(customization.observation)}</p>
+                    </div>
+                ` : ""}
+
+                <div class="order-assets-grid">
+                    ${assets.length
+                        ? assets.map((asset, index) =>
+                            renderAsset(asset, `Imagen del cliente ${index + 1}`, "fa-image")
+                        ).join("")
+                        : '<div class="admin-empty">Sin imágenes adjuntas.</div>'
+                    }
+                </div>
+            </section>
+        `;
+    }
+
     const previewAsset = assetOf(customization, "preview");
     const originalAsset = assetOf(customization, "original");
     const mainText = textDetails(customization, "main");
@@ -337,7 +378,37 @@ function renderCustomization(item) {
     `;
 }
 
-function renderOrderItem(item) {
+function orderDate(value) {
+    if (!value) return "No informada";
+    return new Intl.DateTimeFormat("es-CL", {
+        dateStyle: "long",
+        timeZone: "America/Santiago"
+    }).format(new Date(value));
+}
+
+function whatsappDigits(value) {
+    const digits = String(value || "").replace(/\D/g, "");
+    if (!digits) return "";
+    if (digits.startsWith("56")) return digits;
+    if (digits.length === 9) return `56${digits}`;
+    return digits;
+}
+
+function designWhatsAppUrl(order, item) {
+    const phone = whatsappDigits(order?.cliente?.telefono);
+    if (!phone) return "";
+
+    const message = encodeURIComponent(
+        `Hola ${order.cliente?.nombre || ""}, publicamos el diseño final de ${item.nombre} para el pedido ${order.numeroPedido}. Ingresa a tu cuenta en Mommy Crafts para revisarlo, aprobarlo o solicitar cambios.`
+    );
+
+    return `https://wa.me/${phone}?text=${message}`;
+}
+
+function renderOrderItem(item, order) {
+    const whatsappUrl = designWhatsAppUrl(order, item);
+    const canPublishDesign = order?.estadoPago === "pagado";
+
     return `
         <article class="order-product-item">
             <div class="order-product-main">
@@ -359,6 +430,65 @@ function renderOrderItem(item) {
             </div>
 
             ${renderCustomization(item)}
+
+            ${item.personalizacionResumen?.tipo !== "ninguna" ? `
+                <section class="admin-design-workflow" data-line-id="${AdminUI.escapeHtml(item.lineaId)}">
+                    <h5>Diseño final y aprobación</h5>
+
+                    ${item.disenoFinal?.asset?.url ? `
+                        <a href="${AdminUI.escapeHtml(item.disenoFinal.asset.url)}" target="_blank" rel="noopener">
+                            <img src="${AdminUI.escapeHtml(item.disenoFinal.asset.url)}" alt="Diseño final">
+                        </a>
+                        ${whatsappUrl ? `
+                            <a
+                                class="admin-button secondary small"
+                                href="${AdminUI.escapeHtml(whatsappUrl)}"
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                Avisar por WhatsApp
+                            </a>
+                        ` : ""}
+                    ` : ""}
+
+                    <p>
+                        Estado:
+                        <strong>${AdminUI.escapeHtml(String(item.disenoFinal?.estado || "pendiente").replaceAll("_", " "))}</strong>
+                    </p>
+
+                    ${item.disenoFinal?.observacionesCliente ? `
+                        <p>Observaciones del cliente: ${AdminUI.escapeHtml(item.disenoFinal.observacionesCliente)}</p>
+                    ` : ""}
+
+                    ${!canPublishDesign ? `
+                        <p class="admin-help-text">
+                            Primero debes confirmar el pago para publicar el diseño final.
+                        </p>
+                    ` : ""}
+
+                    <input class="design-file" type="file" accept="image/jpeg,image/png,image/webp" ${canPublishDesign ? "" : "disabled"}>
+
+                    <textarea
+                        class="design-message"
+                        maxlength="1500"
+                        placeholder="Mensaje para el cliente"
+                        ${canPublishDesign ? "" : "disabled"}
+                    >${AdminUI.escapeHtml(item.disenoFinal?.mensaje || "Te enviamos el diseño final para que lo revises y confirmes desde tu cuenta.")}</textarea>
+
+                    <select class="design-channel" ${canPublishDesign ? "" : "disabled"}>
+                        <option value="cuenta">Publicar en la cuenta del cliente</option>
+                        <option value="whatsapp">Cuenta + coordinación manual por WhatsApp</option>
+                    </select>
+
+                    <p class="admin-help-text">
+                        El correo automático se habilitará cuando exista el dominio corporativo. Por ahora, el diseño quedará disponible en la cuenta y puedes avisar por WhatsApp.
+                    </p>
+
+                    <button class="admin-button small upload-final-design" type="button" ${canPublishDesign ? "" : "disabled"}>
+                        Publicar diseño para el cliente
+                    </button>
+                </section>
+            ` : ""}
         </article>
     `;
 }
@@ -471,7 +601,7 @@ function openOrder(id) {
     syncButton.hidden = order.metodoPago !== "mercadopago";
 
     const items = (order.items || [])
-        .map(renderOrderItem)
+        .map((item) => renderOrderItem(item, order))
         .join("");
 
     document.getElementById("order-detail").innerHTML = `
@@ -528,6 +658,88 @@ function openOrder(id) {
             </div>
         </section>
 
+        ${order.metodoPago === "transferencia" ? `
+            <h4 class="admin-section-title">Transferencia bancaria</h4>
+
+            <section class="admin-card">
+                <div class="admin-card-body">
+                    <p>
+                        Estado:
+                        <strong>${AdminUI.escapeHtml(String(order.estadoPago || "").replaceAll("_", " "))}</strong>
+                    </p>
+
+                    <p>
+                        Vence:
+                        <strong>${order.transferencia?.venceAt ? AdminUI.dateTime(order.transferencia.venceAt) : "—"}</strong>
+                    </p>
+
+                    ${order.transferencia?.comprobante?.url ? `
+                        <p>
+                            <a
+                                class="admin-button secondary small"
+                                href="${AdminUI.escapeHtml(order.transferencia.comprobante.url)}"
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                Ver comprobante
+                            </a>
+                        </p>
+                    ` : "<p>Aún no hay comprobante.</p>"}
+
+                    <div class="admin-field full">
+                        <label for="transfer-note">Observaciones de validación</label>
+                        <textarea id="transfer-note">${AdminUI.escapeHtml(order.transferencia?.observaciones || "")}</textarea>
+                    </div>
+
+                    <div class="admin-toolbar-group" style="margin-top:12px">
+                        <button class="admin-button small transfer-action" data-action="aprobar" type="button">
+                            Confirmar pago
+                        </button>
+
+                        <button class="admin-button secondary small transfer-action" data-action="extender" type="button">
+                            Extender 3 horas
+                        </button>
+
+                        <button class="admin-button danger small transfer-action" data-action="rechazar" type="button">
+                            Rechazar
+                        </button>
+
+                        <label class="admin-checkbox">
+                            <input id="transfer-retry" type="checkbox">
+                            Permitir nuevo comprobante
+                        </label>
+                    </div>
+                </div>
+            </section>
+        ` : ""}
+
+        ${order.observaciones ? `
+            <h4 class="admin-section-title">Nota del cliente</h4>
+            <section class="admin-card">
+                <div class="admin-card-body">
+                    <p>${AdminUI.escapeHtml(order.observaciones)}</p>
+                </div>
+            </section>
+        ` : ""}
+
+        ${order.entrega?.receptorTercero?.habilitado ? `
+            <h4 class="admin-section-title">Persona que recibe</h4>
+            <section class="admin-card">
+                <div class="admin-card-body">
+                    <p><strong>${AdminUI.escapeHtml(order.entrega.receptorTercero.nombre)}</strong></p>
+                    <p>${AdminUI.escapeHtml(order.entrega.receptorTercero.telefono)}</p>
+                    <p>${AdminUI.escapeHtml(order.entrega.receptorTercero.relacion)}</p>
+                </div>
+            </section>
+        ` : ""}
+
+        <h4 class="admin-section-title">Fecha preferida</h4>
+        <section class="admin-card">
+            <div class="admin-card-body">
+                <p>${orderDate(order.entrega?.fechaPreferida)}</p>
+            </div>
+        </section>
+
         ${order.metodoPago === "mercadopago" ? `
             <h4 class="admin-section-title">Mercado Pago</h4>
             <section class="admin-card">
@@ -556,6 +768,7 @@ function openOrder(id) {
                     ${[
                         "pendiente",
                         "confirmado",
+                        "validacion_diseno",
                         "en_produccion",
                         "listo",
                         "enviado",
@@ -574,8 +787,12 @@ function openOrder(id) {
                 <select id="order-payment-edit">
                     ${[
                         "pendiente",
+                        "pendiente_comprobante",
+                        "comprobante_recibido",
+                        "en_revision",
                         "pagado",
                         "rechazado",
+                        "vencido",
                         "reembolsado"
                     ].map((status) => `
                         <option value="${status}" ${status === order.estadoPago ? "selected" : ""}>
@@ -591,6 +808,93 @@ function openOrder(id) {
             </div>
         </div>
     `;
+
+    document.querySelectorAll(".upload-final-design").forEach((button) => {
+        button.addEventListener("click", async () => {
+            const block = button.closest("[data-line-id]");
+            const file = block.querySelector(".design-file")?.files?.[0];
+
+            if (!file) {
+                AdminUI.toast("Selecciona la imagen del diseño.", "error");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("archivo", file);
+            formData.append("mensaje", block.querySelector(".design-message")?.value || "");
+            formData.append("canal", block.querySelector(".design-channel")?.value || "cuenta");
+
+            button.disabled = true;
+
+            try {
+                const updated = await AdminAPI.request(
+                    `/admin/pedidos/${encodeURIComponent(currentOrderId)}/items/${encodeURIComponent(block.dataset.lineId)}/diseno`,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+                const index = adminOrders.findIndex(
+                    (entry) => String(entry._id) === String(currentOrderId)
+                );
+
+                if (index >= 0) adminOrders[index] = updated;
+                openOrder(currentOrderId);
+                AdminUI.toast("Diseño publicado en la cuenta del cliente.", "success");
+            } catch (error) {
+                AdminUI.toast(error.message, "error");
+                button.disabled = false;
+            }
+        });
+    });
+
+    document.querySelectorAll(".transfer-action").forEach((button) => {
+        button.addEventListener("click", async () => {
+            const action = button.dataset.action;
+            const allowRetry = document.getElementById("transfer-retry")?.checked === true;
+
+            if (
+                action === "rechazar" &&
+                !window.confirm(
+                    allowRetry
+                        ? "Se rechazará el comprobante y se abrirá un nuevo plazo de 3 horas."
+                        : "Se cancelará el pedido y se liberará el stock. ¿Continuar?"
+                )
+            ) {
+                return;
+            }
+
+            button.disabled = true;
+
+            try {
+                const updated = await AdminAPI.request(
+                    `/admin/pedidos/${encodeURIComponent(currentOrderId)}/transferencia`,
+                    {
+                        method: "POST",
+                        body: {
+                            accion: action,
+                            permitirReenvio: allowRetry,
+                            observaciones: document.getElementById("transfer-note")?.value || "",
+                            canal: "manual"
+                        }
+                    }
+                );
+
+                const index = adminOrders.findIndex(
+                    (entry) => String(entry._id) === String(currentOrderId)
+                );
+
+                if (index >= 0) adminOrders[index] = updated;
+                renderOrders();
+                openOrder(currentOrderId);
+                AdminUI.toast("Transferencia actualizada.", "success");
+            } catch (error) {
+                AdminUI.toast(error.message, "error");
+                button.disabled = false;
+            }
+        });
+    });
 
     AdminUI.openModal("order-modal");
 }

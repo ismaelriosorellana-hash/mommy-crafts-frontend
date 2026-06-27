@@ -20,3 +20,88 @@
 @import url("./products.css");
 @import url("./modal.css");
 @import url("./cart.css");
+
+
+/* V3.25 · transferencia, comprobantes y resumen de personalización */
+.customization-summary-preview {
+    margin: 1rem auto 1.4rem;
+    width: min(100%, 520px);
+    border: 1px solid rgba(91, 58, 70, 0.14);
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 18px 45px rgba(70, 42, 52, 0.12);
+}
+
+.customization-summary-preview img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: contain;
+    background: #f8eff2;
+}
+
+.customization-summary-preview-loading {
+    display: grid;
+    min-height: 280px;
+    place-items: center;
+    padding: 2rem;
+    color: #765c65;
+    text-align: center;
+}
+
+.customization-summary-preview figcaption {
+    padding: 0.9rem 1rem 1rem;
+    color: #6e5961;
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.transfer-security-notice {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid rgba(185, 119, 137, 0.28);
+    border-radius: 1rem;
+    background: #fff8fa;
+}
+
+.transfer-security-notice p:last-child {
+    margin-bottom: 0;
+}
+
+.transfer-deadline,
+.account-order-deadline {
+    color: #76515d;
+}
+
+.transfer-help-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.receipt-file-link a {
+    font-weight: 700;
+}
+
+@media (max-width: 640px) {
+    .customization-summary-preview {
+        border-radius: 1rem;
+    }
+
+    .customization-summary-preview-loading {
+        min-height: 220px;
+    }
+
+    .transfer-help-actions > * {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+
+.delivery-instructions p {
+    white-space: pre-line;
+}

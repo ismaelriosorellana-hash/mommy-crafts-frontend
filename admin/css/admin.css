@@ -613,3 +613,10 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* V3.25: flujo de transferencia y aprobación */
+.admin-design-workflow { display:grid; gap:10px; padding:16px; border-top:1px solid var(--admin-border); background:#f8fbff; }
+.admin-design-workflow > img,.admin-design-workflow > a > img { width:min(100%,420px); max-height:360px; object-fit:contain; border-radius:14px; background:#fff; }
+.admin-design-workflow textarea { min-height:86px; }
+.admin-design-workflow select,.admin-design-workflow input { min-height:42px; }

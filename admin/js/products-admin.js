@@ -409,6 +409,11 @@ function openProductForm(product = null) {
         product?.orden ?? 0;
 
     document.getElementById(
+        "product-preparation-days"
+    ).value =
+        product?.diasPreparacion ?? 3;
+
+    document.getElementById(
         "product-main-category"
     ).value =
         product?.categoriaPrincipal || "";
@@ -831,6 +836,18 @@ async function saveProduct(event) {
                     "product-order"
                 ).value
             ) || 0,
+        diasPreparacion:
+            Math.min(
+                90,
+                Math.max(
+                    1,
+                    Number(
+                        document.getElementById(
+                            "product-preparation-days"
+                        ).value
+                    ) || 3
+                )
+            ),
         categoriaPrincipal:
             document.getElementById(
                 "product-main-category"

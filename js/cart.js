@@ -2,7 +2,6 @@
 
 (function () {
     const STORAGE_KEY = "mommyCraftsCart";
-    let mercadoPagoStatus = null;
 
     function formatPrice(value) {
         return new Intl.NumberFormat(CONFIG.locale || "es-CL", {
@@ -31,6 +30,14 @@
             {};
 
         return {
+            diasPreparacion:
+                Math.min(
+                    90,
+                    Math.max(
+                        1,
+                        Number(raw.diasPreparacion ?? raw.preparationDays ?? 3) || 3
+                    )
+                ),
             shipping: {
                 enabled:
                     shipping.enabled ??
@@ -171,10 +178,11 @@
                 customization,
                 customizationKey,
                 delivery:
-                    normalizeDelivery(
-                        product.delivery ??
-                        product.entrega
-                    )
+                    normalizeDelivery({
+                        ...(product.delivery ?? product.entrega ?? {}),
+                        diasPreparacion:
+                            product.diasPreparacion ?? 3
+                    })
             });
         }
 
@@ -468,21 +476,18 @@
                 ? "pickup"
                 : "shipping";
 
-        const instructions = [
-            ...new Set(
-                items
-                    .map(
-                        (item) =>
-                            normalizeDelivery(
-                                item.delivery
-                            )[key].instructions
-                    )
-                    .filter(Boolean)
-            )
-        ];
+        const details = items
+            .map((item) => {
+                const instruction = normalizeDelivery(item.delivery)[key].instructions;
+                return instruction
+                    ? `${item.name}: ${instruction}`
+                    : "";
+            })
+            .filter(Boolean);
 
-        return instructions.join("\n\n");
+        return [...new Set(details)].join("\n\n");
     }
+
 
     function updateDeliveryForm() {
         const form =
@@ -595,10 +600,12 @@
                     ? "Instrucciones de envío"
                     : "Instrucciones de retiro";
 
-            instructions.innerHTML = `
-                <strong>${methodLabel}</strong>
-                ${deliveryInstructions(items, method)}
-            `;
+            const title = document.createElement("strong");
+            const detail = document.createElement("p");
+            title.textContent = methodLabel;
+            detail.textContent = deliveryInstructions(items, method);
+
+            instructions.replaceChildren(title, detail);
         }
     }
 
@@ -660,6 +667,8 @@
         }
 
         updateDeliveryForm();
+        updatePreferredDate();
+        updateThirdPartyFields();
         prefillCheckoutWithAccount();
     }
 
@@ -716,67 +725,79 @@
     }
 
 
-    async function loadMercadoPagoStatus() {
-        const input = document.querySelector(
-            'input[name="pedido-pago"][value="mercadopago"]'
-        );
-        const option = document.getElementById(
-            "mercadopago-payment-option"
-        );
-        const note = document.getElementById(
-            "payment-method-note"
-        );
-
-        if (!input || !note) return;
-
-        try {
-            mercadoPagoStatus = await API.request(
-                CONFIG.ENDPOINTS.mercadoPagoEstado
-            );
-
-            input.disabled = !mercadoPagoStatus.configured;
-            option?.classList.toggle(
-                "is-disabled",
-                !mercadoPagoStatus.configured
-            );
-
-            if (mercadoPagoStatus.configured) {
-                note.classList.remove("error");
-                note.textContent =
-                    mercadoPagoStatus.environment === "production"
-                        ? "Serás redirigido a Mercado Pago para completar un pago real."
-                        : "Modo de prueba activo: serás redirigido al entorno de pruebas de Mercado Pago.";
-            } else {
-                const transfer = document.querySelector(
-                    'input[name="pedido-pago"][value="transferencia"]'
-                );
-                transfer.checked = true;
-                note.classList.add("error");
-                note.textContent =
-                    "Mercado Pago todavía no está configurado. Puedes continuar mediante transferencia.";
-            }
-        } catch (error) {
-            input.disabled = true;
-            option?.classList.add("is-disabled");
-            const transfer = document.querySelector(
-                'input[name="pedido-pago"][value="transferencia"]'
-            );
-            transfer.checked = true;
-            note.classList.add("error");
-            note.textContent =
-                "No fue posible comprobar Mercado Pago. Comprueba que el backend esté encendido.";
+    function addBusinessDays(start, days) {
+        const date = new Date(start);
+        date.setHours(12, 0, 0, 0);
+        let remaining = Math.max(0, Number(days) || 0);
+        while (remaining > 0) {
+            date.setDate(date.getDate() + 1);
+            const weekday = date.getDay();
+            if (weekday !== 0 && weekday !== 6) remaining -= 1;
         }
+        return date;
     }
 
-    function savePendingPayment(orderResponse) {
-        sessionStorage.setItem(
-            "mommycrafts_pending_payment",
-            JSON.stringify({
-                pedidoId: orderResponse.pedidoId,
-                numeroPedido: orderResponse.numeroPedido,
-                token: orderResponse.consultaToken
-            })
-        );
+    function dateInputValue(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    }
+
+    function updatePreferredDate() {
+        const input = document.getElementById("pedido-fecha-preferida");
+        const help = document.getElementById("pedido-fecha-ayuda");
+        if (!input) return;
+        const days = Math.max(...read().map(item => Number(item.delivery?.diasPreparacion || item.delivery?.preparationDays || 3)), 3);
+        const minimum = addBusinessDays(new Date(), days);
+        const value = dateInputValue(minimum);
+        input.min = value;
+        if (!input.value || input.value < value) input.value = value;
+        if (help) help.textContent = `Primera fecha disponible: ${minimum.toLocaleDateString("es-CL")} (${days} días hábiles mínimos). Puedes elegir una fecha posterior.`;
+    }
+
+    function updateThirdPartyFields() {
+        const enabled = document.getElementById("pedido-tercero")?.checked === true;
+        const container = document.getElementById("third-party-fields");
+        if (container) container.hidden = !enabled;
+        ["tercero-nombre", "tercero-telefono", "tercero-relacion"].forEach((id) => {
+            const input = document.getElementById(id);
+            if (input) input.required = enabled;
+        });
+    }
+
+    function dataUrlToBlob(dataUrl) {
+        const [header, encoded] = String(dataUrl || "").split(",");
+        const mime = header?.match(/data:([^;]+)/)?.[1] || "image/png";
+        const binary = atob(encoded || "");
+        const bytes = new Uint8Array(binary.length);
+        for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+        return new Blob([bytes], { type: mime });
+    }
+
+    async function uploadSimpleCustomizations(items) {
+        let changed = false;
+        for (const item of items) {
+            const customization = item.customization;
+            const dataList = Array.isArray(customization?.imageDataList)
+                ? customization.imageDataList.filter(Boolean)
+                : customization?.imageData ? [customization.imageData] : [];
+            if (customization?.type !== "light" || !dataList.length || customization.assets?.images?.length) continue;
+            const formData = new FormData();
+            formData.append("customizationId", `simple-${item.lineId}`);
+            dataList.forEach((dataUrl, index) => {
+                const blob = dataUrlToBlob(dataUrl);
+                const name = customization.imageNames?.[index] || `referencia-${index + 1}.${blob.type.split("/")[1] || "png"}`;
+                formData.append("imagenes", blob, name);
+            });
+            const uploaded = await API.request("/uploads/personalizacion-simple", { method: "POST", body: formData, timeoutMs: 70000 });
+            customization.assets = { ...(customization.assets || {}), images: uploaded.assets || [] };
+            delete customization.imageData;
+            delete customization.imageDataList;
+            changed = true;
+        }
+        if (changed) write(items);
+        return items;
     }
 
     function initCheckout() {
@@ -794,6 +815,8 @@
                 if (event.target.id === "modal-pedido") closeCheckout();
             }
         );
+        document.getElementById("pedido-tercero")?.addEventListener("change", updateThirdPartyFields);
+
         document
             .querySelectorAll(
                 'input[name="metodo-entrega"]'
@@ -831,16 +854,11 @@
                     return;
                 }
 
-                const paymentMethod =
-                    formData.get("pedido-pago");
-
-                const whatsappWindow =
-                    paymentMethod === "transferencia"
-                        ? window.open(
-                            "about:blank",
-                            "_blank"
-                        )
-                        : null;
+                if (!window.CustomerAuth?.getToken?.()) {
+                    alert("Para proteger el comprobante y la aprobación del diseño, inicia sesión antes de confirmar el pedido.");
+                    location.href = "acceso.html?modo=login&next=carrito.html";
+                    return;
+                }
 
                 if (submitButton) {
                     submitButton.disabled = true;
@@ -851,6 +869,8 @@
                 }
 
                 try {
+                    await uploadSimpleCustomizations(items);
+
                     const response =
                         await API.request(
                             "/pedidos",
@@ -890,6 +910,8 @@
                                     items:
                                         items.map(
                                             (item) => ({
+                                                lineaId:
+                                                    item.lineId,
                                                 productoId:
                                                     item.productId,
                                                 nombre:
@@ -938,7 +960,19 @@
                                                 ? formData.get(
                                                     "comuna"
                                                 )
-                                                : ""
+                                                : "",
+                                        fechaPreferida:
+                                            formData.get("fecha-preferida"),
+                                        receptorTercero: {
+                                            habilitado:
+                                                formData.get("receptor-tercero") === "on",
+                                            nombre:
+                                                formData.get("tercero-nombre") || "",
+                                            telefono:
+                                                formData.get("tercero-telefono") || "",
+                                            relacion:
+                                                formData.get("tercero-relacion") || ""
+                                        }
                                     },
                                     metodoPago:
                                         formData.get(
@@ -953,49 +987,20 @@
                             }
                         );
 
-                    if (paymentMethod === "mercadopago") {
-                        if (!response.pago?.checkoutUrl) {
-                            throw new Error(
-                                response.pago?.error ||
-                                "El pedido fue guardado, pero no fue posible iniciar el pago."
-                            );
-                        }
-
-                        savePendingPayment(response);
-                        clear();
-                        closeCheckout();
-                        form.reset();
-                        window.location.assign(
-                            response.pago.checkoutUrl
-                        );
-                        return;
-                    }
-
-                    const message =
-                        buildWhatsAppOrder(
-                            formData,
-                            response.numeroPedido
-                        );
-
-                    const url =
-                        `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(message)}`;
+                    sessionStorage.setItem(
+                        "mommycrafts_last_order",
+                        JSON.stringify({
+                            pedidoId: response.pedidoId,
+                            numeroPedido: response.numeroPedido,
+                            venceAt: response.venceAt
+                        })
+                    );
 
                     clear();
                     closeCheckout();
                     form.reset();
-
-                    if (
-                        whatsappWindow &&
-                        !whatsappWindow.closed
-                    ) {
-                        whatsappWindow.location.href =
-                            url;
-                    } else {
-                        window.location.href =
-                            url;
-                    }
+                    window.location.href = `pedido.html?id=${encodeURIComponent(response.pedidoId)}`;
                 } catch (error) {
-                    whatsappWindow?.close();
 
                     alert(
                         error.message ||
@@ -1031,6 +1036,5 @@
         updateCount();
         renderCartPage();
         initCheckout();
-        loadMercadoPagoStatus();
     });
 })();

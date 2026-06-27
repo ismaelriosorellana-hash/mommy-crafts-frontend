@@ -484,3 +484,13 @@
     background: #fff0f0;
     color: #8a3434;
 }
+
+
+/* V3.25: entrega, tercero y transferencia */
+.checkout-date-field input[type="date"] { min-height: 46px; }
+.checkout-recipient-toggle { display:flex; gap:12px; align-items:flex-start; padding:14px; border:1px solid var(--border-color,#eadce5); border-radius:14px; background:#fff8fc; cursor:pointer; }
+.checkout-recipient-toggle span { display:grid; gap:3px; }
+.checkout-recipient-toggle small { color:var(--text-muted,#746b70); }
+.checkout-recipient-fields { margin-top:12px; padding:14px; border:1px solid var(--border-color,#eadce5); border-radius:14px; }
+.payment-options.single-option { grid-template-columns:1fr; }
+@media (max-width: 640px) { .modal-pedido-box { width:100%; max-height:100dvh; border-radius:0; } .modal-pedido-body { padding:16px; } .form-row { grid-template-columns:1fr; } }

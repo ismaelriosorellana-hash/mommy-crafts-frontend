@@ -555,3 +555,15 @@
         grid-column: auto;
     }
 }
+
+
+/* V3.25: comprobantes y aprobación de diseños */
+.customer-personalization-assets { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
+.customer-personalization-preview { width:120px; height:120px; object-fit:contain; border:1px solid #eadce5; border-radius:12px; background:#fff; }
+.customer-transfer-card,.customer-design-review,.customer-design-status { margin-top:14px; padding:16px; border:1px solid #eadce5; border-radius:16px; background:#fff9fd; }
+.customer-design-review > a > img { width:min(100%,420px); max-height:420px; object-fit:contain; border-radius:14px; background:#fff; }
+.customer-design-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
+.design-observations { width:100%; min-height:90px; margin-top:10px; }
+.receipt-upload-form { display:grid; gap:10px; margin-top:12px; }
+.customer-order-receiver,.customer-order-note { margin-top:12px; padding:12px; border-radius:12px; background:#fff8fc; }
+@media(max-width:620px){ .customer-order-item{grid-template-columns:64px 1fr}.customer-order-item>strong{grid-column:2}.customer-personalization-preview{width:96px;height:96px} }
