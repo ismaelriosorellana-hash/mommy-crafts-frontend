@@ -30,6 +30,38 @@
             });
     }
 
+
+    function initCategoryRail() {
+        const rail = document.getElementById("categories-grid");
+        if (!rail) return;
+
+        document.querySelectorAll("[data-category-direction]")
+            .forEach((button) => {
+                button.addEventListener("click", () => {
+                    const direction = Number(button.dataset.categoryDirection) || 1;
+                    rail.scrollBy({
+                        left: Math.max(260, rail.clientWidth * 0.72) * direction,
+                        behavior: "smooth"
+                    });
+                });
+            });
+
+        rail.addEventListener("wheel", (event) => {
+            if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+            if (rail.scrollWidth <= rail.clientWidth) return;
+
+            const atStart = rail.scrollLeft <= 1;
+            const atEnd = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 1;
+
+            if ((event.deltaY < 0 && atStart) || (event.deltaY > 0 && atEnd)) {
+                return;
+            }
+
+            event.preventDefault();
+            rail.scrollLeft += event.deltaY;
+        }, { passive: false });
+    }
+
     function bannerImage(slide) {
         const mobile = window.matchMedia(
             "(max-width: 700px)"
@@ -214,6 +246,7 @@
 
     document.addEventListener("DOMContentLoaded", () => {
         initCarouselArrows();
+        initCategoryRail();
         initBanner();
         initHeroScroll();
 

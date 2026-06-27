@@ -567,3 +567,71 @@
 .receipt-upload-form { display:grid; gap:10px; margin-top:12px; }
 .customer-order-receiver,.customer-order-note { margin-top:12px; padding:12px; border-radius:12px; background:#fff8fc; }
 @media(max-width:620px){ .customer-order-item{grid-template-columns:64px 1fr}.customer-order-item>strong{grid-column:2}.customer-personalization-preview{width:96px;height:96px} }
+
+/* V3.26 · acceso y cuenta optimizados para smartphone */
+@media (max-width: 700px) {
+    .account-header-inner {
+        min-height: 7rem;
+        gap: 1rem;
+    }
+
+    .account-brand img:first-child {
+        width: 4.4rem;
+        height: 4.4rem;
+    }
+
+    .account-brand img:last-child {
+        width: min(14rem, 38vw);
+    }
+
+    .account-header-links > a:not(.icon-btn) {
+        display: none;
+    }
+
+    .account-main {
+        width: min(calc(100% - 2rem), 112rem);
+        padding: 2.2rem 0 5rem;
+    }
+
+    .account-auth-card,
+    .account-panel,
+    .account-order-card,
+    .account-detail-card {
+        border-radius: 1.5rem;
+    }
+
+    .account-form-panel,
+    .account-panel,
+    .account-detail-card {
+        padding: 1.6rem;
+    }
+
+    .account-form-grid,
+    .account-dashboard-grid,
+    .account-detail-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .account-field.full {
+        grid-column: auto;
+    }
+
+    .account-tab {
+        padding: 1.2rem .7rem;
+        font-size: 1.15rem;
+    }
+
+    .account-order-card {
+        grid-template-columns: 1fr;
+        padding: 1.4rem;
+    }
+
+    .account-order-total {
+        text-align: left;
+    }
+
+    .account-legal-footer {
+        padding-inline: 1rem;
+        gap: .8rem 1.4rem;
+    }
+}

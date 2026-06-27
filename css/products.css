@@ -1534,3 +1534,78 @@ body.product-zoom-open {
     color: #6f5962;
     line-height: 1.55;
 }
+
+/* V3.26 · productos compactos y táctiles en móvil */
+@media (max-width: 700px) {
+    .container-products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .card-product {
+        border-radius: 1.4rem;
+    }
+
+    .content-card-product {
+        padding: 1.1rem;
+    }
+
+    .product-name {
+        min-height: 3.8rem;
+        font-size: 1.25rem;
+        line-height: 1.35;
+    }
+
+    .product-category,
+    .product-original-price {
+        font-size: 1rem;
+    }
+
+    .product-price {
+        font-size: 1.45rem;
+    }
+
+    .add-cart {
+        width: 3.8rem;
+        height: 3.8rem;
+    }
+
+    .product-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .product-detail-info {
+        padding-inline: .2rem;
+    }
+
+    .detail-title {
+        font-size: clamp(2.5rem, 8vw, 3.5rem);
+    }
+
+    .product-actions {
+        position: sticky;
+        bottom: 0;
+        z-index: 15;
+        margin-inline: -1rem;
+        padding: 1rem;
+        border-top: 1px solid var(--color-border);
+        background: rgba(255,255,255,.96);
+        box-shadow: 0 -1rem 2.5rem rgba(70,42,52,.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .light-customization-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 390px) {
+    .container-products {
+        gap: .75rem;
+    }
+
+    .content-card-product {
+        padding: .9rem;
+    }
+}

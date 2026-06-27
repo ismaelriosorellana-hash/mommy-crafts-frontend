@@ -369,3 +369,123 @@
     color: var(--color-text-soft);
     line-height: 1.5;
 }
+
+/* V3.26 · carrusel moderno y compacto de categorías */
+.category-rail-shell {
+    position: relative;
+}
+
+.categories-grid {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    padding: .7rem 4.8rem 1.6rem;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.categories-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.categories-grid .loading-products {
+    flex: 1 0 100%;
+}
+
+.category-card {
+    flex: 0 0 18rem;
+    min-height: 14rem;
+    scroll-snap-align: start;
+    border-radius: 1.5rem;
+    clip-path: polygon(0 0, 93% 0, 100% 100%, 7% 100%);
+    transition:
+        flex-basis 260ms ease,
+        transform 260ms ease,
+        box-shadow 260ms ease;
+}
+
+.category-card::after {
+    background: linear-gradient(180deg, rgba(31, 24, 27, .06), rgba(31, 24, 27, .84));
+}
+
+.category-card:hover,
+.category-card:focus-within {
+    flex-basis: 22rem;
+    transform: translateY(-.35rem);
+}
+
+.category-card-content {
+    padding: 1.5rem 2rem 1.4rem;
+}
+
+.category-card-content h3 {
+    font-size: 1.7rem;
+}
+
+.category-card-content p {
+    font-size: 1.05rem;
+}
+
+.category-rail-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 5;
+    width: 4.1rem;
+    height: 4.1rem;
+    display: grid;
+    place-items: center;
+    transform: translateY(-50%);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: rgba(255,255,255,.96);
+    color: var(--color-primary-dark);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+}
+
+.category-rail-arrow:hover,
+.category-rail-arrow:focus-visible {
+    background: var(--color-primary-soft);
+}
+
+.category-rail-prev { left: 0; }
+.category-rail-next { right: 0; }
+
+@media (max-width: 700px) {
+    .categories-section {
+        padding-top: 4.5rem;
+    }
+
+    .categories-grid {
+        gap: .8rem;
+        margin-inline: calc(var(--container-padding, 2rem) * -1);
+        padding: .6rem 2rem 1.4rem;
+    }
+
+    .category-card,
+    .category-card:hover,
+    .category-card:focus-within {
+        flex-basis: 14.5rem;
+        min-height: 10.8rem;
+        transform: none;
+        border-radius: 1.25rem;
+    }
+
+    .category-card-content {
+        padding: 1.2rem 1.5rem 1.1rem;
+    }
+
+    .category-card-content h3 {
+        font-size: 1.45rem;
+    }
+
+    .category-card-content p {
+        font-size: .95rem;
+    }
+
+    .category-rail-arrow {
+        display: none;
+    }
+}

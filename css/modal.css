@@ -1059,3 +1059,155 @@
 #preview-secondary-text {
     font-family: "Caveat", cursive;
 }
+
+/* V3.26 · personalización y checkout optimizados para smartphone */
+@media (max-width: 760px) {
+    .modal-overlay,
+    .modal-pedido-overlay {
+        align-items: stretch;
+        padding: 0;
+    }
+
+    .modal-box,
+    .modal-pedido-box {
+        width: 100vw;
+        max-width: none;
+        height: 100dvh;
+        max-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0;
+    }
+
+    .modal-header,
+    .modal-pedido-header {
+        position: sticky;
+        top: 0;
+        z-index: 15;
+        min-height: 6.4rem;
+        padding: 1.25rem 1.5rem;
+        background: rgba(255,255,255,.97);
+        backdrop-filter: blur(12px);
+    }
+
+    .modal-header h2,
+    .modal-pedido-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .modal-steps {
+        flex: none;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding: 1rem 1.4rem;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+    }
+
+    .modal-steps::-webkit-scrollbar { display: none; }
+    .modal-steps .step { flex: 0 0 auto; scroll-snap-align: center; }
+
+    .modal-body,
+    .modal-pedido-body {
+        min-height: 0;
+        flex: 1 1 auto;
+        overflow-y: auto;
+        padding: 1.4rem;
+    }
+
+    .modal-body {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-body-preview {
+        order: 0;
+    }
+
+    .live-preview-panel {
+        position: static;
+        padding: 1.2rem;
+        border-radius: 1.5rem;
+    }
+
+    .product-preview {
+        width: min(100%, 38rem);
+        margin-inline: auto;
+    }
+
+    .customization-form {
+        order: 1;
+        min-width: 0;
+    }
+
+    .customization-category-grid,
+    .option-grid,
+    .color-options-grid,
+    .customizable-products-grid,
+    .text-fields,
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .customization-category-card {
+        min-height: 9rem;
+    }
+
+    .image-editor-controls,
+    .text-editor-controls {
+        position: sticky;
+        bottom: .5rem;
+        z-index: 8;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding: .8rem;
+        border-radius: 1.4rem;
+        background: rgba(255,255,255,.96);
+        box-shadow: 0 .8rem 2.4rem rgba(70,42,52,.14);
+    }
+
+    .edit-btn {
+        flex: 0 0 4.2rem;
+    }
+
+    .modal-footer {
+        position: sticky;
+        bottom: 0;
+        z-index: 20;
+        flex: none;
+        padding: 1rem 1.2rem calc(1rem + env(safe-area-inset-bottom));
+        background: rgba(255,255,255,.97);
+        box-shadow: 0 -1rem 2.8rem rgba(70,42,52,.12);
+        backdrop-filter: blur(12px);
+    }
+
+    .modal-footer-actions,
+    .summary-actions {
+        width: 100%;
+    }
+
+    .modal-footer-actions > *,
+    .summary-actions > * {
+        flex: 1 1 0;
+        min-width: 0;
+        justify-content: center;
+    }
+
+    .payment-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 430px) {
+    .modal-footer-actions,
+    .summary-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .modal-footer-actions > :only-child,
+    .summary-actions > :only-child,
+    .modal-footer-actions > :last-child:nth-child(3),
+    .summary-actions > :last-child:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+}

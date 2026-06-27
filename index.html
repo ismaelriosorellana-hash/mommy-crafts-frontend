@@ -181,8 +181,16 @@
                 </div>
             </div>
 
-            <div class="categories-grid" id="categories-grid" aria-live="polite">
-                <p class="loading-products">Cargando categorías...</p>
+            <div class="category-rail-shell">
+                <button class="category-rail-arrow category-rail-prev" type="button" data-category-direction="-1" aria-label="Categorías anteriores">
+                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                </button>
+                <div class="categories-grid" id="categories-grid" aria-live="polite" tabindex="0">
+                    <p class="loading-products">Cargando categorías...</p>
+                </div>
+                <button class="category-rail-arrow category-rail-next" type="button" data-category-direction="1" aria-label="Categorías siguientes">
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                </button>
             </div>
         </section>
 
@@ -327,7 +335,7 @@
                 <h2 class="title-footer" id="footer-contact-title">Contacto</h2>
                 <ul>
                     <li><a id="footer-support-whatsapp" href="https://wa.me/56954633848?text=Necesito%20ayuda%20con%20un%20producto" target="_blank" rel="noopener noreferrer">WhatsApp: +56 9 5463 3848</a></li>
-                    <li><a href="mailto:contacto@mommycrafts.cl">contacto@mommycrafts.cl</a></li>
+                    <li><a href="contacto.html">Ver canales oficiales</a></li>
                     <li>Santiago, Chile</li>
                 </ul>
             </section>
@@ -335,29 +343,27 @@
             <nav class="information" aria-labelledby="footer-info-title">
                 <h2 class="title-footer" id="footer-info-title">Información</h2>
                 <ul>
-                    <li><a href="seguridad.html">Seguridad e identidad</a></li>
-                    <li><a href="#">Envíos y retiros</a></li>
+                    <li><a href="quienes-somos.html">Quiénes somos</a></li>
+                    <li><a href="despachos-retiros.html">Despachos y retiros</a></li>
+                    <li><a href="cambios-pedidos.html">Cambios y problemas</a></li>
+                    <li><a href="preguntas-frecuentes.html">Preguntas frecuentes</a></li>
+                </ul>
+            </nav>
+
+            <nav class="my-account" aria-labelledby="footer-help-title">
+                <h2 class="title-footer" id="footer-help-title">Ayuda y confianza</h2>
+                <ul>
+                    <li><a href="carrito.html">Mi carrito</a></li>
+                    <li><a href="seguridad.html">Seguridad del sitio</a></li>
                     <li><a href="privacidad.html">Política de privacidad</a></li>
                     <li><a href="terminos.html">Términos de uso</a></li>
                 </ul>
             </nav>
 
-            <nav class="my-account" aria-labelledby="footer-help-title">
-                <h2 class="title-footer" id="footer-help-title">Ayuda</h2>
-                <ul>
-                    <li><a href="carrito.html">Mi carrito</a></li>
-                    <li><a href="#" data-open-customization>Personalizar producto</a></li>
-                    <li><a href="https://wa.me/56954633848" target="_blank" rel="noopener noreferrer">Contactar por WhatsApp</a></li>
-                </ul>
-            </nav>
-
             <section class="newsletter" aria-labelledby="footer-newsletter-title">
                 <h2 class="title-footer" id="footer-newsletter-title">Novedades</h2>
-                <form class="newsletter-form" id="newsletter-form">
-                    <label class="sr-only" for="newsletter-email">Correo electrónico</label>
-                    <input id="newsletter-email" type="email" placeholder="Ingresa tu correo..." required />
-                    <button type="submit">Suscribirme</button>
-                </form>
+                <p class="footer-newsletter-note">El correo corporativo se habilitará junto con el dominio propio.</p>
+                <a class="footer-whatsapp-button" href="https://wa.me/56954633848" target="_blank" rel="noopener noreferrer">Seguir por WhatsApp</a>
             </section>
         </div>
 

@@ -40,6 +40,12 @@
             label: "Banners",
             href: "banners.html",
             icon: "fa-images"
+        },
+        {
+            id: "contenido",
+            label: "Contenido",
+            href: "contenido.html",
+            icon: "fa-file-pen"
         }
     ];
 

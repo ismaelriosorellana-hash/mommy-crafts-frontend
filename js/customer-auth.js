@@ -370,9 +370,15 @@
             "";
 
         menu.innerHTML = `
-            <summary class="icon-btn account-button" aria-label="Acceso de usuarios">
-                <i class="fa-${loggedIn ? "solid" : "regular"} fa-circle-user" aria-hidden="true"></i>
-                ${loggedIn ? '<span class="account-online-dot" aria-hidden="true"></span>' : ""}
+            <summary class="icon-btn account-button account-session-chip ${loggedIn ? "is-logged-in" : ""}" aria-label="${loggedIn ? `Cuenta de ${escapeHtml(firstName)} con sesión activa` : "Iniciar sesión o crear una cuenta"}">
+                <span class="account-session-icon" aria-hidden="true">
+                    <i class="fa-${loggedIn ? "solid" : "regular"} fa-circle-user"></i>
+                    ${loggedIn ? '<span class="account-online-dot"></span>' : ""}
+                </span>
+                <span class="account-session-copy">
+                    <strong>${loggedIn ? escapeHtml(firstName) : "Ingresar"}</strong>
+                    <small>${loggedIn ? "Sesión activa" : "Cuenta cliente"}</small>
+                </span>
             </summary>
             <div class="customer-account-dropdown">
                 <div class="customer-account-heading">

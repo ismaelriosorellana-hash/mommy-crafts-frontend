@@ -238,3 +238,48 @@
 .season-chip {
     background: #fff;
 }
+
+/* V3.26 · catálogo móvil */
+@media (max-width: 760px) {
+    .catalog-heading {
+        gap: 1.5rem;
+    }
+
+    .catalog-customize-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .catalog-category-chips {
+        gap: .8rem;
+        margin-inline: -1rem;
+        padding-inline: 1rem;
+    }
+
+    .catalog-chip-group {
+        scroll-snap-type: x proximity;
+    }
+
+    .catalog-category-chip {
+        min-height: 3.8rem;
+        scroll-snap-align: start;
+    }
+
+    .catalog-toolbar {
+        position: sticky;
+        top: .5rem;
+        z-index: 20;
+        margin-block: 1.5rem;
+        padding: 1.2rem;
+        border-radius: 1.4rem;
+        background: rgba(255,255,255,.94);
+        backdrop-filter: blur(12px);
+    }
+}
+
+@media (max-width: 460px) {
+    .catalog-products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .8rem;
+    }
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="theme-color" content="#FFF9FD">
+    <title>Contenido del sitio | Mommy Crafts</title>
+    <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body data-admin-page="contenido" data-admin-title="Contenido del sitio">
+    <div id="admin-page-content">
+        <section class="admin-content-manager">
+            <div class="admin-toolbar content-manager-toolbar">
+                <div class="admin-toolbar-group content-page-selector-wrap">
+                    <label class="admin-field content-page-selector" for="content-page-select">
+                        <span>Página</span>
+                        <select id="content-page-select" aria-label="Seleccionar página editable">
+                            <option value="">Cargando páginas...</option>
+                        </select>
+                    </label>
+                    <div class="content-status-stack">
+                        <span class="admin-status info" id="content-custom-status">Cargando</span>
+                        <small id="content-update-meta">Sin modificaciones registradas</small>
+                    </div>
+                </div>
+
+                <div class="admin-toolbar-group">
+                    <a class="admin-button secondary" id="content-preview-link" href="../index.html" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        Vista pública
+                    </a>
+                    <button class="admin-button secondary" id="content-reset-button" type="button">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                        Restaurar
+                    </button>
+                    <button class="admin-button" id="content-save-button" type="button">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Guardar cambios
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-alert" id="content-manager-message" hidden></div>
+
+            <div class="admin-grid content-manager-grid">
+                <section class="admin-card">
+                    <div class="admin-card-header">
+                        <div>
+                            <p class="admin-section-kicker">Encabezado</p>
+                            <h3>Información principal</h3>
+                        </div>
+                        <label class="admin-checkbox content-published-toggle">
+                            <input id="content-published" type="checkbox">
+                            <span>Publicada</span>
+                        </label>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="admin-form-grid">
+                            <label class="admin-field">
+                                <span>Nombre interno</span>
+                                <input id="content-label" type="text" maxlength="120">
+                            </label>
+                            <label class="admin-field">
+                                <span>Encabezado breve</span>
+                                <input id="content-kicker" type="text" maxlength="120">
+                            </label>
+                            <label class="admin-field full">
+                                <span>Título</span>
+                                <input id="content-title" type="text" maxlength="220">
+                            </label>
+                            <label class="admin-field full">
+                                <span>Resumen</span>
+                                <textarea id="content-summary" maxlength="3000"></textarea>
+                            </label>
+                            <label class="admin-field full">
+                                <span>Aviso final</span>
+                                <textarea id="content-notice" maxlength="3000"></textarea>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="admin-card">
+                    <div class="admin-card-header">
+                        <div>
+                            <p class="admin-section-kicker">Buscadores</p>
+                            <h3>SEO básico</h3>
+                        </div>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="admin-form-grid">
+                            <label class="admin-field full">
+                                <span>Título SEO</span>
+                                <input id="content-seo-title" type="text" maxlength="180">
+                            </label>
+                            <label class="admin-field full">
+                                <span>Descripción SEO</span>
+                                <textarea id="content-seo-description" maxlength="320"></textarea>
+                                <small>Describe la página con lenguaje claro. No agregues listas de palabras clave.</small>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="admin-card content-editor-card">
+                <div class="admin-card-header">
+                    <div>
+                        <p class="admin-section-kicker">Contenido</p>
+                        <h3>Secciones</h3>
+                    </div>
+                    <button class="admin-button secondary small" id="content-add-section" type="button">
+                        <i class="fa-solid fa-plus"></i>
+                        Agregar sección
+                    </button>
+                </div>
+                <div class="admin-card-body admin-repeatable-list" id="content-sections-list"></div>
+            </section>
+
+            <section class="admin-card content-editor-card">
+                <div class="admin-card-header">
+                    <div>
+                        <p class="admin-section-kicker">Ayuda</p>
+                        <h3>Preguntas frecuentes</h3>
+                    </div>
+                    <button class="admin-button secondary small" id="content-add-faq" type="button">
+                        <i class="fa-solid fa-plus"></i>
+                        Agregar pregunta
+                    </button>
+                </div>
+                <div class="admin-card-body admin-repeatable-list" id="content-faqs-list"></div>
+            </section>
+
+            <section class="admin-card content-editor-card">
+                <div class="admin-card-header">
+                    <div>
+                        <p class="admin-section-kicker">Contacto</p>
+                        <h3>Tarjetas de contacto</h3>
+                    </div>
+                    <button class="admin-button secondary small" id="content-add-contact" type="button">
+                        <i class="fa-solid fa-plus"></i>
+                        Agregar tarjeta
+                    </button>
+                </div>
+                <div class="admin-card-body admin-repeatable-list" id="content-contacts-list"></div>
+            </section>
+
+            <div class="content-mobile-save-bar">
+                <button class="admin-button" id="content-mobile-save" type="button">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar contenido
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script src="../js/config.js" defer></script>
+    <script src="js/admin-api.js" defer></script>
+    <script src="js/admin-common.js" defer></script>
+    <script src="js/content-admin.js" defer></script>
+</body>
+</html>

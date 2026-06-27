@@ -620,3 +620,294 @@ body {
 .admin-design-workflow > img,.admin-design-workflow > a > img { width:min(100%,420px); max-height:360px; object-fit:contain; border-radius:14px; background:#fff; }
 .admin-design-workflow textarea { min-height:86px; }
 .admin-design-workflow select,.admin-design-workflow input { min-height:42px; }
+
+/* V3.26 · gestor de contenido y panel móvil */
+.content-manager-toolbar {
+    position: sticky;
+    top: 82px;
+    z-index: 45;
+    padding: 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: 16px;
+    background: rgba(255,255,255,.95);
+    box-shadow: 0 12px 30px rgba(113,54,79,.08);
+    backdrop-filter: blur(14px);
+}
+
+.content-page-selector-wrap {
+    flex: 1 1 360px;
+}
+
+.content-page-selector {
+    min-width: min(100%, 310px);
+}
+
+.content-page-selector select {
+    min-width: 250px;
+}
+
+.content-manager-grid {
+    grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+    margin-bottom: 18px;
+}
+
+.content-editor-card + .content-editor-card {
+    margin-top: 18px;
+}
+
+.admin-repeatable-list {
+    display: grid;
+    gap: 14px;
+}
+
+.admin-empty.compact {
+    padding: 24px 16px;
+}
+
+.admin-repeatable-card {
+    padding: 16px;
+    border: 1px solid var(--admin-border);
+    border-radius: 15px;
+    background: linear-gradient(180deg, #fff, var(--admin-surface-soft));
+}
+
+.admin-repeatable-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.admin-repeatable-header strong {
+    color: var(--admin-primary-dark);
+}
+
+.admin-repeatable-actions {
+    display: flex;
+    gap: 7px;
+}
+
+.admin-icon-button.danger {
+    color: var(--admin-danger);
+}
+
+.content-published-toggle {
+    padding: 8px 11px;
+    border-radius: 999px;
+    background: var(--admin-surface-soft);
+}
+
+.content-mobile-save-bar {
+    display: none;
+}
+
+@media (max-width: 980px) {
+    .content-manager-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 820px) {
+    .content-manager-toolbar {
+        top: 78px;
+        align-items: stretch;
+        padding: 11px;
+    }
+
+    .content-manager-toolbar > .admin-toolbar-group {
+        width: 100%;
+    }
+
+    .content-page-selector-wrap {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+    }
+
+    .content-page-selector,
+    .content-page-selector select {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .content-manager-toolbar .admin-button {
+        flex: 1 1 140px;
+    }
+
+    .admin-topbar-actions .admin-button {
+        min-width: 42px;
+        padding-inline: 11px;
+    }
+
+    .admin-topbar-actions .admin-button i + * {
+        display: none;
+    }
+}
+
+@media (max-width: 620px) {
+    .admin-topbar {
+        min-height: 64px;
+        padding: 10px 12px;
+    }
+
+    .admin-topbar h1 {
+        max-width: 58vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 1.2rem;
+    }
+
+    .admin-content {
+        padding: 14px 10px 90px;
+    }
+
+    .admin-card,
+    .admin-repeatable-card {
+        border-radius: 14px;
+    }
+
+    .admin-card-header,
+    .admin-card-body {
+        padding: 15px;
+    }
+
+    .content-manager-toolbar {
+        position: static;
+        margin-bottom: 12px;
+    }
+
+    .content-manager-toolbar > .admin-toolbar-group:last-child {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .content-manager-toolbar #content-save-button {
+        display: none;
+    }
+
+    .content-mobile-save-bar {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 120;
+        display: block;
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+        border-top: 1px solid var(--admin-border);
+        background: rgba(255,255,255,.96);
+        box-shadow: 0 -10px 30px rgba(113,54,79,.12);
+        backdrop-filter: blur(12px);
+    }
+
+    .content-mobile-save-bar .admin-button {
+        width: 100%;
+    }
+
+    .admin-repeatable-header {
+        align-items: flex-start;
+    }
+
+    .admin-repeatable-actions {
+        gap: 5px;
+    }
+
+    .admin-repeatable-actions .admin-icon-button {
+        width: 34px;
+        height: 34px;
+    }
+
+    .admin-table {
+        min-width: 680px;
+    }
+
+    .order-product-main {
+        grid-template-columns: 58px minmax(0,1fr);
+    }
+
+    .order-product-main > img {
+        width: 58px;
+        height: 58px;
+    }
+
+    .order-product-main > :last-child {
+        grid-column: 1 / -1;
+        justify-self: start;
+    }
+
+    .order-customization-summary,
+    .order-assets-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-asset-card {
+        grid-template-columns: 110px minmax(0,1fr);
+    }
+}
+
+@media (max-width: 620px) {
+    .admin-login-page {
+        align-items: stretch;
+        padding: 0;
+    }
+
+    .admin-login-card {
+        width: 100%;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 28px 20px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .admin-login-brand img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .admin-login-card .admin-button {
+        min-height: 48px;
+    }
+}
+
+.admin-content-shortcut {
+    margin-top: 20px;
+}
+
+.admin-content-shortcut-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.admin-content-shortcut-body p {
+    max-width: 760px;
+    margin: 0;
+    color: var(--admin-muted);
+    line-height: 1.55;
+}
+
+@media (max-width: 700px) {
+    .admin-content-shortcut-body {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}
+
+.content-status-stack {
+    display: grid;
+    gap: 4px;
+    justify-items: start;
+}
+
+.content-status-stack small {
+    max-width: 280px;
+    color: var(--admin-muted);
+    font-size: .75rem;
+    line-height: 1.35;
+}
