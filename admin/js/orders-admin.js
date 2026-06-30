@@ -421,6 +421,7 @@ function renderOrderItem(item, order) {
                     <strong>${AdminUI.escapeHtml(item.nombre)}</strong>
                     <div class="order-product-meta">
                         ${item.color ? `Color: ${AdminUI.escapeHtml(item.color)} · ` : ""}
+                        ${item.talla || item.personalizacion?.talla || item.personalizacion?.size ? `Talla: ${AdminUI.escapeHtml(item.talla || item.personalizacion?.talla || item.personalizacion?.size)} · ` : ""}
                         Cantidad: ${Number(item.cantidad) || 1}
                         ${item.sku ? ` · SKU: ${AdminUI.escapeHtml(item.sku)}` : ""}
                     </div>
@@ -620,7 +621,7 @@ function openOrder(id) {
                 <div class="admin-card-body">
                     <h4 style="margin-top:0">Resumen</h4>
                     <p>Subtotal: <strong>${AdminUI.money(order.subtotal)}</strong></p>
-                    <p>Envío: <strong>${AdminUI.money(order.costoEnvio)}</strong></p>
+                    <p>Envío: <strong>${String(order.entrega?.modalidadEnvio || "").toLowerCase().includes("chilexpress") ? "Por pagar a Chilexpress" : AdminUI.money(order.costoEnvio)}</strong></p>
                     <p>Total: <strong>${AdminUI.money(order.total)}</strong></p>
                     <p>
                         Método de entrega:
@@ -641,26 +642,36 @@ function openOrder(id) {
             </section>
         </div>
 
-        <h4 class="admin-section-title">Entrega</h4>
-
-        <section class="admin-card">
-            <div class="admin-card-body">
-                <p>
-                    <strong>
-                        ${order.entrega?.metodo === "retiro" ? "Retiro coordinado" : "Envío a domicilio"}
-                    </strong>
-                </p>
-
-                <div class="order-instructions">
-                    <strong>Instrucciones aplicables</strong>
-                    <p>${AdminUI.escapeHtml(order.entrega?.instrucciones || "El pedido no registra instrucciones de entrega.")}</p>
+        <details class="admin-order-accordion">
+            <summary>
+                <span>Entrega</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </summary>
+            <section class="admin-card">
+                <div class="admin-card-body">
+                    <p>
+                        <strong>
+                            ${order.entrega?.metodo === "retiro" ? "Retiro coordinado" : "Envío a domicilio"}
+                        </strong>
+                    </p>
+                    ${order.entrega?.metodo === "envio" ? `
+                        <p>Zona: <strong>${order.entrega?.zonaEnvio === "santiago" ? "Provincia de Santiago" : "Otros sectores de Chile"}</strong></p>
+                        <p>Modalidad: <strong>${String(order.entrega?.modalidadEnvio || "").toLowerCase().includes("chilexpress") ? "Chilexpress por pagar" : "Envío local $4.000"}</strong></p>
+                    ` : ""}
+                    <div class="order-instructions">
+                        <strong>Instrucciones aplicables</strong>
+                        <p>${AdminUI.escapeHtml(order.entrega?.instrucciones || "El pedido no registra instrucciones de entrega.")}</p>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </details>
 
         ${order.metodoPago === "transferencia" ? `
-            <h4 class="admin-section-title">Transferencia bancaria</h4>
-
+            <details class="admin-order-accordion">
+                <summary>
+                    <span>Transferencia bancaria</span>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                </summary>
             <section class="admin-card">
                 <div class="admin-card-body">
                     <p>
@@ -711,6 +722,7 @@ function openOrder(id) {
                     </div>
                 </div>
             </section>
+            </details>
         ` : ""}
 
         ${order.observaciones ? `
@@ -733,12 +745,20 @@ function openOrder(id) {
             </section>
         ` : ""}
 
-        <h4 class="admin-section-title">Fecha preferida</h4>
-        <section class="admin-card">
-            <div class="admin-card-body">
-                <p>${orderDate(order.entrega?.fechaPreferida)}</p>
-            </div>
-        </section>
+        <details class="admin-order-accordion">
+            <summary>
+                <span>${order.entrega?.metodo === "retiro" ? "Fecha preferida" : "Fecha estimada"}</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </summary>
+            <section class="admin-card">
+                <div class="admin-card-body">
+                    ${order.entrega?.metodo === "retiro"
+                        ? `<p>${orderDate(order.entrega?.fechaPreferida)}</p>`
+                        : `<p>Desde: <strong>${orderDate(order.entrega?.fechaMinima)}</strong></p>
+                           ${order.entrega?.fechaEstimadaHasta ? `<p>Hasta: <strong>${orderDate(order.entrega.fechaEstimadaHasta)}</strong></p>` : ""}`}
+                </div>
+            </section>
+        </details>
 
         ${order.metodoPago === "mercadopago" ? `
             <h4 class="admin-section-title">Mercado Pago</h4>
@@ -754,14 +774,22 @@ function openOrder(id) {
             </section>
         ` : ""}
 
-        <h4 class="admin-section-title">Productos y personalizaciones</h4>
-        <div class="order-products-list">
-            ${items || '<div class="admin-empty">Sin productos.</div>'}
-        </div>
+        <details class="admin-order-accordion">
+            <summary>
+                <span>Productos y personalizaciones</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </summary>
+            <div class="order-products-list">
+                ${items || '<div class="admin-empty">Sin productos.</div>'}
+            </div>
+        </details>
 
-        <h4 class="admin-section-title">Actualizar pedido</h4>
-
-        <div class="admin-form-grid">
+        <details class="admin-order-accordion">
+            <summary>
+                <span>Actualizar pedido</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </summary>
+            <div class="admin-form-grid">
             <div class="admin-field">
                 <label for="order-status-edit">Estado del pedido</label>
                 <select id="order-status-edit">
@@ -807,6 +835,7 @@ function openOrder(id) {
                 <textarea id="order-note-edit">${AdminUI.escapeHtml(order.notasInternas || "")}</textarea>
             </div>
         </div>
+        </details>
     `;
 
     document.querySelectorAll(".upload-final-design").forEach((button) => {

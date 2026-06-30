@@ -8,6 +8,7 @@
         productos: [],
         productoActual: null,
         varianteActual: null,
+        tallaActual: "",
         imagenesDetalleActual: [],
         galeriaDetalleActual: [],
         indiceImagenActual: 0,
@@ -706,6 +707,14 @@ function normalizeVariants(rawProduct, defaultImage, defaultImages = []) {
                 rawProduct.detalles
             ),
 
+            tallas: normalizeStringArray(
+                rawProduct.tallas ??
+                rawProduct.sizes ??
+                rawProduct.talla
+            )
+                .map((size) => size.replace(/\s*-\s*/g, "-"))
+                .filter((size) => /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9]+(?:-[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9]+)*$/.test(size)),
+
 personalizationPricing: {
     base: numberValue(rawProduct.precioBasePersonalizacion ?? rawProduct.precioBasePersonalizado ?? rawProduct.personalizacion?.precioBase, 0),
     image: numberValue(rawProduct.costosPersonalizacion?.imagen ?? rawProduct.personalizacion?.costos?.imagen ?? rawProduct.precioAgregarImagen, 0),
@@ -718,6 +727,12 @@ personalizationPricing: {
         };
     }
 
+
+function getProductSizes(product) {
+    return Array.isArray(product?.tallas)
+        ? product.tallas.filter(Boolean)
+        : [];
+}
 
 function getSelectableVariants(product) {
     return Array.isArray(product?.variantes)
@@ -1159,6 +1174,8 @@ function createProductCard(product) {
     const name = fragment.querySelector(".product-name");
     const colorRow = fragment.querySelector(".product-card-color-row");
     const colorSwatches = fragment.querySelector(".product-card-color-swatches");
+    const sizeRow = fragment.querySelector(".product-card-size-row");
+    const sizeOptions = fragment.querySelector(".product-card-size-options");
     const price = fragment.querySelector(".product-price");
     const originalPrice = fragment.querySelector(".product-original-price");
     const addButton = fragment.querySelector(".add-cart");
@@ -1173,7 +1190,19 @@ function createProductCard(product) {
     }
 
     const selectableVariants = getSelectableVariants(product);
+    const availableSizes = getProductSizes(product);
     let activeVariant = getDefaultVariant(product);
+    let activeSize = "";
+
+    function updateCardLink() {
+        const variantParam = activeVariant?.selectable
+            ? `&variante=${encodeURIComponent(activeVariant.id)}`
+            : "";
+        const sizeParam = activeSize
+            ? `&talla=${encodeURIComponent(activeSize)}`
+            : "";
+        link.href = `producto.html?id=${encodeURIComponent(product.id)}${variantParam}${sizeParam}`;
+    }
 
     function updateCardVariant(variant) {
         activeVariant = variant || activeVariant;
@@ -1237,11 +1266,7 @@ function createProductCard(product) {
                 dot.setAttribute("aria-checked", String(selected));
             });
 
-        const variantParam = activeVariant?.selectable
-            ? `&variante=${encodeURIComponent(activeVariant.id)}`
-            : "";
-
-        link.href = `producto.html?id=${encodeURIComponent(product.id)}${variantParam}`;
+        updateCardLink();
         article.dataset.selectedVariantId = activeVariant?.id || "";
     }
 
@@ -1297,19 +1322,65 @@ function createProductCard(product) {
         }
     }
 
+    if (sizeRow && sizeOptions && availableSizes.length) {
+        sizeRow.hidden = false;
+        sizeOptions.innerHTML = "";
+        sizeOptions.setAttribute("role", "radiogroup");
+        sizeOptions.setAttribute("aria-label", `Tallas disponibles para ${product.nombre}`);
+
+        availableSizes.slice(0, 8).forEach((size) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "product-card-size-option";
+            button.textContent = size;
+            button.dataset.size = size;
+            button.setAttribute("role", "radio");
+            button.setAttribute("aria-checked", "false");
+            button.setAttribute("aria-label", `Seleccionar talla ${size} para ${product.nombre}`);
+
+            button.addEventListener("click", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                activeSize = size;
+                article.dataset.selectedSize = size;
+                sizeOptions.querySelectorAll(".product-card-size-option").forEach((item) => {
+                    const selected = item.dataset.size === size;
+                    item.classList.toggle("selected", selected);
+                    item.setAttribute("aria-checked", String(selected));
+                });
+                updateCardLink();
+            });
+
+            sizeOptions.appendChild(button);
+        });
+
+        if (availableSizes.length > 8) {
+            const more = document.createElement("span");
+            more.className = "product-card-size-more";
+            more.textContent = `+${availableSizes.length - 8}`;
+            sizeOptions.appendChild(more);
+        }
+    }
+
     updateCardVariant(activeVariant);
 
     if (!hasAvailableStock(product)) {
         addButton.disabled = true;
         addButton.querySelector("span").textContent = "Agotado";
-    } else if (selectableVariants.length) {
-        addButton.querySelector("span").textContent = "Elegir color";
+    } else if (selectableVariants.length || availableSizes.length) {
+        addButton.querySelector("span").textContent =
+            selectableVariants.length && availableSizes.length
+                ? "Elegir color y talla"
+                : selectableVariants.length
+                    ? "Elegir color"
+                    : "Elegir talla";
         addButton.addEventListener("click", () => {
-            const variantParam = activeVariant?.id
-                ? `&variante=${encodeURIComponent(activeVariant.id)}`
-                : "";
-            window.location.href =
-                `producto.html?id=${encodeURIComponent(product.id)}${variantParam}`;
+            if (availableSizes.length && !activeSize) {
+                showToast("Selecciona una talla antes de continuar.");
+                sizeRow?.scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+            window.location.href = link.href;
         });
     } else {
         addButton.addEventListener("click", () => {
@@ -2115,36 +2186,39 @@ function renderProductDelivery(product) {
     );
 
     cards.push(`
-        <article class="product-delivery-card preparation-card">
-            <i class="fa-regular fa-calendar-check" aria-hidden="true"></i>
-            <div>
+        <details class="product-delivery-card preparation-card">
+            <summary>
+                <i class="fa-regular fa-calendar-check" aria-hidden="true"></i>
                 <strong>Preparación mínima</strong>
-                <p>${preparationDays} día${preparationDays === 1 ? "" : "s"} hábil${preparationDays === 1 ? "" : "es"}. La fecha final se elige al terminar la compra.</p>
-            </div>
-        </article>
+                <i class="fa-solid fa-chevron-down product-delivery-chevron" aria-hidden="true"></i>
+            </summary>
+            <p>${preparationDays} día${preparationDays === 1 ? "" : "s"} hábil${preparationDays === 1 ? "" : "es"}. Para retiro podrás escoger una fecha disponible al finalizar la compra.</p>
+        </details>
     `);
 
     if (delivery.shipping?.enabled) {
         cards.push(`
-            <article class="product-delivery-card">
-                <i class="fa-solid fa-truck-fast" aria-hidden="true"></i>
-                <div>
+            <details class="product-delivery-card">
+                <summary>
+                    <i class="fa-solid fa-truck-fast" aria-hidden="true"></i>
                     <strong>Envío</strong>
-                    <p>${escapeHtml(delivery.shipping.instructions)}</p>
-                </div>
-            </article>
+                    <i class="fa-solid fa-chevron-down product-delivery-chevron" aria-hidden="true"></i>
+                </summary>
+                <p>${escapeHtml(delivery.shipping.instructions)}</p>
+            </details>
         `);
     }
 
     if (delivery.pickup?.enabled) {
         cards.push(`
-            <article class="product-delivery-card">
-                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-                <div>
+            <details class="product-delivery-card">
+                <summary>
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
                     <strong>Retiro</strong>
-                    <p>${escapeHtml(delivery.pickup.instructions)}</p>
-                </div>
-            </article>
+                    <i class="fa-solid fa-chevron-down product-delivery-chevron" aria-hidden="true"></i>
+                </summary>
+                <p>${escapeHtml(delivery.pickup.instructions)}</p>
+            </details>
         `);
     }
 
@@ -2309,9 +2383,55 @@ function renderColorSelector(product) {
     if (initialVariant) selectProductVariant(product, initialVariant);
 }
 
+
+function renderSizeSelector(product) {
+    const section = document.getElementById("product-size-selector");
+    const container = document.getElementById("product-size-options");
+    const selectedLabel = document.getElementById("product-selected-size");
+    const sizes = getProductSizes(product);
+
+    state.tallaActual = "";
+
+    if (!section || !container || sizes.length === 0) {
+        if (section) section.hidden = true;
+        return;
+    }
+
+    section.hidden = false;
+    container.innerHTML = "";
+    if (selectedLabel) selectedLabel.textContent = "Selecciona una opción";
+
+    const choose = (size) => {
+        state.tallaActual = size;
+        if (selectedLabel) selectedLabel.textContent = size;
+        container.querySelectorAll(".product-size-option").forEach((button) => {
+            const active = button.dataset.size === size;
+            button.classList.toggle("selected", active);
+            button.setAttribute("aria-checked", String(active));
+        });
+    };
+
+    sizes.forEach((size) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "product-size-option";
+        button.dataset.size = size;
+        button.textContent = size;
+        button.setAttribute("role", "radio");
+        button.setAttribute("aria-checked", "false");
+        button.setAttribute("aria-label", `Seleccionar talla ${size}`);
+        button.addEventListener("click", () => choose(size));
+        container.appendChild(button);
+    });
+
+    const requestedSize = new URLSearchParams(window.location.search).get("talla");
+    if (requestedSize && sizes.includes(requestedSize)) choose(requestedSize);
+}
+
     function renderProductDetail(product) {
         state.productoActual = product;
         state.varianteActual = null;
+        state.tallaActual = "";
         state.imagenesDetalleActual = [];
         state.galeriaDetalleActual = [];
         state.indiceImagenActual = 0;
@@ -2469,6 +2589,7 @@ function renderColorSelector(product) {
             ?.init(product);
 
         renderColorSelector(product);
+        renderSizeSelector(product);
 
         const requestedVariantId =
             new URLSearchParams(window.location.search)
@@ -2579,6 +2700,16 @@ function renderColorSelector(product) {
                 () => {
                     if (!window.ProductOptions?.validate()) return;
 
+                    const sizes = getProductSizes(product);
+                    if (sizes.length && !state.tallaActual) {
+                        showToast("Selecciona una talla antes de agregar el producto.");
+                        document.getElementById("product-size-selector")?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+                        return;
+                    }
+
                     const variant = state.varianteActual;
                     const availableStock = getVariantStock(product, variant);
 
@@ -2598,6 +2729,11 @@ function renderColorSelector(product) {
                     const customization = lightCustomization
                         ? { ...lightCustomization }
                         : {};
+
+                    if (state.tallaActual) {
+                        customization.talla = state.tallaActual;
+                        customization.size = state.tallaActual;
+                    }
 
                     if (variant?.selectable) {
                         customization.productVariant = variant.nombre;
@@ -2768,6 +2904,7 @@ function renderColorSelector(product) {
         normalizeLightCustomization,
         normalizeVariants,
         getSelectableVariants,
+        getProductSizes,
         getVariantStock,
         getVariantPrice,
         getVariantImages,

@@ -172,9 +172,10 @@
                 <h1 id="hero-title">Productos auténticos y únicos para quienes más quieres</h1>
                 <a class="btn-primary" id="hero-cta" href="#lo-mas-vendido">Ver productos</a>
             </div>
+            <div class="banner-pagination" id="banner-pagination" aria-label="Seleccionar banner" hidden></div>
         </section>
 
-        <section class="container categories-section" aria-labelledby="categories-title">
+        <section class="container categories-section" id="categorias" aria-labelledby="categories-title">
             <div class="section-header">
                 <div>
                     <p class="section-kicker">Explora</p>
@@ -390,6 +391,10 @@
     <span class="product-card-color-label">Colores</span>
     <div class="product-card-color-swatches" aria-label="Colores disponibles"></div>
 </div>
+<div class="product-card-size-row" hidden>
+    <span class="product-card-size-label">Tallas</span>
+    <div class="product-card-size-options" aria-label="Tallas disponibles"></div>
+</div>
                     <div class="product-price-row">
                         <strong class="product-price"></strong>
                         <span class="product-original-price" hidden></span>
@@ -460,6 +465,15 @@
                         <div id="preview-secondary-text" hidden></div>
                     </div>
                 </div>
+
+                <div class="image-editor-controls preview-image-controls" id="image-editor-controls" hidden>
+                    <span class="editor-selection-status">Editando: <strong>Imagen</strong></span>
+                    <button class="edit-btn" id="btn-zoom-in" type="button" aria-label="Acercar imagen"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+                    <button class="edit-btn" id="btn-zoom-out" type="button" aria-label="Alejar imagen"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+                    <button class="edit-btn" id="btn-rotate-left" type="button" aria-label="Rotar imagen"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+                    <button class="edit-btn" id="btn-reset-image" type="button" aria-label="Restablecer imagen"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i></button>
+                    <button class="edit-btn danger" id="btn-remove-img-editor" type="button" aria-label="Quitar imagen"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                </div>
             </aside>
 
             <div class="customization-form">
@@ -526,6 +540,12 @@
                     <div id="color-selection-area" class="color-selection-grid" aria-live="polite">
                         <p>Primero selecciona un producto.</p>
                     </div>
+
+                    <div class="customization-size-section" id="customization-size-section" hidden>
+                        <h4>Elige una talla</h4>
+                        <p>La talla es obligatoria para este producto.</p>
+                        <div id="customization-size-options" class="customization-size-options" role="radiogroup" aria-label="Tallas disponibles"></div>
+                    </div>
                 </section>
 
                 <section class="modal-step-content" id="step-5" data-step-content="5">
@@ -542,13 +562,6 @@
                         <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" />
                     </label>
 
-                    <div class="image-editor-controls" id="image-editor-controls" hidden>
-                        <button class="edit-btn" id="btn-zoom-in" type="button" aria-label="Acercar imagen"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-zoom-out" type="button" aria-label="Alejar imagen"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-rotate-left" type="button" aria-label="Rotar imagen"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-reset-image" type="button" aria-label="Restablecer imagen"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i></button>
-                        <button class="edit-btn danger" id="btn-remove-img-editor" type="button" aria-label="Quitar imagen"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
-                    </div>
                 </section>
 
                 <section class="modal-step-content" id="step-6" data-step-content="6">

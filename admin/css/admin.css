@@ -1086,3 +1086,39 @@ body {
 @media (max-width: 620px) {
     .site-color-grid { grid-template-columns: 1fr; }
 }
+
+/* V3.28 · detalle de pedidos contraíble */
+.admin-order-accordion {
+    margin-top: 1rem;
+    border: 1px solid var(--admin-border, #eadde4);
+    border-radius: 1rem;
+    background: #fff;
+    overflow: hidden;
+}
+.admin-order-accordion > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.15rem;
+    color: #5f3146;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+.admin-order-accordion > summary::-webkit-details-marker { display: none; }
+.admin-order-accordion > summary i { transition: transform .2s ease; }
+.admin-order-accordion[open] > summary i { transform: rotate(180deg); }
+.admin-order-accordion > .admin-card,
+.admin-order-accordion > .order-products-list,
+.admin-order-accordion > .admin-form-grid {
+    margin: 0;
+    border: 0;
+    border-top: 1px solid var(--admin-border, #eadde4);
+    border-radius: 0;
+    box-shadow: none;
+}
+.admin-order-accordion > .order-products-list,
+.admin-order-accordion > .admin-form-grid { padding: 1rem; }

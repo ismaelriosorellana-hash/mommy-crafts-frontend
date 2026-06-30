@@ -19,6 +19,7 @@
         category: "",
         product: null,
         variant: null,
+        size: "",
         style: "",
         imageName: "",
         imageFile: null,
@@ -68,6 +69,8 @@
         categoryTitle: $("#selected-customization-category"),
         basePrice: $("#customization-base-price"),
         colors: $("#color-selection-area"),
+        sizeSection: $("#customization-size-section"),
+        sizeOptions: $("#customization-size-options"),
         productImage: $("#preview-product-image"),
         userImage: $("#preview-user-image"),
         mainText: $("#preview-main-text"),
@@ -114,12 +117,32 @@ function productOverride(product) {
     return 0;
 }
 
+function preferredProductVariant(product) {
+    const variants = window.Products?.getSelectableVariants(product) || [];
+    const white = variants.find((variant) => {
+        const name = normalize(variant?.nombre);
+        return ["blanco", "blanca", "white"].some((word) =>
+            name === word || name.includes(word)
+        ) && window.Products.getVariantStock(product, variant) > 0;
+    });
+
+    return white ||
+        variants.find((variant) => window.Products.getVariantStock(product, variant) > 0) ||
+        variants[0] ||
+        product?.variantes?.[0] ||
+        null;
+}
+
+function productSizes(product) {
+    return window.Products?.getProductSizes(product) || [];
+}
+
 function productBasePrice(product, category = "") {
     const custom = product?.personalizationPricing || {};
 
     return (
-        Number(custom.base) ||
         Number(product?.precio) ||
+        Number(custom.base) ||
         productOverride(product) ||
         configuredCategoryBase(category) ||
         0
@@ -142,6 +165,9 @@ function categoryBase(category) {
 
         return {
             base:
+                (state.product && state.variant
+                    ? Number(window.Products.getVariantPrice(state.product, state.variant))
+                    : 0) ||
                 productBasePrice(
                     state.product,
                     state.category
@@ -357,7 +383,7 @@ function updateSelectionUI() {
     );
 
     const imageSelected =
-        state.step === 5 &&
+        [5, 6].includes(state.step) &&
         state.selectedObject === "image" &&
         current.userImage &&
         !current.userImage.hidden;
@@ -406,7 +432,7 @@ function selectObject(type) {
     if (
         type === "image" &&
         (
-            state.step !== 5 ||
+            ![5, 6].includes(state.step) ||
             !current.userImage ||
             current.userImage.hidden
         )
@@ -503,9 +529,10 @@ function clearImageStep() {
 
 function clearVariantStep() {
     state.variant = null;
+    state.size = "";
 
     document
-        .querySelectorAll(".color-option-card")
+        .querySelectorAll(".color-option-card, .customization-size-option")
         .forEach((card) => {
             card.classList.remove("selected");
             card.setAttribute("aria-checked", "false");
@@ -527,6 +554,7 @@ function clearStyleStep() {
 function clearProductStep() {
     state.product = null;
     state.variant = null;
+    state.size = "";
 
     document
         .querySelectorAll(".customizable-product-card")
@@ -540,6 +568,9 @@ function clearProductStep() {
         current.colors.innerHTML =
             "<p>Primero selecciona un producto.</p>";
     }
+
+    if (current.sizeSection) current.sizeSection.hidden = true;
+    if (current.sizeOptions) current.sizeOptions.innerHTML = "";
 
     if (current.productImage) {
         current.productImage.src =
@@ -617,7 +648,7 @@ function clearStepsAfter(step) {
         }
 
         if (
-            state.step !== 5 &&
+            ![5, 6].includes(state.step) &&
             state.selectedObject === "image"
         ) {
             state.selectedObject = null;
@@ -661,6 +692,7 @@ function advanceToStep(nextStep, delay = 180) {
             category: "",
             product: null,
             variant: null,
+            size: "",
             style: "",
             imageName: "",
             imageFile: null,
@@ -865,7 +897,9 @@ function advanceToStep(nextStep, delay = 180) {
             button.className = "customizable-product-card";
             button.dataset.productId = product.id;
 
+            const preferredVariant = preferredProductVariant(product);
             image.src =
+                preferredVariant?.imagen ||
                 product.imagenPrincipal ||
                 CONFIG.placeholderImage;
             image.alt = "";
@@ -899,14 +933,14 @@ function advanceToStep(nextStep, delay = 180) {
     function selectProduct(product) {
         clearStepsAfter(2);
         state.product = product;
+        state.size = "";
 
         const selectableVariants =
             window.Products
                 .getSelectableVariants(product);
 
         state.variant =
-            selectableVariants[0] ||
-            product.variantes?.[0] || {
+            preferredProductVariant(product) || {
                 id: "standard",
                 nombre: "Estándar",
                 imagen: product.imagenPrincipal
@@ -923,6 +957,7 @@ function advanceToStep(nextStep, delay = 180) {
 
         updatePreview();
         renderColors();
+        renderSizes();
         updatePrice();
     }
 
@@ -1040,13 +1075,49 @@ function advanceToStep(nextStep, delay = 180) {
                 state.variant = variant;
                 updatePreview();
                 updatePrice();
-                advanceToStep(5);
             });
 
             grid.appendChild(button);
         });
 
         area.appendChild(grid);
+    }
+
+    function renderSizes() {
+        const current = els();
+        const sizes = productSizes(state.product);
+
+        if (!current.sizeSection || !current.sizeOptions) return;
+
+        current.sizeOptions.innerHTML = "";
+        current.sizeSection.hidden = sizes.length === 0;
+
+        if (sizes.length === 0) {
+            state.size = "";
+            return;
+        }
+
+        sizes.forEach((size) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "customization-size-option";
+            button.dataset.size = size;
+            button.textContent = size;
+            button.setAttribute("role", "radio");
+            button.setAttribute("aria-checked", "false");
+            button.setAttribute("aria-label", `Seleccionar talla ${size}`);
+            button.addEventListener("click", () => {
+                state.size = size;
+                current.sizeOptions
+                    .querySelectorAll(".customization-size-option")
+                    .forEach((item) => {
+                        const selected = item.dataset.size === size;
+                        item.classList.toggle("selected", selected);
+                        item.setAttribute("aria-checked", String(selected));
+                    });
+            });
+            current.sizeOptions.appendChild(button);
+        });
     }
 
     function validStep() {
@@ -1068,7 +1139,8 @@ function advanceToStep(nextStep, delay = 180) {
         }
 
         if (state.step === 4) {
-            return Boolean(state.variant);
+            return Boolean(state.variant) &&
+                (productSizes(state.product).length === 0 || Boolean(state.size));
         }
 
         return true;
@@ -1219,6 +1291,7 @@ function advanceToStep(nextStep, delay = 180) {
         addSummary(current.summaryList, "Tipo", state.category);
         addSummary(current.summaryList, "Producto", state.product.nombre);
         addSummary(current.summaryList, "Color", state.variant?.nombre || "Estándar");
+        if (state.size) addSummary(current.summaryList, "Talla", state.size);
         addSummary(current.summaryList, "Estilo", state.style || "Sin definir");
         addSummary(current.summaryList, "Imagen", state.imageName || "Sin imagen");
         addSummary(
@@ -1727,6 +1800,8 @@ function advanceToStep(nextStep, delay = 180) {
                 productVariant: state.variant?.nombre || "Estándar",
                 variantId: state.variant?.id || "",
                 sku: state.variant?.sku || "",
+                talla: state.size,
+                size: state.size,
                 style: state.style,
                 imageName: state.imageName,
                 mainText,
@@ -1882,7 +1957,7 @@ function drag(
 
         if (
             type === "image" &&
-            state.step !== 5
+            ![5, 6].includes(state.step)
         ) {
             return;
         }

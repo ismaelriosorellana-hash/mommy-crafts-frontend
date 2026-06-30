@@ -240,6 +240,16 @@
     <p class="product-color-help" id="product-color-help">La imagen cambiará para mostrar el producto en el color seleccionado.</p>
 </section>
 
+<section class="product-size-selector" id="product-size-selector" aria-labelledby="product-size-title" hidden>
+    <div class="product-size-selector-header">
+        <div>
+            <span class="product-option-label" id="product-size-title">Elige una talla</span>
+            <strong id="product-selected-size">Selecciona una opción</strong>
+        </div>
+        <span class="product-size-required">Selección requerida</span>
+    </div>
+    <div class="product-size-options" id="product-size-options" role="radiogroup" aria-labelledby="product-size-title"></div>
+</section>
 
 <section
     class="light-customization-panel"
@@ -357,11 +367,11 @@
 
                     <div class="detail-accordion">
                         <article class="accordion-item">
-                            <button class="accordion-header active" type="button" aria-expanded="true" aria-controls="detalle-descripcion">
+                            <button class="accordion-header" type="button" aria-expanded="false" aria-controls="detalle-descripcion">
                                 <span>Descripción del producto</span>
                                 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                             </button>
-                            <div class="accordion-content active" id="detalle-descripcion"></div>
+                            <div class="accordion-content" id="detalle-descripcion"></div>
                         </article>
 
                         <article class="accordion-item">
@@ -488,6 +498,15 @@
                         <div id="preview-secondary-text" hidden></div>
                     </div>
                 </div>
+
+                <div class="image-editor-controls preview-image-controls" id="image-editor-controls" hidden>
+                    <span class="editor-selection-status">Editando: <strong>Imagen</strong></span>
+                    <button class="edit-btn" id="btn-zoom-in" type="button" aria-label="Acercar imagen"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+                    <button class="edit-btn" id="btn-zoom-out" type="button" aria-label="Alejar imagen"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+                    <button class="edit-btn" id="btn-rotate-left" type="button" aria-label="Rotar imagen"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+                    <button class="edit-btn" id="btn-reset-image" type="button" aria-label="Restablecer imagen"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i></button>
+                    <button class="edit-btn danger" id="btn-remove-img-editor" type="button" aria-label="Quitar imagen"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                </div>
             </aside>
 
             <div class="customization-form">
@@ -554,6 +573,12 @@
                     <div id="color-selection-area" class="color-selection-grid" aria-live="polite">
                         <p>Primero selecciona un producto.</p>
                     </div>
+
+                    <div class="customization-size-section" id="customization-size-section" hidden>
+                        <h4>Elige una talla</h4>
+                        <p>La talla es obligatoria para este producto.</p>
+                        <div id="customization-size-options" class="customization-size-options" role="radiogroup" aria-label="Tallas disponibles"></div>
+                    </div>
                 </section>
 
                 <section class="modal-step-content" id="step-5" data-step-content="5">
@@ -570,13 +595,6 @@
                         <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" />
                     </label>
 
-                    <div class="image-editor-controls" id="image-editor-controls" hidden>
-                        <button class="edit-btn" id="btn-zoom-in" type="button" aria-label="Acercar imagen"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-zoom-out" type="button" aria-label="Alejar imagen"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-rotate-left" type="button" aria-label="Rotar imagen"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
-                        <button class="edit-btn" id="btn-reset-image" type="button" aria-label="Restablecer imagen"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i></button>
-                        <button class="edit-btn danger" id="btn-remove-img-editor" type="button" aria-label="Quitar imagen"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
-                    </div>
                 </section>
 
                 <section class="modal-step-content" id="step-6" data-step-content="6">
@@ -695,6 +713,10 @@
 <div class="product-card-color-row" hidden>
     <span class="product-card-color-label">Colores</span>
     <div class="product-card-color-swatches" aria-label="Colores disponibles"></div>
+</div>
+<div class="product-card-size-row" hidden>
+    <span class="product-card-size-label">Tallas</span>
+    <div class="product-card-size-options" aria-label="Tallas disponibles"></div>
 </div>
                     <div class="product-price-row">
                         <strong class="product-price"></strong>

@@ -77,7 +77,6 @@ window.CONFIG = Object.freeze({
         }),
 
         productBaseOverrides: Object.freeze({
-            "agenda personal 2026": 7990,
             "poleron": 12990,
             "polerón": 12990,
             "taza": 4990
@@ -111,7 +110,7 @@ HOME_BANNERS: Object.freeze([
     DELIVERY_DEFAULTS: Object.freeze({
         shipping: Object.freeze({
             enabled: true,
-            instructions: "El envío se realizará dentro de 3 días hábiles después de la confirmación del pedido. Esta confirmación será notificada al cliente por correo electrónico o WhatsApp."
+            instructions: "Provincia de Santiago: entrega entre 5 y 7 días hábiles desde la confirmación del pedido, con costo de $4.000. Otros sectores de Chile: envío por Chilexpress desde 5 días hábiles, con costo por pagar y coordinación previa con el cliente."
         }),
         pickup: Object.freeze({
             enabled: true,

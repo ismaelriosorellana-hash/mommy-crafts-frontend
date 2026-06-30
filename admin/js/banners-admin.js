@@ -4,7 +4,7 @@ let adminBanners = [];
 
 document.addEventListener(
     "admin:ready",
-    () => {
+    async () => {
         document.getElementById(
             "banner-new"
         ).addEventListener(
@@ -33,9 +33,88 @@ document.addEventListener(
             handleBannerTable
         );
 
-        loadBanners();
+        document.getElementById("banner-target-type")
+            ?.addEventListener("change", updateDestinationFields);
+        document.getElementById("banner-target-category")
+            ?.addEventListener("change", syncBannerDestination);
+        document.getElementById("banner-target-section")
+            ?.addEventListener("change", syncBannerDestination);
+
+        await loadBannerCategories();
+        await loadBanners();
     }
 );
+
+async function loadBannerCategories() {
+    const select = document.getElementById("banner-target-category");
+    if (!select) return;
+
+    try {
+        const products = await AdminAPI.request("/admin/productos");
+        const categories = [...new Set(
+            (products || [])
+                .flatMap((product) => [
+                    product.categoriaPrincipal,
+                    ...(Array.isArray(product.categorias) ? product.categorias : [])
+                ])
+                .map((item) => String(item || "").trim())
+                .filter(Boolean)
+        )].sort((a, b) => a.localeCompare(b, "es"));
+
+        select.innerHTML = '<option value="">Selecciona una categoría</option>' +
+            categories.map((category) =>
+                `<option value="${AdminUI.escapeHtml(category)}">${AdminUI.escapeHtml(category)}</option>`
+            ).join("");
+    } catch (error) {
+        console.warn("No fue posible cargar las categorías para los banners:", error);
+    }
+}
+
+function destinationTypeFromBanner(banner = {}) {
+    if (banner.destinoTipo) return banner.destinoTipo;
+    const target = String(banner.destino || "");
+    if (/catalogo\.html\?categoria=/i.test(target)) return "categoria";
+    if (target.startsWith("#")) return "seccion";
+    return "url";
+}
+
+function categoryFromTarget(target) {
+    try {
+        const value = String(target || "");
+        const query = value.split("?")[1] || "";
+        return new URLSearchParams(query).get("categoria") || "";
+    } catch {
+        return "";
+    }
+}
+
+function updateDestinationFields() {
+    const type = document.getElementById("banner-target-type")?.value || "seccion";
+    const categoryField = document.getElementById("banner-category-field");
+    const sectionField = document.getElementById("banner-section-field");
+    const urlField = document.getElementById("banner-url-field");
+
+    if (categoryField) categoryField.hidden = type !== "categoria";
+    if (sectionField) sectionField.hidden = type !== "seccion";
+    if (urlField) urlField.hidden = type !== "url";
+
+    syncBannerDestination();
+}
+
+function syncBannerDestination() {
+    const type = document.getElementById("banner-target-type")?.value || "seccion";
+    const target = document.getElementById("banner-target");
+    if (!target) return;
+
+    if (type === "categoria") {
+        const category = document.getElementById("banner-target-category")?.value || "";
+        target.value = category
+            ? `catalogo.html?categoria=${encodeURIComponent(category)}`
+            : "catalogo.html";
+    } else if (type === "seccion") {
+        target.value = document.getElementById("banner-target-section")?.value || "#lo-mas-vendido";
+    }
+}
 
 async function loadBanners() {
     const container =
@@ -210,11 +289,17 @@ function openBannerForm(banner = null) {
         banner?.textoBoton ||
         "Ver productos";
 
-    document.getElementById(
-        "banner-target"
-    ).value =
-        banner?.destino ||
-        "#lo-mas-vendido";
+    const destinationType = destinationTypeFromBanner(banner || {});
+    document.getElementById("banner-target-type").value = destinationType;
+    document.getElementById("banner-target").value =
+        banner?.destino || "#lo-mas-vendido";
+    document.getElementById("banner-target-section").value =
+        destinationType === "seccion"
+            ? (banner?.destino || "#lo-mas-vendido")
+            : "#lo-mas-vendido";
+    document.getElementById("banner-target-category").value =
+        banner?.categoriaDestino || categoryFromTarget(banner?.destino);
+    updateDestinationFields();
 
     document.getElementById(
         "banner-desktop"
@@ -297,6 +382,12 @@ async function saveBanner(event) {
             document.getElementById(
                 "banner-target"
             ).value.trim(),
+        destinoTipo:
+            document.getElementById("banner-target-type").value,
+        categoriaDestino:
+            document.getElementById("banner-target-type").value === "categoria"
+                ? document.getElementById("banner-target-category").value
+                : "",
         imagenEscritorio:
             document.getElementById(
                 "banner-desktop"

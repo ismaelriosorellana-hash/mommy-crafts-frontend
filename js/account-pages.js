@@ -563,6 +563,7 @@
                     <h3>${escapeHtml(item.nombre)}</h3>
                     <p>Cantidad: ${Number(item.cantidad) || 1}</p>
                     ${item.color ? `<p>Color: ${escapeHtml(item.color)}</p>` : ""}
+                    ${item.talla || item.personalizacion?.talla || item.personalizacion?.size ? `<p>Talla: ${escapeHtml(item.talla || item.personalizacion?.talla || item.personalizacion?.size)}</p>` : ""}
                     ${customizationBlock(item.personalizacion, item.personalizacionResumen)}
                     ${designApprovalBlock(item)}
                 </div>
@@ -777,10 +778,28 @@
                             </p>
                         ` : ""}
 
-                        ${order.entrega?.fechaPreferida ? `
+                        ${order.entrega?.metodo === "retiro" && order.entrega?.fechaPreferida ? `
                             <p>
                                 Fecha preferida:
                                 <strong>${dateOnlyDisplay(order.entrega.fechaPreferida)}</strong>
+                            </p>
+                        ` : ""}
+
+                        ${order.entrega?.metodo === "envio" ? `
+                            <p>
+                                Zona de envío:
+                                <strong>${order.entrega?.zonaEnvio === "santiago" ? "Provincia de Santiago" : "Otros sectores de Chile"}</strong>
+                            </p>
+                            <p>
+                                Plazo estimado:
+                                <strong>
+                                    Desde ${dateOnlyDisplay(order.entrega?.fechaMinima)}
+                                    ${order.entrega?.fechaEstimadaHasta ? ` hasta ${dateOnlyDisplay(order.entrega.fechaEstimadaHasta)}` : ""}
+                                </strong>
+                            </p>
+                            <p>
+                                Costo de envío:
+                                <strong>${String(order.entrega?.modalidadEnvio || "").toLowerCase().includes("chilexpress") ? "Por pagar a Chilexpress" : money(order.costoEnvio || 0)}</strong>
                             </p>
                         ` : ""}
 

@@ -2,6 +2,7 @@
 
 (function () {
     const STORAGE_KEY = "mommyCraftsCart";
+    const SANTIAGO_SHIPPING_COST = 4000;
 
     function formatPrice(value) {
         return new Intl.NumberFormat(CONFIG.locale || "es-CL", {
@@ -237,6 +238,9 @@
         if (customization.productVariant) {
             parts.push(`Color: ${customization.productVariant}`);
         }
+        if (customization.talla || customization.size) {
+            parts.push(`Talla: ${customization.talla || customization.size}`);
+        }
         if (customization.style) {
             parts.push(`Estilo: ${customization.style}`);
         }
@@ -290,7 +294,13 @@
 
         article.dataset.lineId = item.lineId;
 
-        const detailUrl = `producto.html?id=${encodeURIComponent(item.productId)}`;
+        const variantParam = item.customization?.variantId
+            ? `&variante=${encodeURIComponent(item.customization.variantId)}`
+            : "";
+        const sizeParam = item.customization?.talla || item.customization?.size
+            ? `&talla=${encodeURIComponent(item.customization.talla || item.customization.size)}`
+            : "";
+        const detailUrl = `producto.html?id=${encodeURIComponent(item.productId)}${variantParam}${sizeParam}`;
         imageLink.href = detailUrl;
         nameLink.href = detailUrl;
 
@@ -471,20 +481,33 @@
         );
     }
 
-    function deliveryInstructions(items, method) {
-        const key =
-            method === "retiro"
-                ? "pickup"
-                : "shipping";
+    function selectedShippingZone(form = document.getElementById("form-pedido")) {
+        return form?.querySelector("#pedido-zona-envio")?.value || "santiago";
+    }
 
-        const details = items
-            .map((item) => {
-                const instruction = normalizeDelivery(item.delivery)[key].instructions;
-                return instruction
-                    ? `${item.name}: ${instruction}`
-                    : "";
-            })
-            .filter(Boolean);
+    function shippingCost(form = document.getElementById("form-pedido")) {
+        return selectedDeliveryMethod(form) === "envio" &&
+            selectedShippingZone(form) === "santiago"
+            ? SANTIAGO_SHIPPING_COST
+            : 0;
+    }
+
+    function checkoutTotal(form = document.getElementById("form-pedido")) {
+        return total() + shippingCost(form);
+    }
+
+    function deliveryInstructionDetails(items, method) {
+        const key = method === "retiro" ? "pickup" : "shipping";
+        return items.map((item) => ({
+            product: item.name,
+            title: `Instrucciones de ${method === "retiro" ? "retiro" : "envío"}: ${item.name}`,
+            instruction: normalizeDelivery(item.delivery)[key].instructions || "Sin instrucciones adicionales."
+        }));
+    }
+
+    function deliveryInstructions(items, method) {
+        const details = deliveryInstructionDetails(items, method)
+            .map((detail) => `${detail.title}\n${detail.instruction}`);
 
         return [...new Set(details)].join("\n\n");
     }
@@ -574,6 +597,10 @@
 
         const isShipping =
             method === "envio";
+        const pickupDateField = document.getElementById("pickup-date-field");
+        const preferredDate = document.getElementById("pedido-fecha-preferida");
+        const shippingZone = document.getElementById("pedido-zona-envio");
+        const shippingZoneHelp = document.getElementById("pedido-zona-envio-ayuda");
 
         if (addressFields) {
             addressFields.hidden =
@@ -590,23 +617,43 @@
                 isShipping;
         }
 
+        if (shippingZone) {
+            shippingZone.required = isShipping;
+            shippingZone.disabled = !isShipping;
+        }
+
+        if (pickupDateField) pickupDateField.hidden = isShipping;
+        if (preferredDate) {
+            preferredDate.disabled = isShipping;
+            preferredDate.required = !isShipping;
+            if (isShipping) preferredDate.value = "";
+        }
+
+        if (shippingZoneHelp && isShipping) {
+            shippingZoneHelp.textContent = selectedShippingZone(form) === "santiago"
+                ? "El costo de $4.000 se agrega al total. Entrega estimada entre 5 y 7 días hábiles desde la confirmación."
+                : "Envío por Chilexpress desde 5 días hábiles. El costo es por pagar y se coordina contigo.";
+        }
+
+        if (!isShipping) updatePreferredDate();
+
         const instructions =
             document.getElementById(
                 "delivery-instructions"
             );
 
         if (instructions) {
-            const methodLabel =
-                isShipping
-                    ? "Instrucciones de envío"
-                    : "Instrucciones de retiro";
-
-            const title = document.createElement("strong");
-            const detail = document.createElement("p");
-            title.textContent = methodLabel;
-            detail.textContent = deliveryInstructions(items, method);
-
-            instructions.replaceChildren(title, detail);
+            instructions.replaceChildren();
+            deliveryInstructionDetails(items, method).forEach((detail) => {
+                const block = document.createElement("div");
+                block.className = "delivery-instruction-product";
+                const title = document.createElement("strong");
+                const text = document.createElement("p");
+                title.textContent = detail.title;
+                text.textContent = detail.instruction;
+                block.append(title, text);
+                instructions.appendChild(block);
+            });
         }
     }
 
@@ -651,6 +698,23 @@
         }
     }
 
+    function renderCheckoutSummary() {
+        const summary = document.getElementById("pedido-producto-info");
+        if (!summary) return;
+
+        const form = document.getElementById("form-pedido");
+        const cost = shippingCost(form);
+        const zone = selectedShippingZone(form);
+        const method = selectedDeliveryMethod(form);
+
+        summary.innerHTML = `
+            <strong>${count()} producto(s)</strong>
+            <p>Subtotal: ${formatPrice(total())}</p>
+            <p>Envío: ${method === "retiro" ? "Sin costo" : zone === "santiago" ? formatPrice(cost) : "Por pagar a Chilexpress"}</p>
+            <p><strong>Total estimado: ${formatPrice(checkoutTotal(form))}</strong></p>
+        `;
+    }
+
     function openCheckout() {
         const overlay = document.getElementById("modal-pedido");
         if (!overlay || read().length === 0) return;
@@ -659,15 +723,8 @@
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("modal-open");
 
-        const summary = document.getElementById("pedido-producto-info");
-        if (summary) {
-            summary.innerHTML = `
-                <strong>${count()} producto(s)</strong>
-                <p>Total estimado: ${formatPrice(total())}</p>
-            `;
-        }
-
         updateDeliveryForm();
+        renderCheckoutSummary();
         updatePreferredDate();
         updateThirdPartyFields();
         prefillCheckoutWithAccount();
@@ -707,9 +764,12 @@
                 : "envio";
 
         lines.push(
-            `Total estimado: ${formatPrice(total())}`,
+            `Total estimado: ${formatPrice(total() + (deliveryMethod === "envio" && formData.get("zona-envio") === "santiago" ? SANTIAGO_SHIPPING_COST : 0))}`,
             "",
             `Entrega: ${deliveryMethod === "envio" ? "Envío" : "Retiro"}`,
+            deliveryMethod === "envio"
+                ? `Zona: ${formData.get("zona-envio") === "santiago" ? "Provincia de Santiago · $4.000 · 5 a 7 días hábiles" : "Otros sectores de Chile · Chilexpress por pagar · desde 5 días hábiles"}`
+                : `Fecha preferida: ${formData.get("fecha-preferida") || "Por coordinar"}`,
             `Instrucciones: ${deliveryInstructions(read(), deliveryMethod)}`,
             "",
             `Nombre: ${formData.get("nombre")}`,
@@ -749,6 +809,15 @@
         const input = document.getElementById("pedido-fecha-preferida");
         const help = document.getElementById("pedido-fecha-ayuda");
         if (!input) return;
+        const form = document.getElementById("form-pedido");
+        if (selectedDeliveryMethod(form) !== "retiro") {
+            input.value = "";
+            input.disabled = true;
+            input.required = false;
+            return;
+        }
+        input.disabled = false;
+        input.required = true;
         const days = Math.max(...read().map(item => Number(item.delivery?.diasPreparacion || item.delivery?.preparationDays || 3)), 3);
         const minimum = addBusinessDays(new Date(), days);
         const value = dateInputValue(minimum);
@@ -823,11 +892,21 @@
                 'input[name="metodo-entrega"]'
             )
             .forEach((input) => {
-                input.addEventListener(
-                    "change",
-                    updateDeliveryForm
-                );
+                input.addEventListener("change", () => {
+                    updateDeliveryForm();
+                    renderCheckoutSummary();
+                });
             });
+
+        document.getElementById("pedido-zona-envio")?.addEventListener("change", () => {
+            updateDeliveryForm();
+            renderCheckoutSummary();
+        });
+
+        const preferredDateInput = document.getElementById("pedido-fecha-preferida");
+        preferredDateInput?.addEventListener("click", () => {
+            if (!preferredDateInput.disabled) preferredDateInput.showPicker?.();
+        });
 
         document.getElementById("form-pedido")?.addEventListener(
             "submit",
@@ -935,6 +1014,10 @@
                                                     item.customization
                                                         ?.sku ||
                                                     "",
+                                                talla:
+                                                    item.customization?.talla ||
+                                                    item.customization?.size ||
+                                                    "",
                                                 personalizacion:
                                                     item.customization,
                                                 entrega:
@@ -962,8 +1045,14 @@
                                                     "comuna"
                                                 )
                                                 : "",
+                                        zonaEnvio:
+                                            formData.get("metodo-entrega") === "envio"
+                                                ? formData.get("zona-envio")
+                                                : "",
                                         fechaPreferida:
-                                            formData.get("fecha-preferida"),
+                                            formData.get("metodo-entrega") === "retiro"
+                                                ? formData.get("fecha-preferida")
+                                                : "",
                                         receptorTercero: {
                                             habilitado:
                                                 formData.get("receptor-tercero") === "on",

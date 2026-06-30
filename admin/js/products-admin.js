@@ -428,6 +428,13 @@ function openProductForm(product = null) {
             : product?.categorias || "";
 
     document.getElementById(
+        "product-sizes"
+    ).value =
+        Array.isArray(product?.tallas)
+            ? product.tallas.join(", ")
+            : product?.tallas || "";
+
+    document.getElementById(
         "product-badge"
     ).value =
         product?.insignia || "";
@@ -862,6 +869,17 @@ async function saveProduct(event) {
                         item.trim()
                 )
                 .filter(Boolean),
+        tallas:
+            document.getElementById(
+                "product-sizes"
+            ).value
+                .split(/[,\n]/)
+                .map((item) => item.trim().replace(/\s*-\s*/g, "-"))
+                .filter((item, index, values) =>
+                    item &&
+                    /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9]+(?:-[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9]+)*$/.test(item) &&
+                    values.indexOf(item) === index
+                ),
         insignia:
             document.getElementById(
                 "product-badge"
