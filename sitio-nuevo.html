@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta id="meta-description" name="description" content="Detalle de producto de Mommy Crafts." />
-    <title>Producto | Mommy Crafts</title>
+    <meta name="description" content="Productos personalizados, sublimados y estampados de Mommy Crafts." />
+    <title>Mommy Crafts | Productos personalizados</title>
 
     <link
     rel="stylesheet"
@@ -12,12 +12,13 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
 />
-    <link rel="stylesheet" href="css/main.css?v=3.29.0" />
-    <link rel="stylesheet" href="css/products.css?v=3.29.0" />
-    <link rel="stylesheet" href="css/modal.css?v=3.29.0" />
-        <link rel="stylesheet" href="css/experience-v327.css?v=3.29.0">
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/products.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+        <link rel="stylesheet" href="css/experience-v327.css">
     </head>
-<body data-page="product">
+<body data-page="home">
     <a class="skip-link" href="#main-content">Saltar al contenido</a>
 
     <header class="site-header" id="site-header">
@@ -163,237 +164,170 @@
     </div>
 </header>
 
-    <main id="main-content" class="product-page">
-        <div class="container">
-            <nav class="breadcrumb" aria-label="Migas de pan">
-                <a href="index.html">Inicio</a>
-                <span aria-hidden="true">/</span>
-                <a id="breadcrumb-category" href="index.html">Productos</a>
-                <span aria-hidden="true">/</span>
-                <span id="detalle-nombre-producto">Cargando...</span>
-            </nav>
+    <main id="main-content">
+        <section class="banner" aria-labelledby="hero-title">
+            <div class="banner-background" id="banner-bg" aria-hidden="true"></div>
+            <div class="content-banner container">
+                <p id="hero-eyebrow">Regalos creados con intención</p>
+                <h1 id="hero-title">Productos auténticos y únicos para quienes más quieres</h1>
+                <a class="btn-primary" id="hero-cta" href="#lo-mas-vendido">Ver productos</a>
+            </div>
+            <div class="banner-pagination" id="banner-pagination" aria-label="Seleccionar banner" hidden></div>
+        </section>
 
-            <section class="product-detail-grid" id="product-detail" aria-live="polite">
-                <div class="product-detail-images">
-                    <div class="detail-main-image-container">
-                        <div
-                            class="detail-main-image-track"
-                            id="detalle-imagen-track"
-                            role="button"
-                            tabindex="0"
-                            aria-label="Acercar o alejar imagen del producto"
-                            aria-describedby="detail-zoom-help"
-                            aria-pressed="false"
-                        >
-                            <img
-                                id="detalle-imagen-principal"
-                                src=""
-                                alt=""
-                                class="detail-main-img"
-                                draggable="false"
-                            />
+        <section class="container categories-section" id="categorias" aria-labelledby="categories-title">
+            <div class="section-header">
+                <div>
+                    <p class="section-kicker">Explora</p>
+                    <h2 class="section-title" id="categories-title">Categorías</h2>
+                </div>
+            </div>
 
-                            <span class="detail-zoom-hint" id="detail-zoom-help">
-                                <i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i>
-                                Haz clic para acercar
-                            </span>
-                        </div>
+            <div class="category-rail-shell">
+                <button class="category-rail-arrow category-rail-prev" type="button" data-category-direction="-1" aria-label="Categorías anteriores">
+                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                </button>
+                <div class="categories-grid" id="categories-grid" aria-live="polite" tabindex="0">
+                    <p class="loading-products">Cargando categorías...</p>
+                </div>
+                <button class="category-rail-arrow category-rail-next" type="button" data-category-direction="1" aria-label="Categorías siguientes">
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                </button>
+            </div>
+        </section>
 
-                        <button class="detail-arrow prev-detail" id="detail-prev" type="button" aria-label="Imagen anterior">
-                            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-                        </button>
-                        <button class="detail-arrow next-detail" id="detail-next" type="button" aria-label="Imagen siguiente">
-                            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-                        </button>
+        <section class="container trending-section" id="productos-destacados" aria-labelledby="trending-title">
+            <div class="section-header">
+                <div>
+                    <p class="section-kicker">Los favoritos</p>
+                    <h2 class="section-title" id="trending-title">Tendencias</h2>
+                </div>
+                <a href="index.html?filtro=destacados" class="section-link">Ver todo <span aria-hidden="true">→</span></a>
+            </div>
+
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow carousel-arrow-prev" type="button" data-carousel="trending-carousel" data-direction="-1" aria-label="Productos anteriores">
+                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                </button>
+
+                <div class="carousel-container" id="trending-carousel" tabindex="0">
+                    <div class="carousel-track" id="productos-tendencias" aria-live="polite">
+                        <p class="loading-products">Cargando productos destacados...</p>
                     </div>
-
-                    <div class="detail-thumbnails" id="detalle-thumbnails" aria-label="Galería de imágenes"></div>
                 </div>
 
-                <div class="product-detail-info">
-                    <p class="product-category" id="detalle-categoria"></p>
-                    <h1 class="detail-title" id="detalle-titulo">Cargando producto...</h1>
+                <button class="carousel-arrow carousel-arrow-next" type="button" data-carousel="trending-carousel" data-direction="1" aria-label="Productos siguientes">
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                </button>
+            </div>
+        </section>
 
-                    <div class="detail-rating" aria-label="Sin reseñas todavía">
-                        <span class="stars" aria-hidden="true">★★★★★</span>
-                        <span class="rating-count">(0 reseñas)</span>
-                    </div>
-
-                    <div class="detail-price">
-                        <span class="current-price" id="detalle-precio"></span>
-                        <span class="old-price" id="detalle-precio-original" hidden></span>
-                        <span class="detail-label-badge" id="detalle-badge" hidden></span>
-                        <span class="detail-discount-badge" id="detalle-descuento" hidden></span>
-                    </div>
-
-                    <p class="stock-status" id="detalle-stock"></p>
-
-<section class="product-color-selector" id="product-color-selector" aria-labelledby="product-color-title" hidden>
-    <div class="product-color-selector-header">
+        
+<section class="container best-sellers-section" id="lo-mas-vendido" aria-labelledby="best-sellers-title">
+    <div class="section-header">
         <div>
-            <span class="product-option-label" id="product-color-title">Elige un color</span>
-            <strong id="product-selected-color">Selecciona una opción</strong>
+            <p class="section-kicker">Los preferidos</p>
+            <h2 class="section-title" id="best-sellers-title">Lo más vendido</h2>
         </div>
-        <span class="product-color-required">Selección requerida</span>
-    </div>
-    <div class="product-color-options" id="product-color-options" role="radiogroup" aria-labelledby="product-color-title"></div>
-    <p class="product-color-help" id="product-color-help">La imagen cambiará para mostrar el producto en el color seleccionado.</p>
-</section>
 
-<section class="product-size-selector" id="product-size-selector" aria-labelledby="product-size-title" hidden>
-    <div class="product-size-selector-header">
-        <div>
-            <span class="product-option-label" id="product-size-title">Elige una talla</span>
-            <strong id="product-selected-size">Selecciona una opción</strong>
-        </div>
-        <span class="product-size-required">Selección requerida</span>
-    </div>
-    <div class="product-size-options" id="product-size-options" role="radiogroup" aria-labelledby="product-size-title"></div>
-</section>
-
-<section
-    class="light-customization-panel"
-    id="light-customization-panel"
-    aria-labelledby="light-customization-title"
-    hidden
->
-    <div class="light-customization-heading">
-        <div>
-            <p class="section-kicker">Opcional</p>
-            <h2 id="light-customization-title">Personaliza este producto</h2>
-            <p id="light-customization-description">
-                Puedes indicar un nombre, adjuntar una imagen de referencia o dejar una observación.
-            </p>
-        </div>
-        <span class="light-customization-badge">
-            <i class="fa-solid fa-pen-ruler" aria-hidden="true"></i>
-            Personalización simple
-        </span>
+        <a href="catalogo.html?orden=mas-vendidos" class="section-link">
+            Ver más vendidos <span aria-hidden="true">→</span>
+        </a>
     </div>
 
-    <div class="light-customization-grid">
-        <label
-            class="light-customization-field"
-            id="light-customization-name-field"
-            for="light-customization-name"
+    <div class="carousel-wrapper">
+        <button
+            class="carousel-arrow carousel-arrow-prev"
+            type="button"
+            data-carousel="best-sellers-carousel"
+            data-direction="-1"
+            aria-label="Productos anteriores"
         >
-            <span>Nombre o texto breve</span>
-            <input
-                type="text"
-                id="light-customization-name"
-                maxlength="25"
-                placeholder="Ej.: Tu nombre o frase corta"
-                autocomplete="off"
-            />
-            <small id="light-customization-name-count">0 / 25</small>
-        </label>
+            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
 
-<div
-    class="light-customization-field light-customization-image-field"
-    id="light-customization-image-field"
->
-    <span>Imágenes de referencia</span>
+        <div class="carousel-container" id="best-sellers-carousel" tabindex="0">
+            <div class="carousel-track" id="productos-mas-vendidos" aria-live="polite">
+                <p class="loading-products">Cargando productos más vendidos...</p>
+            </div>
+        </div>
 
-    <label class="light-image-upload" for="light-customization-image">
-        <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
-        <strong id="light-image-upload-title">Seleccionar imagen</strong>
-        <small id="light-image-upload-help">
-            JPG, PNG o WEBP · Máximo 5 MB por archivo
-        </small>
-
-        <input
-            type="file"
-            id="light-customization-image"
-            accept="image/jpeg,image/png,image/webp"
-            multiple
-        />
-    </label>
-
-    <div
-        class="light-image-preview-grid"
-        id="light-image-preview-grid"
-        aria-live="polite"
-        hidden
-    ></div>
-</div>
-
-        <label
-            class="light-customization-field light-customization-observation-field"
-            id="light-customization-observation-field"
-            for="light-customization-observation"
+        <button
+            class="carousel-arrow carousel-arrow-next"
+            type="button"
+            data-carousel="best-sellers-carousel"
+            data-direction="1"
+            aria-label="Productos siguientes"
         >
-            <span>Observaciones</span>
-            <textarea
-                id="light-customization-observation"
-                rows="4"
-                maxlength="400"
-                placeholder="Indica posición, colores, fecha u otros detalles."
-            ></textarea>
-            <small id="light-customization-observation-count">0 / 400</small>
-        </label>
-    </div>
-
-    <div class="light-customization-notice">
-        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-        <p id="light-customization-notice-text">
-            La personalización se revisará antes de fabricar el producto.
-        </p>
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
     </div>
 </section>
 
-                    <div class="product-actions">
-                        <div class="quantity-control">
-                            <label for="product-quantity">Cantidad</label>
-                            <input id="product-quantity" type="number" min="1" value="1" inputmode="numeric" />
+        <section class="container new-section" aria-labelledby="new-title">
+            <div class="section-header">
+                <div>
+                    <p class="section-kicker">Recién llegados</p>
+                    <h2 class="section-title" id="new-title">Lo más nuevo</h2>
+                </div>
+                <a href="index.html?filtro=nuevos" class="section-link">Ver todo <span aria-hidden="true">→</span></a>
+            </div>
+
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow carousel-arrow-prev" type="button" data-carousel="new-carousel" data-direction="-1" aria-label="Productos anteriores">
+                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                </button>
+
+                <div class="carousel-container" id="new-carousel" tabindex="0">
+                    <div class="carousel-track" id="productos-nuevos" aria-live="polite">
+                        <p class="loading-products">Cargando productos nuevos...</p>
+                    </div>
+                </div>
+
+                <button class="carousel-arrow carousel-arrow-next" type="button" data-carousel="new-carousel" data-direction="1" aria-label="Productos siguientes">
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                </button>
+            </div>
+        </section>
+
+        <section class="main-content" aria-labelledby="benefits-title">
+            <div class="container">
+                <h2 class="sr-only" id="benefits-title">Beneficios de comprar en Mommy Crafts</h2>
+                <div class="container-features">
+                    <article class="card-feature">
+                        <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+                        <div class="feature-content">
+                            <h3>Diseños personalizados</h3>
+                            <p>Creaciones preparadas especialmente para ti.</p>
                         </div>
+                    </article>
 
-                        <button class="btn-primary" id="btn-add-cart" type="button">
-                            <i class="fa-solid fa-cart-plus" aria-hidden="true"></i>
-                            Agregar al carrito
-                        </button>
+                    <article class="card-feature">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        <div class="feature-content">
+                            <h3>Revisión antes de producir</h3>
+                            <p>Confirmamos contigo los detalles importantes.</p>
+                        </div>
+                    </article>
 
-                        <button class="btn-secondary" id="btn-open-customization" type="button" hidden>
-                            <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
-                            Personalizar
-                        </button>
-                    </div>
+                    <article class="card-feature">
+                        <i class="fa-solid fa-gift" aria-hidden="true"></i>
+                        <div class="feature-content">
+                            <h3>Regalos memorables</h3>
+                            <p>Opciones para cumpleaños, celebraciones y empresas.</p>
+                        </div>
+                    </article>
 
-                    <section
-                        class="product-delivery-info product-delivery-near-actions"
-                        id="product-delivery-info"
-                        aria-label="Opciones de entrega"
-                        hidden
-                    ></section>
-
-                    <div class="detail-accordion">
-                        <article class="accordion-item">
-                            <button class="accordion-header" type="button" aria-expanded="false" aria-controls="detalle-descripcion">
-                                <span>Descripción del producto</span>
-                                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                            </button>
-                            <div class="accordion-content" id="detalle-descripcion"></div>
-                        </article>
-
-                        <article class="accordion-item">
-                            <button class="accordion-header" type="button" aria-expanded="false" aria-controls="detalle-caracteristicas-panel">
-                                <span>Características</span>
-                                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                            </button>
-                            <div class="accordion-content" id="detalle-caracteristicas-panel">
-                                <ul id="detalle-caracteristicas"></ul>
-                            </div>
-                        </article>
-                    </div>
+                    <article class="card-feature">
+                        <i class="fa-solid fa-headset" aria-hidden="true"></i>
+                        <div class="feature-content">
+                            <h3>Atención cercana</h3>
+                            <p>Te acompañamos durante todo el proceso.</p>
+                        </div>
+                    </article>
                 </div>
-            </section>
-
-            <section class="related-products" aria-labelledby="related-title">
-                <div class="section-header">
-                    <h2 class="section-title" id="related-title">También te puede gustar</h2>
-                </div>
-                <div class="container-products" id="related-products" aria-live="polite"></div>
-            </section>
-        </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
@@ -440,6 +374,39 @@
         </div>
     </div>
 </footer>
+
+    <template id="product-card-template">
+        <article class="card-product">
+            <a class="product-card-link" href="#">
+                <div class="container-img">
+                    <img class="product-card-image" src="" alt="" loading="lazy" />
+                    <span class="product-badge" hidden></span>
+                    <span class="product-discount-badge" hidden></span>
+                </div>
+                <div class="content-card-product">
+                    <p class="product-category"></p>
+                    <h3 class="product-name"></h3>
+
+<div class="product-card-color-row" hidden>
+    <span class="product-card-color-label">Colores</span>
+    <div class="product-card-color-swatches" aria-label="Colores disponibles"></div>
+</div>
+<div class="product-card-size-row" hidden>
+    <span class="product-card-size-label">Tallas</span>
+    <div class="product-card-size-options" aria-label="Tallas disponibles"></div>
+</div>
+                    <div class="product-price-row">
+                        <strong class="product-price"></strong>
+                        <span class="product-original-price" hidden></span>
+                    </div>
+                </div>
+            </a>
+            <button class="add-cart" type="button">
+                <i class="fa-solid fa-cart-plus" aria-hidden="true"></i>
+                <span>Agregar</span>
+            </button>
+        </article>
+    </template>
 
     <div class="modal-overlay" id="modal-personalizar" aria-hidden="true">
     <section
@@ -697,56 +664,19 @@
 
 
 
-
-    <template id="product-card-template">
-        <article class="card-product">
-            <a class="product-card-link" href="#">
-                <div class="container-img">
-                    <img class="product-card-image" src="" alt="" loading="lazy" />
-                    <span class="product-badge" hidden></span>
-                    <span class="product-discount-badge" hidden></span>
-                </div>
-                <div class="content-card-product">
-                    <p class="product-category"></p>
-                    <h3 class="product-name"></h3>
-
-<div class="product-card-color-row" hidden>
-    <span class="product-card-color-label">Colores</span>
-    <div class="product-card-color-swatches" aria-label="Colores disponibles"></div>
-</div>
-<div class="product-card-size-row" hidden>
-    <span class="product-card-size-label">Tallas</span>
-    <div class="product-card-size-options" aria-label="Tallas disponibles"></div>
-</div>
-                    <div class="product-price-row">
-                        <strong class="product-price"></strong>
-                        <span class="product-original-price" hidden></span>
-                    </div>
-                </div>
-            </a>
-            <button class="add-cart" type="button">
-                <i class="fa-solid fa-cart-plus" aria-hidden="true"></i>
-                <span>Agregar</span>
-            </button>
-        </article>
-    </template>
-
-    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-
     <noscript>
-        <p class="noscript-message">Necesitas habilitar JavaScript para cargar el producto.</p>
+        <p class="noscript-message">Necesitas habilitar JavaScript para ver los productos de la tienda.</p>
     </noscript>
 
-    <script src="js/config.js?v=3.29.0" defer></script>
-    <script src="js/api.js?v=3.29.0" defer></script>
-    <script src="js/site-settings.js?v=3.29.0" defer></script>
-    <script src="js/customer-auth.js?v=3.29.0" defer></script>
-    <script src="js/cart.js?v=3.29.0" defer></script>
-    <script src="js/product-options.js?v=3.29.0" defer></script>
-    <script src="js/product-gallery.js?v=3.29.0" defer></script>
-    <script src="js/products.js?v=3.29.0" defer></script>
-    <script src="js/ui.js?v=3.29.0" defer></script>
-    <script src="js/customization.js?v=3.29.0" defer></script>
-        <script src="js/experience-v327.js?v=3.29.0" defer></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/site-settings.js" defer></script>
+    <script src="js/customer-auth.js" defer></script>
+    <script src="js/cart.js" defer></script>
+    <script src="js/products.js" defer></script>
+    <script src="js/ui.js" defer></script>
+    <script src="js/customization.js" defer></script>
+    <script src="js/home.js" defer></script>
+        <script src="js/experience-v327.js" defer></script>
     </body>
 </html>

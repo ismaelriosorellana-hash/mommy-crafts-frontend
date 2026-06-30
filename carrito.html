@@ -16,11 +16,11 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
 />
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/products.css" />
-    <link rel="stylesheet" href="css/cart.css" />
-    <link rel="stylesheet" href="css/modal.css" />
-        <link rel="stylesheet" href="css/experience-v327.css">
+    <link rel="stylesheet" href="css/main.css?v=3.29.0" />
+    <link rel="stylesheet" href="css/products.css?v=3.29.0" />
+    <link rel="stylesheet" href="css/cart.css?v=3.29.0" />
+    <link rel="stylesheet" href="css/modal.css?v=3.29.0" />
+        <link rel="stylesheet" href="css/experience-v327.css?v=3.29.0">
     </head>
 <body data-page="cart">
     <a class="skip-link" href="#main-content">Saltar al contenido</a>
@@ -455,8 +455,8 @@
                 <fieldset class="form-group">
                     <legend>Forma de pago</legend>
 
-                    <div class="payment-options single-option">
-                        <label class="is-selected">
+                    <div class="payment-options">
+                        <label id="payment-option-transfer" class="is-selected">
                             <input
                                 type="radio"
                                 name="pedido-pago"
@@ -467,6 +467,25 @@
                                 <strong>Transferencia bancaria</strong>
                                 <small>
                                     El stock se reserva durante 3 horas mientras envías el comprobante.
+                                </small>
+                            </span>
+                        </label>
+
+                        <label id="payment-option-mercadopago" class="is-disabled" aria-disabled="true">
+                            <input
+                                id="pedido-pago-mercadopago"
+                                type="radio"
+                                name="pedido-pago"
+                                value="mercadopago"
+                                disabled
+                            />
+                            <span>
+                                <strong>
+                                    <i class="fa-solid fa-wallet" aria-hidden="true"></i>
+                                    Mercado Pago
+                                </strong>
+                                <small id="mercadopago-availability">
+                                    Comprobando disponibilidad…
                                 </small>
                             </span>
                         </label>
@@ -793,14 +812,14 @@
         <p class="noscript-message">Necesitas habilitar JavaScript para administrar el carrito.</p>
     </noscript>
 
-    <script src="js/config.js" defer></script>
-    <script src="js/api.js" defer></script>
-    <script src="js/site-settings.js" defer></script>
-    <script src="js/customer-auth.js" defer></script>
-    <script src="js/cart.js" defer></script>
-    <script src="js/products.js" defer></script>
-    <script src="js/ui.js" defer></script>
-    <script src="js/customization.js" defer></script>
-        <script src="js/experience-v327.js" defer></script>
+    <script src="js/config.js?v=3.29.0" defer></script>
+    <script src="js/api.js?v=3.29.0" defer></script>
+    <script src="js/site-settings.js?v=3.29.0" defer></script>
+    <script src="js/customer-auth.js?v=3.29.0" defer></script>
+    <script src="js/cart.js?v=3.29.0" defer></script>
+    <script src="js/products.js?v=3.29.0" defer></script>
+    <script src="js/ui.js?v=3.29.0" defer></script>
+    <script src="js/customization.js?v=3.29.0" defer></script>
+        <script src="js/experience-v327.js?v=3.29.0" defer></script>
     </body>
 </html>

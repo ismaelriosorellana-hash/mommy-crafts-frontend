@@ -270,13 +270,19 @@
                     const result = await CustomerAuth.createPaymentPreference(
                         button.dataset.payOrder
                     );
+                    sessionStorage.setItem(
+                        "mommycrafts_pending_payment",
+                        JSON.stringify({
+                            pedidoId: button.dataset.payOrder
+                        })
+                    );
                     location.href = result.checkoutUrl;
                 } catch (error) {
                     alert(error.message || "No fue posible iniciar el pago.");
                     button.disabled = false;
                     button.textContent = original;
                 }
-            }, { once: true });
+            });
         } catch (error) {
             if (error.status === 401) {
                 location.replace("acceso.html?modo=login&sesion=expirada");
@@ -650,6 +656,39 @@
     }
 
 
+    function mercadoPagoBlock(order) {
+        if (order.metodoPago !== "mercadopago") return "";
+
+        const canPay =
+            order.estadoPago !== "pagado" &&
+            order.estadoPedido !== "cancelado";
+
+        return `
+            <section class="account-detail-card customer-mercadopago-card">
+                <h2>Pago con Mercado Pago</h2>
+                <p>Estado: <span class="account-status">${statusLabel(order.estadoPago)}</span></p>
+                <p>
+                    ${order.estadoPago === "pagado"
+                        ? "Mercado Pago confirmó el pago correctamente."
+                        : "Completa el pago en el entorno seguro de Mercado Pago. El estado se actualizará automáticamente."}
+                </p>
+                ${order.mercadoPago?.paymentId ? `
+                    <p>ID de pago: <strong>${escapeHtml(order.mercadoPago.paymentId)}</strong></p>
+                ` : ""}
+                ${canPay ? `
+                    <button
+                        class="btn-primary customer-mercadopago-pay"
+                        type="button"
+                        data-pay-mercadopago="${escapeHtml(order.id || order._id)}"
+                    >
+                        ${order.estadoPago === "rechazado" ? "Reintentar con Mercado Pago" : "Pagar con Mercado Pago"}
+                    </button>
+                ` : ""}
+            </section>
+        `;
+    }
+
+
     function bindOrderActions(order, container) {
         container.querySelector(".receipt-upload-form")?.addEventListener(
             "submit",
@@ -678,6 +717,33 @@
                     alert(error.message || "No fue posible enviar el comprobante.");
                     button.disabled = false;
                     button.textContent = "Enviar comprobante";
+                }
+            }
+        );
+
+        container.querySelector("[data-pay-mercadopago]")?.addEventListener(
+            "click",
+            async (event) => {
+                const button = event.currentTarget;
+                const original = button.textContent;
+                button.disabled = true;
+                button.textContent = "Preparando pago...";
+
+                try {
+                    const orderId = button.dataset.payMercadopago;
+                    const result = await CustomerAuth.createPaymentPreference(orderId);
+                    sessionStorage.setItem(
+                        "mommycrafts_pending_payment",
+                        JSON.stringify({
+                            pedidoId: orderId,
+                            numeroPedido: order.numeroPedido
+                        })
+                    );
+                    location.href = result.checkoutUrl;
+                } catch (error) {
+                    alert(error.message || "No fue posible iniciar el pago.");
+                    button.disabled = false;
+                    button.textContent = original;
                 }
             }
         );
@@ -762,6 +828,7 @@
                     </section>
 
                     ${transferBlock(order)}
+                    ${mercadoPagoBlock(order)}
                 </section>
 
                 <aside>

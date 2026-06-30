@@ -635,3 +635,16 @@
         gap: .8rem 1.4rem;
     }
 }
+
+/* V3.29 · Mercado Pago */
+.customer-mercadopago-card {
+    margin-top: 14px;
+    padding: 16px;
+    border: 1px solid #d8e5ff;
+    border-radius: 16px;
+    background: #f7faff;
+}
+
+.customer-mercadopago-card .customer-mercadopago-pay {
+    margin-top: 10px;
+}

@@ -106,8 +106,8 @@
                 "answer": "Sí. La cuenta permite asociar el pedido al cliente, cargar comprobantes, revisar diseños y consultar el avance de la compra."
             },
             {
-                "question": "¿Cómo se paga mientras Mercado Pago no está disponible?",
-                "answer": "El medio habilitado es la transferencia bancaria. Después de confirmar el pedido, recibirás las instrucciones oficiales y tendrás el plazo indicado para enviar el comprobante."
+                "question": "¿Qué medios de pago están disponibles?",
+                "answer": "Puedes pagar con Mercado Pago cuando aparezca habilitado en el checkout o mediante transferencia bancaria. Mercado Pago confirma automáticamente el resultado; las transferencias requieren enviar un comprobante para revisión."
             },
             {
                 "question": "¿El comprobante confirma automáticamente el pago?",

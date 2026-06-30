@@ -3,6 +3,7 @@
 (function () {
     const STORAGE_KEY = "mommyCraftsCart";
     const SANTIAGO_SHIPPING_COST = 4000;
+    let mercadoPagoAvailable = false;
 
     function formatPrice(value) {
         return new Intl.NumberFormat(CONFIG.locale || "es-CL", {
@@ -870,6 +871,80 @@
         return items;
     }
 
+    function selectedPaymentMethod(form = document.getElementById("form-pedido")) {
+        return form?.querySelector('input[name="pedido-pago"]:checked')?.value || "transferencia";
+    }
+
+    function updatePaymentMethodUI() {
+        const form = document.getElementById("form-pedido");
+        const method = selectedPaymentMethod(form);
+        const note = document.getElementById("payment-method-note");
+        const submitButton = document.getElementById("btn-enviar-pedido");
+
+        document.querySelectorAll(".payment-options label").forEach((label) => {
+            const input = label.querySelector('input[name="pedido-pago"]');
+            label.classList.toggle("is-selected", Boolean(input?.checked));
+        });
+
+        if (note) {
+            note.classList.remove("error");
+
+            if (method === "mercadopago") {
+                note.textContent = mercadoPagoAvailable
+                    ? "Serás redirigido al entorno seguro de Mercado Pago. El pedido se confirmará automáticamente cuando Mercado Pago apruebe el pago."
+                    : "Mercado Pago todavía no está disponible. Selecciona transferencia bancaria.";
+                note.classList.toggle("error", !mercadoPagoAvailable);
+            } else {
+                note.textContent = "El comprobante no confirma el pago automáticamente. Mommy Crafts validará que la transferencia haya sido recibida.";
+            }
+        }
+
+        if (submitButton) {
+            submitButton.innerHTML = method === "mercadopago"
+                ? '<i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Ir a Mercado Pago'
+                : '<i class="fa-solid fa-lock" aria-hidden="true"></i> Confirmar pedido';
+        }
+    }
+
+    async function loadMercadoPagoAvailability() {
+        const option = document.getElementById("payment-option-mercadopago");
+        const input = document.getElementById("pedido-pago-mercadopago");
+        const availability = document.getElementById("mercadopago-availability");
+
+        if (!option || !input || !availability) return;
+
+        try {
+            const status = await API.request(
+                CONFIG.ENDPOINTS?.mercadoPagoEstado || "/pagos/mercadopago/estado",
+                { timeoutMs: 25000 }
+            );
+
+            mercadoPagoAvailable = Boolean(status?.available);
+            input.disabled = !mercadoPagoAvailable;
+            option.classList.toggle("is-disabled", !mercadoPagoAvailable);
+            option.setAttribute("aria-disabled", String(!mercadoPagoAvailable));
+
+            if (mercadoPagoAvailable) {
+                availability.textContent = status.environment === "production"
+                    ? "Paga con tarjetas, saldo u otros medios disponibles."
+                    : "Modo de prueba habilitado. No se realizarán cobros reales.";
+            } else if (status?.configured && !status?.webhookReady) {
+                availability.textContent = "Configuración pendiente de Webhook.";
+            } else {
+                availability.textContent = "Próximamente disponible.";
+            }
+        } catch (error) {
+            mercadoPagoAvailable = false;
+            input.disabled = true;
+            option.classList.add("is-disabled");
+            option.setAttribute("aria-disabled", "true");
+            availability.textContent = "No disponible temporalmente.";
+            console.warn("No se pudo consultar Mercado Pago:", error.message);
+        }
+
+        updatePaymentMethodUI();
+    }
+
     function initCheckout() {
         document.getElementById("btn-open-checkout")?.addEventListener(
             "click",
@@ -886,6 +961,15 @@
             }
         );
         document.getElementById("pedido-tercero")?.addEventListener("change", updateThirdPartyFields);
+
+        document
+            .querySelectorAll('input[name="pedido-pago"]')
+            .forEach((input) => {
+                input.addEventListener("change", updatePaymentMethodUI);
+            });
+
+        loadMercadoPagoAvailability();
+        updatePaymentMethodUI();
 
         document
             .querySelectorAll(
@@ -937,6 +1021,15 @@
                 if (!window.CustomerAuth?.getToken?.()) {
                     alert("Para proteger el comprobante y la aprobación del diseño, inicia sesión antes de confirmar el pedido.");
                     location.href = "acceso.html?modo=login&next=carrito.html";
+                    return;
+                }
+
+                const paymentMethod = String(
+                    formData.get("pedido-pago") || "transferencia"
+                );
+
+                if (paymentMethod === "mercadopago" && !mercadoPagoAvailable) {
+                    alert("Mercado Pago todavía no está disponible. Selecciona transferencia bancaria.");
                     return;
                 }
 
@@ -1082,9 +1175,52 @@
                         JSON.stringify({
                             pedidoId: response.pedidoId,
                             numeroPedido: response.numeroPedido,
-                            venceAt: response.venceAt
+                            venceAt: response.venceAt,
+                            metodoPago: response.metodoPago
                         })
                     );
+
+                    if (paymentMethod === "mercadopago") {
+                        if (submitButton) submitButton.innerHTML = "Preparando Mercado Pago...";
+
+                        try {
+                            const preference = await API.request(
+                                `/pagos/mercadopago/pedidos/${encodeURIComponent(response.pedidoId)}/preferencia`,
+                                {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: "{}",
+                                    timeoutMs: 70000
+                                }
+                            );
+
+                            sessionStorage.setItem(
+                                "mommycrafts_pending_payment",
+                                JSON.stringify({
+                                    pedidoId: response.pedidoId,
+                                    numeroPedido: response.numeroPedido
+                                })
+                            );
+
+                            clear();
+                            closeCheckout();
+                            form.reset();
+                            window.location.href = preference.checkoutUrl;
+                            return;
+                        } catch (paymentError) {
+                            clear();
+                            closeCheckout();
+                            form.reset();
+                            alert(
+                                paymentError.message ||
+                                "El pedido quedó guardado, pero no fue posible abrir Mercado Pago. Puedes reintentar desde el detalle del pedido."
+                            );
+                            window.location.href = `pedido.html?id=${encodeURIComponent(response.pedidoId)}`;
+                            return;
+                        }
+                    }
 
                     clear();
                     closeCheckout();
@@ -1099,10 +1235,7 @@
                 } finally {
                     if (submitButton) {
                         submitButton.disabled = false;
-                        submitButton.innerHTML =
-                            submitButton.dataset
-                                .originalText ||
-                            "Finalizar pedido";
+                        updatePaymentMethodUI();
                     }
                 }
             }

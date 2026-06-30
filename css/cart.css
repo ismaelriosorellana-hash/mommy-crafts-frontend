@@ -534,3 +534,19 @@
         border-radius: 1.6rem;
     }
 }
+
+/* V3.29 · Mercado Pago Checkout Pro */
+.payment-options label strong i {
+    margin-right: .35rem;
+}
+
+@media (min-width: 760px) {
+    .payment-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch;
+    }
+
+    .payment-options label {
+        min-height: 88px;
+    }
+}
