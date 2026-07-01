@@ -52,6 +52,12 @@
             label: "Apariencia",
             href: "apariencia.html",
             icon: "fa-palette"
+        },
+        {
+            id: "studio",
+            label: "Editor del sitio",
+            href: "editor-sitio.html",
+            icon: "fa-layer-group"
         }
     ];
 
@@ -277,6 +283,38 @@
         );
     }
 
+    function renderNavigation(items, activePage) {
+        const nav = document.querySelector(".admin-nav");
+        if (!nav) return;
+        nav.innerHTML = items
+            .filter((item) => item.enabled !== false)
+            .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
+            .map((item) => `
+                <a
+                    href="${escapeHtml(item.href)}"
+                    class="${item.id === activePage ? "active" : ""}"
+                >
+                    <i class="fa-solid ${escapeHtml(item.icon || "fa-link")}" aria-hidden="true"></i>
+                    <span>${escapeHtml(item.label)}</span>
+                </a>
+            `).join("");
+    }
+
+    async function applyAdminStudio() {
+        try {
+            const result = await AdminAPI.request("/admin/estudio-sitio");
+            const studio = result.studio || result;
+            const panel = studio.adminPanel || {};
+            document.documentElement.style.setProperty("--admin-primary", panel.accentColor || "#8E456A");
+            document.documentElement.style.setProperty("--admin-sidebar-background", panel.sidebarBackground || "#2F2930");
+            document.documentElement.style.setProperty("--admin-sidebar-text", panel.sidebarText || "#FFFFFF");
+            const activePage = document.body.dataset.adminPage || "dashboard";
+            renderNavigation(Array.isArray(panel.items) && panel.items.length ? panel.items : pages.map((item, index) => ({ ...item, enabled: true, order: (index + 1) * 10 })), activePage);
+        } catch (error) {
+            console.warn("No fue posible aplicar la configuración del panel:", error);
+        }
+    }
+
     function renderShell() {
         const page =
             document.body.dataset.adminPage ||
@@ -462,6 +500,7 @@
 
         renderShell();
         bindModalClosers();
+        await applyAdminStudio();
 
         document.dispatchEvent(
             new CustomEvent(

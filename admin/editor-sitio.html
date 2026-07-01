@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editor del sitio | Mommy Crafts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../css/main.css?v=3.31.0">
+    <link rel="stylesheet" href="css/admin.css?v=3.31.0">
+    <link rel="stylesheet" href="css/admin-experience-v327.css?v=3.31.0">
+    <link rel="stylesheet" href="css/site-studio-admin.css?v=3.31.0">
+</head>
+<body data-admin-page="studio" data-admin-title="Editor del sitio">
+    <div id="admin-page-content">
+        <section class="admin-card">
+            <div class="studio-admin-toolbar">
+                <div>
+                    <p class="admin-eyebrow">CMS visual Mommy Crafts</p>
+                    <h2>Controla páginas, bloques y componentes</h2>
+                    <p>Los cambios se guardan en MongoDB y se aplican sin publicar una nueva versión del frontend.</p>
+                </div>
+                <div class="admin-actions">
+                    <button class="admin-button secondary" id="studio-reset" type="button">
+                        <i class="fa-solid fa-rotate-left"></i> Restaurar
+                    </button>
+                    <button class="admin-button primary" id="studio-save-top" type="button">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar todo
+                    </button>
+                </div>
+            </div>
+            <div id="studio-message" class="admin-message" hidden></div>
+        </section>
+
+        <div class="studio-admin-tabs" role="tablist" aria-label="Secciones del editor">
+            <button class="active" type="button" data-studio-tab="pages">Páginas y bloques</button>
+            <button type="button" data-studio-tab="global">Diseño global</button>
+            <button type="button" data-studio-tab="navigation">Menú y pie</button>
+            <button type="button" data-studio-tab="admin">Panel administrador</button>
+        </div>
+
+        <section class="studio-tab-panel" data-studio-panel="pages">
+            <section class="admin-card">
+                <div class="studio-admin-toolbar">
+                    <label class="admin-field" style="min-width:min(100%,360px)">
+                        <span>Página que deseas editar</span>
+                        <select id="studio-page-select"></select>
+                    </label>
+                    <div class="admin-actions">
+                        <button class="admin-button secondary" id="studio-add-page" type="button">
+                            <i class="fa-solid fa-file-circle-plus"></i> Nueva página
+                        </button>
+                        <button class="admin-button secondary" id="studio-preview-page" type="button">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir página
+                        </button>
+                        <button class="admin-button danger" id="studio-delete-page" type="button" hidden>
+                            <i class="fa-solid fa-trash"></i> Eliminar página
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-card">
+                <div class="admin-card-header"><div><h2>Configuración de la página</h2><p>Nombre, SEO, visibilidad y dimensiones.</p></div></div>
+                <div class="studio-page-grid">
+                    <label class="admin-field"><span>Nombre interno</span><input id="studio-page-label" maxlength="160"></label>
+                    <label class="admin-field"><span>Ruta pública</span><input id="studio-page-path" readonly></label>
+                    <label class="admin-field studio-field-wide"><span>Título SEO</span><input id="studio-page-seo-title" maxlength="180"></label>
+                    <label class="admin-field studio-field-wide"><span>Descripción SEO</span><textarea id="studio-page-seo-description" maxlength="320" rows="3"></textarea></label>
+                    <label class="admin-field"><span>Ancho máximo (px)</span><input id="studio-page-max-width" type="number" min="720" max="1800"></label>
+                    <label class="admin-field"><span>Margen lateral (px)</span><input id="studio-page-padding" type="number" min="0" max="80"></label>
+                    <label class="admin-field"><span>Separación entre bloques (px)</span><input id="studio-page-gap" type="number" min="0" max="140"></label>
+                    <label class="admin-field"><span>Fondo</span><input id="studio-page-background" type="color"></label>
+                    <label class="studio-inline-check studio-field-wide"><input id="studio-page-enabled" type="checkbox"> <span>Mostrar esta página públicamente</span></label>
+                </div>
+            </section>
+
+            <section class="admin-card">
+                <div class="admin-card-header">
+                    <div><h2>Secciones de la página</h2><p>Contrae, reordena, oculta o personaliza cada bloque.</p></div>
+                </div>
+                <div class="studio-sections-list" id="studio-sections-list"></div>
+                <div class="studio-block-add" style="margin-top:18px">
+                    <label class="admin-field"><span>Nuevo bloque</span>
+                        <select id="studio-new-block-type">
+                            <option value="hero">Banner o hero</option>
+                            <option value="richText">Texto enriquecido</option>
+                            <option value="imageText">Imagen y texto</option>
+                            <option value="cta">Llamado a la acción</option>
+                            <option value="notice">Aviso destacado</option>
+                            <option value="productGrid">Grilla de productos</option>
+                            <option value="categoryLinks">Enlaces de categorías</option>
+                            <option value="spacer">Espaciador</option>
+                            <option value="divider">Separador</option>
+                        </select>
+                    </label>
+                    <button class="admin-button secondary" id="studio-add-block" type="button"><i class="fa-solid fa-plus"></i> Agregar bloque</button>
+                </div>
+                <p class="studio-limit-note">Los bloques no permiten JavaScript ni HTML libre. Esto protege la tienda y evita que una edición visual rompa pagos, carrito, sesiones o pedidos.</p>
+            </section>
+        </section>
+
+        <section class="studio-tab-panel" data-studio-panel="global" hidden>
+            <section class="admin-card">
+                <div class="admin-card-header"><div><h2>Componentes globales</h2><p>Estos valores se aplican a toda la tienda.</p></div></div>
+                <div class="studio-settings-grid">
+                    <label class="admin-field"><span>Ancho general (px)</span><input id="studio-global-width" type="number" min="720" max="1800"></label>
+                    <label class="admin-field"><span>Borde de botones (px)</span><input id="studio-button-radius" type="number" min="0" max="40"></label>
+                    <label class="admin-field"><span>Altura de botones (px)</span><input id="studio-button-height" type="number" min="34" max="72"></label>
+                    <label class="admin-field"><span>Tamaño texto botones (px)</span><input id="studio-button-font" type="number" min="11" max="24"></label>
+                    <label class="admin-field"><span>Borde de tarjetas (px)</span><input id="studio-card-radius" type="number" min="0" max="60"></label>
+                    <label class="admin-field"><span>Sombra de tarjetas</span><select id="studio-card-shadow"><option value="none">Sin sombra</option><option value="soft">Suave</option><option value="medium">Media</option><option value="strong">Marcada</option></select></label>
+                    <label class="admin-field"><span>Ancho máximo de ventanas (px)</span><input id="studio-modal-width" type="number" min="520" max="1600"></label>
+                    <label class="admin-field"><span>Borde de ventanas (px)</span><input id="studio-modal-radius" type="number" min="0" max="60"></label>
+                    <label class="admin-field"><span>Oscuridad detrás de ventanas</span><input id="studio-modal-overlay" type="number" min="0.2" max="0.95" step="0.01"></label>
+                    <label class="admin-field"><span>Escala de títulos</span><input id="studio-heading-scale" type="number" min="0.75" max="1.5" step="0.05"></label>
+                    <label class="admin-field"><span>Escala de texto</span><input id="studio-body-scale" type="number" min="0.8" max="1.3" step="0.05"></label>
+                    <label class="studio-inline-check"><input id="studio-header-sticky" type="checkbox"> <span>Encabezado fijo al desplazarse</span></label>
+                </div>
+            </section>
+        </section>
+
+        <section class="studio-tab-panel" data-studio-panel="navigation" hidden>
+            <section class="admin-card">
+                <div class="admin-card-header"><div><h2>Menú principal</h2><p>Edita textos, destinos, orden y visibilidad.</p></div><button class="admin-button secondary small" id="studio-add-nav" type="button"><i class="fa-solid fa-plus"></i> Enlace</button></div>
+                <div class="studio-repeat-list" id="studio-nav-list"></div>
+            </section>
+            <section class="admin-card">
+                <div class="admin-card-header"><div><h2>Pie de página</h2><p>Información, enlaces y newsletter.</p></div></div>
+                <div class="studio-settings-grid">
+                    <label class="admin-field"><span>Título</span><input id="studio-footer-heading" maxlength="160"></label>
+                    <label class="studio-inline-check"><input id="studio-footer-enabled" type="checkbox"> <span>Mostrar pie de página</span></label>
+                    <label class="admin-field studio-field-wide"><span>Descripción</span><textarea id="studio-footer-description" rows="3" maxlength="1200"></textarea></label>
+                    <label class="admin-field studio-field-wide"><span>Texto legal</span><input id="studio-footer-copyright" maxlength="300"></label>
+                    <label class="studio-inline-check studio-field-wide"><input id="studio-footer-newsletter" type="checkbox"> <span>Mostrar bloque de novedades</span></label>
+                </div>
+                <div class="admin-card-header" style="margin-top:18px"><div><h3>Enlaces del pie</h3></div><button class="admin-button secondary small" id="studio-add-footer-link" type="button"><i class="fa-solid fa-plus"></i> Enlace</button></div>
+                <div class="studio-repeat-list" id="studio-footer-links"></div>
+            </section>
+        </section>
+
+        <section class="studio-tab-panel" data-studio-panel="admin" hidden>
+            <section class="admin-card">
+                <div class="admin-card-header"><div><h2>Diseño del panel</h2><p>Personaliza el panel sin alterar su seguridad.</p></div></div>
+                <div class="studio-settings-grid">
+                    <label class="admin-field"><span>Color principal</span><input id="studio-admin-accent" type="color"></label>
+                    <label class="admin-field"><span>Fondo del menú</span><input id="studio-admin-sidebar" type="color"></label>
+                    <label class="admin-field"><span>Texto del menú</span><input id="studio-admin-text" type="color"></label>
+                </div>
+            </section>
+            <section class="admin-card">
+                <div class="admin-card-header"><div><h2>Secciones del panel</h2><p>Puedes cambiar nombres, ordenar, ocultar y agregar enlaces. Crear una función administrativa nueva sigue requiriendo programación segura del backend.</p></div><button class="admin-button secondary small" id="studio-add-admin-link" type="button"><i class="fa-solid fa-plus"></i> Enlace personalizado</button></div>
+                <div class="studio-repeat-list" id="studio-admin-list"></div>
+            </section>
+        </section>
+
+        <div class="studio-sticky-actions">
+            <button class="admin-button primary" id="studio-save-bottom" type="button"><i class="fa-solid fa-floppy-disk"></i> Guardar editor del sitio</button>
+        </div>
+    </div>
+
+    <script src="../js/config.js?v=3.31.0"></script>
+    <script src="js/admin-api.js?v=3.31.0"></script>
+    <script src="js/admin-common.js?v=3.31.0"></script>
+    <script src="js/site-studio-admin.js?v=3.31.0"></script>
+</body>
+</html>

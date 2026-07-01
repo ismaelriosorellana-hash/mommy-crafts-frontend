@@ -859,6 +859,13 @@ function initSeasonFlyout() {
     }
 
     document.addEventListener(
+        "studio:navigation-applied",
+        () => {
+            loadGlobalData();
+        }
+    );
+
+    document.addEventListener(
         "DOMContentLoaded",
         () => {
             initMobileMenu();

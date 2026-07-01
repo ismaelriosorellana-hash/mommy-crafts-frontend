@@ -1136,3 +1136,13 @@ body {
 .site-announcement-preview a { font-weight:700; text-decoration:underline; }
 .site-announcement-preview i { font-size:.35rem; opacity:.55; }
 @media(max-width:760px){ .announcement-admin-item{grid-template-columns:1fr}.announcement-admin-item .admin-icon-button{justify-self:end} }
+
+/* Editor del sitio V3.31 */
+:root {
+    --admin-sidebar-background: #2F2930;
+    --admin-sidebar-text: #FFFFFF;
+}
+.admin-sidebar { background: var(--admin-sidebar-background, #2F2930); color: var(--admin-sidebar-text, #FFFFFF); }
+.admin-sidebar a,
+.admin-sidebar span,
+.admin-sidebar strong { color: inherit; }
