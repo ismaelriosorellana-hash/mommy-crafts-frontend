@@ -1,19 +1,22 @@
-# Editor visual Mommy Crafts
+# Editor visual de Mommy Crafts
 
-## Qué se administra sin modificar código
+La sección `admin/editor-sitio.html` permite administrar sin modificar archivos:
 
-- Navegación principal y pie de página.
-- Páginas públicas y páginas nuevas por slug.
-- Orden, visibilidad, textos, botones y enlaces de las secciones compatibles.
-- Bloques de texto, imagen, llamados a la acción, avisos, categorías y productos.
-- Anchos, radios, sombras, tamaños generales y comportamiento del encabezado.
-- Logo, título, paleta funcional y cinta superior desde Apariencia.
+- Páginas principales y páginas personalizadas.
+- Visibilidad, SEO, fondos, anchos y separaciones.
+- Orden y contenido de secciones.
+- Bloques nuevos de texto, imágenes, CTA, avisos, productos y categorías.
+- Menú principal y pie de página.
+- Estilos globales de botones, tarjetas y ventanas.
+- Apariencia y orden del menú administrador.
 
-## Tema Boutique lúdica V3.32
+## Responsabilidades de otras secciones
 
-El nuevo tema es una capa visual sobre la estructura funcional existente. El Editor del sitio continúa controlando los contenidos y el orden de sus bloques, mientras que Apariencia mantiene el control de logo, colores funcionales y cinta superior.
-
-Algunos detalles decorativos propios del tema —formas, composiciones del banner y animaciones— permanecen protegidos en CSS y JavaScript para evitar que una configuración incorrecta rompa la tienda.
+- **Productos:** productos, precios, stock, tallas, imágenes y personalización.
+- **Banners:** carrusel principal.
+- **Contenido:** textos legales, contacto, preguntas frecuentes y páginas informativas estructuradas.
+- **Apariencia:** logotipo, título, paleta y cinta superior.
+- **Editor del sitio:** composición, orden, páginas nuevas, navegación y diseño de componentes.
 
 ## Límite de seguridad
 
