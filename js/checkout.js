@@ -328,7 +328,11 @@
     async function submitOrder(event) {
         event.preventDefault();
         const form = event.currentTarget;
-        const submitButton = form.querySelector('[type="submit"]');
+        // El botón de confirmación vive en la columna de resumen y está asociado
+        // al formulario mediante form="form-pedido", por lo que no es descendiente
+        // directo de <form>. Buscarlo primero por su id evita obtener null.
+        const submitButton = document.getElementById("btn-enviar-pedido")
+            || form.querySelector('[type="submit"]');
         const formData = new FormData(form);
         const items = read();
         if (!items.length) { window.location.href = "carrito.html"; return; }
@@ -382,7 +386,7 @@
             }));
 
             if (paymentMethod === "mercadopago") {
-                submitButton.innerHTML = "Preparando Mercado Pago...";
+                if (submitButton) submitButton.innerHTML = "Preparando Mercado Pago...";
                 try {
                     const preference = await API.request(`/pagos/mercadopago/pedidos/${encodeURIComponent(response.pedidoId)}/preferencia`, {
                         method: "POST", headers: { "Content-Type": "application/json" }, body: "{}", timeoutMs: 70000
