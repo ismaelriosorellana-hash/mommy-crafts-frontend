@@ -1996,3 +1996,9 @@ body {
 .footer .copyright {
     color: var(--color-footer-text);
 }
+
+/* V3.30 · cinta superior administrable */
+.promo-banner { background: var(--color-primary-deep); color:#fff; }
+.promo-banner-track { animation-duration:var(--promo-duration,22s)!important; }
+.promo-banner-text { color:inherit; text-decoration:none; transition:opacity .2s ease; }
+a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-decoration:underline; text-underline-offset:.25rem; }

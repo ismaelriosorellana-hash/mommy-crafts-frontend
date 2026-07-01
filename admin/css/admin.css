@@ -1122,3 +1122,17 @@ body {
 }
 .admin-order-accordion > .order-products-list,
 .admin-order-accordion > .admin-form-grid { padding: 1rem; }
+
+/* V3.30 · administración de cinta superior */
+.site-toggle-field { display:flex!important; align-items:center; flex-direction:row!important; gap:1rem; }
+.site-toggle-field input { width:2rem!important; height:2rem; }
+.announcement-admin-heading { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin:2rem 0 1rem; }
+.announcement-admin-heading div { display:grid; gap:.25rem; }
+.announcement-admin-heading small { color:var(--admin-text-soft); }
+.announcement-admin-list { display:grid; gap:1rem; }
+.announcement-admin-item { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; align-items:end; gap:1rem; padding:1.2rem; border:1px solid var(--admin-border); border-radius:1.2rem; background:var(--admin-surface-soft); }
+.site-announcement-preview { overflow:hidden; padding:.8rem 1.2rem; font-size:1rem; white-space:nowrap; }
+.site-announcement-preview > div { display:flex; align-items:center; justify-content:center; gap:1.5rem; }
+.site-announcement-preview a { font-weight:700; text-decoration:underline; }
+.site-announcement-preview i { font-size:.35rem; opacity:.55; }
+@media(max-width:760px){ .announcement-admin-item{grid-template-columns:1fr}.announcement-admin-item .admin-icon-button{justify-self:end} }

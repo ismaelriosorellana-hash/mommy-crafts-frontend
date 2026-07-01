@@ -23,6 +23,17 @@
                 gap: 10
             }
         },
+        announcementBar: {
+            enabled: true,
+            speedSeconds: 22,
+            backgroundColor: "#71364F",
+            textColor: "#FFFFFF",
+            linkColor: "#FFFFFF",
+            items: [
+                { text: "Envío gratis dentro de Santiago por compras desde $25.000", url: "despachos-retiros.html" },
+                { text: "Productos personalizados para cada ocasión", url: "catalogo.html" }
+            ]
+        },
         colors: {
             primary: "#FCC0E6",
             primaryDark: "#8E456A",
@@ -88,7 +99,14 @@
                 logo: { ...defaults.branding.logo, ...(value.branding?.logo || {}) },
                 title: { ...defaults.branding.title, ...(value.branding?.title || {}) }
             },
-            colors: { ...defaults.colors, ...(value.colors || {}) }
+            colors: { ...defaults.colors, ...(value.colors || {}) },
+            announcementBar: {
+                ...defaults.announcementBar,
+                ...(value.announcementBar || {}),
+                items: Array.isArray(value.announcementBar?.items)
+                    ? value.announcementBar.items.map((item) => ({ ...item }))
+                    : defaults.announcementBar.items.map((item) => ({ ...item }))
+            }
         };
     }
 
@@ -113,6 +131,42 @@
         if (output) output.textContent = `${value}${suffix}`;
     }
 
+    function renderAnnouncementItems() {
+        const container = $("#announcement-items");
+        if (!container) return;
+        const items = state.settings.announcementBar.items || [];
+        container.innerHTML = items.map((item, index) => `
+            <div class="announcement-admin-item" data-announcement-index="${index}">
+                <label class="admin-field">
+                    <span>Texto ${index + 1}</span>
+                    <input type="text" data-announcement-text maxlength="240" value="${AdminUI.escapeHtml(item.text || "")}">
+                </label>
+                <label class="admin-field">
+                    <span>Enlace opcional</span>
+                    <input type="text" data-announcement-url maxlength="1000" placeholder="catalogo.html o https://..." value="${AdminUI.escapeHtml(item.url || "")}">
+                </label>
+                <button class="admin-icon-button danger" data-announcement-remove type="button" aria-label="Eliminar mensaje ${index + 1}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        `).join("");
+    }
+
+    function announcementItemsFromForm() {
+        return [...document.querySelectorAll("[data-announcement-index]")].map((row) => ({
+            text: row.querySelector("[data-announcement-text]")?.value.trim() || "",
+            url: row.querySelector("[data-announcement-url]")?.value.trim() || ""
+        })).filter((item) => item.text);
+    }
+
+    function setColorPair(pickerId, textId, value) {
+        const color = value || "#FFFFFF";
+        const picker = $(`#${pickerId}`);
+        const text = $(`#${textId}`);
+        if (picker) picker.value = color;
+        if (text) text.value = color.toUpperCase();
+    }
+
     function renderForm() {
         const { logo, title } = state.settings.branding;
         $("#site-logo-alt").value = logo.alt || "";
@@ -127,6 +181,14 @@
         setRange("site-title-x", title.offsetX);
         setRange("site-title-y", title.offsetY);
         setRange("site-title-gap", title.gap);
+
+        const announcement = state.settings.announcementBar;
+        $("#announcement-enabled").checked = announcement.enabled !== false;
+        setRange("announcement-speed", announcement.speedSeconds, "s");
+        setColorPair("announcement-background", "announcement-background-text", announcement.backgroundColor);
+        setColorPair("announcement-text-color", "announcement-text-color-text", announcement.textColor);
+        setColorPair("announcement-link-color", "announcement-link-color-text", announcement.linkColor);
+        renderAnnouncementItems();
 
         for (const [key] of COLOR_FIELDS) {
             const color = state.settings.colors[key] || DEFAULTS.colors[key];
@@ -170,6 +232,15 @@
                     gap: valueNumber("site-title-gap")
                 }
             },
+            announcementBar: {
+                ...state.settings.announcementBar,
+                enabled: $("#announcement-enabled")?.checked !== false,
+                speedSeconds: valueNumber("announcement-speed"),
+                backgroundColor: ($("#announcement-background-text")?.value || DEFAULTS.announcementBar.backgroundColor).toUpperCase(),
+                textColor: ($("#announcement-text-color-text")?.value || DEFAULTS.announcementBar.textColor).toUpperCase(),
+                linkColor: ($("#announcement-link-color-text")?.value || DEFAULTS.announcementBar.linkColor).toUpperCase(),
+                items: announcementItemsFromForm()
+            },
             colors
         };
     }
@@ -184,12 +255,25 @@
         const current = collect();
         const { logo, title } = current.branding;
         const colors = current.colors;
+        const announcement = current.announcementBar;
         const root = $("#site-brand-preview");
         const brand = $("#site-brand-preview-brand");
         const logoImage = $("#site-preview-logo");
         const titleImage = $("#site-preview-title-image");
         const titleText = $("#site-preview-title-text");
         if (!root || !brand || !logoImage || !titleImage || !titleText) return;
+
+        const announcementPreview = $("#site-announcement-preview");
+        const announcementTrack = $("#site-announcement-preview-track");
+        if (announcementPreview && announcementTrack) {
+            announcementPreview.hidden = announcement.enabled === false;
+            announcementPreview.style.background = announcement.backgroundColor;
+            announcementPreview.style.color = announcement.textColor;
+            announcementTrack.innerHTML = (announcement.items || []).map((item) => item.url
+                ? `<a href="#" style="color:${announcement.linkColor}">${AdminUI.escapeHtml(item.text)}</a>`
+                : `<span>${AdminUI.escapeHtml(item.text)}</span>`
+            ).join('<i class="fa-solid fa-circle"></i>');
+        }
 
         root.style.setProperty("--preview-primary", colors.primary);
         root.style.setProperty("--preview-primary-dark", colors.primaryDark);
@@ -270,7 +354,7 @@
             state.customized = true;
             renderForm();
             setStatus(result.settings, true);
-            message("La identidad y los colores ya están publicados.", "success");
+            message("La identidad, la cinta y los colores ya están publicados.", "success");
             AdminUI.toast("Apariencia guardada.", "success");
         } catch (error) {
             message(error.message, "danger");
@@ -300,7 +384,7 @@
         document.querySelectorAll('input[type="range"]').forEach((input) => {
             input.addEventListener("input", () => {
                 const output = $(`#${input.id}-output`);
-                if (output) output.textContent = `${input.value}px`;
+                if (output) output.textContent = `${input.value}${input.id === "announcement-speed" ? "s" : "px"}`;
                 updatePreview();
             });
         });
@@ -324,6 +408,48 @@
                 if (picker) picker.value = event.target.value;
                 updatePreview();
             }
+        });
+
+        $("#announcement-enabled")?.addEventListener("change", updatePreview);
+        [
+            ["announcement-background", "announcement-background-text"],
+            ["announcement-text-color", "announcement-text-color-text"],
+            ["announcement-link-color", "announcement-link-color-text"]
+        ].forEach(([pickerId, textId]) => {
+            $(`#${pickerId}`)?.addEventListener("input", (event) => {
+                $(`#${textId}`).value = event.target.value.toUpperCase();
+                updatePreview();
+            });
+            $(`#${textId}`)?.addEventListener("input", (event) => {
+                if (/^#[0-9a-f]{6}$/i.test(event.target.value)) {
+                    $(`#${pickerId}`).value = event.target.value;
+                    updatePreview();
+                }
+            });
+        });
+        $("#announcement-add-item")?.addEventListener("click", () => {
+            state.settings = mergeSettings(collect());
+            if (state.settings.announcementBar.items.length >= 12) {
+                AdminUI.toast("La cinta permite hasta 12 mensajes.", "error");
+                return;
+            }
+            state.settings.announcementBar.items.push({ text: "Nuevo mensaje", url: "" });
+            renderAnnouncementItems();
+            updatePreview();
+        });
+        $("#announcement-items")?.addEventListener("input", updatePreview);
+        $("#announcement-items")?.addEventListener("click", (event) => {
+            const button = event.target.closest("[data-announcement-remove]");
+            if (!button) return;
+            state.settings = mergeSettings(collect());
+            const index = Number(button.closest("[data-announcement-index]")?.dataset.announcementIndex);
+            if (state.settings.announcementBar.items.length <= 1) {
+                AdminUI.toast("Debe quedar al menos un mensaje.", "error");
+                return;
+            }
+            state.settings.announcementBar.items.splice(index, 1);
+            renderAnnouncementItems();
+            updatePreview();
         });
 
         $("#site-logo-default")?.addEventListener("click", () => {

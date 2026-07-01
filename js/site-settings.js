@@ -82,8 +82,64 @@
         }
     }
 
+
+    function safeAnnouncementUrl(value) {
+        const url = String(value || "").trim();
+        if (!url) return "";
+        if (/^https:\/\//i.test(url) || /^(\/|\.\/|\.\.\/|[a-z0-9_-]+\.html(?:[?#].*)?$)/i.test(url)) return url;
+        return "";
+    }
+
+    function createAnnouncementItem(item, linkColor) {
+        const text = String(item?.text || "").trim();
+        if (!text) return null;
+        const url = safeAnnouncementUrl(item?.url);
+        const element = document.createElement(url ? "a" : "span");
+        element.className = "promo-banner-text";
+        element.textContent = text;
+        if (url) {
+            element.href = url;
+            element.style.color = linkColor;
+            if (/^https:\/\//i.test(url)) {
+                element.target = "_blank";
+                element.rel = "noopener noreferrer";
+            }
+        }
+        return element;
+    }
+
+    function applyAnnouncementBar(settings) {
+        const config = settings?.announcementBar || {};
+        const items = Array.isArray(config.items) ? config.items.filter((item) => String(item?.text || "").trim()) : [];
+        document.querySelectorAll(".promo-banner").forEach((banner) => {
+            banner.hidden = config.enabled === false || items.length === 0;
+            if (banner.hidden) return;
+            banner.style.background = config.backgroundColor || "#71364F";
+            banner.style.color = config.textColor || "#FFFFFF";
+            banner.style.setProperty("--promo-duration", `${Math.max(6, Number(config.speedSeconds) || 22)}s`);
+            let track = banner.querySelector(".promo-banner-track");
+            if (!track) {
+                track = document.createElement("div");
+                track.className = "promo-banner-track";
+                banner.appendChild(track);
+            }
+            track.replaceChildren();
+            for (let copy = 0; copy < 2; copy += 1) {
+                const loop = document.createElement("div");
+                loop.className = "promo-banner-loop";
+                if (copy === 1) loop.setAttribute("aria-hidden", "true");
+                items.forEach((item) => {
+                    const node = createAnnouncementItem(item, config.linkColor || config.textColor || "#FFFFFF");
+                    if (node) loop.appendChild(node);
+                });
+                track.appendChild(loop);
+            }
+        });
+    }
+
     function apply(settings) {
         const colors = settings?.colors || {};
+        applyAnnouncementBar(settings);
         for (const [key, variable] of Object.entries(CSS_VARIABLES)) {
             if (colors[key]) document.documentElement.style.setProperty(variable, colors[key]);
         }
