@@ -39,6 +39,7 @@
         return {
             lineId: item?.lineId || item?.cartItemId || `${productId || "item"}::${customizationKey || index}`,
             productId,
+            productSlug: String(item?.productSlug ?? item?.slug ?? product?.slug ?? ""),
             name: item?.name ?? item?.nombre ?? product?.nombre ?? "Producto",
             price: Number(item?.price ?? item?.precio ?? product?.precio ?? 0) || 0,
             image: item?.image ?? item?.imagenPrincipal ?? item?.imagenes?.[0] ?? product?.imagenPrincipal ?? product?.imagenes?.[0] ?? CONFIG.placeholderImage,
@@ -80,6 +81,7 @@
             items.push({
                 lineId: window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
                 productId: product.id,
+                productSlug: product.slug || "",
                 name: product.nombre,
                 price: product.precio,
                 image: product.imagenPrincipal,
@@ -163,10 +165,17 @@
         const itemTotal = fragment.querySelector(".cart-item-total");
 
         article.dataset.lineId = item.lineId;
-        const variantParam = item.customization?.variantId ? `&variante=${encodeURIComponent(item.customization.variantId)}` : "";
         const selectedSize = item.customization?.talla || item.customization?.size || "";
-        const sizeParam = selectedSize ? `&talla=${encodeURIComponent(selectedSize)}` : "";
-        const detailUrl = `producto.html?id=${encodeURIComponent(item.productId)}${variantParam}${sizeParam}`;
+        const detailUrl = window.ProductLinks.detail(
+            {
+                id: item.productId,
+                slug: item.productSlug
+            },
+            {
+                variantId: item.customization?.variantId || "",
+                size: selectedSize
+            }
+        );
         imageLink.href = detailUrl;
         nameLink.href = detailUrl;
         image.src = getDisplayImage(item);

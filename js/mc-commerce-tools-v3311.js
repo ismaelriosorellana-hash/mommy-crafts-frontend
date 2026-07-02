@@ -466,7 +466,7 @@
         document.getElementById("mc-quick-view-title").textContent = product.nombre;
         document.getElementById("mc-quick-view-review").innerHTML = reviewMarkup(product);
         document.getElementById("mc-quick-view-description").textContent = product.descripcion || "Sin descripción disponible.";
-        document.getElementById("mc-quick-view-full-link").href = `producto.html?id=${encodeURIComponent(product.id)}`;
+        document.getElementById("mc-quick-view-full-link").href = window.ProductLinks.detail(product);
         document.getElementById("mc-quick-view-quantity").value = "1";
 
         const colorSection = document.getElementById("mc-quick-view-colors");
@@ -690,7 +690,7 @@
                     <button class="mc-compare-remove" type="button" data-mc-compare-remove="${escapeHtml(product.id)}" aria-label="Quitar ${escapeHtml(product.nombre)}">
                         <i class="fa-solid fa-xmark" aria-hidden="true"></i>
                     </button>
-                    <a href="producto.html?id=${encodeURIComponent(product.id)}">
+                    <a href="${window.ProductLinks.detail(product)}">
                         <img class="mc-compare-image" src="${escapeHtml(product.imagenPrincipal || CONFIG.placeholderImage)}" alt="${escapeHtml(product.nombre)}" />
                     </a>
                     <p class="mc-compare-category">${escapeHtml(product.categoria || "Producto")}</p>
@@ -707,7 +707,7 @@
                             <i class="fa-regular fa-eye" aria-hidden="true"></i>
                             Vista rápida
                         </button>
-                        <a class="btn-primary" href="producto.html?id=${encodeURIComponent(product.id)}">Ver producto</a>
+                        <a class="btn-primary" href="${window.ProductLinks.detail(product)}">Ver producto</a>
                     </div>
                 </article>
             `;

@@ -582,6 +582,8 @@ function normalizeVariants(rawProduct, defaultImage, defaultImages = []) {
 
         return {
             id: stringValue(rawProduct._id ?? rawProduct.id),
+            slug: stringValue(rawProduct.slug),
+            sku: stringValue(rawProduct.sku),
             nombre: stringValue(rawProduct.nombre, "Producto sin nombre"),
             precio: numberValue(rawProduct.precio),
             precioOriginal: numberValue(rawProduct.precioOriginal),
@@ -1220,13 +1222,15 @@ function createProductCard(product) {
     let activeSize = "";
 
     function updateCardLink() {
-        const variantParam = activeVariant?.selectable
-            ? `&variante=${encodeURIComponent(activeVariant.id)}`
-            : "";
-        const sizeParam = activeSize
-            ? `&talla=${encodeURIComponent(activeSize)}`
-            : "";
-        link.href = `producto.html?id=${encodeURIComponent(product.id)}${variantParam}${sizeParam}`;
+        link.href = window.ProductLinks.detail(
+            product,
+            {
+                variantId: activeVariant?.selectable
+                    ? activeVariant.id
+                    : "",
+                size: activeSize
+            }
+        );
     }
 
     function updateCardVariant(variant) {
@@ -2171,19 +2175,48 @@ function setDetailImage(
         ].slice(0, limit);
     }
 
-    function renderRelatedProducts(
+    async function renderRelatedProducts(
         currentProduct
     ) {
-        renderProducts(
-            document.getElementById(
-                "related-products"
-            ),
-            getRelatedProducts(
-                currentProduct,
-                5
-            ),
-            "Todavía no hay productos relacionados."
+        const container = document.getElementById(
+            "related-products"
         );
+
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="loading-products" role="status">
+                Buscando productos relacionados…
+            </div>
+        `;
+
+        try {
+            const rawProducts = await API.obtenerProductosRelacionados(
+                currentProduct.id,
+                5
+            );
+
+            const related = rawProducts
+                .map(normalizeProduct)
+                .filter((product) => product.id && product.activo);
+
+            renderProducts(
+                container,
+                related,
+                "Todavía no hay productos relacionados."
+            );
+        } catch (error) {
+            console.warn(
+                "No fue posible cargar relacionados desde la API:",
+                error
+            );
+
+            renderProducts(
+                container,
+                getRelatedProducts(currentProduct, 5),
+                "Todavía no hay productos relacionados."
+            );
+        }
     }
 
 
@@ -2847,15 +2880,17 @@ function renderSizeSelector(product) {
     async function initProductPage(
         force = false
     ) {
+        void force;
+
         const params =
             new URLSearchParams(
                 window.location.search
             );
 
-        const productId =
-            params.get("id");
+        const productSlug = params.get("slug");
+        const productId = params.get("id");
 
-        if (!productId) {
+        if (!productSlug && !productId) {
             document.getElementById(
                 "product-detail"
             ).innerHTML = `
@@ -2868,18 +2903,33 @@ function renderSizeSelector(product) {
         }
 
         try {
-            await loadProducts(force);
+            const rawProduct = productSlug
+                ? await API.obtenerProductoPorSlug(productSlug)
+                : await API.obtenerProductoPorId(productId);
 
-            const product =
-                state.productos.find(
-                    (item) =>
-                        String(item.id) ===
-                        String(productId)
-                ) || null;
+            const product = normalizeProduct(rawProduct);
 
-            if (!product) {
+            if (!product.id || !product.activo) {
                 throw new Error(
-                    "El producto solicitado no existe, está inactivo o el ID de la URL no corresponde a MongoDB."
+                    "El producto solicitado no existe o está inactivo."
+                );
+            }
+
+            state.productos = [product];
+
+            window.dispatchEvent(
+                new CustomEvent("products:loaded", {
+                    detail: state.productos
+                })
+            );
+
+            if (!productSlug && product.slug) {
+                params.delete("id");
+                params.set("slug", product.slug);
+                window.history.replaceState(
+                    null,
+                    "",
+                    `${window.location.pathname}?${params.toString()}`
                 );
             }
 

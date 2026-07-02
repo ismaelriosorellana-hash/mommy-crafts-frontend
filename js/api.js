@@ -275,32 +275,110 @@
         );
     }
 
-    async function obtenerProductos() {
-        const data = await request(CONFIG.ENDPOINTS.productos);
+    function withQuery(endpoint, values = {}) {
+        const params = new URLSearchParams();
 
-        if (Array.isArray(data)) return data;
-        if (Array.isArray(data?.productos)) return data.productos;
+        Object.entries(values || {}).forEach(([key, value]) => {
+            if (value === undefined || value === null || value === "") {
+                return;
+            }
+
+            params.set(key, String(value));
+        });
+
+        const query = params.toString();
+        return query ? `${endpoint}?${query}` : endpoint;
+    }
+
+    async function obtenerCatalogo(filtros = {}) {
+        const data = await request(
+            withQuery(CONFIG.ENDPOINTS.productos, filtros)
+        );
+
+        if (Array.isArray(data)) {
+            return {
+                productos: data,
+                paginacion: {
+                    pagina: 1,
+                    limite: data.length,
+                    total: data.length,
+                    paginas: 1,
+                    hayAnterior: false,
+                    haySiguiente: false
+                }
+            };
+        }
+
+        if (Array.isArray(data?.productos)) {
+            return {
+                productos: data.productos,
+                paginacion: data.paginacion || null,
+                filtros: data.filtros || null
+            };
+        }
 
         throw new ApiError(
             "La respuesta de productos no contiene un listado válido."
         );
     }
 
+    async function obtenerProductos(filtros = {}) {
+        const catalogo = await obtenerCatalogo({
+            limite: 100,
+            ...filtros
+        });
+
+        return catalogo.productos;
+    }
+
     async function obtenerProductoPorId(id) {
-        if (!id) {
+        const productId = String(id || "").trim();
+
+        if (!productId) {
             throw new ApiError("No se recibió el ID del producto.");
         }
 
-        const productos = await obtenerProductos();
-        return productos.find(
-            (producto) => String(producto._id || producto.id) === String(id)
-        ) || null;
+        return request(
+            `${CONFIG.ENDPOINTS.productos}/${encodeURIComponent(productId)}`
+        );
+    }
+
+    async function obtenerProductoPorSlug(slug) {
+        const productSlug = String(slug || "").trim();
+
+        if (!productSlug) {
+            throw new ApiError("No se recibió el slug del producto.");
+        }
+
+        return request(
+            `${CONFIG.ENDPOINTS.productos}/slug/${encodeURIComponent(productSlug)}`
+        );
+    }
+
+    async function obtenerProductosRelacionados(id, limit = 5) {
+        const productId = String(id || "").trim();
+
+        if (!productId) return [];
+
+        const data = await request(
+            withQuery(
+                `${CONFIG.ENDPOINTS.productos}/${encodeURIComponent(productId)}/relacionados`,
+                { limit }
+            )
+        );
+
+        if (Array.isArray(data)) return data;
+        if (Array.isArray(data?.productos)) return data.productos;
+        return [];
     }
 
     window.API = Object.freeze({
         ApiError,
         request,
+        obtenerCatalogo,
         obtenerProductos,
-        obtenerProductoPorId
+        obtenerProductoPorId,
+        obtenerProductoPorSlug,
+        obtenerProductosRelacionados
     });
 })();

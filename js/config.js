@@ -10,7 +10,7 @@ const API_BASE_URL =
         : "https://mommy-crafts-backend.onrender.com/api";
 
 window.CONFIG = Object.freeze({
-    APP_VERSION: "3.31.6",
+    APP_VERSION: "3.32.0",
 
     FREE_SHIPPING_THRESHOLD: 25000,
 
@@ -151,4 +151,39 @@ HOME_BANNERS: Object.freeze([
                 </text>
             </svg>
         `)
+});
+
+
+window.ProductLinks = Object.freeze({
+    detail(productOrId, options = {}) {
+        const product =
+            productOrId && typeof productOrId === "object"
+                ? productOrId
+                : { id: productOrId };
+
+        const slug = String(product.slug || "").trim();
+        const id = String(product.id || product._id || "").trim();
+        const params = new URLSearchParams();
+
+        if (slug) params.set("slug", slug);
+        else if (id) params.set("id", id);
+
+        const variant =
+            options.variantId ||
+            options.variante ||
+            product.variantId ||
+            "";
+
+        const size =
+            options.size ||
+            options.talla ||
+            product.size ||
+            "";
+
+        if (variant) params.set("variante", String(variant));
+        if (size) params.set("talla", String(size));
+
+        const query = params.toString();
+        return query ? `producto.html?${query}` : "catalogo.html";
+    }
 });

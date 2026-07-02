@@ -400,8 +400,9 @@
 
     async function populateProductGrid(container, section) {
         try {
-            const data = await window.API.request("/productos", { timeoutMs: 30000 });
-            let products = Array.isArray(data) ? data : data.productos || data.products || [];
+            let products = await window.API.obtenerProductos({
+                limite: 100
+            });
             if (section.productMode === "featured") products = products.filter((product) => product.destacado);
             if (section.productMode === "new") products = products.filter((product) => String(product.insignia || "").toLowerCase().includes("nuevo"));
             if (section.productMode === "category" && section.productCategory) products = products.filter((product) => String(product.categoria || product.categorias || "").includes(section.productCategory));
@@ -413,7 +414,7 @@
             products.slice(0, Number(section.itemLimit) || 4).forEach((product) => {
                 const a = document.createElement("a");
                 a.className = "studio-product-card";
-                a.href = `producto.html?id=${encodeURIComponent(product._id || product.id || "")}`;
+                a.href = window.ProductLinks.detail(product);
                 const img = document.createElement("img");
                 img.src = productImage(product);
                 img.alt = product.nombre || "Producto";

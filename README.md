@@ -34,3 +34,13 @@ node scripts/verificar-frontend.js
 3. Publicar este frontend.
 4. Probar inicio, catálogo, producto, carrito, checkout, cuenta y administración.
 5. Probar al menos una pantalla móvil.
+
+## Versión 3.32.0 — Catálogo profesional
+
+La ficha de producto utiliza consultas directas por slug o ID. Para validar la entrega:
+
+```bash
+node scripts/verificar-frontend.js
+node scripts/verificar-seguridad.js
+node scripts/verificar-catalogo.js
+```

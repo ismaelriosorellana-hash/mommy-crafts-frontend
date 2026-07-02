@@ -479,7 +479,7 @@ function initSeasonFlyout() {
 
     function openProduct(product) {
         window.location.href =
-            `producto.html?id=${encodeURIComponent(product.id)}`;
+            window.ProductLinks.detail(product);
     }
 
     function activateSuggestion(index) {
