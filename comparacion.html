@@ -7,7 +7,7 @@
         name="description"
         content="Catálogo de productos disponibles de Mommy Crafts."
     />
-    <title>Todos los productos | Mommy Crafts</title>
+    <title>Comparación de productos | Mommy Crafts</title>
 
     <link
     rel="stylesheet"
@@ -23,7 +23,7 @@
         <link rel="stylesheet" href="css/site-studio.css?v=3.31.0">
     <link rel="stylesheet" href="css/mc-commerce-tools-v3311.css?v=3.31.1">
 </head>
-<body data-page="catalog">
+<body data-page="compare">
     <a class="skip-link" href="#main-content">Saltar al contenido</a>
 
     <header class="site-header" id="site-header">
@@ -169,57 +169,22 @@
     </div>
 </header>
 
-    <main id="main-content" class="catalog-page">
+    <main id="main-content" class="mc-compare-page">
         <div class="container">
             <nav class="breadcrumb" aria-label="Migas de pan">
                 <a href="index.html">Inicio</a>
                 <span aria-hidden="true">/</span>
-                <span id="catalog-breadcrumb-label">Todos los productos</span>
+                <span>Comparación de productos</span>
             </nav>
 
-            <section class="catalog-heading" aria-labelledby="catalog-title">
-                <div>
-                    <p class="section-kicker">Catálogo</p>
-                    <h1 class="section-title" id="catalog-title">Todos los productos</h1>
-                    <p class="catalog-description">
-                        Explora los productos disponibles para compra directa.
-                        Los productos personalizados se gestionan desde el modal de personalización.
-                    </p>
-                </div>
-</section>
+            <header class="mc-compare-heading">
+                <p class="section-kicker">Elige con mayor claridad</p>
+                <h1>Comparación de productos</h1>
+                <p>Agrega hasta 3 productos desde el catálogo o desde su ficha individual y compáralos en un mismo lugar.</p>
+                <p id="mc-compare-summary" aria-live="polite">0 de 3 productos agregados.</p>
+            </header>
 
-            <div class="catalog-category-chips" id="catalog-category-chips" aria-label="Filtrar por categoría"></div>
-
-            <section class="catalog-toolbar" aria-label="Orden y filtros">
-                <div class="catalog-result-summary">
-                    <strong id="catalog-result-count">0 productos</strong>
-                    <span id="catalog-active-filter">Todos</span>
-                </div>
-
-                <div class="catalog-controls">
-                    <label class="catalog-control">
-                        <span>Ordenar por</span>
-                        <select id="catalog-sort">
-                            <option value="mas-vendidos">Más vendidos</option>
-                            <option value="precio-menor">Precio menor</option>
-                            <option value="precio-mayor">Precio mayor</option>
-                            <option value="mas-nuevos">Más nuevos</option>
-                        </select>
-                    </label>
-
-                    <label class="catalog-check">
-                        <input type="checkbox" id="catalog-in-stock" checked />
-                        <span>En stock</span>
-                    </label>
-                </div>
-            </section>
-
-            <section aria-labelledby="catalog-grid-title">
-                <h2 class="sr-only" id="catalog-grid-title">Listado de productos</h2>
-                <div class="catalog-products-grid" id="catalog-products" aria-live="polite">
-                    <p class="loading-products">Cargando catálogo...</p>
-                </div>
-            </section>
+            <section class="mc-compare-grid" id="mc-compare-products" aria-live="polite" aria-label="Productos en comparación"></section>
         </div>
     </main>
 
@@ -565,7 +530,6 @@
     <script src="js/products.js?v=3.31.1" defer></script>
     <script src="js/ui.js?v=3.31.0" defer></script>
     <script src="js/customization.js?v=3.31.0" defer></script>
-    <script src="js/catalog.js?v=3.31.0" defer></script>
         <script src="js/experience-v327.js?v=3.31.0" defer></script>
         <script src="js/mc-commerce-tools-v3311.js?v=3.31.1" defer></script>
 </body>

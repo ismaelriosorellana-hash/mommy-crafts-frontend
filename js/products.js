@@ -685,6 +685,31 @@ function normalizeVariants(rawProduct, defaultImage, defaultImages = []) {
                 0
             ),
 
+            valoracionPromedio: Math.min(
+                5,
+                Math.max(
+                    0,
+                    numberValue(
+                        rawProduct.valoracionPromedio ??
+                        rawProduct.rating ??
+                        rawProduct.calificacionPromedio ??
+                        rawProduct.resenas?.promedio,
+                        0
+                    )
+                )
+            ),
+
+            cantidadResenas: Math.max(
+                0,
+                numberValue(
+                    rawProduct.cantidadResenas ??
+                    rawProduct.reviewCount ??
+                    rawProduct.totalResenas ??
+                    rawProduct.resenas?.cantidad,
+                    0
+                )
+            ),
+
             createdAt: createdAtRaw
                 ? new Date(createdAtRaw).getTime()
                 : 0,
