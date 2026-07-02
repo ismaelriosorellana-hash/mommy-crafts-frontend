@@ -1427,13 +1427,6 @@ function createProductCard(product) {
         });
 
         container.appendChild(fragment);
-
-        window.dispatchEvent(new CustomEvent("products:rendered", {
-            detail: {
-                containerId: container.id || "",
-                count: products.length
-            }
-        }));
     }
 
     function categoryCount(category) {
