@@ -328,9 +328,7 @@
     async function submitOrder(event) {
         event.preventDefault();
         const form = event.currentTarget;
-        const submitButton =
-            document.getElementById("btn-enviar-pedido")
-            ||  form.querySelector('[type="submit"]');
+        const submitButton = form.querySelector('[type="submit"]');
         const formData = new FormData(form);
         const items = read();
         if (!items.length) { window.location.href = "carrito.html"; return; }

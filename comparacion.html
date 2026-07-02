@@ -25,7 +25,7 @@
 
     <link rel="stylesheet" href="css/compare-v334.css?v=3.34.0" />
 </head>
-<body data-page="catalog">
+<body data-page="compare">
     <a class="skip-link" href="#main-content">Saltar al contenido</a>
 
     <header class="site-header" id="site-header">
@@ -171,59 +171,16 @@
     </div>
 </header>
 
-    <main id="main-content" class="catalog-page">
-        <div class="container">
-            <nav class="breadcrumb" aria-label="Migas de pan">
-                <a href="index.html">Inicio</a>
-                <span aria-hidden="true">/</span>
-                <span id="catalog-breadcrumb-label">Todos los productos</span>
-            </nav>
-
-            <section class="catalog-heading" aria-labelledby="catalog-title">
-                <div>
-                    <p class="section-kicker">Catálogo</p>
-                    <h1 class="section-title" id="catalog-title">Todos los productos</h1>
-                    <p class="catalog-description">
-                        Explora los productos disponibles para compra directa.
-                        Los productos personalizados se gestionan desde el modal de personalización.
-                    </p>
-                </div>
-</section>
-
-            <div class="catalog-category-chips" id="catalog-category-chips" aria-label="Filtrar por categoría"></div>
-
-            <section class="catalog-toolbar" aria-label="Orden y filtros">
-                <div class="catalog-result-summary">
-                    <strong id="catalog-result-count">0 productos</strong>
-                    <span id="catalog-active-filter">Todos</span>
-                </div>
-
-                <div class="catalog-controls">
-                    <label class="catalog-control">
-                        <span>Ordenar por</span>
-                        <select id="catalog-sort">
-                            <option value="mas-vendidos">Más vendidos</option>
-                            <option value="precio-menor">Precio menor</option>
-                            <option value="precio-mayor">Precio mayor</option>
-                            <option value="mas-nuevos">Más nuevos</option>
-                        </select>
-                    </label>
-
-                    <label class="catalog-check">
-                        <input type="checkbox" id="catalog-in-stock" checked />
-                        <span>En stock</span>
-                    </label>
-                </div>
-            </section>
-
-            <section aria-labelledby="catalog-grid-title">
-                <h2 class="sr-only" id="catalog-grid-title">Listado de productos</h2>
-                <div class="catalog-products-grid" id="catalog-products" aria-live="polite">
-                    <p class="loading-products">Cargando catálogo...</p>
-                </div>
-            </section>
+    <main id="main-content" class="compare-page-shell">
+    <section class="compare-page container" aria-labelledby="compare-page-title">
+        <div class="compare-hero">
+            <p class="section-kicker">Comparación de productos</p>
+            <h1 id="compare-page-title">Compara hasta 3 productos</h1>
+            <p id="compare-products-meta">Reúne tus opciones favoritas y visualízalas lado a lado para tomar una mejor decisión de compra.</p>
         </div>
-    </main>
+        <div class="compare-grid" id="compare-products-root" aria-live="polite"></div>
+    </section>
+</main>
 
     <footer class="footer">
     <div class="container container-footer">
