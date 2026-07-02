@@ -31,6 +31,33 @@
             );
         }
 
+        let parsed;
+
+        try {
+            parsed = new URL(base, window.location.origin);
+        } catch {
+            throw new ApiError(
+                "La dirección del servidor no es una URL válida."
+            );
+        }
+
+        if (parsed.username || parsed.password) {
+            throw new ApiError(
+                "La dirección del servidor no puede contener credenciales."
+            );
+        }
+
+        if (
+            !IS_LOCAL_ENVIRONMENT &&
+            parsed.protocol !== "https:"
+        ) {
+            throw new ApiError(
+                "La tienda publicada solo puede conectarse a una API HTTPS."
+            );
+        }
+
+        base = parsed.href.replace(/\/+$/, "");
+
         if (!/\/api$/i.test(base)) {
             base = `${base}/api`;
         }
@@ -167,7 +194,8 @@
                     method: "GET",
                     ...fetchOptions,
                     headers,
-                    signal: controller.signal
+                    signal: controller.signal,
+                    referrerPolicy: "strict-origin-when-cross-origin"
                 });
 
                 const contentType =

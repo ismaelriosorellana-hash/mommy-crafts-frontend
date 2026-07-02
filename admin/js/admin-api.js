@@ -58,6 +58,47 @@
             );
         }
 
+        let parsed;
+
+        try {
+            parsed = new URL(
+                base,
+                window.location.origin
+            );
+        } catch {
+            throw new AdminApiError(
+                "La dirección del servidor no es una URL válida."
+            );
+        }
+
+        if (
+            parsed.username ||
+            parsed.password
+        ) {
+            throw new AdminApiError(
+                "La dirección del servidor no puede contener credenciales."
+            );
+        }
+
+        const localHost = [
+            "localhost",
+            "127.0.0.1"
+        ].includes(
+            window.location.hostname
+        );
+
+        if (
+            !localHost &&
+            parsed.protocol !== "https:"
+        ) {
+            throw new AdminApiError(
+                "El panel publicado solo puede conectarse a una API HTTPS."
+            );
+        }
+
+        base = parsed.href
+            .replace(/\/+$/, "");
+
         if (
             !/\/api$/i.test(
                 base
@@ -193,7 +234,9 @@
                                     ? options.body
                                     : JSON.stringify(options.body),
                         signal:
-                            controller.signal
+                            controller.signal,
+                        referrerPolicy:
+                            "strict-origin-when-cross-origin"
                     }
                 );
 

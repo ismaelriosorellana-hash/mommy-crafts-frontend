@@ -1,4 +1,4 @@
-# Mommy Crafts Frontend 3.31.5
+# Mommy Crafts Frontend 3.31.6
 
 Frontend multipágina de Mommy Crafts.
 
@@ -10,7 +10,7 @@ El frontend consume la API configurada en `js/config.js`.
 
 - La versión visible se define en `CONFIG.APP_VERSION`.
 - Los HTML deben referenciar CSS y JavaScript con la misma versión de caché.
-- En esta entrega, toda la aplicación utiliza `3.31.5`.
+- En esta entrega, toda la aplicación utiliza `3.31.6`.
 
 ## Archivos que no deben publicarse
 
