@@ -138,6 +138,15 @@
     }
 
 
+    function applyElementPosition(selector, value) {
+        const offsetX = Number(value?.offsetX) || 0;
+        const offsetY = Number(value?.offsetY) || 0;
+
+        document.querySelectorAll(selector).forEach((element) => {
+            element.style.setProperty("translate", `${offsetX}px ${offsetY}px`, "important");
+        });
+    }
+
     function applyHeaderLayout(settings) {
         const layout = settings?.headerLayout || {};
         const groups = {
@@ -153,6 +162,11 @@
             document.documentElement.style.setProperty(`--mc-header-${name}-x`, `${offsetX}px`);
             document.documentElement.style.setProperty(`--mc-header-${name}-y`, `${offsetY}px`);
         }
+
+        applyElementPosition(".container-hero .social-icons-header", layout.social);
+        applyElementPosition(".container-hero .container-logo", layout.brand);
+        applyElementPosition(".container-hero .customer-support", layout.support);
+        applyElementPosition(".site-header .navbar-actions", layout.actions);
     }
 
     function apply(settings) {
