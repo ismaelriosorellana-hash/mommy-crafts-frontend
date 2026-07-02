@@ -1,28 +1,26 @@
-# Mommy Crafts Frontend 3.32.1
+# Mommy Crafts Frontend 3.33.0
 
 Frontend multipágina de Mommy Crafts.
 
-## Entorno publicado
+## Etapa 2A — Ficha de producto de alto impacto
 
-El frontend consume la API configurada en `js/config.js`.
+Esta versión mejora la jerarquía visual y la claridad de compra de `producto.html`:
 
-## Versión y caché
+- título más grande en escritorio y móvil;
+- resumen breve del producto;
+- marca y SKU cuando existen;
+- precio, descuento y ahorro más visibles;
+- reseñas mostradas de forma honesta;
+- disponibilidad destacada;
+- bloque de confianza y ayuda;
+- área de compra optimizada para móvil.
 
-- La versión visible se define en `CONFIG.APP_VERSION`.
-- Los HTML deben referenciar CSS y JavaScript con la misma versión de caché.
-- En esta entrega, toda la aplicación utiliza `3.32.1`.
+## Compatibilidad
 
-## Administración de productos
-
-El formulario está organizado en cinco secciones:
-
-1. General.
-2. Logística.
-3. SEO.
-4. Personalización.
-5. Variantes.
-
-Permite administrar SKU, marca, peso, dimensiones y metadatos SEO sin romper productos antiguos.
+- Backend recomendado: `2.14.1`.
+- No requiere actualizar el backend.
+- No requiere nuevas variables de Render.
+- No requiere migraciones en MongoDB Atlas.
 
 ## Verificación local
 
@@ -31,21 +29,13 @@ node scripts/verificar-frontend.js
 node scripts/verificar-seguridad.js
 node scripts/verificar-catalogo.js
 node scripts/verificar-productos-admin.js
+node scripts/verificar-ficha-producto.js
 ```
-
-## Archivos que no deben publicarse
-
-- `.env`
-- `.git`
-- `node_modules`
-- ZIP de respaldo
-- Aplicadores temporales
-- Copias antiguas del sitio
 
 ## Despliegue
 
-1. Publicar primero Backend 2.14.1.
-2. Verificar `/api/health`.
-3. Publicar Frontend 3.32.1.
-4. Probar creación y edición de productos.
-5. Confirmar navegación pública, carrito y checkout.
+1. Confirmar que Backend `2.14.1` sigue activo.
+2. Publicar Frontend `3.33.0`.
+3. Abrir una ficha con `Ctrl + F5`.
+4. Probar escritorio y móvil.
+5. Confirmar título, precio, variantes, carrito y personalización.

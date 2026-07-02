@@ -1,0 +1,429 @@
+/* ==========================================================
+   Mommy Crafts · Ficha de producto de alto impacto · v3.33.0
+   ========================================================== */
+
+body[data-page="product"] .product-page {
+    padding-top: clamp(2.4rem, 4vw, 4.8rem);
+}
+
+body[data-page="product"] .breadcrumb {
+    margin-bottom: clamp(1.8rem, 3vw, 3rem);
+}
+
+body[data-page="product"] .product-detail-grid {
+    grid-template-columns: minmax(0, 1.08fr) minmax(38rem, .92fr);
+    gap: clamp(3.2rem, 6vw, 7.2rem);
+}
+
+body[data-page="product"] .product-detail-info {
+    padding-top: 0;
+}
+
+.product-heading-block {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.product-heading-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .8rem 1.6rem;
+    margin-bottom: .8rem;
+}
+
+.product-heading-meta .product-category {
+    margin: 0;
+    font-size: 1.15rem;
+    letter-spacing: .09em;
+}
+
+.product-reference {
+    margin: 0;
+    color: var(--color-text-soft);
+    font-size: 1.15rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+body[data-page="product"] .detail-title {
+    max-width: 18ch;
+    margin: 0;
+    color: var(--color-text);
+    font-size: clamp(4rem, 4.7vw, 6.2rem);
+    font-weight: 800;
+    letter-spacing: -.035em;
+    line-height: 1.02;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+}
+
+.product-lead {
+    max-width: 62ch;
+    margin: 1.5rem 0 0;
+    color: var(--color-text-soft);
+    font-size: clamp(1.45rem, 1.5vw, 1.7rem);
+    line-height: 1.65;
+}
+
+body[data-page="product"] .detail-rating {
+    width: fit-content;
+    min-height: 3.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .75rem;
+    margin-top: 1.6rem;
+    padding: .7rem 1.1rem;
+    border: 1px solid rgba(146, 75, 103, .16);
+    border-radius: 999px;
+    background: rgba(255, 249, 251, .9);
+    color: var(--color-text-soft);
+    font-size: 1.25rem;
+    font-weight: 650;
+}
+
+body[data-page="product"] .detail-rating i,
+body[data-page="product"] .detail-rating .stars {
+    color: #d99b21;
+}
+
+body[data-page="product"] .detail-rating.has-reviews {
+    color: var(--color-text);
+}
+
+.product-price-card {
+    margin-top: 2rem;
+    padding: clamp(1.7rem, 3vw, 2.2rem);
+    border: 1px solid rgba(146, 75, 103, .16);
+    border-radius: 2rem;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, .98), rgba(255, 247, 251, .94));
+    box-shadow: 0 1.4rem 3.4rem rgba(83, 49, 64, .08);
+}
+
+.product-price-label {
+    display: block;
+    margin-bottom: .45rem;
+    color: var(--color-text-soft);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+body[data-page="product"] .detail-price {
+    gap: .8rem 1rem;
+    margin-top: 0;
+}
+
+body[data-page="product"] .current-price {
+    color: var(--color-text);
+    font-size: clamp(3.2rem, 4vw, 4.4rem);
+    font-weight: 850;
+    letter-spacing: -.035em;
+    line-height: 1;
+}
+
+body[data-page="product"] .old-price {
+    font-size: 1.55rem;
+}
+
+.product-savings {
+    margin: .8rem 0 0;
+    color: var(--color-success);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.product-availability-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid rgba(146, 75, 103, .12);
+}
+
+body[data-page="product"] .stock-status {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    margin: 0;
+    padding: .65rem 1rem;
+    border-radius: 999px;
+    background: #eaf7ef;
+    color: #287b49;
+    font-size: 1.2rem;
+    font-weight: 750;
+}
+
+body[data-page="product"] .stock-status::before {
+    width: .8rem;
+    height: .8rem;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: currentColor;
+    content: "";
+}
+
+body[data-page="product"] .stock-status.out-of-stock {
+    background: #fff0f1;
+    color: var(--color-danger);
+}
+
+.product-delivery-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    color: var(--color-primary-dark);
+    font-size: 1.2rem;
+    font-weight: 750;
+    text-decoration: underline;
+    text-decoration-thickness: .08em;
+    text-underline-offset: .25em;
+}
+
+.product-delivery-link:hover,
+.product-delivery-link:focus-visible {
+    text-decoration-thickness: .14em;
+}
+
+body[data-page="product"] .product-color-selector,
+body[data-page="product"] .product-size-selector,
+body[data-page="product"] .light-customization-panel {
+    margin-top: 1.8rem;
+}
+
+body[data-page="product"] .product-actions {
+    grid-template-columns: 10rem minmax(0, 1fr);
+    margin-top: 2rem;
+    padding: 1.4rem;
+    border: 1px solid rgba(146, 75, 103, .14);
+    border-radius: 1.8rem;
+    background: #fff;
+    box-shadow: 0 1rem 2.6rem rgba(83, 49, 64, .07);
+}
+
+body[data-page="product"] .product-actions .btn-primary {
+    min-height: 5.2rem;
+    border-radius: 1.4rem;
+    font-size: 1.45rem;
+    font-weight: 800;
+    box-shadow: 0 .9rem 2.2rem rgba(142, 69, 106, .2);
+}
+
+body[data-page="product"] .product-actions .btn-secondary {
+    min-height: 4.8rem;
+    border-radius: 1.4rem;
+}
+
+body[data-page="product"] .quantity-control input {
+    min-height: 5.2rem;
+    border-radius: 1.4rem;
+    font-size: 1.4rem;
+    font-weight: 750;
+}
+
+.product-confidence {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.6rem;
+}
+
+.product-confidence-item {
+    position: relative;
+    min-width: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.35rem;
+    border: 1px solid rgba(146, 75, 103, .14);
+    border-radius: 1.5rem;
+    background: rgba(255, 252, 253, .94);
+    color: var(--color-text);
+}
+
+.product-confidence-link {
+    padding-right: 3.2rem;
+    transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.product-confidence-link:hover,
+.product-confidence-link:focus-visible {
+    border-color: rgba(142, 69, 106, .42);
+    box-shadow: 0 .8rem 2rem rgba(83, 49, 64, .07);
+    transform: translateY(-.15rem);
+}
+
+.product-confidence-icon {
+    width: 3.6rem;
+    height: 3.6rem;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    border-radius: 1.1rem;
+    background: var(--color-primary-soft);
+    color: var(--color-primary-dark);
+    font-size: 1.35rem;
+}
+
+.product-confidence-item strong {
+    display: block;
+    margin-bottom: .3rem;
+    font-size: 1.25rem;
+}
+
+.product-confidence-item p {
+    margin: 0;
+    color: var(--color-text-soft);
+    font-size: 1.12rem;
+    line-height: 1.45;
+}
+
+.product-confidence-arrow {
+    position: absolute;
+    top: 50%;
+    right: 1.2rem;
+    color: var(--color-primary-dark);
+    transform: translateY(-50%);
+}
+
+body[data-page="product"] .product-delivery-info {
+    margin: 1.6rem 0 0;
+}
+
+body[data-page="product"] .product-delivery-card {
+    border-radius: 1.5rem;
+    background: #fff;
+}
+
+body[data-page="product"] .detail-accordion {
+    margin-top: 2rem;
+}
+
+@media (max-width: 1100px) {
+    body[data-page="product"] .product-detail-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(34rem, .92fr);
+        gap: 3.2rem;
+    }
+
+    body[data-page="product"] .detail-title {
+        font-size: clamp(3.6rem, 4.8vw, 5rem);
+    }
+}
+
+@media (max-width: 820px) {
+    body[data-page="product"] .product-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body[data-page="product"] .detail-title {
+        max-width: 22ch;
+    }
+}
+
+@media (max-width: 700px) {
+    body[data-page="product"] .product-page {
+        padding-top: 1.8rem;
+    }
+
+    .product-heading-block {
+        padding-bottom: 1.5rem;
+    }
+
+    .product-heading-meta {
+        margin-bottom: .65rem;
+    }
+
+    body[data-page="product"] .detail-title {
+        max-width: none;
+        font-size: clamp(3rem, 9.4vw, 4.1rem);
+        letter-spacing: -.03em;
+        line-height: 1.04;
+    }
+
+    .product-lead {
+        margin-top: 1.1rem;
+        font-size: 1.42rem;
+        line-height: 1.55;
+    }
+
+    body[data-page="product"] .detail-rating {
+        margin-top: 1.2rem;
+    }
+
+    .product-price-card {
+        margin-top: 1.4rem;
+        padding: 1.4rem;
+        border-radius: 1.6rem;
+    }
+
+    body[data-page="product"] .current-price {
+        font-size: clamp(3rem, 10vw, 3.8rem);
+    }
+
+    .product-availability-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    body[data-page="product"] .product-actions {
+        position: sticky;
+        z-index: 35;
+        bottom: 0;
+        grid-template-columns: 6.8rem minmax(0, 1fr);
+        gap: .8rem;
+        margin: 1.5rem -.9rem 0;
+        padding: .8rem .9rem calc(.8rem + env(safe-area-inset-bottom));
+        border-right: 0;
+        border-bottom: 0;
+        border-left: 0;
+        border-radius: 0;
+        background: rgba(255, 255, 255, .97);
+        box-shadow: 0 -1rem 2.8rem rgba(70, 42, 52, .12);
+        backdrop-filter: blur(12px);
+    }
+
+    body[data-page="product"] .product-actions .btn-primary,
+    body[data-page="product"] .quantity-control input {
+        min-height: 4.8rem;
+    }
+
+    body[data-page="product"] .product-actions .btn-primary {
+        padding-inline: 1rem;
+        font-size: 1.2rem;
+    }
+
+    body[data-page="product"] .product-actions .btn-secondary {
+        grid-column: 1 / -1;
+    }
+
+    .product-confidence {
+        grid-template-columns: 1fr;
+        gap: .8rem;
+    }
+}
+
+@media (max-width: 390px) {
+    body[data-page="product"] .detail-title {
+        font-size: clamp(2.8rem, 9.8vw, 3.5rem);
+    }
+
+    .product-heading-meta {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    body[data-page="product"] .product-actions {
+        grid-template-columns: 6rem minmax(0, 1fr);
+    }
+
+    body[data-page="product"] .product-actions .btn-primary {
+        font-size: 1.1rem;
+    }
+}

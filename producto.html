@@ -14,12 +14,13 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
 />
-    <link rel="stylesheet" href="css/main.css?v=3.32.1" />
-    <link rel="stylesheet" href="css/products.css?v=3.32.1" />
-    <link rel="stylesheet" href="css/modal.css?v=3.32.1" />
-        <link rel="stylesheet" href="css/experience-v327.css?v=3.32.1">
-        <link rel="stylesheet" href="css/site-studio.css?v=3.32.1">
-    <link rel="stylesheet" href="css/mc-commerce-tools-v3311.css?v=3.32.1">
+    <link rel="stylesheet" href="css/main.css?v=3.33.0" />
+    <link rel="stylesheet" href="css/products.css?v=3.33.0" />
+    <link rel="stylesheet" href="css/modal.css?v=3.33.0" />
+        <link rel="stylesheet" href="css/experience-v327.css?v=3.33.0">
+        <link rel="stylesheet" href="css/site-studio.css?v=3.33.0">
+    <link rel="stylesheet" href="css/mc-commerce-tools-v3311.css?v=3.33.0">
+    <link rel="stylesheet" href="css/product-detail-v3330.css?v=3.33.0">
 </head>
 <body data-page="product">
     <a class="skip-link" href="#main-content">Saltar al contenido</a>
@@ -215,22 +216,39 @@
                 </div>
 
                 <div class="product-detail-info">
-                    <p class="product-category" id="detalle-categoria"></p>
-                    <h1 class="detail-title" id="detalle-titulo">Cargando producto...</h1>
+                    <header class="product-heading-block">
+                        <div class="product-heading-meta">
+                            <p class="product-category" id="detalle-categoria"></p>
+                            <p class="product-reference" id="detalle-referencia" hidden></p>
+                        </div>
 
-                    <div class="detail-rating" aria-label="Sin reseñas todavía">
-                        <span class="stars" aria-hidden="true">★★★★★</span>
-                        <span class="rating-count">(0 reseñas)</span>
-                    </div>
+                        <h1 class="detail-title" id="detalle-titulo">Cargando producto...</h1>
+                        <p class="product-lead" id="detalle-resumen" hidden></p>
 
-                    <div class="detail-price">
-                        <span class="current-price" id="detalle-precio"></span>
-                        <span class="old-price" id="detalle-precio-original" hidden></span>
-                        <span class="detail-label-badge" id="detalle-badge" hidden></span>
-                        <span class="detail-discount-badge" id="detalle-descuento" hidden></span>
-                    </div>
+                        <div class="detail-rating" id="detalle-rating" aria-live="polite">
+                            <i class="fa-regular fa-star" aria-hidden="true"></i>
+                            <span class="rating-count">Aún no hay reseñas</span>
+                        </div>
+                    </header>
 
-                    <p class="stock-status" id="detalle-stock"></p>
+                    <section class="product-price-card" aria-label="Precio y disponibilidad">
+                        <span class="product-price-label">Precio</span>
+                        <div class="detail-price">
+                            <span class="current-price" id="detalle-precio"></span>
+                            <span class="old-price" id="detalle-precio-original" hidden></span>
+                            <span class="detail-label-badge" id="detalle-badge" hidden></span>
+                            <span class="detail-discount-badge" id="detalle-descuento" hidden></span>
+                        </div>
+                        <p class="product-savings" id="detalle-ahorro" hidden></p>
+
+                        <div class="product-availability-row">
+                            <p class="stock-status" id="detalle-stock" role="status"></p>
+                            <a class="product-delivery-link" href="#product-delivery-info">
+                                Ver opciones de entrega
+                                <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </section>
 
 <section class="product-color-selector" id="product-color-selector" aria-labelledby="product-color-title" hidden>
     <div class="product-color-selector-header">
@@ -361,6 +379,50 @@
                             Personalizar
                         </button>
                     </div>
+
+                    <section class="product-confidence" aria-label="Compra con confianza">
+                        <article class="product-confidence-item">
+                            <span class="product-confidence-icon" aria-hidden="true">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </span>
+                            <div>
+                                <strong>Pago protegido</strong>
+                                <p>El pago online se procesa de forma segura mediante Mercado Pago.</p>
+                            </div>
+                        </article>
+
+                        <article class="product-confidence-item" id="product-confidence-personalization" hidden>
+                            <span class="product-confidence-icon" aria-hidden="true">
+                                <i class="fa-solid fa-pen-ruler"></i>
+                            </span>
+                            <div>
+                                <strong>Revisión antes de fabricar</strong>
+                                <p>Confirmaremos los detalles de la personalización antes de producir.</p>
+                            </div>
+                        </article>
+
+                        <a class="product-confidence-item product-confidence-link" href="cambios-pedidos.html">
+                            <span class="product-confidence-icon" aria-hidden="true">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                            </span>
+                            <div>
+                                <strong>Cambios y problemas</strong>
+                                <p>Consulta las condiciones y los canales de ayuda disponibles.</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right product-confidence-arrow" aria-hidden="true"></i>
+                        </a>
+
+                        <a class="product-confidence-item product-confidence-link" href="contacto.html">
+                            <span class="product-confidence-icon" aria-hidden="true">
+                                <i class="fa-regular fa-comments"></i>
+                            </span>
+                            <div>
+                                <strong>¿Necesitas orientación?</strong>
+                                <p>Revisa nuestros canales oficiales antes de completar tu compra.</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right product-confidence-arrow" aria-hidden="true"></i>
+                        </a>
+                    </section>
 
                     <section
                         class="product-delivery-info product-delivery-near-actions"
@@ -741,18 +803,18 @@
         <p class="noscript-message">Necesitas habilitar JavaScript para cargar el producto.</p>
     </noscript>
 
-    <script src="js/config.js?v=3.32.1" defer></script>
-    <script src="js/api.js?v=3.32.1" defer></script>
-    <script src="js/site-settings.js?v=3.32.1" defer></script>
-    <script src="js/site-studio.js?v=3.32.1" defer></script>
-    <script src="js/customer-auth.js?v=3.32.1" defer></script>
-    <script src="js/cart.js?v=3.32.1" defer></script>
-    <script src="js/product-options.js?v=3.32.1" defer></script>
-    <script src="js/product-gallery.js?v=3.32.1" defer></script>
-    <script src="js/products.js?v=3.32.1" defer></script>
-    <script src="js/ui.js?v=3.32.1" defer></script>
-    <script src="js/customization.js?v=3.32.1" defer></script>
-        <script src="js/experience-v327.js?v=3.32.1" defer></script>
-        <script src="js/mc-commerce-tools-v3311.js?v=3.32.1" defer></script>
+    <script src="js/config.js?v=3.33.0" defer></script>
+    <script src="js/api.js?v=3.33.0" defer></script>
+    <script src="js/site-settings.js?v=3.33.0" defer></script>
+    <script src="js/site-studio.js?v=3.33.0" defer></script>
+    <script src="js/customer-auth.js?v=3.33.0" defer></script>
+    <script src="js/cart.js?v=3.33.0" defer></script>
+    <script src="js/product-options.js?v=3.33.0" defer></script>
+    <script src="js/product-gallery.js?v=3.33.0" defer></script>
+    <script src="js/products.js?v=3.33.0" defer></script>
+    <script src="js/ui.js?v=3.33.0" defer></script>
+    <script src="js/customization.js?v=3.33.0" defer></script>
+        <script src="js/experience-v327.js?v=3.33.0" defer></script>
+        <script src="js/mc-commerce-tools-v3311.js?v=3.33.0" defer></script>
 </body>
 </html>

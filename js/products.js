@@ -584,6 +584,8 @@ function normalizeVariants(rawProduct, defaultImage, defaultImages = []) {
             id: stringValue(rawProduct._id ?? rawProduct.id),
             slug: stringValue(rawProduct.slug),
             sku: stringValue(rawProduct.sku),
+            marca: stringValue(rawProduct.marca ?? rawProduct.brand),
+            codigoBarras: stringValue(rawProduct.codigoBarras ?? rawProduct.barcode),
             nombre: stringValue(rawProduct.nombre, "Producto sin nombre"),
             precio: numberValue(rawProduct.precio),
             precioOriginal: numberValue(rawProduct.precioOriginal),
@@ -2287,12 +2289,28 @@ function renderProductDelivery(product) {
         cards.join("");
 }
 
+function updateProductReference(product, variant = null) {
+    const reference = document.getElementById("detalle-referencia");
+    if (!reference) return;
+
+    const parts = [];
+    const brand = String(product?.marca || "").trim();
+    const sku = String(variant?.sku || product?.sku || "").trim();
+
+    if (brand) parts.push(brand);
+    if (sku) parts.push(`SKU: ${sku}`);
+
+    reference.hidden = parts.length === 0;
+    reference.textContent = parts.join(" · ");
+}
+
 function updateDetailPrice(product, variant) {
     const price = getVariantPrice(product, variant);
     const originalPrice = getVariantOriginalPrice(product, variant);
     const current = document.getElementById("detalle-precio");
     const original = document.getElementById("detalle-precio-original");
     const discount = document.getElementById("detalle-descuento");
+    const savings = document.getElementById("detalle-ahorro");
 
     if (current) current.textContent = formatPrice(price);
 
@@ -2301,13 +2319,24 @@ function updateDetailPrice(product, variant) {
         original.textContent = original.hidden ? "" : formatPrice(originalPrice);
     }
 
+    const percentage = originalPrice > price && originalPrice > 0
+        ? Math.round(((originalPrice - price) / originalPrice) * 100)
+        : 0;
+
     if (discount) {
-        const percentage = originalPrice > price && originalPrice > 0
-            ? Math.round(((originalPrice - price) / originalPrice) * 100)
-            : 0;
         discount.hidden = percentage <= 0;
         discount.textContent = percentage > 0 ? `-${percentage}%` : "";
     }
+
+    if (savings) {
+        const amount = Math.max(0, originalPrice - price);
+        savings.hidden = amount <= 0;
+        savings.textContent = amount > 0
+            ? `Ahorras ${formatPrice(amount)} en esta compra.`
+            : "";
+    }
+
+    updateProductReference(product, variant);
 }
 
 function updateDetailStock(product, variant) {
@@ -2486,6 +2515,70 @@ function renderSizeSelector(product) {
     if (requestedSize && sizes.includes(requestedSize)) choose(requestedSize);
 }
 
+    function buildProductLead(description, maxLength = 210) {
+        const clean = String(description || "")
+            .replace(/\s+/g, " ")
+            .trim();
+
+        if (!clean || clean === "Sin descripción disponible.") return "";
+        if (clean.length <= maxLength) return clean;
+
+        const shortened = clean.slice(0, maxLength + 1);
+        const lastSpace = shortened.lastIndexOf(" ");
+        return `${shortened.slice(0, lastSpace > 120 ? lastSpace : maxLength).trim()}…`;
+    }
+
+    function renderProductRating(product) {
+        const rating = document.getElementById("detalle-rating");
+        if (!rating) return;
+
+        const average = Math.min(5, Math.max(0, Number(product.valoracionPromedio) || 0));
+        const count = Math.max(0, Number(product.cantidadResenas) || 0);
+
+        rating.classList.toggle("has-reviews", count > 0 && average > 0);
+
+        if (count > 0 && average > 0) {
+            const rounded = average.toFixed(1).replace(".0", "");
+            const reviewLabel = `${count} reseña${count === 1 ? "" : "s"}`;
+            rating.setAttribute(
+                "aria-label",
+                `${rounded} de 5 estrellas, ${reviewLabel}`
+            );
+            rating.innerHTML = `
+                <span class="stars" aria-hidden="true">★</span>
+                <strong>${escapeHtml(rounded)}</strong>
+                <span class="rating-count">${escapeHtml(reviewLabel)}</span>
+            `;
+            return;
+        }
+
+        rating.setAttribute("aria-label", "Este producto aún no tiene reseñas");
+        rating.innerHTML = `
+            <i class="fa-regular fa-star" aria-hidden="true"></i>
+            <span class="rating-count">Aún no hay reseñas</span>
+        `;
+    }
+
+    function renderProductHeading(product) {
+        const summary = document.getElementById("detalle-resumen");
+        if (summary) {
+            const lead = buildProductLead(product.descripcion);
+            summary.hidden = !lead;
+            summary.textContent = lead;
+        }
+
+        updateProductReference(product, null);
+        renderProductRating(product);
+
+        const personalizationConfidence = document.getElementById(
+            "product-confidence-personalization"
+        );
+
+        if (personalizationConfidence) {
+            personalizationConfidence.hidden = !product.personalizable;
+        }
+    }
+
     function renderProductDetail(product) {
         state.productoActual = product;
         state.varianteActual = null;
@@ -2524,10 +2617,8 @@ function renderSizeSelector(product) {
             "detalle-titulo"
         ).textContent = product.nombre;
 
-        document.getElementById(
-            "detalle-precio"
-        ).textContent =
-            formatPrice(product.precio);
+        renderProductHeading(product);
+        updateDetailPrice(product, null);
 
         document.getElementById(
             "detalle-descripcion"
@@ -2545,24 +2636,6 @@ function renderSizeSelector(product) {
         breadcrumbCategory.href =
             `catalogo.html?categoria=${encodeURIComponent(product.categoria)}`;
 
-        const oldPrice =
-            document.getElementById(
-                "detalle-precio-original"
-            );
-
-        if (
-            product.precioOriginal > 0 &&
-            product.precioOriginal >
-            product.precio
-        ) {
-            oldPrice.hidden = false;
-
-            oldPrice.textContent =
-                formatPrice(
-                    product.precioOriginal
-                );
-        }
-
         const badge =
             document.getElementById(
                 "detalle-badge"
@@ -2572,13 +2645,6 @@ function renderSizeSelector(product) {
             badge.hidden = false;
             badge.textContent =
                 product.insignia;
-        }
-
-        const detailDiscount = document.getElementById("detalle-descuento");
-        const detailDiscountPercentage = calculateDiscountPercentage(product);
-        if (detailDiscount && detailDiscountPercentage > 0) {
-            detailDiscount.hidden = false;
-            detailDiscount.textContent = `-${detailDiscountPercentage}%`;
         }
 
         const stock =
