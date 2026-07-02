@@ -1,4 +1,4 @@
-# Mommy Crafts Frontend 3.31.6
+# Mommy Crafts Frontend 3.32.1
 
 Frontend multipágina de Mommy Crafts.
 
@@ -10,37 +10,42 @@ El frontend consume la API configurada en `js/config.js`.
 
 - La versión visible se define en `CONFIG.APP_VERSION`.
 - Los HTML deben referenciar CSS y JavaScript con la misma versión de caché.
-- En esta entrega, toda la aplicación utiliza `3.31.6`.
+- En esta entrega, toda la aplicación utiliza `3.32.1`.
 
-## Archivos que no deben publicarse
+## Administración de productos
 
-- `.env`
-- `.git`
-- ZIP de respaldo
-- Aplicadores temporales
-- Copias antiguas del sitio
-- Carpetas de archivos duplicados
+El formulario está organizado en cinco secciones:
+
+1. General.
+2. Logística.
+3. SEO.
+4. Personalización.
+5. Variantes.
+
+Permite administrar SKU, marca, peso, dimensiones y metadatos SEO sin romper productos antiguos.
 
 ## Verificación local
 
 ```bash
 node scripts/verificar-frontend.js
+node scripts/verificar-seguridad.js
+node scripts/verificar-catalogo.js
+node scripts/verificar-productos-admin.js
 ```
+
+## Archivos que no deben publicarse
+
+- `.env`
+- `.git`
+- `node_modules`
+- ZIP de respaldo
+- Aplicadores temporales
+- Copias antiguas del sitio
 
 ## Despliegue
 
-1. Publicar primero el backend compatible.
-2. Verificar su endpoint `/api/health`.
-3. Publicar este frontend.
-4. Probar inicio, catálogo, producto, carrito, checkout, cuenta y administración.
-5. Probar al menos una pantalla móvil.
-
-## Versión 3.32.0 — Catálogo profesional
-
-La ficha de producto utiliza consultas directas por slug o ID. Para validar la entrega:
-
-```bash
-node scripts/verificar-frontend.js
-node scripts/verificar-seguridad.js
-node scripts/verificar-catalogo.js
-```
+1. Publicar primero Backend 2.14.1.
+2. Verificar `/api/health`.
+3. Publicar Frontend 3.32.1.
+4. Probar creación y edición de productos.
+5. Confirmar navegación pública, carrito y checkout.

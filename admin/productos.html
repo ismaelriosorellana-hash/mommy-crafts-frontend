@@ -4,234 +4,405 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://mommy-crafts-backend.onrender.com; media-src 'self' blob:; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
     <meta name="robots" content="noindex, nofollow, noarchive">
-
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Productos | Mommy Crafts</title>
     <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
-    <link rel="stylesheet" href="css/admin.css?v=3.32.0">
+    <link rel="stylesheet" href="css/admin.css?v=3.32.1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="css/admin-experience-v327.css?v=3.32.0">
+    <link rel="stylesheet" href="css/admin-experience-v327.css?v=3.32.1">
 </head>
 <body data-admin-page="productos" data-admin-title="Productos">
     <section id="admin-page-content">
-
-<div class="admin-page-intro">
-    <div>
-        <h2>Catálogo e inventario</h2>
-        <p>Crea, edita y desactiva productos y variantes.</p>
-    </div>
-
-    <button class="admin-button" id="product-new" type="button">
-        <i class="fa-solid fa-plus"></i>
-        Nuevo producto
-    </button>
-</div>
-
-<div class="admin-toolbar">
-    <div class="admin-toolbar-group" style="flex:1">
-        <div class="admin-field" style="min-width:min(100%,320px);flex:1">
-            <input id="product-search" type="search" placeholder="Buscar por nombre o descripción">
-        </div>
-
-        <select id="product-status" aria-label="Filtrar por estado" style="min-height:43px;border:1px solid var(--admin-border);border-radius:11px;padding:0 12px">
-            <option value="">Todos</option>
-            <option value="true">Activos</option>
-            <option value="false">Inactivos</option>
-        </select>
-    </div>
-
-    <button class="admin-button secondary" id="product-refresh" type="button">
-        <i class="fa-solid fa-rotate"></i>
-        Actualizar
-    </button>
-</div>
-
-<section class="admin-card">
-    <div class="admin-table-wrap" id="products-table"></div>
-</section>
-
-<div class="admin-modal" id="product-modal" hidden>
-    <section class="admin-modal-panel">
-        <header class="admin-modal-header">
-            <h3 id="product-modal-title">Nuevo producto</h3>
-            <button class="admin-icon-button" type="button" data-close-modal="product-modal" aria-label="Cerrar">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </header>
-
-        <form id="product-form">
-            <div class="admin-modal-body">
-                <input id="product-id" type="hidden">
-
-                <h4 class="admin-section-title">Información principal</h4>
-
-                <div class="admin-form-grid">
-                    <div class="admin-field full">
-                        <label for="product-name">Nombre</label>
-                        <input id="product-name" required maxlength="180">
-                    </div>
-
-                    <div class="admin-field">
-                        <label for="product-price">Precio</label>
-                        <input id="product-price" type="number" min="0" step="1" required>
-                    </div>
-
-                    <div class="admin-field">
-                        <label for="product-original-price">Precio anterior</label>
-                        <input id="product-original-price" type="number" min="0" step="1">
-                    </div>
-
-                    <div class="admin-field">
-                        <label for="product-stock">Stock general</label>
-                        <input id="product-stock" type="number" min="0" step="1">
-                    </div>
-
-                    <div class="admin-field">
-                        <label for="product-order">Orden</label>
-                        <input id="product-order" type="number" step="1">
-                    </div>
-
-                    <div class="admin-field">
-                        <label for="product-preparation-days">Días hábiles mínimos de preparación</label>
-                        <input id="product-preparation-days" type="number" min="1" max="90" step="1" value="3">
-                    </div>
-
-                    <div class="admin-field">
-                        <label for="product-main-category">Categoría principal</label>
-                        <input id="product-main-category" placeholder="Vasos">
-                    </div>
-
-                    <div class="admin-field">
-                        <label for="product-categories">Categorías</label>
-                        <input id="product-categories" placeholder="Vasos, Regalos">
-                    </div>
-
-                    <div class="admin-field full">
-                        <label for="product-sizes">Tallas disponibles</label>
-                        <textarea id="product-sizes" rows="3" placeholder="S, M, L, XL, 0-3, 4-6"></textarea>
-                        <small>Separa por coma o por línea. Se permiten letras, números y guiones para rangos.</small>
-                    </div>
-
-                    <div class="admin-field">
-                        <label for="product-badge">Insignia</label>
-                        <input id="product-badge" placeholder="Nuevo">
-                    </div>
-
-                    <div class="admin-field full">
-                        <label for="product-description">Descripción</label>
-                        <textarea id="product-description"></textarea>
-                    </div>
-
-                    <div class="admin-field full">
-                        <label for="product-images">Imágenes generales</label>
-                        <textarea id="product-images" placeholder="Una URL de Cloudinary por línea"></textarea>
-                        <small>Para productos con colores, también puedes dejar este campo vacío y usar imágenes dentro de cada variante.</small>
-                    </div>
-
-                    <div class="admin-field full">
-                        <label for="product-characteristics">Características</label>
-                        <textarea id="product-characteristics" placeholder="Capacidad: 450 ml&#10;Altura: 20 cm"></textarea>
-                        <small>Una característica por línea usando “Título: Valor”.</small>
-                    </div>
-                </div>
-
-                <div class="admin-checkbox-row" style="margin-top:18px">
-                    <label class="admin-checkbox"><input id="product-active" type="checkbox" checked> Activo</label>
-                    <label class="admin-checkbox"><input id="product-publish" type="checkbox" checked> Publicar en catálogo</label>
-                    <label class="admin-checkbox"><input id="product-featured" type="checkbox"> Destacado</label>
-                    <label class="admin-checkbox"><input id="product-customizable" type="checkbox"> Personalizable en modal</label>
-                </div>
-
-                <h4 class="admin-section-title">Personalización simple</h4>
-
-                <div class="admin-checkbox-row">
-                    <label class="admin-checkbox"><input id="light-enabled" type="checkbox"> Habilitada</label>
-                    <label class="admin-checkbox"><input id="light-name" type="checkbox"> Permitir nombre</label>
-                    <label class="admin-checkbox"><input id="light-image" type="checkbox"> Permitir imagen</label>
-                    <label class="admin-checkbox"><input id="light-observation" type="checkbox"> Permitir observación</label>
-                </div>
-
-                <div class="admin-form-grid" style="margin-top:14px">
-                    <div class="admin-field">
-                        <label for="light-image-count">Máximo de imágenes</label>
-                        <select id="light-image-count">
-                            <option value="1">1 imagen</option>
-                            <option value="2">2 imágenes</option>
-                        </select>
-                    </div>
-
-                    <div class="admin-field">
-                        <label for="light-description">Descripción breve</label>
-                        <input id="light-description">
-                    </div>
-
-                    <div class="admin-field full">
-                        <label for="light-notice">Aviso al cliente</label>
-                        <input id="light-notice">
-                    </div>
-                </div>
-
-
-                <h4 class="admin-section-title">Envío y retiro</h4>
-
-                <div class="admin-checkbox-row">
-                    <label class="admin-checkbox">
-                        <input id="shipping-enabled" type="checkbox" checked>
-                        Permitir envío
-                    </label>
-
-                    <label class="admin-checkbox">
-                        <input id="pickup-enabled" type="checkbox" checked>
-                        Permitir retiro
-                    </label>
-                </div>
-
-                <div class="admin-form-grid" style="margin-top:14px">
-                    <div class="admin-field full">
-                        <label for="shipping-instructions">Instrucciones de envío</label>
-                        <textarea id="shipping-instructions" rows="4">El envío se realizará dentro de 3 días hábiles después de la confirmación del pedido. Esta confirmación será notificada al cliente por correo electrónico o WhatsApp.</textarea>
-                        <small>Se mostrarán al cliente y quedarán guardadas en el pedido.</small>
-                    </div>
-
-                    <div class="admin-field full">
-                        <label for="pickup-instructions">Instrucciones de retiro</label>
-                        <textarea id="pickup-instructions" rows="4">El lugar definido para retiros es la salida norte de la estación Macul, Línea 4 del Metro de Santiago. La fecha y hora de entrega serán coordinadas una vez confirmado el pedido.</textarea>
-                        <small>Puedes modificar el lugar o la forma de coordinación para este producto.</small>
-                    </div>
-                </div>
-
-                <h4 class="admin-section-title">Variantes de color</h4>
-
-                <div id="product-variants" class="admin-variant-list"></div>
-
-                <button class="admin-button secondary small" id="variant-add" type="button" style="margin-top:12px">
-                    <i class="fa-solid fa-plus"></i>
-                    Agregar color
-                </button>
+        <div class="admin-page-intro">
+            <div>
+                <h2>Catálogo e inventario</h2>
+                <p>Administra información comercial, logística, SEO y variantes desde una ficha ordenada.</p>
             </div>
 
-            <footer class="admin-modal-footer">
-                <button class="admin-button secondary" type="button" data-close-modal="product-modal">
-                    Cancelar
-                </button>
+            <button class="admin-button" id="product-new" type="button">
+                <i class="fa-solid fa-plus"></i>
+                Nuevo producto
+            </button>
+        </div>
 
-                <button class="admin-button" id="product-save" type="submit">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    Guardar producto
-                </button>
-            </footer>
-        </form>
+        <div class="admin-toolbar">
+            <div class="admin-toolbar-group admin-product-search-group">
+                <div class="admin-field admin-product-search-field">
+                    <input id="product-search" type="search" placeholder="Buscar por nombre, SKU, marca o categoría">
+                </div>
+
+                <select id="product-status" aria-label="Filtrar por estado" class="admin-filter-select">
+                    <option value="">Todos</option>
+                    <option value="true">Activos</option>
+                    <option value="false">Inactivos</option>
+                </select>
+            </div>
+
+            <button class="admin-button secondary" id="product-refresh" type="button">
+                <i class="fa-solid fa-rotate"></i>
+                Actualizar
+            </button>
+        </div>
+
+        <section class="admin-card">
+            <div class="admin-table-wrap" id="products-table"></div>
+        </section>
+
+        <div class="admin-modal" id="product-modal" hidden>
+            <section class="admin-modal-panel admin-product-modal-panel">
+                <header class="admin-modal-header">
+                    <div>
+                        <h3 id="product-modal-title">Nuevo producto</h3>
+                        <p id="product-modal-subtitle">Completa primero la información comercial esencial.</p>
+                    </div>
+                    <button class="admin-icon-button" type="button" data-close-modal="product-modal" aria-label="Cerrar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </header>
+
+                <form id="product-form">
+                    <div class="admin-product-form-status" aria-live="polite">
+                        <div>
+                            <strong id="product-completion-label">Ficha 0% completa</strong>
+                            <span id="product-completion-help">Agrega nombre, precio, categoría, imágenes, logística y SEO.</span>
+                        </div>
+                        <div class="admin-product-progress" aria-hidden="true">
+                            <span id="product-completion-bar"></span>
+                        </div>
+                    </div>
+
+                    <nav class="admin-product-tabs" role="tablist" aria-label="Secciones del producto">
+                        <button class="admin-product-tab active" type="button" role="tab" aria-selected="true" data-product-tab="general">
+                            <i class="fa-solid fa-box"></i>
+                            General
+                        </button>
+                        <button class="admin-product-tab" type="button" role="tab" aria-selected="false" data-product-tab="logistica">
+                            <i class="fa-solid fa-truck-fast"></i>
+                            Logística
+                        </button>
+                        <button class="admin-product-tab" type="button" role="tab" aria-selected="false" data-product-tab="seo">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            SEO
+                        </button>
+                        <button class="admin-product-tab" type="button" role="tab" aria-selected="false" data-product-tab="personalizacion">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            Personalización
+                        </button>
+                        <button class="admin-product-tab" type="button" role="tab" aria-selected="false" data-product-tab="variantes">
+                            <i class="fa-solid fa-palette"></i>
+                            Variantes
+                        </button>
+                    </nav>
+
+                    <div class="admin-modal-body admin-product-modal-body">
+                        <input id="product-id" type="hidden">
+
+                        <section class="admin-product-panel active" role="tabpanel" data-product-panel="general">
+                            <div class="admin-product-section-heading">
+                                <div>
+                                    <span class="admin-product-eyebrow">Información comercial</span>
+                                    <h4>Datos principales</h4>
+                                </div>
+                                <p>Estos datos identifican el producto dentro de la tienda y del inventario.</p>
+                            </div>
+
+                            <div class="admin-form-grid">
+                                <div class="admin-field full">
+                                    <label for="product-name">Nombre del producto</label>
+                                    <input id="product-name" required maxlength="180" autocomplete="off">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-sku">SKU principal</label>
+                                    <input id="product-sku" maxlength="80" placeholder="Se generará automáticamente" autocomplete="off">
+                                    <small>Identificador interno único. Usa letras, números, guiones, puntos o guion bajo.</small>
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-brand">Marca</label>
+                                    <input id="product-brand" maxlength="120" value="Mommy Crafts">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-barcode">Código de barras</label>
+                                    <input id="product-barcode" maxlength="80" inputmode="numeric" placeholder="Opcional">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-badge">Insignia</label>
+                                    <input id="product-badge" placeholder="Nuevo" maxlength="80">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-price">Precio</label>
+                                    <input id="product-price" type="number" min="0" step="1" required>
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-original-price">Precio anterior</label>
+                                    <input id="product-original-price" type="number" min="0" step="1">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-stock">Stock general</label>
+                                    <input id="product-stock" type="number" min="0" step="1">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-order">Orden de aparición</label>
+                                    <input id="product-order" type="number" step="1">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-main-category">Categoría principal</label>
+                                    <input id="product-main-category" placeholder="Librería" maxlength="100">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-categories">Categorías adicionales</label>
+                                    <input id="product-categories" placeholder="Educativos, Regalos">
+                                </div>
+
+                                <div class="admin-field full">
+                                    <label for="product-sizes">Tallas disponibles</label>
+                                    <textarea id="product-sizes" rows="3" placeholder="S, M, L, XL, 0-3, 4-6"></textarea>
+                                    <small>Separa por coma o por línea. Se permiten letras, números y guiones para rangos.</small>
+                                </div>
+
+                                <div class="admin-field full">
+                                    <label for="product-description">Descripción</label>
+                                    <textarea id="product-description" rows="7" maxlength="10000"></textarea>
+                                </div>
+
+                                <div class="admin-field full">
+                                    <label for="product-images">Imágenes generales</label>
+                                    <textarea id="product-images" rows="5" placeholder="Una URL de Cloudinary por línea"></textarea>
+                                    <small>La primera imagen será la principal. Las variantes pueden tener imágenes propias.</small>
+                                </div>
+
+                                <div class="admin-field full">
+                                    <label for="product-characteristics">Características</label>
+                                    <textarea id="product-characteristics" rows="5" placeholder="Tipo de papel: Bond 90 g&#10;Tamaño: 15 × 21 cm"></textarea>
+                                    <small>Una característica por línea usando “Título: Valor”.</small>
+                                </div>
+                            </div>
+
+                            <div class="admin-checkbox-row admin-product-flags">
+                                <label class="admin-checkbox"><input id="product-active" type="checkbox" checked> Activo</label>
+                                <label class="admin-checkbox"><input id="product-publish" type="checkbox" checked> Publicar en catálogo</label>
+                                <label class="admin-checkbox"><input id="product-featured" type="checkbox"> Destacado</label>
+                                <label class="admin-checkbox"><input id="product-customizable" type="checkbox"> Personalizable en modal</label>
+                            </div>
+                        </section>
+
+                        <section class="admin-product-panel" role="tabpanel" data-product-panel="logistica" hidden>
+                            <div class="admin-product-section-heading">
+                                <div>
+                                    <span class="admin-product-eyebrow">Preparación y despacho</span>
+                                    <h4>Información logística</h4>
+                                </div>
+                                <p>El peso y las medidas permitirán calcular costos de despacho automáticamente en una etapa posterior.</p>
+                            </div>
+
+                            <div class="admin-form-grid">
+                                <div class="admin-field">
+                                    <label for="product-preparation-days">Días hábiles de preparación</label>
+                                    <input id="product-preparation-days" type="number" min="1" max="90" step="1" value="3">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-weight">Peso embalado (gramos)</label>
+                                    <input id="product-weight" type="number" min="0" max="100000" step="1" placeholder="Ej. 650">
+                                    <small>Incluye caja, protección y accesorios.</small>
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-length">Largo embalado (cm)</label>
+                                    <input id="product-length" type="number" min="0" max="1000" step="0.1" placeholder="Ej. 30">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-width">Ancho embalado (cm)</label>
+                                    <input id="product-width" type="number" min="0" max="1000" step="0.1" placeholder="Ej. 22">
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="product-height">Alto embalado (cm)</label>
+                                    <input id="product-height" type="number" min="0" max="1000" step="0.1" placeholder="Ej. 8">
+                                </div>
+                            </div>
+
+                            <div class="admin-product-callout">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <p>Usa las medidas del paquete listo para despachar, no solo las medidas del producto sin embalaje.</p>
+                            </div>
+
+                            <div class="admin-checkbox-row">
+                                <label class="admin-checkbox">
+                                    <input id="shipping-enabled" type="checkbox" checked>
+                                    Permitir envío
+                                </label>
+                                <label class="admin-checkbox">
+                                    <input id="pickup-enabled" type="checkbox" checked>
+                                    Permitir retiro
+                                </label>
+                            </div>
+
+                            <div class="admin-form-grid admin-product-spacing-top">
+                                <div class="admin-field full">
+                                    <label for="shipping-instructions">Instrucciones de envío</label>
+                                    <textarea id="shipping-instructions" rows="4">El envío se realizará dentro de 3 días hábiles después de la confirmación del pedido. Esta confirmación será notificada al cliente por correo electrónico o WhatsApp.</textarea>
+                                    <small>Se mostrarán al cliente y quedarán guardadas en el pedido.</small>
+                                </div>
+
+                                <div class="admin-field full">
+                                    <label for="pickup-instructions">Instrucciones de retiro</label>
+                                    <textarea id="pickup-instructions" rows="4">El lugar definido para retiros es la salida norte de la estación Macul, Línea 4 del Metro de Santiago. La fecha y hora de entrega serán coordinadas una vez confirmado el pedido.</textarea>
+                                    <small>Puedes modificar el lugar o la forma de coordinación para este producto.</small>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-product-panel" role="tabpanel" data-product-panel="seo" hidden>
+                            <div class="admin-product-section-heading">
+                                <div>
+                                    <span class="admin-product-eyebrow">Visibilidad en buscadores</span>
+                                    <h4>SEO del producto</h4>
+                                </div>
+                                <p>Configura cómo podría verse esta ficha en Google y al compartirla.</p>
+                            </div>
+
+                            <div class="admin-form-grid">
+                                <div class="admin-field full">
+                                    <label for="product-slug">Dirección amigable (slug)</label>
+                                    <div class="admin-input-action-row">
+                                        <input id="product-slug" maxlength="140" placeholder="nombre-del-producto" autocomplete="off">
+                                        <button class="admin-button secondary small" id="product-slug-generate" type="button">
+                                            Regenerar
+                                        </button>
+                                    </div>
+                                    <small>Evita cambiarla cuando el producto ya esté publicado para no romper enlaces compartidos.</small>
+                                </div>
+
+                                <div class="admin-field full">
+                                    <label for="product-seo-title">Título SEO</label>
+                                    <input id="product-seo-title" maxlength="70" placeholder="Nombre del producto | Mommy Crafts">
+                                    <small><span id="product-seo-title-count">0</span>/70 caracteres.</small>
+                                </div>
+
+                                <div class="admin-field full">
+                                    <label for="product-seo-description">Descripción SEO</label>
+                                    <textarea id="product-seo-description" rows="4" maxlength="180" placeholder="Describe el beneficio principal, material, uso y personalización."></textarea>
+                                    <small><span id="product-seo-description-count">0</span>/180 caracteres.</small>
+                                </div>
+
+                                <div class="admin-field full">
+                                    <label for="product-seo-keywords">Palabras clave internas</label>
+                                    <input id="product-seo-keywords" placeholder="cuaderno personalizado, regalo educativo, librería">
+                                    <small>Separa por coma. Se guardan como apoyo editorial; no se mostrarán al cliente.</small>
+                                </div>
+
+                                <div class="admin-field full">
+                                    <label for="product-seo-image">Imagen social</label>
+                                    <input id="product-seo-image" type="url" placeholder="URL de Cloudinary opcional">
+                                    <small>Si queda vacía, más adelante se utilizará la imagen principal del producto.</small>
+                                </div>
+                            </div>
+
+                            <label class="admin-checkbox admin-product-noindex">
+                                <input id="product-seo-noindex" type="checkbox">
+                                Ocultar esta ficha de los buscadores
+                            </label>
+
+                            <div class="admin-seo-preview" aria-label="Vista previa orientativa en buscadores">
+                                <span class="admin-seo-preview-label">Vista previa orientativa</span>
+                                <div class="admin-seo-preview-url" id="product-seo-preview-url">mommycrafts.onrender.com/producto.html</div>
+                                <strong id="product-seo-preview-title">Nombre del producto | Mommy Crafts</strong>
+                                <p id="product-seo-preview-description">Agrega una descripción SEO clara para explicar qué hace especial este producto.</p>
+                            </div>
+                        </section>
+
+                        <section class="admin-product-panel" role="tabpanel" data-product-panel="personalizacion" hidden>
+                            <div class="admin-product-section-heading">
+                                <div>
+                                    <span class="admin-product-eyebrow">Opciones del cliente</span>
+                                    <h4>Personalización simple</h4>
+                                </div>
+                                <p>Define los campos que el cliente podrá completar antes de agregar el producto al carrito.</p>
+                            </div>
+
+                            <div class="admin-checkbox-row">
+                                <label class="admin-checkbox"><input id="light-enabled" type="checkbox"> Habilitada</label>
+                                <label class="admin-checkbox"><input id="light-name" type="checkbox"> Permitir nombre</label>
+                                <label class="admin-checkbox"><input id="light-image" type="checkbox"> Permitir imagen</label>
+                                <label class="admin-checkbox"><input id="light-observation" type="checkbox"> Permitir observación</label>
+                            </div>
+
+                            <div class="admin-form-grid admin-product-spacing-top">
+                                <div class="admin-field">
+                                    <label for="light-image-count">Máximo de imágenes</label>
+                                    <select id="light-image-count">
+                                        <option value="1">1 imagen</option>
+                                        <option value="2">2 imágenes</option>
+                                    </select>
+                                </div>
+
+                                <div class="admin-field">
+                                    <label for="light-description">Descripción breve</label>
+                                    <input id="light-description" maxlength="300">
+                                </div>
+
+                                <div class="admin-field full">
+                                    <label for="light-notice">Aviso al cliente</label>
+                                    <input id="light-notice" maxlength="500">
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-product-panel" role="tabpanel" data-product-panel="variantes" hidden>
+                            <div class="admin-product-section-heading admin-product-variant-heading">
+                                <div>
+                                    <span class="admin-product-eyebrow">Colores y presentaciones</span>
+                                    <h4>Variantes del producto</h4>
+                                </div>
+                                <button class="admin-button secondary small" id="variant-add" type="button">
+                                    <i class="fa-solid fa-plus"></i>
+                                    Agregar variante
+                                </button>
+                            </div>
+
+                            <div class="admin-product-callout">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <p>Si una variante tiene peso o medidas diferentes, complétalos aquí. Los campos vacíos usarán la información logística general.</p>
+                            </div>
+
+                            <div id="product-variants" class="admin-variant-list"></div>
+                            <div id="product-variants-empty" class="admin-empty admin-product-variants-empty">
+                                Aún no hay variantes. El producto utilizará el stock, precio, SKU y medidas generales.
+                            </div>
+                        </section>
+                    </div>
+
+                    <footer class="admin-modal-footer">
+                        <button class="admin-button secondary" type="button" data-close-modal="product-modal">
+                            Cancelar
+                        </button>
+
+                        <button class="admin-button" id="product-save" type="submit">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Guardar producto
+                        </button>
+                    </footer>
+                </form>
+            </section>
+        </div>
     </section>
-</div>
 
-    </section>
-
-    <script src="../js/config.js?v=3.32.0"></script>
-    <script src="js/admin-api.js?v=3.32.0"></script>
-    <script src="js/admin-common.js?v=3.32.0"></script>
-    <script src="js/admin-experience-v327.js?v=3.32.0"></script>
-    <script src="js/products-admin.js?v=3.32.0"></script>
+    <script src="../js/config.js?v=3.32.1"></script>
+    <script src="js/admin-api.js?v=3.32.1"></script>
+    <script src="js/admin-common.js?v=3.32.1"></script>
+    <script src="js/admin-experience-v327.js?v=3.32.1"></script>
+    <script src="js/products-admin.js?v=3.32.1"></script>
 </body>
 </html>
