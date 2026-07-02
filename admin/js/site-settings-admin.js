@@ -230,6 +230,32 @@
         return Number($(`#${id}`)?.value || 0);
     }
 
+    function normalizedPositionGroup(value = {}) {
+        return {
+            offsetX: Number(value?.offsetX) || 0,
+            offsetY: Number(value?.offsetY) || 0
+        };
+    }
+
+    function sameHeaderLayout(left = {}, right = {}) {
+        return ["social", "brand", "support", "actions"].every((key) => {
+            const a = normalizedPositionGroup(left?.[key]);
+            const b = normalizedPositionGroup(right?.[key]);
+            return a.offsetX === b.offsetX && a.offsetY === b.offsetY;
+        });
+    }
+
+    function scaledPreviewOffset(value) {
+        return Math.round((Number(value) || 0) * 0.28);
+    }
+
+    function applyPreviewPosition(element, position = {}) {
+        if (!element) return;
+        const x = scaledPreviewOffset(position.offsetX);
+        const y = scaledPreviewOffset(position.offsetY);
+        element.style.translate = `${x}px ${y}px`;
+    }
+
     function collect() {
         const colors = {};
         for (const [key] of COLOR_FIELDS) {
@@ -309,10 +335,16 @@
         const previewSocial = $("#site-preview-social");
         const previewSupport = $("#site-preview-support");
         const previewActions = $("#site-preview-actions");
-        if (previewSocial) previewSocial.style.transform = `translate(${headerLayout.social.offsetX}px, ${headerLayout.social.offsetY}px)`;
-        brand.style.transform = `translate(${headerLayout.brand.offsetX}px, ${headerLayout.brand.offsetY}px)`;
-        if (previewSupport) previewSupport.style.transform = `translate(${headerLayout.support.offsetX}px, ${headerLayout.support.offsetY}px)`;
-        if (previewActions) previewActions.style.transform = `translate(${headerLayout.actions.offsetX}px, ${headerLayout.actions.offsetY}px)`;
+
+        /*
+         * La vista previa usa solo el 28% del desplazamiento real. Así conserva
+         * la proporción del encabezado público sin superponer los cuatro grupos
+         * dentro de la tarjeta angosta del panel.
+         */
+        applyPreviewPosition(previewSocial, headerLayout.social);
+        applyPreviewPosition(brand, headerLayout.brand);
+        applyPreviewPosition(previewSupport, headerLayout.support);
+        applyPreviewPosition(previewActions, headerLayout.actions);
 
         const announcementPreview = $("#site-announcement-preview");
         const announcementTrack = $("#site-announcement-preview-track");
@@ -396,23 +428,64 @@
 
     async function save() {
         if (state.saving || state.uploading) return;
+
+        const payload = collect();
         state.saving = true;
-        document.querySelectorAll("#site-settings-save, #site-settings-mobile-save").forEach((button) => button.disabled = true);
+        document.querySelectorAll("#site-settings-save, #site-settings-mobile-save")
+            .forEach((button) => button.disabled = true);
         message("Guardando apariencia...");
+
         try {
-            const result = await AdminAPI.request("/admin/configuracion-sitio", { method: "PUT", body: collect() });
-            state.settings = mergeSettings(result.settings);
-            state.customized = true;
+            const result = await AdminAPI.request("/admin/configuracion-sitio", {
+                method: "PUT",
+                body: payload
+            });
+
+            /*
+             * Verificación real: después del PUT volvemos a consultar el backend.
+             * Si el servidor todavía no reconoce headerLayout, conservamos los
+             * controles en pantalla y mostramos el problema en lugar de volverlos
+             * silenciosamente a cero.
+             */
+            const verification = await AdminAPI.request("/admin/configuracion-sitio");
+            const verifiedSettings = mergeSettings(verification.settings || result.settings || {});
+
+            if (!sameHeaderLayout(payload.headerLayout, verifiedSettings.headerLayout)) {
+                state.settings = mergeSettings({
+                    ...verifiedSettings,
+                    headerLayout: payload.headerLayout
+                });
+                renderForm();
+                setStatus(verification.settings || result.settings || verifiedSettings, Boolean(verification.customized ?? true));
+                message(
+                    "El panel envió las posiciones, pero el backend aún no las está almacenando. " +
+                    "Publica la corrección Backend V2.13.2 y vuelve a guardar.",
+                    "danger"
+                );
+                AdminUI.toast("El backend no confirmó las posiciones del encabezado.", "error");
+                return;
+            }
+
+            state.settings = verifiedSettings;
+            state.customized = Boolean(verification.customized ?? true);
             renderForm();
-            setStatus(result.settings, true);
+            setStatus(verification.settings || verifiedSettings, state.customized);
             message("La identidad, las posiciones del encabezado, la cinta y los colores ya están publicados.", "success");
             AdminUI.toast("Apariencia guardada.", "success");
         } catch (error) {
+            /* Mantiene en el formulario lo que el usuario estaba ajustando. */
+            state.settings = mergeSettings({
+                ...state.settings,
+                ...payload,
+                headerLayout: payload.headerLayout
+            });
+            renderForm();
             message(error.message, "danger");
             AdminUI.toast(error.message, "error");
         } finally {
             state.saving = false;
-            document.querySelectorAll("#site-settings-save, #site-settings-mobile-save").forEach((button) => button.disabled = false);
+            document.querySelectorAll("#site-settings-save, #site-settings-mobile-save")
+                .forEach((button) => button.disabled = false);
         }
     }
 
