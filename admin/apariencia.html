@@ -12,6 +12,7 @@
 <link href="css/admin.css?v=3.31.0" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
 <link href="css/admin-experience-v327.css?v=3.31.0" rel="stylesheet"/>
+<link href="css/header-layout-v3312.css?v=3.31.3" rel="stylesheet"/>
 </head>
 <body data-admin-page="apariencia" data-admin-title="Apariencia del sitio">
 <div id="admin-page-content">
@@ -138,6 +139,39 @@
 </div>
 </section>
 <section class="admin-card" data-settings-section="">
+<div class="admin-card-header">
+<div>
+<p class="admin-section-kicker">Encabezado</p>
+<h3>Posición de los elementos</h3>
+</div>
+</div>
+<div class="admin-card-body">
+<p class="site-settings-help">Ajusta la posición horizontal y vertical de cada grupo del encabezado. Los cuatro iconos permanecen a la derecha, en la misma línea que soporte al cliente.</p>
+<div class="header-layout-settings-grid">
+<fieldset class="header-layout-control-group">
+<legend>Iconos de redes sociales</legend>
+<label class="admin-field"><span>Posición horizontal</span><input id="header-social-x" max="300" min="-300" step="1" type="range"/><output id="header-social-x-output"></output></label>
+<label class="admin-field"><span>Posición vertical</span><input id="header-social-y" max="160" min="-160" step="1" type="range"/><output id="header-social-y-output"></output></label>
+</fieldset>
+<fieldset class="header-layout-control-group">
+<legend>Logos</legend>
+<label class="admin-field"><span>Posición horizontal del grupo</span><input id="header-brand-x" max="300" min="-300" step="1" type="range"/><output id="header-brand-x-output"></output></label>
+<label class="admin-field"><span>Posición vertical del grupo</span><input id="header-brand-y" max="160" min="-160" step="1" type="range"/><output id="header-brand-y-output"></output></label>
+</fieldset>
+<fieldset class="header-layout-control-group">
+<legend>Soporte al cliente</legend>
+<label class="admin-field"><span>Posición horizontal</span><input id="header-support-x" max="300" min="-300" step="1" type="range"/><output id="header-support-x-output"></output></label>
+<label class="admin-field"><span>Posición vertical</span><input id="header-support-y" max="160" min="-160" step="1" type="range"/><output id="header-support-y-output"></output></label>
+</fieldset>
+<fieldset class="header-layout-control-group">
+<legend>Iconos de búsqueda, cuenta, comparación y carrito</legend>
+<label class="admin-field"><span>Posición horizontal</span><input id="header-actions-x" max="300" min="-300" step="1" type="range"/><output id="header-actions-x-output"></output></label>
+<label class="admin-field"><span>Posición vertical</span><input id="header-actions-y" max="160" min="-160" step="1" type="range"/><output id="header-actions-y-output"></output></label>
+</fieldset>
+</div>
+</div>
+</section>
+<section class="admin-card" data-settings-section="">
 <div class="admin-card-header"><div><p class="admin-section-kicker">Comunicación</p><h3>Cinta superior</h3></div></div>
 <div class="admin-card-body">
 <p class="site-settings-help">Controla los mensajes que se desplazan en la parte superior de toda la tienda. Cada mensaje puede incluir un enlace interno o una dirección https://.</p>
@@ -173,11 +207,18 @@
 </div>
 <div class="admin-card-body">
 <div class="site-brand-preview" id="site-brand-preview"><div class="site-announcement-preview" id="site-announcement-preview"><div id="site-announcement-preview-track"></div></div>
-<div class="site-brand-preview-header">
+<div class="site-brand-preview-header header-layout-preview">
+<div class="header-layout-preview-social" id="site-preview-social" aria-hidden="true">
+<i class="fa-brands fa-instagram"></i><i class="fa-brands fa-whatsapp"></i><i class="fa-brands fa-threads"></i><i class="fa-brands fa-tiktok"></i>
+</div>
 <div class="site-brand-preview-brand" id="site-brand-preview-brand">
 <img alt="" id="site-preview-logo"/>
 <img alt="Mommy Crafts" id="site-preview-title-image"/>
 <strong hidden="" id="site-preview-title-text">Mommy Crafts</strong>
+</div>
+<div class="header-layout-preview-right">
+<div class="header-layout-preview-support" id="site-preview-support" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i><span><small>Soporte</small><strong>+56 9 5463 3848</strong></span></div>
+<div class="header-layout-preview-actions" id="site-preview-actions" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i><i class="fa-regular fa-circle-user"></i><i class="fa-regular fa-heart"></i><i class="fa-solid fa-cart-shopping"></i></div>
 </div>
 </div>
 <div class="site-brand-preview-body">
@@ -203,7 +244,7 @@
 <script defer="" src="../js/config.js?v=3.31.0"></script>
 <script defer="" src="js/admin-api.js?v=3.31.0"></script>
 <script defer="" src="js/admin-common.js?v=3.31.0"></script>
-<script defer="" src="js/site-settings-admin.js?v=3.31.0"></script>
+<script defer="" src="js/site-settings-admin.js?v=3.31.3"></script>
 <script src="js/admin-experience-v327.js?v=3.31.0"></script>
 </body>
 </html>

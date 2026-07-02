@@ -616,3 +616,47 @@ body.mc-quick-view-open {
         grid-template-columns: 1fr;
     }
 }
+
+/* V3.31.3 · posiciones independientes y compatibles con las animaciones internas */
+.container-hero .hero > .mc-header-right-group {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.4rem;
+    min-width: 0;
+}
+
+.container-hero .mc-header-right-group > .customer-support {
+    justify-self: auto;
+    flex: none;
+    transform: none;
+    translate: var(--mc-header-support-x, 0px) var(--mc-header-support-y, 0px);
+}
+
+.container-hero .mc-header-right-group > .mc-header-actions,
+.container-hero .navbar-actions.mc-header-actions {
+    flex: none;
+    transform: none;
+    translate: var(--mc-header-actions-x, 0px) var(--mc-header-actions-y, 0px);
+}
+
+.container-hero .social-icons-header {
+    transform: none;
+    translate: var(--mc-header-social-x, 0px) var(--mc-header-social-y, 0px);
+}
+
+.container-hero .container-logo {
+    transform: none;
+    translate: var(--mc-header-brand-x, 0px) var(--mc-header-brand-y, 0px);
+}
+
+@media (max-width: 820px) {
+    .container-hero .hero > .mc-header-right-group {
+        gap: 0;
+    }
+
+    .container-hero .mc-header-right-group > .customer-support {
+        display: none;
+    }
+}

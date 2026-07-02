@@ -137,9 +137,42 @@
         });
     }
 
+
+    function applyElementPosition(selector, value) {
+        const offsetX = Number(value?.offsetX) || 0;
+        const offsetY = Number(value?.offsetY) || 0;
+
+        document.querySelectorAll(selector).forEach((element) => {
+            element.style.setProperty("translate", `${offsetX}px ${offsetY}px`, "important");
+        });
+    }
+
+    function applyHeaderLayout(settings) {
+        const layout = settings?.headerLayout || {};
+        const groups = {
+            social: layout.social,
+            brand: layout.brand,
+            support: layout.support,
+            actions: layout.actions
+        };
+
+        for (const [name, value] of Object.entries(groups)) {
+            const offsetX = Number(value?.offsetX) || 0;
+            const offsetY = Number(value?.offsetY) || 0;
+            document.documentElement.style.setProperty(`--mc-header-${name}-x`, `${offsetX}px`);
+            document.documentElement.style.setProperty(`--mc-header-${name}-y`, `${offsetY}px`);
+        }
+
+        applyElementPosition(".container-hero .social-icons-header", layout.social);
+        applyElementPosition(".container-hero .container-logo", layout.brand);
+        applyElementPosition(".container-hero .customer-support", layout.support);
+        applyElementPosition(".site-header .navbar-actions", layout.actions);
+    }
+
     function apply(settings) {
         const colors = settings?.colors || {};
         applyAnnouncementBar(settings);
+        applyHeaderLayout(settings);
         for (const [key, variable] of Object.entries(CSS_VARIABLES)) {
             if (colors[key]) document.documentElement.style.setProperty(variable, colors[key]);
         }

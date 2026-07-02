@@ -266,9 +266,34 @@
         desired.forEach((element) => actions.appendChild(element));
     }
 
+    function moveHeaderActionsToHero(siteHeader, actions) {
+        const hero = siteHeader?.querySelector(".container-hero .hero");
+        const support = hero?.querySelector(":scope > .customer-support, .mc-header-right-group > .customer-support");
+        if (!hero || !actions) return;
+
+        let group = hero.querySelector(":scope > .mc-header-right-group");
+        if (!group) {
+            group = document.createElement("div");
+            group.className = "mc-header-right-group";
+            group.setAttribute("data-mc-header-right-group", "");
+            hero.appendChild(group);
+        }
+
+        if (support && support.parentElement !== group) {
+            group.appendChild(support);
+        }
+
+        if (actions.parentElement !== group) {
+            group.appendChild(actions);
+        }
+    }
+
     function setupHeader() {
-        document.querySelectorAll(".navbar-actions").forEach((actions) => {
-            const navbar = actions.closest(".navbar");
+        document.querySelectorAll(".site-header").forEach((siteHeader) => {
+            const actions = siteHeader.querySelector(".navbar-actions");
+            if (!actions) return;
+
+            const navbar = siteHeader.querySelector(".navbar");
             const searchShell = navbar?.querySelector(":scope > .search-shell") || null;
 
             actions.classList.add("mc-header-actions");
@@ -276,6 +301,7 @@
             createHeaderSearch(actions, searchShell);
             createHeaderCompare(actions);
             orderHeaderActions(actions);
+            moveHeaderActionsToHero(siteHeader, actions);
         });
 
         updateCompareUi();

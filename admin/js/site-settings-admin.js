@@ -23,6 +23,12 @@
                 gap: 10
             }
         },
+        headerLayout: {
+            social: { offsetX: 0, offsetY: 0 },
+            brand: { offsetX: 0, offsetY: 0 },
+            support: { offsetX: 0, offsetY: 0 },
+            actions: { offsetX: 0, offsetY: 0 }
+        },
         announcementBar: {
             enabled: true,
             speedSeconds: 22,
@@ -98,6 +104,14 @@
                 ...(value.branding || {}),
                 logo: { ...defaults.branding.logo, ...(value.branding?.logo || {}) },
                 title: { ...defaults.branding.title, ...(value.branding?.title || {}) }
+            },
+            headerLayout: {
+                ...defaults.headerLayout,
+                ...(value.headerLayout || {}),
+                social: { ...defaults.headerLayout.social, ...(value.headerLayout?.social || {}) },
+                brand: { ...defaults.headerLayout.brand, ...(value.headerLayout?.brand || {}) },
+                support: { ...defaults.headerLayout.support, ...(value.headerLayout?.support || {}) },
+                actions: { ...defaults.headerLayout.actions, ...(value.headerLayout?.actions || {}) }
             },
             colors: { ...defaults.colors, ...(value.colors || {}) },
             announcementBar: {
@@ -182,6 +196,16 @@
         setRange("site-title-y", title.offsetY);
         setRange("site-title-gap", title.gap);
 
+        const headerLayout = state.settings.headerLayout;
+        setRange("header-social-x", headerLayout.social.offsetX);
+        setRange("header-social-y", headerLayout.social.offsetY);
+        setRange("header-brand-x", headerLayout.brand.offsetX);
+        setRange("header-brand-y", headerLayout.brand.offsetY);
+        setRange("header-support-x", headerLayout.support.offsetX);
+        setRange("header-support-y", headerLayout.support.offsetY);
+        setRange("header-actions-x", headerLayout.actions.offsetX);
+        setRange("header-actions-y", headerLayout.actions.offsetY);
+
         const announcement = state.settings.announcementBar;
         $("#announcement-enabled").checked = announcement.enabled !== false;
         setRange("announcement-speed", announcement.speedSeconds, "s");
@@ -232,6 +256,24 @@
                     gap: valueNumber("site-title-gap")
                 }
             },
+            headerLayout: {
+                social: {
+                    offsetX: valueNumber("header-social-x"),
+                    offsetY: valueNumber("header-social-y")
+                },
+                brand: {
+                    offsetX: valueNumber("header-brand-x"),
+                    offsetY: valueNumber("header-brand-y")
+                },
+                support: {
+                    offsetX: valueNumber("header-support-x"),
+                    offsetY: valueNumber("header-support-y")
+                },
+                actions: {
+                    offsetX: valueNumber("header-actions-x"),
+                    offsetY: valueNumber("header-actions-y")
+                }
+            },
             announcementBar: {
                 ...state.settings.announcementBar,
                 enabled: $("#announcement-enabled")?.checked !== false,
@@ -254,6 +296,7 @@
     function updatePreview() {
         const current = collect();
         const { logo, title } = current.branding;
+        const headerLayout = current.headerLayout;
         const colors = current.colors;
         const announcement = current.announcementBar;
         const root = $("#site-brand-preview");
@@ -262,6 +305,14 @@
         const titleImage = $("#site-preview-title-image");
         const titleText = $("#site-preview-title-text");
         if (!root || !brand || !logoImage || !titleImage || !titleText) return;
+
+        const previewSocial = $("#site-preview-social");
+        const previewSupport = $("#site-preview-support");
+        const previewActions = $("#site-preview-actions");
+        if (previewSocial) previewSocial.style.transform = `translate(${headerLayout.social.offsetX}px, ${headerLayout.social.offsetY}px)`;
+        brand.style.transform = `translate(${headerLayout.brand.offsetX}px, ${headerLayout.brand.offsetY}px)`;
+        if (previewSupport) previewSupport.style.transform = `translate(${headerLayout.support.offsetX}px, ${headerLayout.support.offsetY}px)`;
+        if (previewActions) previewActions.style.transform = `translate(${headerLayout.actions.offsetX}px, ${headerLayout.actions.offsetY}px)`;
 
         const announcementPreview = $("#site-announcement-preview");
         const announcementTrack = $("#site-announcement-preview-track");
@@ -354,7 +405,7 @@
             state.customized = true;
             renderForm();
             setStatus(result.settings, true);
-            message("La identidad, la cinta y los colores ya están publicados.", "success");
+            message("La identidad, las posiciones del encabezado, la cinta y los colores ya están publicados.", "success");
             AdminUI.toast("Apariencia guardada.", "success");
         } catch (error) {
             message(error.message, "danger");
@@ -366,7 +417,7 @@
     }
 
     async function reset() {
-        if (!AdminUI.confirmAction("¿Restaurar el logo, título, posiciones, tamaños y colores predeterminados?")) return;
+        if (!AdminUI.confirmAction("¿Restaurar el logo, título, posiciones del encabezado, tamaños y colores predeterminados?")) return;
         try {
             const result = await AdminAPI.request("/admin/configuracion-sitio/restablecer", { method: "POST" });
             state.settings = mergeSettings(result.settings);
