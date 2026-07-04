@@ -2589,6 +2589,7 @@ function renderSizeSelector(product) {
 
         const uniqueFacts = Array.from(new Set(facts.map((fact) => fact.trim()).filter(Boolean))).slice(0, 5);
         section.hidden = uniqueFacts.length === 0;
+        if (!section.hidden) section.open = false;
         list.innerHTML = "";
 
         uniqueFacts.forEach((fact) => {
@@ -2601,9 +2602,8 @@ function renderSizeSelector(product) {
     function renderProductHeading(product) {
         const summary = document.getElementById("detalle-resumen");
         if (summary) {
-            const lead = buildProductLead(product.descripcion);
-            summary.hidden = !lead;
-            summary.textContent = lead;
+            summary.hidden = true;
+            summary.textContent = "";
         }
 
         updateProductReference(product, null);
