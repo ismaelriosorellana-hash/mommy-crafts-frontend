@@ -1,4 +1,4 @@
-# Cambios frontend v3.35.1
+# Cambios frontend v3.36.0
 
 ## Correcciones
 

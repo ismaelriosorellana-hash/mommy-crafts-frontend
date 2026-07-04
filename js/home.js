@@ -9,11 +9,44 @@
         if (!scrollArea || scrollArea.dataset.dragScrollReady === "true") return;
 
         let isPointerDown = false;
+        let isDragging = false;
         let startX = 0;
         let startScrollLeft = 0;
-        let moved = false;
+        let lastX = 0;
+        let lastTime = 0;
+        let velocity = 0;
+        let momentumFrame = 0;
 
-        const threshold = Number(options.threshold || 6);
+        const threshold = Number(options.threshold || 14);
+        const friction = Number(options.friction || 0.94);
+        const minVelocity = Number(options.minVelocity || 0.18);
+
+        function cancelMomentum() {
+            if (momentumFrame) {
+                window.cancelAnimationFrame(momentumFrame);
+                momentumFrame = 0;
+            }
+        }
+
+        function startMomentum() {
+            cancelMomentum();
+
+            let currentVelocity = velocity * 16;
+            if (Math.abs(currentVelocity) < minVelocity) return;
+
+            const step = () => {
+                currentVelocity *= friction;
+                scrollArea.scrollLeft -= currentVelocity;
+
+                if (Math.abs(currentVelocity) > minVelocity) {
+                    momentumFrame = window.requestAnimationFrame(step);
+                } else {
+                    momentumFrame = 0;
+                }
+            };
+
+            momentumFrame = window.requestAnimationFrame(step);
+        }
 
         scrollArea.dataset.dragScrollReady = "true";
         scrollArea.classList.add("drag-scroll-ready");
@@ -22,36 +55,53 @@
             if (event.button !== undefined && event.button !== 0) return;
             if (scrollArea.scrollWidth <= scrollArea.clientWidth) return;
 
+            cancelMomentum();
             isPointerDown = true;
-            moved = false;
+            isDragging = false;
             startX = event.clientX;
+            lastX = event.clientX;
+            lastTime = performance.now();
+            velocity = 0;
             startScrollLeft = scrollArea.scrollLeft;
-            scrollArea.classList.add("is-dragging-scroll");
         });
 
         scrollArea.addEventListener("pointermove", (event) => {
             if (!isPointerDown) return;
 
             const distance = event.clientX - startX;
+            const absDistance = Math.abs(distance);
 
-            if (Math.abs(distance) > threshold) {
-                moved = true;
-                event.preventDefault();
+            if (!isDragging && absDistance > threshold) {
+                isDragging = true;
+                scrollArea.classList.add("is-dragging-scroll");
             }
 
+            if (!isDragging) return;
+
+            const now = performance.now();
+            const elapsed = Math.max(now - lastTime, 16);
+            velocity = (event.clientX - lastX) / elapsed;
+            lastX = event.clientX;
+            lastTime = now;
+
+            event.preventDefault();
             scrollArea.scrollLeft = startScrollLeft - distance;
         }, { passive: false });
 
         function stopDragging() {
             if (!isPointerDown) return;
+
+            const wasDragging = isDragging;
             isPointerDown = false;
+            isDragging = false;
             scrollArea.classList.remove("is-dragging-scroll");
 
-            if (moved) {
+            if (wasDragging) {
                 scrollArea.dataset.suppressClick = "true";
                 window.setTimeout(() => {
                     delete scrollArea.dataset.suppressClick;
-                }, 80);
+                }, 0);
+                startMomentum();
             }
         }
 

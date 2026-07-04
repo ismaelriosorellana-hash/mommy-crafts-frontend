@@ -1,4 +1,4 @@
-# Mommy Crafts Frontend 3.35.1
+# Mommy Crafts Frontend 3.36.0
 
 ## Etapa 1B — Administración avanzada de productos
 
