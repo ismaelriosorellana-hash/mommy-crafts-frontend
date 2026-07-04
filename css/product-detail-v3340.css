@@ -1,5 +1,5 @@
 /* ==========================================================
-   Mommy Crafts · Ficha de producto marketplace · v3.36.0
+   Mommy Crafts · Ficha de producto marketplace · v3.36.1
    Ajuste fino: ficha limpia, datos colapsables y mayor claridad
    ========================================================== */
 
@@ -889,7 +889,7 @@ body[data-page="product"] .related-products {
 }
 
 
-/* v3.36.0 · ajustes solicitados por revisión visual */
+/* v3.36.1 · ajustes solicitados por revisión visual */
 body[data-page="product"] .product-content-nav {
     display: none !important;
 }
@@ -914,7 +914,7 @@ body[data-page="product"] .related-products .container-img {
 }
 
 /* ==========================================================
-   v3.36.0 · Selectores y proceso de compra profesional
+   v3.36.1 · Selectores y proceso de compra profesional
    - Cajas individuales por columna.
    - Sin caja/fondo global detrás de la ficha.
    - Estados claros para talla, variante y compra.
@@ -1182,5 +1182,174 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
     body[data-page="product"] .product-color-required,
     body[data-page="product"] .product-size-required {
         font-size: .96rem;
+    }
+}
+
+/* ==========================================================
+   v3.36.1 · Ficha móvil: galería limpia, sin logo superior y orden comercial
+   ========================================================== */
+@media (max-width: 700px) {
+    body[data-page="product"] .product-page {
+        padding-top: 0;
+        background: var(--color-background);
+    }
+
+    body[data-page="product"] .breadcrumb {
+        display: none !important;
+    }
+
+    body[data-page="product"] .product-detail-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    body[data-page="product"] .product-detail-images {
+        order: 1;
+        display: block;
+        margin-inline: calc((100vw - 100%) / -2);
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: #fff !important;
+        box-shadow: none !important;
+    }
+
+    body[data-page="product"] .detail-thumbnails {
+        display: none !important;
+    }
+
+    body[data-page="product"] .detail-main-image-container {
+        min-height: min(100vw, 42rem);
+        height: min(100vw, 42rem);
+        border: 0;
+        border-radius: 0;
+        background: #fff;
+        box-shadow: none;
+    }
+
+    body[data-page="product"] .detail-main-image-track {
+        cursor: grab;
+        touch-action: pan-y pinch-zoom;
+    }
+
+    body[data-page="product"] .detail-main-img {
+        max-height: none;
+        padding: 1.2rem;
+    }
+
+    body[data-page="product"] .detail-zoom-hint {
+        display: none !important;
+    }
+
+    body[data-page="product"] .detail-arrow {
+        width: 4.4rem;
+        height: 4.4rem;
+        background: rgba(255,255,255,.94);
+        box-shadow: 0 .8rem 2rem rgba(83, 49, 64, .12);
+    }
+
+    body[data-page="product"] .product-detail-info {
+        display: contents;
+    }
+
+    body[data-page="product"] .product-heading-block {
+        order: 2;
+        padding: 1.25rem 1.35rem;
+        border: 1px solid rgba(146, 75, 103, .11);
+        border-radius: 1.35rem;
+        background: #fff;
+        box-shadow: 0 .7rem 1.8rem rgba(83, 49, 64, .045);
+    }
+
+    body[data-page="product"] .product-purchase-panel {
+        order: 3;
+    }
+
+    body[data-page="product"] .product-color-selector,
+    body[data-page="product"] .product-size-selector,
+    body[data-page="product"] .light-customization-panel,
+    body[data-page="product"] .product-key-facts {
+        order: 4;
+        margin-top: 0;
+    }
+
+    body[data-page="product"] .product-size-selector { order: 5; }
+    body[data-page="product"] .light-customization-panel { order: 6; }
+    body[data-page="product"] .product-key-facts { order: 7; }
+
+    body[data-page="product"] .detail-title {
+        max-width: none;
+        font-size: clamp(2.25rem, 6.4vw, 2.85rem);
+        line-height: 1.22;
+    }
+
+    body[data-page="product"] .detail-rating {
+        margin-top: .8rem;
+    }
+
+    body[data-page="product"] .product-purchase-panel {
+        display: block;
+        border-radius: 1.35rem !important;
+        padding: 1.15rem !important;
+    }
+
+    body[data-page="product"] .product-price-card {
+        padding-right: 0;
+        border-right: 0;
+    }
+
+    body[data-page="product"] .product-actions {
+        position: sticky;
+        z-index: 35;
+        bottom: 0;
+        grid-template-columns: 6.8rem minmax(0, 1fr);
+        margin: 1rem -1.15rem 0;
+        padding: .85rem 1rem calc(.85rem + env(safe-area-inset-bottom));
+        border-top: 1px solid rgba(146, 75, 103, .16);
+        background: rgba(255, 255, 255, .98);
+        box-shadow: 0 -1rem 2.8rem rgba(70, 42, 52, .12);
+        backdrop-filter: blur(12px);
+    }
+
+    body[data-page="product"] .product-detail-content {
+        margin-top: 1.4rem;
+    }
+
+    body[data-page="product"] .related-products .container-products {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(15.8rem, calc((100vw - 4.3rem) / 2));
+        grid-template-columns: none;
+        gap: 1rem;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        scroll-snap-type: x proximity;
+        padding-bottom: 1.5rem;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body[data-page="product"] .related-products .container-products::-webkit-scrollbar {
+        display: none;
+    }
+
+    body[data-page="product"] .related-products .card-product {
+        min-width: 0;
+        scroll-snap-align: start;
+    }
+}
+
+/* v3.36.1 · Header móvil específico de ficha cargado junto al CSS de producto */
+@media (max-width: 700px) {
+    body[data-page="product"] .promo-banner,
+    body[data-page="product"] .container-hero {
+        display: none !important;
+    }
+
+    body[data-page="product"] .container-navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1200;
     }
 }

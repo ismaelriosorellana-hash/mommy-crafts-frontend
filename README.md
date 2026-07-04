@@ -1,10 +1,18 @@
-# Mommy Crafts Frontend 3.36.0
+# Mommy Crafts Frontend v3.36.1
 
-Etapa 2B: selectores de variantes, proceso de compra y corrección visual de columnas en ficha de producto.
+Actualización correctiva de experiencia móvil y carruseles.
 
-Backend compatible: 2.14.1.
+Backend requerido: 2.15.1.
 
+Comandos de verificación:
 
-## v3.36.0
-
-Etapa 2C ampliada: categorías administrables, corrección global de badges de descuento y reducción de salto visual en header.
+```bash
+node scripts/verificar-frontend.js
+node scripts/verificar-seguridad.js
+node scripts/verificar-catalogo.js
+node scripts/verificar-productos-admin.js
+node scripts/verificar-ficha-producto.js
+node scripts/verificar-categorias.js
+node scripts/verificar-header-badges.js
+node scripts/verificar-home-carrito.js
+```

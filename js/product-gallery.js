@@ -8,7 +8,8 @@
         zoomScale: 1,
         zoomOriginX: 50,
         zoomOriginY: 50,
-        zoomFrame: 0
+        zoomFrame: 0,
+        suppressZoomUntil: 0
     };
 
     const clamp = (value, min, max) =>
@@ -266,6 +267,63 @@
         resetZoom(false);
     }
 
+
+    function initMainImageSwipe() {
+        const { track } = zoomElements();
+        if (!track || track.dataset.swipeReady === "true") return;
+
+        track.dataset.swipeReady = "true";
+
+        let pointerDown = false;
+        let pointerId = null;
+        let startX = 0;
+        let startY = 0;
+        let moved = false;
+
+        track.addEventListener("pointerdown", (event) => {
+            if (!window.matchMedia("(max-width: 700px)").matches) return;
+            if (event.pointerType === "mouse") return;
+            if (state.zoomScale > 1) return;
+
+            pointerDown = true;
+            pointerId = event.pointerId;
+            startX = event.clientX;
+            startY = event.clientY;
+            moved = false;
+        }, { passive: true });
+
+        track.addEventListener("pointermove", (event) => {
+            if (!pointerDown || event.pointerId !== pointerId) return;
+            const deltaX = event.clientX - startX;
+            const deltaY = event.clientY - startY;
+            if (Math.abs(deltaX) > 18 && Math.abs(deltaX) > Math.abs(deltaY)) {
+                moved = true;
+            }
+        }, { passive: true });
+
+        const finishSwipe = (event) => {
+            if (!pointerDown || event.pointerId !== pointerId) return;
+
+            const deltaX = event.clientX - startX;
+            const deltaY = event.clientY - startY;
+            pointerDown = false;
+            pointerId = null;
+
+            if (!moved || Math.abs(deltaX) < 42 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+
+            state.suppressZoomUntil = performance.now() + 260;
+            const selector = deltaX < 0 ? "#detail-next" : "#detail-prev";
+            document.querySelector(selector)?.click();
+        };
+
+        track.addEventListener("pointerup", finishSwipe);
+        track.addEventListener("pointercancel", () => {
+            pointerDown = false;
+            pointerId = null;
+            moved = false;
+        });
+    }
+
     function initZoom() {
         const { track, image } = zoomElements();
         if (!track || !image || track.dataset.inlineZoomReady === "true") return;
@@ -275,6 +333,11 @@
         resetZoom(false);
 
         track.addEventListener("click", (event) => {
+            if (performance.now() < state.suppressZoomUntil) {
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
             toggleZoom(event);
         });
 
@@ -319,6 +382,7 @@
 
     function init() {
         initThumbnailDrag();
+        initMainImageSwipe();
         initZoom();
     }
 

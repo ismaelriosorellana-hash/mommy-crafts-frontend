@@ -19,6 +19,15 @@
             : `catalogo.html?categoria=${encodeURIComponent(name)}`;
     }
 
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
     function createCountBadge(category) {
         const count =
             document.createElement("span");
@@ -74,11 +83,45 @@
         return item;
     }
 
+function createSeasonSubmenuList() {
+    const list = document.createElement("ul");
+    list.className = "season-mobile-submenu";
+    list.hidden = true;
+
+    const allItem = document.createElement("li");
+    const allLink = document.createElement("a");
+    allLink.href = categoryUrl("Temporada");
+    allLink.className = "season-mobile-submenu-link season-mobile-submenu-all";
+    allLink.innerHTML = `
+        <span><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Ver todo Temporada</span>
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    `;
+    allItem.appendChild(allLink);
+    list.appendChild(allItem);
+
+    CONFIG.SEASON_CATEGORIES.forEach((category) => {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = categoryUrl(category);
+        link.className = "season-mobile-submenu-link";
+        link.innerHTML = `
+            <span>${escapeHtml(category)}</span>
+            <small>${window.Products.categoryCount(category)} producto${window.Products.categoryCount(category) === 1 ? "" : "s"}</small>
+        `;
+        item.appendChild(link);
+        list.appendChild(item);
+    });
+
+    return list;
+}
+
 function createSeasonItem() {
     const item = document.createElement("li");
     const link = document.createElement("a");
     const label = document.createElement("span");
     const right = document.createElement("span");
+    const submenu = createSeasonSubmenuList();
+    const submenuId = "season-mobile-submenu";
 
     item.className = "season-menu-item";
 
@@ -86,7 +129,7 @@ function createSeasonItem() {
     link.href = categoryUrl("Temporada");
     link.setAttribute("aria-haspopup", "true");
     link.setAttribute("aria-expanded", "false");
-    link.setAttribute("aria-controls", "season-flyout");
+    link.setAttribute("aria-controls", submenuId);
 
     label.textContent = "Temporada";
 
@@ -96,8 +139,10 @@ function createSeasonItem() {
         <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
     `;
 
+    submenu.id = submenuId;
+
     link.append(label, right);
-    item.appendChild(link);
+    item.append(link, submenu);
 
     return item;
 }
@@ -325,15 +370,35 @@ function scheduleSeasonFlyoutClose() {
 function initSeasonFlyout() {
     const item = document.querySelector(".season-menu-item");
     const trigger = item?.querySelector(".season-menu-trigger");
+    const mobileSubmenu = item?.querySelector(".season-mobile-submenu");
 
     if (!item || !trigger) return;
 
     createSeasonFlyout();
 
-    item.addEventListener("pointerenter", openSeasonFlyout);
-    item.addEventListener("pointerleave", scheduleSeasonFlyoutClose);
-    item.addEventListener("focusin", openSeasonFlyout);
+    const isMobile = () => window.matchMedia("(max-width: 820px)").matches;
+
+    const setMobileOpen = (open) => {
+        item.classList.toggle("is-mobile-open", open);
+        trigger.setAttribute("aria-expanded", String(open));
+        if (mobileSubmenu) mobileSubmenu.hidden = !open;
+        if (open) closeSeasonFlyout();
+    };
+
+    item.addEventListener("pointerenter", () => {
+        if (!isMobile()) openSeasonFlyout();
+    });
+
+    item.addEventListener("pointerleave", () => {
+        if (!isMobile()) scheduleSeasonFlyoutClose();
+    });
+
+    item.addEventListener("focusin", () => {
+        if (!isMobile()) openSeasonFlyout();
+    });
+
     item.addEventListener("focusout", (event) => {
+        if (isMobile()) return;
         const flyout = document.getElementById("season-flyout");
 
         if (
@@ -345,22 +410,25 @@ function initSeasonFlyout() {
     });
 
     trigger.addEventListener("click", (event) => {
-        if (window.matchMedia("(max-width: 820px)").matches) {
-            const flyout = document.getElementById("season-flyout");
-            const currentlyOpen = Boolean(flyout?.classList.contains("is-open"));
+        if (isMobile()) {
+            event.preventDefault();
+            setMobileOpen(!item.classList.contains("is-mobile-open"));
+            return;
+        }
 
-            if (!currentlyOpen) {
-                event.preventDefault();
-                openSeasonFlyout();
-            }
+        const flyout = document.getElementById("season-flyout");
+        const currentlyOpen = Boolean(flyout?.classList.contains("is-open"));
+        if (!currentlyOpen) {
+            event.preventDefault();
+            openSeasonFlyout();
         }
     });
 
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-            closeSeasonFlyout();
-            trigger.focus();
-        }
+        if (event.key !== "Escape") return;
+        setMobileOpen(false);
+        closeSeasonFlyout();
+        trigger.focus();
     });
 
     document.addEventListener("pointerdown", (event) => {
@@ -370,11 +438,17 @@ function initSeasonFlyout() {
             !item.contains(event.target) &&
             !flyout?.contains(event.target)
         ) {
+            setMobileOpen(false);
             closeSeasonFlyout();
         }
     });
 
     const reposition = () => {
+        if (isMobile()) {
+            closeSeasonFlyout();
+            return;
+        }
+
         const flyout = document.getElementById("season-flyout");
 
         if (flyout?.classList.contains("is-open")) {

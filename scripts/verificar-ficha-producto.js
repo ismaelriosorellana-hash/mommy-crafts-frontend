@@ -7,7 +7,7 @@ const css = fs.readFileSync(path.join(root, 'css', 'product-detail-v3340.css'), 
 const js = fs.readFileSync(path.join(root, 'js', 'products.js'), 'utf8');
 
 const checks = [
-  ['CSS específico v3.36.0 cargado', html.includes('css/product-detail-v3340.css?v=3.36.0')],
+  ['CSS específico v3.36.1 cargado', html.includes('css/product-detail-v3340.css?v=3.36.1')],
   ['Layout marketplace presente', html.includes('product-detail-marketplace')],
   ['Galería con miniaturas laterales presente', html.indexOf('id="detalle-thumbnails"') < html.indexOf('class="detail-main-image-container"')],
   ['Columna de compra separada presente', html.includes('class="product-purchase-panel"')],
@@ -35,7 +35,11 @@ const checks = [
   ['Estado de compra visible y accesible', html.includes('id="product-selection-status"') && js.includes('function updatePurchaseReadiness')],
   ['Error visual de talla presente', html.includes('id="product-size-error"') && css.includes('.product-option-error')],
   ['Selectores con estado de atención', css.includes('.needs-attention')],
-  ['Ficha usa CSS específico v3.36.0', html.includes('css/product-detail-v3340.css?v=3.36.0')],
+  ['Ficha móvil oculta logo superior', css.includes('body[data-page="product"] .promo-banner,') && css.includes('body[data-page="product"] .container-hero') && css.includes('display: none !important')],
+  ['Ficha móvil oculta miniaturas', /body\[data-page="product"\] \.detail-thumbnails[\s\S]*display:\s*none !important/.test(css)],
+  ['Ficha móvil permite swipe en imagen', fs.readFileSync(path.join(root, 'js', 'product-gallery.js'), 'utf8').includes('initMainImageSwipe')],
+  ['Productos relacionados móviles usan tamaño compacto', /related-products[\s\S]*grid-auto-columns:\s*minmax\(15\.8rem, calc\(\(100vw - 4\.3rem\) \/ 2\)\)/.test(css)],
+  ['Ficha usa CSS específico v3.36.1', html.includes('css/product-detail-v3340.css?v=3.36.1')],
 ];
 
 const failed = checks.filter(([, ok]) => !ok);
@@ -48,4 +52,4 @@ if (failed.length) {
   process.exit(1);
 }
 
-console.log(`\n✅ Ficha de producto v3.36.0 verificada (${checks.length} controles).`);
+console.log(`\n✅ Ficha de producto v3.36.1 verificada (${checks.length} controles).`);

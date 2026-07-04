@@ -11,15 +11,17 @@
         let isPointerDown = false;
         let isDragging = false;
         let startX = 0;
+        let startY = 0;
         let startScrollLeft = 0;
         let lastX = 0;
         let lastTime = 0;
         let velocity = 0;
+        let pointerId = null;
         let momentumFrame = 0;
 
-        const threshold = Number(options.threshold || 14);
-        const friction = Number(options.friction || 0.94);
-        const minVelocity = Number(options.minVelocity || 0.18);
+        const threshold = Number(options.threshold || 8);
+        const friction = Number(options.friction || 0.955);
+        const minVelocity = Number(options.minVelocity || 0.08);
 
         function cancelMomentum() {
             if (momentumFrame) {
@@ -55,10 +57,16 @@
             if (event.button !== undefined && event.button !== 0) return;
             if (scrollArea.scrollWidth <= scrollArea.clientWidth) return;
 
+            // En pantallas táctiles dejamos que el navegador haga el scroll nativo:
+            // es más fluido y tiene inercia real del dispositivo.
+            if (event.pointerType === "touch") return;
+
             cancelMomentum();
             isPointerDown = true;
             isDragging = false;
+            pointerId = event.pointerId;
             startX = event.clientX;
+            startY = event.clientY;
             lastX = event.clientX;
             lastTime = performance.now();
             velocity = 0;
@@ -66,14 +74,16 @@
         });
 
         scrollArea.addEventListener("pointermove", (event) => {
-            if (!isPointerDown) return;
+            if (!isPointerDown || event.pointerId !== pointerId) return;
 
-            const distance = event.clientX - startX;
-            const absDistance = Math.abs(distance);
+            const deltaX = event.clientX - startX;
+            const deltaY = event.clientY - startY;
+            const absX = Math.abs(deltaX);
 
-            if (!isDragging && absDistance > threshold) {
+            if (!isDragging && absX > threshold && absX > Math.abs(deltaY)) {
                 isDragging = true;
                 scrollArea.classList.add("is-dragging-scroll");
+                scrollArea.setPointerCapture?.(pointerId);
             }
 
             if (!isDragging) return;
@@ -85,11 +95,11 @@
             lastTime = now;
 
             event.preventDefault();
-            scrollArea.scrollLeft = startScrollLeft - distance;
+            scrollArea.scrollLeft = startScrollLeft - deltaX;
         }, { passive: false });
 
-        function stopDragging() {
-            if (!isPointerDown) return;
+        function stopDragging(event) {
+            if (!isPointerDown || (event?.pointerId !== undefined && event.pointerId !== pointerId)) return;
 
             const wasDragging = isDragging;
             isPointerDown = false;
@@ -100,14 +110,19 @@
                 scrollArea.dataset.suppressClick = "true";
                 window.setTimeout(() => {
                     delete scrollArea.dataset.suppressClick;
-                }, 0);
+                }, 90);
                 startMomentum();
             }
+
+            try {
+                if (pointerId !== null) scrollArea.releasePointerCapture?.(pointerId);
+            } catch {}
+            pointerId = null;
         }
 
         scrollArea.addEventListener("pointerup", stopDragging);
         scrollArea.addEventListener("pointercancel", stopDragging);
-        scrollArea.addEventListener("pointerleave", stopDragging);
+        scrollArea.addEventListener("lostpointercapture", stopDragging);
 
         scrollArea.addEventListener("click", (event) => {
             if (scrollArea.dataset.suppressClick === "true") {
@@ -115,6 +130,22 @@
                 event.stopPropagation();
             }
         }, true);
+
+        scrollArea.addEventListener("wheel", (event) => {
+            if (scrollArea.scrollWidth <= scrollArea.clientWidth) return;
+            const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+                ? event.deltaX
+                : event.deltaY;
+            if (!delta) return;
+
+            const atStart = scrollArea.scrollLeft <= 1;
+            const atEnd = scrollArea.scrollLeft + scrollArea.clientWidth >= scrollArea.scrollWidth - 1;
+            if ((delta < 0 && atStart) || (delta > 0 && atEnd)) return;
+
+            event.preventDefault();
+            cancelMomentum();
+            scrollArea.scrollBy({ left: delta, behavior: "auto" });
+        }, { passive: false });
     }
 
     function initDragCarousels() {

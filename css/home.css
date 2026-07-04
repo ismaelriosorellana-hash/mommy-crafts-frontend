@@ -511,7 +511,7 @@
 }
 
 
-/* V3.36.0 · Home móvil más limpio, carruseles modulares y arrastre natural */
+/* V3.36.1 · Home móvil más limpio, carruseles modulares y arrastre natural */
 .category-rail-shell,
 .carousel-wrapper,
 .carousel-container {
@@ -713,5 +713,130 @@ body[data-page="home"] .carousel-track {
     body[data-page="home"] .categories-grid {
         margin-inline: calc(var(--container-padding, 2rem) * -1);
         padding-inline: var(--container-padding, 2rem);
+    }
+}
+
+/* ==========================================================
+   V3.36.1 · Home más fluido, banner móvil ajustado y carruseles sin fondo
+   ========================================================== */
+body[data-page="home"] {
+    background: var(--color-background) !important;
+}
+
+body[data-page="home"] .categories-section,
+body[data-page="home"] .trending-section,
+body[data-page="home"] .best-sellers-section,
+body[data-page="home"] .new-section,
+body[data-page="home"] .all-products-section,
+body[data-page="home"] .category-rail-shell,
+body[data-page="home"] .carousel-wrapper,
+body[data-page="home"] .carousel-container,
+body[data-page="home"] .carousel-track,
+body[data-page="home"] .categories-grid {
+    background-color: var(--color-background) !important;
+    background-image: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+body[data-page="home"] .carousel-wrapper::before,
+body[data-page="home"] .carousel-wrapper::after,
+body[data-page="home"] .carousel-container::before,
+body[data-page="home"] .carousel-container::after,
+body[data-page="home"] .carousel-track::before,
+body[data-page="home"] .carousel-track::after,
+body[data-page="home"] .categories-grid::before,
+body[data-page="home"] .categories-grid::after {
+    display: none !important;
+    content: none !important;
+}
+
+body[data-page="home"] .carousel-container,
+body[data-page="home"] .categories-grid {
+    scroll-behavior: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-inline: contain;
+}
+
+body[data-page="home"] .carousel-track > *,
+body[data-page="home"] .categories-grid > * {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+}
+
+body[data-page="home"] .carousel-container.is-dragging-scroll,
+body[data-page="home"] .categories-grid.is-dragging-scroll {
+    scroll-snap-type: none !important;
+    scroll-behavior: auto !important;
+}
+
+@media (max-width: 700px) {
+    body[data-page="home"] .banner {
+        width: min(calc(100% - 3rem), var(--container-width));
+        min-height: clamp(12rem, 33vw, 14rem);
+        height: clamp(12rem, 33vw, 14rem);
+        margin: 1rem auto 0;
+        border-radius: 1.45rem;
+        background: var(--color-surface-soft);
+    }
+
+    body[data-page="home"] .banner-background {
+        inset: 0;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    body[data-page="home"] .content-banner {
+        min-height: clamp(12rem, 33vw, 14rem);
+        height: clamp(12rem, 33vw, 14rem);
+        padding: .9rem 1.2rem;
+    }
+
+    body[data-page="home"] .content-banner h1,
+    body[data-page="home"] .content-banner p,
+    body[data-page="home"] .content-banner .btn-primary,
+    body[data-page="home"] .banner-pagination {
+        display: none !important;
+    }
+
+    body[data-page="home"] .carousel-wrapper,
+    body[data-page="home"] .category-rail-shell,
+    body[data-page="home"] .carousel-container,
+    body[data-page="home"] .categories-grid {
+        margin-inline: calc(var(--container-padding, 1.5rem) * -1);
+        padding-inline: var(--container-padding, 1.5rem);
+    }
+
+    body[data-page="home"] .carousel-track {
+        grid-auto-columns: minmax(15.8rem, calc((100vw - 4.3rem) / 2));
+        gap: 1rem;
+        padding: .4rem 0 1.5rem;
+    }
+
+    body[data-page="home"] .carousel-track .card-product {
+        width: 100%;
+        min-width: 0;
+    }
+
+    body[data-page="home"] .carousel-track .content-card-product {
+        padding: 1.1rem;
+    }
+
+    body[data-page="home"] .carousel-track .product-name {
+        min-height: 3.8rem;
+        font-size: 1.25rem;
+        line-height: 1.35;
+    }
+
+    body[data-page="home"] .carousel-track .product-price {
+        font-size: 1.45rem;
+    }
+
+    body[data-page="home"] .carousel-track .product-category,
+    body[data-page="home"] .carousel-track .product-original-price {
+        font-size: 1rem;
     }
 }

@@ -15,6 +15,9 @@ const checks = [
     ["Descuento ya no depende solo de sugeridos", commerceCss.includes(".container-img .product-discount-badge")]
 ];
 
+checks.push(["Temporada móvil usa submenú visible", fs.readFileSync(path.join(root, "css", "main.css"), "utf8").includes("season-mobile-submenu") && fs.readFileSync(path.join(root, "js", "ui.js"), "utf8").includes("setMobileOpen")]);
+checks.push(["Header móvil de ficha conserva acciones", fs.readFileSync(path.join(root, "js", "mc-commerce-tools-v3311.js"), "utf8").includes("keepActionsInNavbarForProductMobile")]);
+
 const failed = checks.filter(([, ok]) => !ok);
 checks.forEach(([name, ok]) => console.log(`${ok ? "✅" : "❌"} ${name}`));
 
@@ -23,4 +26,4 @@ if (failed.length) {
     process.exit(1);
 }
 
-console.log(`\n✅ Header y badges v3.36.0 verificados (${checks.length} controles).`);
+console.log(`\n✅ Header y badges v3.36.1 verificados (${checks.length} controles).`);

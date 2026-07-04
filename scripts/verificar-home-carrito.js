@@ -10,11 +10,14 @@ const homeJs = fs.readFileSync(path.join(root, "js", "home.js"), "utf8");
 const commerceCss = fs.readFileSync(path.join(root, "css", "mc-commerce-tools-v3311.css"), "utf8");
 
 const checks = [
-    ["Banner móvil ajustado al ancho visible", homeCss.includes("body[data-page=\"home\"] .banner") && homeCss.includes("width: min(calc(100% - 2rem), 100%)")],
-    ["Banner móvil conserva altura tipo cinta", homeCss.includes("min-height: clamp(14rem, 33vw, 18rem)")],
+    ["Banner móvil ajustado al ancho visible", homeCss.includes("body[data-page=\"home\"] .banner") && homeCss.includes("width: min(calc(100% - 3rem), var(--container-width))")],
+    ["Banner móvil conserva altura tipo cinta", homeCss.includes("min-height: clamp(12rem, 33vw, 14rem)")],
     ["Carruseles de inicio sin fondos globales", homeCss.includes("body[data-page=\"home\"] .trending-section") && homeCss.includes("background: transparent !important")],
-    ["Arrastre no bloquea clics simples", homeJs.includes("const threshold = Number(options.threshold || 14)") && homeJs.includes("if (!isDragging) return")],
+    ["Arrastre no bloquea clics simples", homeJs.includes("const threshold = Number(options.threshold || 8)") && homeJs.includes("if (!isDragging) return")],
     ["Carruseles con inercia suave", homeJs.includes("startMomentum") && homeJs.includes("requestAnimationFrame(step)")],
+    ["Carrusel usa scroll nativo en touch", homeJs.includes('event.pointerType === "touch"') && homeJs.includes('scroll nativo')],
+    ["Tarjetas del carrusel móvil igualan grilla de categoría", homeCss.includes('grid-auto-columns: minmax(15.8rem, calc((100vw - 4.3rem) / 2))')],
+    ["Fondo de carruseles igual al fondo principal", homeCss.includes('background-color: var(--color-background) !important')],
     ["Scroll snap no fuerza tirones al arrastrar", homeCss.includes("scroll-snap-type: x proximity") && homeCss.includes("scroll-snap-type: none !important")],
     ["Carrito móvil ordena productos antes del resumen", cartCss.includes("productos primero, resumen después") && cartCss.includes(".cart-products") && cartCss.includes("order: 1") && cartCss.includes("order: 2")],
     ["Resumen de carrito no queda sticky en móvil", cartCss.includes("position: static !important")],
@@ -29,4 +32,4 @@ if (failed.length) {
     process.exit(1);
 }
 
-console.log(`\n✅ Home, carruseles y carrito v3.36.0 verificados (${checks.length} controles).`);
+console.log(`\n✅ Home, carruseles y carrito v3.36.1 verificados (${checks.length} controles).`);

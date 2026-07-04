@@ -266,7 +266,24 @@
         desired.forEach((element) => actions.appendChild(element));
     }
 
+    function isProductMobileHeader() {
+        return document.body?.dataset?.page === "product" &&
+            window.matchMedia("(max-width: 700px)").matches;
+    }
+
+    function keepActionsInNavbarForProductMobile(siteHeader, actions) {
+        if (!isProductMobileHeader()) return false;
+        const navbar = siteHeader?.querySelector(".container-navbar .navbar");
+        if (!navbar || !actions) return true;
+        if (actions.parentElement !== navbar) {
+            navbar.appendChild(actions);
+        }
+        return true;
+    }
+
     function moveHeaderActionsToHero(siteHeader, actions) {
+        if (keepActionsInNavbarForProductMobile(siteHeader, actions)) return;
+
         const hero = siteHeader?.querySelector(".container-hero .hero");
         const support = hero?.querySelector(":scope > .customer-support, .mc-header-right-group > .customer-support");
         if (!hero || !actions) return;
@@ -305,6 +322,12 @@
         });
 
         updateCompareUi();
+    }
+
+    let headerResizeTimer = 0;
+    function scheduleHeaderPlacementRefresh() {
+        window.clearTimeout(headerResizeTimer);
+        headerResizeTimer = window.setTimeout(setupHeader, 80);
     }
 
     function ensureQuickViewModal() {
@@ -767,6 +790,7 @@
             updateCompareUi();
             renderComparePage();
         });
+        window.addEventListener("resize", scheduleHeaderPlacementRefresh, { passive: true });
     }
 
     window.MommyCraftsCompare = Object.freeze({
