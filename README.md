@@ -1,4 +1,4 @@
-# Mommy Crafts Frontend 3.33.0
+# Mommy Crafts Frontend 3.33.1
 
 Frontend multipágina de Mommy Crafts.
 
@@ -35,7 +35,12 @@ node scripts/verificar-ficha-producto.js
 ## Despliegue
 
 1. Confirmar que Backend `2.14.1` sigue activo.
-2. Publicar Frontend `3.33.0`.
+2. Publicar Frontend `3.33.1`.
 3. Abrir una ficha con `Ctrl + F5`.
 4. Probar escritorio y móvil.
 5. Confirmar título, precio, variantes, carrito y personalización.
+
+
+## Versión 3.33.1
+
+Corrección visual profesional de la ficha de producto: layout tipo marketplace, miniaturas laterales, título equilibrado, caja de compra separada y contenido inferior más ordenado.

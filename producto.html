@@ -14,13 +14,13 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
 />
-    <link rel="stylesheet" href="css/main.css?v=3.33.0" />
-    <link rel="stylesheet" href="css/products.css?v=3.33.0" />
-    <link rel="stylesheet" href="css/modal.css?v=3.33.0" />
-        <link rel="stylesheet" href="css/experience-v327.css?v=3.33.0">
-        <link rel="stylesheet" href="css/site-studio.css?v=3.33.0">
-    <link rel="stylesheet" href="css/mc-commerce-tools-v3311.css?v=3.33.0">
-    <link rel="stylesheet" href="css/product-detail-v3330.css?v=3.33.0">
+    <link rel="stylesheet" href="css/main.css?v=3.33.1" />
+    <link rel="stylesheet" href="css/products.css?v=3.33.1" />
+    <link rel="stylesheet" href="css/modal.css?v=3.33.1" />
+        <link rel="stylesheet" href="css/experience-v327.css?v=3.33.1">
+        <link rel="stylesheet" href="css/site-studio.css?v=3.33.1">
+    <link rel="stylesheet" href="css/mc-commerce-tools-v3311.css?v=3.33.1">
+    <link rel="stylesheet" href="css/product-detail-v3331.css?v=3.33.1">
 </head>
 <body data-page="product">
     <a class="skip-link" href="#main-content">Saltar al contenido</a>
@@ -178,8 +178,10 @@
                 <span id="detalle-nombre-producto">Cargando...</span>
             </nav>
 
-            <section class="product-detail-grid" id="product-detail" aria-live="polite">
-                <div class="product-detail-images">
+            <section class="product-detail-grid product-detail-marketplace" id="product-detail" aria-live="polite">
+                <div class="product-detail-images" aria-label="Galería del producto">
+                    <div class="detail-thumbnails" id="detalle-thumbnails" aria-label="Miniaturas disponibles"></div>
+
                     <div class="detail-main-image-container">
                         <div
                             class="detail-main-image-track"
@@ -200,7 +202,7 @@
 
                             <span class="detail-zoom-hint" id="detail-zoom-help">
                                 <i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i>
-                                Haz clic para acercar
+                                Ver detalle
                             </span>
                         </div>
 
@@ -211,8 +213,6 @@
                             <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                         </button>
                     </div>
-
-                    <div class="detail-thumbnails" id="detalle-thumbnails" aria-label="Galería de imágenes"></div>
                 </div>
 
                 <div class="product-detail-info">
@@ -223,14 +223,135 @@
                         </div>
 
                         <h1 class="detail-title" id="detalle-titulo">Cargando producto...</h1>
-                        <p class="product-lead" id="detalle-resumen" hidden></p>
 
                         <div class="detail-rating" id="detalle-rating" aria-live="polite">
                             <i class="fa-regular fa-star" aria-hidden="true"></i>
                             <span class="rating-count">Aún no hay reseñas</span>
                         </div>
+
+                        <p class="product-lead" id="detalle-resumen" hidden></p>
                     </header>
 
+                    <section class="product-key-facts" id="product-key-facts" aria-label="Lo más importante del producto" hidden>
+                        <h2>Lo que tienes que saber</h2>
+                        <ul id="product-key-facts-list"></ul>
+                    </section>
+
+                    <section class="product-color-selector" id="product-color-selector" aria-labelledby="product-color-title" hidden>
+                        <div class="product-color-selector-header">
+                            <div>
+                                <span class="product-option-label" id="product-color-title">Color</span>
+                                <strong id="product-selected-color">Selecciona una opción</strong>
+                            </div>
+                            <span class="product-color-required">Selección requerida</span>
+                        </div>
+                        <div class="product-color-options" id="product-color-options" role="radiogroup" aria-labelledby="product-color-title"></div>
+                        <p class="product-color-help" id="product-color-help">La imagen cambiará para mostrar el producto en el color seleccionado.</p>
+                    </section>
+
+                    <section class="product-size-selector" id="product-size-selector" aria-labelledby="product-size-title" hidden>
+                        <div class="product-size-selector-header">
+                            <div>
+                                <span class="product-option-label" id="product-size-title">Talla</span>
+                                <strong id="product-selected-size">Selecciona una opción</strong>
+                            </div>
+                            <span class="product-size-required">Selección requerida</span>
+                        </div>
+                        <div class="product-size-options" id="product-size-options" role="radiogroup" aria-labelledby="product-size-title"></div>
+                    </section>
+
+                    <section
+                        class="light-customization-panel"
+                        id="light-customization-panel"
+                        aria-labelledby="light-customization-title"
+                        hidden
+                    >
+                        <div class="light-customization-heading">
+                            <div>
+                                <p class="section-kicker">Opcional</p>
+                                <h2 id="light-customization-title">Personaliza este producto</h2>
+                                <p id="light-customization-description">
+                                    Puedes indicar un nombre, adjuntar una imagen de referencia o dejar una observación.
+                                </p>
+                            </div>
+                            <span class="light-customization-badge">
+                                <i class="fa-solid fa-pen-ruler" aria-hidden="true"></i>
+                                Personalización simple
+                            </span>
+                        </div>
+
+                        <div class="light-customization-grid">
+                            <label
+                                class="light-customization-field"
+                                id="light-customization-name-field"
+                                for="light-customization-name"
+                            >
+                                <span>Nombre o texto breve</span>
+                                <input
+                                    type="text"
+                                    id="light-customization-name"
+                                    maxlength="25"
+                                    placeholder="Ej.: Tu nombre o frase corta"
+                                    autocomplete="off"
+                                />
+                                <small id="light-customization-name-count">0 / 25</small>
+                            </label>
+
+                            <div
+                                class="light-customization-field light-customization-image-field"
+                                id="light-customization-image-field"
+                            >
+                                <span>Imágenes de referencia</span>
+
+                                <label class="light-image-upload" for="light-customization-image">
+                                    <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                                    <strong id="light-image-upload-title">Seleccionar imagen</strong>
+                                    <small id="light-image-upload-help">
+                                        JPG, PNG o WEBP · Máximo 5 MB por archivo
+                                    </small>
+
+                                    <input
+                                        type="file"
+                                        id="light-customization-image"
+                                        accept="image/jpeg,image/png,image/webp"
+                                        multiple
+                                    />
+                                </label>
+
+                                <div
+                                    class="light-image-preview-grid"
+                                    id="light-image-preview-grid"
+                                    aria-live="polite"
+                                    hidden
+                                ></div>
+                            </div>
+
+                            <label
+                                class="light-customization-field light-customization-observation-field"
+                                id="light-customization-observation-field"
+                                for="light-customization-observation"
+                            >
+                                <span>Observaciones</span>
+                                <textarea
+                                    id="light-customization-observation"
+                                    rows="4"
+                                    maxlength="400"
+                                    placeholder="Indica posición, colores, fecha u otros detalles."
+                                ></textarea>
+                                <small id="light-customization-observation-count">0 / 400</small>
+                            </label>
+                        </div>
+
+                        <div class="light-customization-notice">
+                            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                            <p id="light-customization-notice-text">
+                                La personalización se revisará antes de fabricar el producto.
+                            </p>
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="product-purchase-panel" aria-label="Compra del producto">
                     <section class="product-price-card" aria-label="Precio y disponibilidad">
                         <span class="product-price-label">Precio</span>
                         <div class="detail-price">
@@ -244,124 +365,11 @@
                         <div class="product-availability-row">
                             <p class="stock-status" id="detalle-stock" role="status"></p>
                             <a class="product-delivery-link" href="#product-delivery-info">
-                                Ver opciones de entrega
+                                Ver entrega
                                 <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
                             </a>
                         </div>
                     </section>
-
-<section class="product-color-selector" id="product-color-selector" aria-labelledby="product-color-title" hidden>
-    <div class="product-color-selector-header">
-        <div>
-            <span class="product-option-label" id="product-color-title">Elige un color</span>
-            <strong id="product-selected-color">Selecciona una opción</strong>
-        </div>
-        <span class="product-color-required">Selección requerida</span>
-    </div>
-    <div class="product-color-options" id="product-color-options" role="radiogroup" aria-labelledby="product-color-title"></div>
-    <p class="product-color-help" id="product-color-help">La imagen cambiará para mostrar el producto en el color seleccionado.</p>
-</section>
-
-<section class="product-size-selector" id="product-size-selector" aria-labelledby="product-size-title" hidden>
-    <div class="product-size-selector-header">
-        <div>
-            <span class="product-option-label" id="product-size-title">Elige una talla</span>
-            <strong id="product-selected-size">Selecciona una opción</strong>
-        </div>
-        <span class="product-size-required">Selección requerida</span>
-    </div>
-    <div class="product-size-options" id="product-size-options" role="radiogroup" aria-labelledby="product-size-title"></div>
-</section>
-
-<section
-    class="light-customization-panel"
-    id="light-customization-panel"
-    aria-labelledby="light-customization-title"
-    hidden
->
-    <div class="light-customization-heading">
-        <div>
-            <p class="section-kicker">Opcional</p>
-            <h2 id="light-customization-title">Personaliza este producto</h2>
-            <p id="light-customization-description">
-                Puedes indicar un nombre, adjuntar una imagen de referencia o dejar una observación.
-            </p>
-        </div>
-        <span class="light-customization-badge">
-            <i class="fa-solid fa-pen-ruler" aria-hidden="true"></i>
-            Personalización simple
-        </span>
-    </div>
-
-    <div class="light-customization-grid">
-        <label
-            class="light-customization-field"
-            id="light-customization-name-field"
-            for="light-customization-name"
-        >
-            <span>Nombre o texto breve</span>
-            <input
-                type="text"
-                id="light-customization-name"
-                maxlength="25"
-                placeholder="Ej.: Tu nombre o frase corta"
-                autocomplete="off"
-            />
-            <small id="light-customization-name-count">0 / 25</small>
-        </label>
-
-<div
-    class="light-customization-field light-customization-image-field"
-    id="light-customization-image-field"
->
-    <span>Imágenes de referencia</span>
-
-    <label class="light-image-upload" for="light-customization-image">
-        <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
-        <strong id="light-image-upload-title">Seleccionar imagen</strong>
-        <small id="light-image-upload-help">
-            JPG, PNG o WEBP · Máximo 5 MB por archivo
-        </small>
-
-        <input
-            type="file"
-            id="light-customization-image"
-            accept="image/jpeg,image/png,image/webp"
-            multiple
-        />
-    </label>
-
-    <div
-        class="light-image-preview-grid"
-        id="light-image-preview-grid"
-        aria-live="polite"
-        hidden
-    ></div>
-</div>
-
-        <label
-            class="light-customization-field light-customization-observation-field"
-            id="light-customization-observation-field"
-            for="light-customization-observation"
-        >
-            <span>Observaciones</span>
-            <textarea
-                id="light-customization-observation"
-                rows="4"
-                maxlength="400"
-                placeholder="Indica posición, colores, fecha u otros detalles."
-            ></textarea>
-            <small id="light-customization-observation-count">0 / 400</small>
-        </label>
-    </div>
-
-    <div class="light-customization-notice">
-        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-        <p id="light-customization-notice-text">
-            La personalización se revisará antes de fabricar el producto.
-        </p>
-    </div>
-</section>
 
                     <div class="product-actions">
                         <div class="quantity-control">
@@ -387,7 +395,7 @@
                             </span>
                             <div>
                                 <strong>Pago protegido</strong>
-                                <p>El pago online se procesa de forma segura mediante Mercado Pago.</p>
+                                <p>Pago online seguro mediante Mercado Pago.</p>
                             </div>
                         </article>
 
@@ -396,8 +404,8 @@
                                 <i class="fa-solid fa-pen-ruler"></i>
                             </span>
                             <div>
-                                <strong>Revisión antes de fabricar</strong>
-                                <p>Confirmaremos los detalles de la personalización antes de producir.</p>
+                                <strong>Revisión previa</strong>
+                                <p>Confirmamos detalles antes de fabricar.</p>
                             </div>
                         </article>
 
@@ -406,8 +414,8 @@
                                 <i class="fa-solid fa-arrows-rotate"></i>
                             </span>
                             <div>
-                                <strong>Cambios y problemas</strong>
-                                <p>Consulta las condiciones y los canales de ayuda disponibles.</p>
+                                <strong>Cambios y ayuda</strong>
+                                <p>Consulta condiciones y canales disponibles.</p>
                             </div>
                             <i class="fa-solid fa-chevron-right product-confidence-arrow" aria-hidden="true"></i>
                         </a>
@@ -417,8 +425,8 @@
                                 <i class="fa-regular fa-comments"></i>
                             </span>
                             <div>
-                                <strong>¿Necesitas orientación?</strong>
-                                <p>Revisa nuestros canales oficiales antes de completar tu compra.</p>
+                                <strong>Orientación</strong>
+                                <p>Escríbenos antes de finalizar tu compra.</p>
                             </div>
                             <i class="fa-solid fa-chevron-right product-confidence-arrow" aria-hidden="true"></i>
                         </a>
@@ -430,26 +438,57 @@
                         aria-label="Opciones de entrega"
                         hidden
                     ></section>
+                </aside>
+            </section>
 
-                    <div class="detail-accordion">
-                        <article class="accordion-item">
-                            <button class="accordion-header" type="button" aria-expanded="false" aria-controls="detalle-descripcion">
-                                <span>Descripción del producto</span>
-                                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                            </button>
-                            <div class="accordion-content" id="detalle-descripcion"></div>
-                        </article>
+            <section class="product-detail-content" aria-label="Información detallada del producto">
+                <nav class="product-content-nav" aria-label="Secciones de la ficha">
+                    <a href="#detalle-descripcion-panel">Descripción</a>
+                    <a href="#detalle-caracteristicas-panel">Características</a>
+                    <a href="#product-reviews-preview">Reseñas</a>
+                    <a href="#product-questions-preview">Preguntas</a>
+                </nav>
 
-                        <article class="accordion-item">
-                            <button class="accordion-header" type="button" aria-expanded="false" aria-controls="detalle-caracteristicas-panel">
-                                <span>Características</span>
-                                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                            </button>
-                            <div class="accordion-content" id="detalle-caracteristicas-panel">
-                                <ul id="detalle-caracteristicas"></ul>
-                            </div>
-                        </article>
-                    </div>
+                <div class="detail-accordion">
+                    <article class="accordion-item">
+                        <button class="accordion-header" type="button" aria-expanded="false" aria-controls="detalle-descripcion-panel">
+                            <span>Descripción del producto</span>
+                            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                        <div class="accordion-content" id="detalle-descripcion-panel">
+                            <div id="detalle-descripcion"></div>
+                        </div>
+                    </article>
+
+                    <article class="accordion-item">
+                        <button class="accordion-header" type="button" aria-expanded="false" aria-controls="detalle-caracteristicas-panel">
+                            <span>Características</span>
+                            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                        <div class="accordion-content" id="detalle-caracteristicas-panel">
+                            <ul id="detalle-caracteristicas"></ul>
+                        </div>
+                    </article>
+
+                    <article class="accordion-item product-preview-section" id="product-reviews-preview">
+                        <button class="accordion-header" type="button" aria-expanded="false" aria-controls="product-reviews-content">
+                            <span>Reseñas</span>
+                            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                        <div class="accordion-content" id="product-reviews-content">
+                            <p class="product-empty-content">Pronto podrás ver y dejar reseñas verificadas de este producto.</p>
+                        </div>
+                    </article>
+
+                    <article class="accordion-item product-preview-section" id="product-questions-preview">
+                        <button class="accordion-header" type="button" aria-expanded="false" aria-controls="product-questions-content">
+                            <span>Preguntas</span>
+                            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                        <div class="accordion-content" id="product-questions-content">
+                            <p class="product-empty-content">El módulo de preguntas por producto se agregará en una etapa posterior.</p>
+                        </div>
+                    </article>
                 </div>
             </section>
 
@@ -803,18 +842,18 @@
         <p class="noscript-message">Necesitas habilitar JavaScript para cargar el producto.</p>
     </noscript>
 
-    <script src="js/config.js?v=3.33.0" defer></script>
-    <script src="js/api.js?v=3.33.0" defer></script>
-    <script src="js/site-settings.js?v=3.33.0" defer></script>
-    <script src="js/site-studio.js?v=3.33.0" defer></script>
-    <script src="js/customer-auth.js?v=3.33.0" defer></script>
-    <script src="js/cart.js?v=3.33.0" defer></script>
-    <script src="js/product-options.js?v=3.33.0" defer></script>
-    <script src="js/product-gallery.js?v=3.33.0" defer></script>
-    <script src="js/products.js?v=3.33.0" defer></script>
-    <script src="js/ui.js?v=3.33.0" defer></script>
-    <script src="js/customization.js?v=3.33.0" defer></script>
-        <script src="js/experience-v327.js?v=3.33.0" defer></script>
-        <script src="js/mc-commerce-tools-v3311.js?v=3.33.0" defer></script>
+    <script src="js/config.js?v=3.33.1" defer></script>
+    <script src="js/api.js?v=3.33.1" defer></script>
+    <script src="js/site-settings.js?v=3.33.1" defer></script>
+    <script src="js/site-studio.js?v=3.33.1" defer></script>
+    <script src="js/customer-auth.js?v=3.33.1" defer></script>
+    <script src="js/cart.js?v=3.33.1" defer></script>
+    <script src="js/product-options.js?v=3.33.1" defer></script>
+    <script src="js/product-gallery.js?v=3.33.1" defer></script>
+    <script src="js/products.js?v=3.33.1" defer></script>
+    <script src="js/ui.js?v=3.33.1" defer></script>
+    <script src="js/customization.js?v=3.33.1" defer></script>
+        <script src="js/experience-v327.js?v=3.33.1" defer></script>
+        <script src="js/mc-commerce-tools-v3311.js?v=3.33.1" defer></script>
 </body>
 </html>

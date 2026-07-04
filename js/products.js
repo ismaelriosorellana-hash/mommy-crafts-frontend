@@ -2559,6 +2559,45 @@ function renderSizeSelector(product) {
         `;
     }
 
+
+    function renderProductKeyFacts(product) {
+        const section = document.getElementById("product-key-facts");
+        const list = document.getElementById("product-key-facts-list");
+        if (!section || !list) return;
+
+        const facts = [];
+        const characteristics = Array.isArray(product.caracteristicas)
+            ? product.caracteristicas
+            : [];
+
+        characteristics
+            .filter((item) => item && String(item.value || "").trim())
+            .slice(0, 4)
+            .forEach((item) => {
+                const label = String(item.label || "").trim();
+                const value = String(item.value || "").trim();
+                facts.push(label ? `${label}: ${value}` : value);
+            });
+
+        const preparationDays = Math.min(90, Math.max(1, Number(product.diasPreparacion) || 0));
+        if (product.personalizable) {
+            facts.push("Personalizable con revisión antes de fabricar");
+        }
+        if (preparationDays > 0) {
+            facts.push(`Preparación estimada: ${preparationDays} día${preparationDays === 1 ? "" : "s"} hábil${preparationDays === 1 ? "" : "es"}`);
+        }
+
+        const uniqueFacts = Array.from(new Set(facts.map((fact) => fact.trim()).filter(Boolean))).slice(0, 5);
+        section.hidden = uniqueFacts.length === 0;
+        list.innerHTML = "";
+
+        uniqueFacts.forEach((fact) => {
+            const item = document.createElement("li");
+            item.textContent = fact;
+            list.appendChild(item);
+        });
+    }
+
     function renderProductHeading(product) {
         const summary = document.getElementById("detalle-resumen");
         if (summary) {
@@ -2569,6 +2608,7 @@ function renderSizeSelector(product) {
 
         updateProductReference(product, null);
         renderProductRating(product);
+        renderProductKeyFacts(product);
 
         const personalizationConfidence = document.getElementById(
             "product-confidence-personalization"
