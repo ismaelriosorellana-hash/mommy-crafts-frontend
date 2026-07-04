@@ -1,6 +1,8 @@
 "use strict";
 
 (function () {
+    const SETTINGS_CACHE_KEY = "mommycrafts_site_settings_cache_v1";
+
     const CSS_VARIABLES = {
         primary: "--color-primary",
         primaryDark: "--color-primary-dark",
@@ -190,17 +192,60 @@
         document.dispatchEvent(new CustomEvent("site:settings-applied", { detail: settings }));
     }
 
+    function markReady() {
+        document.body?.classList.add("mc-site-settings-ready");
+        document.documentElement.classList.add("mc-site-settings-ready");
+    }
+
+    function readCachedSettings() {
+        try {
+            const raw = localStorage.getItem(SETTINGS_CACHE_KEY);
+            return raw ? JSON.parse(raw) : null;
+        } catch {
+            return null;
+        }
+    }
+
+    function saveCachedSettings(settings) {
+        try {
+            localStorage.setItem(
+                SETTINGS_CACHE_KEY,
+                JSON.stringify(settings)
+            );
+        } catch {
+            /* Cache visual opcional. */
+        }
+    }
+
+    function applyCachedSettings() {
+        const cached = readCachedSettings();
+        if (!cached) return false;
+        apply(cached);
+        return true;
+    }
+
     async function load() {
+        const hadCache = applyCachedSettings();
+
+        if (hadCache) {
+            markReady();
+        }
+
         try {
             const settings = window.API?.request
                 ? await window.API.request("/configuracion-sitio", { timeoutMs: 30000 })
                 : null;
-            if (settings) apply(settings);
+            if (settings) {
+                apply(settings);
+                saveCachedSettings(settings);
+            }
         } catch (error) {
             console.warn("No fue posible cargar la apariencia personalizada:", error);
+        } finally {
+            markReady();
         }
     }
 
-    window.SiteSettings = Object.freeze({ apply, load });
+    window.SiteSettings = Object.freeze({ apply, load, applyCachedSettings });
     document.addEventListener("DOMContentLoaded", load, { once: true });
 })();

@@ -660,3 +660,60 @@ body.mc-quick-view-open {
         display: none;
     }
 }
+
+
+/* V3.35 · evita salto visual del header al aplicar posiciones guardadas */
+.site-header .social-icons-header,
+.site-header .container-logo,
+.site-header .customer-support,
+.site-header .navbar-actions {
+    opacity: 0;
+}
+
+body.mc-site-settings-ready .site-header .social-icons-header,
+body.mc-site-settings-ready .site-header .container-logo,
+body.mc-site-settings-ready .site-header .customer-support,
+body.mc-site-settings-ready .site-header .navbar-actions,
+html.mc-site-settings-ready .site-header .social-icons-header,
+html.mc-site-settings-ready .site-header .container-logo,
+html.mc-site-settings-ready .site-header .customer-support,
+html.mc-site-settings-ready .site-header .navbar-actions {
+    opacity: 1;
+    transition: opacity 120ms ease;
+}
+
+/* V3.35 · badges apilados en todas las tarjetas para no chocar con comparar */
+.container-img .product-badge {
+    z-index: 5;
+    max-width: calc(100% - 7.6rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.container-img .product-discount-badge {
+    top: calc(1.2rem + 3.2rem);
+    right: auto;
+    left: 1.2rem;
+    z-index: 5;
+}
+
+.container-img .product-badge[hidden] + .product-discount-badge {
+    top: 1.2rem;
+}
+
+@media (max-width: 520px) {
+    .container-img .product-badge,
+    .container-img .product-discount-badge {
+        left: 0.9rem;
+        font-size: 0.95rem;
+    }
+
+    .container-img .product-discount-badge {
+        top: calc(0.9rem + 3rem);
+    }
+
+    .container-img .product-badge[hidden] + .product-discount-badge {
+        top: 0.9rem;
+    }
+}

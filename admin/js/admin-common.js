@@ -24,6 +24,12 @@
             icon: "fa-bag-shopping"
         },
         {
+            id: "categorias",
+            label: "Categorías",
+            href: "categorias.html",
+            icon: "fa-tags"
+        },
+        {
             id: "inventario",
             label: "Inventario",
             href: "inventario.html",
@@ -283,6 +289,28 @@
         );
     }
 
+    function mergeNavigationItems(items = []) {
+        const map = new Map();
+
+        pages.forEach((item, index) => {
+            map.set(item.id, {
+                ...item,
+                enabled: true,
+                order: (index + 1) * 10
+            });
+        });
+
+        items.forEach((item) => {
+            if (!item?.id) return;
+            map.set(item.id, {
+                ...(map.get(item.id) || {}),
+                ...item
+            });
+        });
+
+        return Array.from(map.values());
+    }
+
     function renderNavigation(items, activePage) {
         const nav = document.querySelector(".admin-nav");
         if (!nav) return;
@@ -309,7 +337,7 @@
             document.documentElement.style.setProperty("--admin-sidebar-background", panel.sidebarBackground || "#2F2930");
             document.documentElement.style.setProperty("--admin-sidebar-text", panel.sidebarText || "#FFFFFF");
             const activePage = document.body.dataset.adminPage || "dashboard";
-            renderNavigation(Array.isArray(panel.items) && panel.items.length ? panel.items : pages.map((item, index) => ({ ...item, enabled: true, order: (index + 1) * 10 })), activePage);
+            renderNavigation(mergeNavigationItems(Array.isArray(panel.items) ? panel.items : []), activePage);
         } catch (error) {
             console.warn("No fue posible aplicar la configuración del panel:", error);
         }

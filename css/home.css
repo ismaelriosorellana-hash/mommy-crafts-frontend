@@ -489,3 +489,23 @@
         display: none;
     }
 }
+
+/* V3.35 · categorías administrables */
+.category-card {
+    border-color: color-mix(in srgb, var(--category-accent, var(--color-primary)) 22%, var(--color-border));
+}
+
+.category-card:hover,
+.category-card:focus-visible {
+    border-color: var(--category-accent, var(--color-primary));
+}
+
+.category-card-content h3::after {
+    content: "";
+    width: 3.8rem;
+    height: .32rem;
+    display: block;
+    margin-top: .65rem;
+    border-radius: 999px;
+    background: var(--category-accent, var(--color-primary));
+}

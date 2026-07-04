@@ -3,6 +3,7 @@
 let adminProducts = [];
 let variantCounter = 0;
 let productSlugManuallyEdited = false;
+let adminCategories = [];
 
 const PRODUCT_TAB_LABELS = Object.freeze({
     general: "Información general",
@@ -78,8 +79,30 @@ document.addEventListener("admin:ready", () => {
     document.getElementById("product-form")
         ?.addEventListener("change", updateProductFormStatus);
 
+    loadAdminCategories();
     loadProducts();
 });
+
+
+async function loadAdminCategories() {
+    try {
+        const response = await AdminAPI.request("/admin/categorias");
+        adminCategories = Array.isArray(response?.categorias) ? response.categorias : [];
+        renderCategoryDatalist();
+    } catch (error) {
+        console.warn("No fue posible cargar categorías administrables:", error);
+    }
+}
+
+function renderCategoryDatalist() {
+    const list = document.getElementById("admin-product-categories-list");
+    if (!list) return;
+
+    list.innerHTML = adminCategories
+        .filter((category) => category.activa !== false)
+        .map((category) => `<option value="${AdminUI.escapeHtml(category.nombre)}"></option>`)
+        .join("");
+}
 
 function debounce(callback, delay) {
     let timeout;

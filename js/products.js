@@ -1483,15 +1483,24 @@ function createProductCard(product) {
         const publicProducts =
             products.filter(isCatalogProduct);
 
-        const categories = CONFIG.CATEGORIES
-            .filter((category) =>
-                !["Todos", "Temporada"].includes(category)
-            )
-            .filter((category) =>
-                publicProducts.some((product) =>
-                    matchesCategory(product, category)
-                )
-            );
+        const categories = (
+            window.Categories?.getHomeCategories?.() ||
+            CONFIG.CATEGORIES.map((nombre) => ({ nombre }))
+        )
+            .filter((category) => {
+                const name = typeof category === "string"
+                    ? category
+                    : category.nombre;
+                return !["Todos", "Temporada"].includes(name);
+            })
+            .filter((category) => {
+                const name = typeof category === "string"
+                    ? category
+                    : category.nombre;
+                return publicProducts.some((product) =>
+                    matchesCategory(product, name)
+                );
+            });
 
         container.innerHTML = "";
 
@@ -1508,7 +1517,10 @@ function createProductCard(product) {
             document.createDocumentFragment();
 
         categories.slice(0, 8)
-            .forEach((categoryName) => {
+            .forEach((category) => {
+                const categoryName = typeof category === "string"
+                    ? category
+                    : category.nombre;
                 const categoryProducts =
                     publicProducts.filter(
                         (product) =>
@@ -1539,6 +1551,7 @@ function createProductCard(product) {
                     `catalogo.html?categoria=${encodeURIComponent(categoryName)}`;
 
                 image.src =
+                    (typeof category === "object" && category.imagen) ||
                     categoryProducts[0]
                         ?.imagenPrincipal ||
                     CONFIG.placeholderImage;
@@ -1552,7 +1565,12 @@ function createProductCard(product) {
                 title.textContent = categoryName;
 
                 description.textContent =
+                    (typeof category === "object" && category.descripcion) ||
                     `${categoryProducts.length} producto${categoryProducts.length === 1 ? "" : "s"}`;
+
+                if (typeof category === "object" && category.color) {
+                    link.style.setProperty("--category-accent", category.color);
+                }
 
                 content.append(
                     title,
@@ -1755,8 +1773,11 @@ function createProductCard(product) {
         ];
 
         try {
-            const products =
-                await loadProducts(force);
+            const [products] =
+                await Promise.all([
+                    loadProducts(force),
+                    window.Categories?.loadCategories?.(force)
+                ]);
 
             renderHome(products);
         } catch (error) {

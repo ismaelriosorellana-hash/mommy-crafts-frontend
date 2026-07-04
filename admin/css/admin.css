@@ -1147,7 +1147,7 @@ body {
 .admin-sidebar span,
 .admin-sidebar strong { color: inherit; }
 
-/* V3.34.0: ficha profesional de administración de productos */
+/* V3.35.0: ficha profesional de administración de productos */
 body[data-admin-page="productos"] .admin-product-modal-panel {
     width: min(100%, 1180px);
 }
@@ -1444,4 +1444,90 @@ body[data-admin-page="productos"] .admin-variant-card-header span {
     .admin-input-action-row {
         grid-template-columns: 1fr;
     }
+}
+
+
+/* V3.35 · administración de categorías */
+.admin-category-help {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.admin-category-help h3 {
+    margin: 0 0 6px;
+}
+
+.admin-category-help p {
+    margin: 0;
+    color: var(--admin-muted);
+}
+
+.admin-category-name {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-category-name small {
+    display: block;
+    max-width: 34rem;
+    color: var(--admin-muted);
+}
+
+.admin-category-icon {
+    width: 42px;
+    height: 42px;
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--category-color, #8E456A) 16%, #fff);
+    color: var(--category-color, #8E456A);
+}
+
+.admin-pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.admin-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: #f1edf0;
+    color: #5d5358;
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.admin-pill.success {
+    background: #e8f8ed;
+    color: #287646;
+}
+
+.admin-pill.muted {
+    background: #f3f3f3;
+    color: #8b8186;
+}
+
+.admin-checkbox-field label {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.admin-checkbox-field input {
+    width: 18px;
+    height: 18px;
 }

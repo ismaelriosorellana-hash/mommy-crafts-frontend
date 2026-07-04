@@ -6,10 +6,17 @@
         activeIndex: -1
     };
 
+    function categoryName(category) {
+        return typeof category === "string"
+            ? category
+            : String(category?.nombre || "").trim();
+    }
+
     function categoryUrl(category) {
-        return category === "Todos"
+        const name = categoryName(category);
+        return name === "Todos" || !name
             ? "catalogo.html"
-            : `catalogo.html?categoria=${encodeURIComponent(category)}`;
+            : `catalogo.html?categoria=${encodeURIComponent(name)}`;
     }
 
     function createCountBadge(category) {
@@ -22,7 +29,7 @@
         count.textContent =
             String(
                 window.Products
-                    .categoryCount(category)
+                    .categoryCount(categoryName(category))
             );
 
         return count;
@@ -38,17 +45,28 @@
         const label =
             document.createElement("span");
 
+        const icon =
+            document.createElement("i");
+
+        const name = categoryName(category);
+
         link.className =
             "category-dropdown-link";
 
         link.href =
             categoryUrl(category);
 
-        label.textContent = category;
+        if (category?.icono) {
+            icon.className = category.icono;
+            icon.setAttribute("aria-hidden", "true");
+            link.appendChild(icon);
+        }
+
+        label.textContent = name;
 
         link.append(
             label,
-            createCountBadge(category)
+            createCountBadge(name)
         );
 
         item.appendChild(link);
@@ -94,9 +112,13 @@ function createSeasonItem() {
 
         dropdown.innerHTML = "";
 
-        CONFIG.CATEGORIES
+        const categories = window.Categories?.getMenuCategories?.() ||
+            CONFIG.CATEGORIES.map((nombre) => ({ nombre }));
+
+        categories
+            .filter((category) => categoryName(category) !== "Todos")
             .forEach((category) => {
-                if (category === "Temporada") {
+                if (categoryName(category) === "Temporada") {
                     dropdown.appendChild(
                         createSeasonItem()
                     );
@@ -833,8 +855,10 @@ function initSeasonFlyout() {
 
     async function loadGlobalData() {
         try {
-            await window.Products
-                .loadProducts();
+            await Promise.all([
+                window.Products.loadProducts(),
+                window.Categories?.loadCategories?.()
+            ]);
 
             renderCategoryDropdown();
         } catch (error) {
