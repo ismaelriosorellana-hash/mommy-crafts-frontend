@@ -14,13 +14,13 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
 />
-    <link rel="stylesheet" href="css/main.css?v=3.33.2" />
-    <link rel="stylesheet" href="css/products.css?v=3.33.2" />
-    <link rel="stylesheet" href="css/modal.css?v=3.33.2" />
-        <link rel="stylesheet" href="css/experience-v327.css?v=3.33.2">
-        <link rel="stylesheet" href="css/site-studio.css?v=3.33.2">
-    <link rel="stylesheet" href="css/mc-commerce-tools-v3311.css?v=3.33.2">
-    <link rel="stylesheet" href="css/product-detail-v3332.css?v=3.33.2">
+    <link rel="stylesheet" href="css/main.css?v=3.34.0" />
+    <link rel="stylesheet" href="css/products.css?v=3.34.0" />
+    <link rel="stylesheet" href="css/modal.css?v=3.34.0" />
+        <link rel="stylesheet" href="css/experience-v327.css?v=3.34.0">
+        <link rel="stylesheet" href="css/site-studio.css?v=3.34.0">
+    <link rel="stylesheet" href="css/mc-commerce-tools-v3311.css?v=3.34.0">
+    <link rel="stylesheet" href="css/product-detail-v3340.css?v=3.34.0">
 </head>
 <body data-page="product">
     <a class="skip-link" href="#main-content">Saltar al contenido</a>
@@ -251,6 +251,7 @@
                         </div>
                         <div class="product-color-options" id="product-color-options" role="radiogroup" aria-labelledby="product-color-title"></div>
                         <p class="product-color-help" id="product-color-help">La imagen cambiará para mostrar el producto en el color seleccionado.</p>
+                        <p class="product-option-error" id="product-color-error" role="alert" hidden>Selecciona un color disponible para continuar.</p>
                     </section>
 
                     <section class="product-size-selector" id="product-size-selector" aria-labelledby="product-size-title" hidden>
@@ -262,6 +263,7 @@
                             <span class="product-size-required">Selección requerida</span>
                         </div>
                         <div class="product-size-options" id="product-size-options" role="radiogroup" aria-labelledby="product-size-title"></div>
+                        <p class="product-option-error" id="product-size-error" role="alert" hidden>Selecciona una talla antes de agregar el producto al carrito.</p>
                     </section>
 
                     <section
@@ -376,6 +378,7 @@
                     </section>
 
                     <div class="product-actions">
+                        <p class="product-selection-status" id="product-selection-status" aria-live="polite" hidden></p>
                         <div class="quantity-control">
                             <label for="product-quantity">Cantidad</label>
                             <input id="product-quantity" type="number" min="1" value="1" inputmode="numeric" />
@@ -839,18 +842,18 @@
         <p class="noscript-message">Necesitas habilitar JavaScript para cargar el producto.</p>
     </noscript>
 
-    <script src="js/config.js?v=3.33.2" defer></script>
-    <script src="js/api.js?v=3.33.2" defer></script>
-    <script src="js/site-settings.js?v=3.33.2" defer></script>
-    <script src="js/site-studio.js?v=3.33.2" defer></script>
-    <script src="js/customer-auth.js?v=3.33.2" defer></script>
-    <script src="js/cart.js?v=3.33.2" defer></script>
-    <script src="js/product-options.js?v=3.33.2" defer></script>
-    <script src="js/product-gallery.js?v=3.33.2" defer></script>
-    <script src="js/products.js?v=3.33.2" defer></script>
-    <script src="js/ui.js?v=3.33.2" defer></script>
-    <script src="js/customization.js?v=3.33.2" defer></script>
-        <script src="js/experience-v327.js?v=3.33.2" defer></script>
-        <script src="js/mc-commerce-tools-v3311.js?v=3.33.2" defer></script>
+    <script src="js/config.js?v=3.34.0" defer></script>
+    <script src="js/api.js?v=3.34.0" defer></script>
+    <script src="js/site-settings.js?v=3.34.0" defer></script>
+    <script src="js/site-studio.js?v=3.34.0" defer></script>
+    <script src="js/customer-auth.js?v=3.34.0" defer></script>
+    <script src="js/cart.js?v=3.34.0" defer></script>
+    <script src="js/product-options.js?v=3.34.0" defer></script>
+    <script src="js/product-gallery.js?v=3.34.0" defer></script>
+    <script src="js/products.js?v=3.34.0" defer></script>
+    <script src="js/ui.js?v=3.34.0" defer></script>
+    <script src="js/customization.js?v=3.34.0" defer></script>
+        <script src="js/experience-v327.js?v=3.34.0" defer></script>
+        <script src="js/mc-commerce-tools-v3311.js?v=3.34.0" defer></script>
 </body>
 </html>

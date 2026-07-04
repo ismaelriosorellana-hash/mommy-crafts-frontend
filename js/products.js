@@ -2366,8 +2366,60 @@ function updateDetailStock(product, variant) {
             ? "Agotado"
             : `<i class="fa-solid fa-cart-plus" aria-hidden="true"></i> Agregar al carrito`;
     }
+
+    updatePurchaseReadiness(product, { showErrors: false });
 }
 
+
+
+function setOptionError(sectionId, errorId, show) {
+    const section = document.getElementById(sectionId);
+    const error = document.getElementById(errorId);
+
+    if (section) {
+        section.classList.toggle("needs-attention", Boolean(show));
+    }
+
+    if (error) {
+        error.hidden = !show;
+    }
+}
+
+function setSelectionStatus(message = "", type = "info") {
+    const status = document.getElementById("product-selection-status");
+    if (!status) return;
+
+    const clean = String(message || "").trim();
+    status.hidden = !clean;
+    status.textContent = clean;
+    status.classList.toggle("is-warning", type === "warning");
+}
+
+function updatePurchaseReadiness(product, { showErrors = false } = {}) {
+    if (!product) return true;
+
+    const sizes = getProductSizes(product);
+    const needsSize = sizes.length > 0;
+    const missingSize = needsSize && !state.tallaActual;
+    const stockAmount = getVariantStock(product, state.varianteActual);
+    const noStock = stockAmount <= 0;
+
+    setOptionError("product-size-selector", "product-size-error", showErrors && missingSize);
+    setOptionError("product-color-selector", "product-color-error", showErrors && !state.varianteActual && getSelectableVariants(product).length > 0);
+
+    if (missingSize) {
+        setSelectionStatus("Selecciona la talla para continuar con la compra.", showErrors ? "warning" : "info");
+        return false;
+    }
+
+    if (noStock) {
+        setSelectionStatus("Esta opción no tiene stock disponible. Elige otra variante si está disponible.", "warning");
+        return false;
+    }
+
+    setSelectionStatus("Opciones listas. Puedes agregar este producto al carrito.", "info");
+    return true;
+}
 
 function selectProductVariant(
     product,
@@ -2481,6 +2533,8 @@ function renderSizeSelector(product) {
 
     if (!section || !container || sizes.length === 0) {
         if (section) section.hidden = true;
+        setOptionError("product-size-selector", "product-size-error", false);
+        updatePurchaseReadiness(product, { showErrors: false });
         return;
     }
 
@@ -2496,6 +2550,9 @@ function renderSizeSelector(product) {
             button.classList.toggle("selected", active);
             button.setAttribute("aria-checked", String(active));
         });
+
+        setOptionError("product-size-selector", "product-size-error", false);
+        updatePurchaseReadiness(product, { showErrors: false });
     };
 
     sizes.forEach((size) => {
@@ -2513,6 +2570,7 @@ function renderSizeSelector(product) {
 
     const requestedSize = new URLSearchParams(window.location.search).get("talla");
     if (requestedSize && sizes.includes(requestedSize)) choose(requestedSize);
+    updatePurchaseReadiness(product, { showErrors: false });
 }
 
     function buildProductLead(description, maxLength = 210) {
@@ -2866,6 +2924,7 @@ function renderSizeSelector(product) {
 
                     const sizes = getProductSizes(product);
                     if (sizes.length && !state.tallaActual) {
+                        updatePurchaseReadiness(product, { showErrors: true });
                         showToast("Selecciona una talla antes de agregar el producto.");
                         document.getElementById("product-size-selector")?.scrollIntoView({
                             behavior: "smooth",
@@ -2878,6 +2937,7 @@ function renderSizeSelector(product) {
                     const availableStock = getVariantStock(product, variant);
 
                     if (availableStock <= 0) {
+                        updatePurchaseReadiness(product, { showErrors: true });
                         showToast("El color seleccionado está agotado.");
                         return;
                     }

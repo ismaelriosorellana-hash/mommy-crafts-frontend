@@ -1147,7 +1147,7 @@ body {
 .admin-sidebar span,
 .admin-sidebar strong { color: inherit; }
 
-/* V3.33.2: ficha profesional de administración de productos */
+/* V3.34.0: ficha profesional de administración de productos */
 body[data-admin-page="productos"] .admin-product-modal-panel {
     width: min(100%, 1180px);
 }
