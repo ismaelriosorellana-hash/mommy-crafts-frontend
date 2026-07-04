@@ -717,3 +717,43 @@ html.mc-site-settings-ready .site-header .navbar-actions {
         top: 0.9rem;
     }
 }
+
+
+/* V3.35.1 · descuento siempre debajo de etiqueta y lejos de comparar */
+.container-img {
+    --mc-card-tool-safe-area: 6.8rem;
+}
+
+.container-img .product-badge,
+.container-img .product-discount-badge {
+    right: auto !important;
+    left: 1.2rem !important;
+    max-width: calc(100% - var(--mc-card-tool-safe-area) - 1.8rem);
+}
+
+.container-img .product-discount-badge {
+    top: calc(1.2rem + 3.2rem) !important;
+}
+
+.container-img .product-badge[hidden] + .product-discount-badge {
+    top: 1.2rem !important;
+}
+
+@media (max-width: 520px) {
+    .container-img {
+        --mc-card-tool-safe-area: 5.6rem;
+    }
+
+    .container-img .product-badge,
+    .container-img .product-discount-badge {
+        left: 0.9rem !important;
+    }
+
+    .container-img .product-discount-badge {
+        top: calc(0.9rem + 3rem) !important;
+    }
+
+    .container-img .product-badge[hidden] + .product-discount-badge {
+        top: 0.9rem !important;
+    }
+}

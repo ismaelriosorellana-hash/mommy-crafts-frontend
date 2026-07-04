@@ -1,4 +1,4 @@
-# Cambios frontend v3.35.0
+# Cambios frontend v3.35.1
 
 ## Etapa 2C ampliada
 

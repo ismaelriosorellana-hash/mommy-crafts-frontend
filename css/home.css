@@ -509,3 +509,100 @@
     border-radius: 999px;
     background: var(--category-accent, var(--color-primary));
 }
+
+
+/* V3.35.1 · Home móvil más limpio, carruseles modulares y arrastre natural */
+.category-rail-shell,
+.carousel-wrapper,
+.carousel-container {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.carousel-track,
+.categories-grid {
+    background: transparent !important;
+}
+
+.drag-scroll-ready {
+    cursor: grab;
+    user-select: none;
+}
+
+.drag-scroll-ready.is-dragging-scroll {
+    cursor: grabbing;
+    scroll-behavior: auto;
+}
+
+.drag-scroll-ready.is-dragging-scroll a,
+.drag-scroll-ready.is-dragging-scroll button {
+    pointer-events: none;
+}
+
+@media (max-width: 700px) {
+    .banner {
+        min-height: clamp(14rem, 33vw, 18rem);
+        margin-top: 0;
+        background: var(--color-surface-soft);
+        color: var(--color-text);
+    }
+
+    .banner-background {
+        inset: 0;
+        transform: none;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 1;
+    }
+
+    .banner-background.is-changing {
+        opacity: 0.75;
+    }
+
+    .content-banner {
+        min-height: clamp(14rem, 33vw, 18rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-block: 1.4rem;
+        pointer-events: none;
+    }
+
+    .content-banner p {
+        margin-bottom: 0.35rem;
+        font-size: clamp(0.95rem, 2.7vw, 1.1rem);
+        opacity: 0.9;
+    }
+
+    .content-banner h1 {
+        max-width: 58%;
+        margin-bottom: 0.9rem;
+        font-size: clamp(1.7rem, 5vw, 2.35rem);
+        line-height: 1.08;
+    }
+
+    .content-banner .btn-primary {
+        width: max-content;
+        min-height: 3.1rem;
+        padding: 0.65rem 1.2rem;
+        font-size: 1.05rem;
+        pointer-events: auto;
+    }
+
+    .banner-pagination {
+        bottom: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-banner p {
+        display: none;
+    }
+
+    .content-banner h1 {
+        max-width: 54%;
+        margin-bottom: 0.7rem;
+    }
+}

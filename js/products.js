@@ -1492,14 +1492,6 @@ function createProductCard(product) {
                     ? category
                     : category.nombre;
                 return !["Todos", "Temporada"].includes(name);
-            })
-            .filter((category) => {
-                const name = typeof category === "string"
-                    ? category
-                    : category.nombre;
-                return publicProducts.some((product) =>
-                    matchesCategory(product, name)
-                );
             });
 
         container.innerHTML = "";
@@ -1516,7 +1508,7 @@ function createProductCard(product) {
         const fragment =
             document.createDocumentFragment();
 
-        categories.slice(0, 8)
+        categories
             .forEach((category) => {
                 const categoryName = typeof category === "string"
                     ? category

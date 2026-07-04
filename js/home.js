@@ -4,6 +4,74 @@
     let bannerTimer = 0;
     let bannerIndex = 0;
 
+
+    function enableDragScroll(scrollArea, options = {}) {
+        if (!scrollArea || scrollArea.dataset.dragScrollReady === "true") return;
+
+        let isPointerDown = false;
+        let startX = 0;
+        let startScrollLeft = 0;
+        let moved = false;
+
+        const threshold = Number(options.threshold || 6);
+
+        scrollArea.dataset.dragScrollReady = "true";
+        scrollArea.classList.add("drag-scroll-ready");
+
+        scrollArea.addEventListener("pointerdown", (event) => {
+            if (event.button !== undefined && event.button !== 0) return;
+            if (scrollArea.scrollWidth <= scrollArea.clientWidth) return;
+
+            isPointerDown = true;
+            moved = false;
+            startX = event.clientX;
+            startScrollLeft = scrollArea.scrollLeft;
+            scrollArea.classList.add("is-dragging-scroll");
+        });
+
+        scrollArea.addEventListener("pointermove", (event) => {
+            if (!isPointerDown) return;
+
+            const distance = event.clientX - startX;
+
+            if (Math.abs(distance) > threshold) {
+                moved = true;
+                event.preventDefault();
+            }
+
+            scrollArea.scrollLeft = startScrollLeft - distance;
+        }, { passive: false });
+
+        function stopDragging() {
+            if (!isPointerDown) return;
+            isPointerDown = false;
+            scrollArea.classList.remove("is-dragging-scroll");
+
+            if (moved) {
+                scrollArea.dataset.suppressClick = "true";
+                window.setTimeout(() => {
+                    delete scrollArea.dataset.suppressClick;
+                }, 80);
+            }
+        }
+
+        scrollArea.addEventListener("pointerup", stopDragging);
+        scrollArea.addEventListener("pointercancel", stopDragging);
+        scrollArea.addEventListener("pointerleave", stopDragging);
+
+        scrollArea.addEventListener("click", (event) => {
+            if (scrollArea.dataset.suppressClick === "true") {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }, true);
+    }
+
+    function initDragCarousels() {
+        document
+            .querySelectorAll(".carousel-container, .categories-grid")
+            .forEach((scrollArea) => enableDragScroll(scrollArea));
+    }
     function initCarouselArrows() {
         document
             .querySelectorAll(".carousel-arrow")
@@ -281,6 +349,7 @@
     document.addEventListener("DOMContentLoaded", () => {
         initCarouselArrows();
         initCategoryRail();
+        initDragCarousels();
         initBanner();
         initHeroScroll();
 
