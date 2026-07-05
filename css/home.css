@@ -942,7 +942,7 @@ body[data-page="home"] .categories-grid::after {
     }
 }
 
-/* V3.41.0 · carruseles sin fondo global preservados */
+/* V3.42.0 · carruseles sin fondo global preservados */
 body[data-page="home"] .carousel-wrapper,
 body[data-page="home"] .carousel-container,
 body[data-page="home"] .carousel-track,

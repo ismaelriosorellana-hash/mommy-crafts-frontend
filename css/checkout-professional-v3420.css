@@ -1,0 +1,295 @@
+/* Mommy Crafts · Checkout profesional v3.42.0 */
+:root {
+    --mc-checkout-ink: #332632;
+    --mc-checkout-muted: #7a6574;
+    --mc-checkout-brand: #9b4774;
+    --mc-checkout-brand-dark: #7e355e;
+    --mc-checkout-soft: #fff6fa;
+    --mc-checkout-border: #eadfe6;
+    --mc-checkout-success: #2f9461;
+    --mc-checkout-warning: #b56a1f;
+}
+
+.checkout-progress-pro {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0 2rem;
+}
+
+.checkout-progress-step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--mc-checkout-border);
+    border-radius: 1.6rem;
+    background: #fff;
+    box-shadow: 0 1.4rem 3rem rgba(80, 48, 66, .07);
+    color: var(--mc-checkout-muted);
+}
+
+.checkout-progress-step strong {
+    display: block;
+    color: var(--mc-checkout-ink);
+    font-size: 1.38rem;
+    line-height: 1.2;
+}
+
+.checkout-progress-step small {
+    display: block;
+    margin-top: .2rem;
+    font-size: 1.12rem;
+}
+
+.checkout-progress-badge {
+    width: 3.6rem;
+    min-width: 3.6rem;
+    height: 3.6rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--mc-checkout-soft);
+    color: var(--mc-checkout-brand);
+    border: 1px solid #efd3df;
+    font-weight: 800;
+}
+
+.checkout-progress-step.is-active {
+    border-color: #e6bdd0;
+    background: linear-gradient(135deg, #fff, #fff5fa);
+}
+
+.checkout-progress-step.is-done .checkout-progress-badge {
+    background: #e9f7ef;
+    color: var(--mc-checkout-success);
+    border-color: #c8ead7;
+}
+
+.checkout-helper-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0 0 1.5rem;
+}
+
+.checkout-helper-card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.2rem;
+    border: 1px solid var(--mc-checkout-border);
+    border-radius: 1.4rem;
+    background: #fff;
+    color: var(--mc-checkout-muted);
+}
+
+.checkout-helper-card i {
+    width: 3.2rem;
+    min-width: 3.2rem;
+    height: 3.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--mc-checkout-soft);
+    color: var(--mc-checkout-brand);
+}
+
+.checkout-helper-card strong {
+    display: block;
+    color: var(--mc-checkout-ink);
+    margin-bottom: .25rem;
+}
+
+.checkout-completion-card,
+.checkout-trust-card,
+.checkout-shipping-meter {
+    margin-top: 1rem;
+    padding: 1.2rem;
+    border: 1px solid var(--mc-checkout-border);
+    border-radius: 1.4rem;
+    background: #fff;
+}
+
+.checkout-completion-card h3,
+.checkout-trust-card h3 {
+    margin: 0 0 .8rem;
+    font-size: 1.35rem;
+    color: var(--mc-checkout-ink);
+}
+
+.checkout-completion-list,
+.checkout-trust-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: .65rem;
+}
+
+.checkout-completion-list li,
+.checkout-trust-list li {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    color: var(--mc-checkout-muted);
+    font-size: 1.2rem;
+}
+
+.checkout-completion-list i,
+.checkout-trust-list i {
+    color: var(--mc-checkout-success);
+}
+
+.checkout-completion-list li.is-pending i {
+    color: var(--mc-checkout-warning);
+}
+
+.checkout-shipping-meter strong {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--mc-checkout-ink);
+    font-size: 1.22rem;
+}
+
+.checkout-shipping-meter small {
+    display: block;
+    color: var(--mc-checkout-muted);
+    margin-top: .3rem;
+}
+
+.checkout-meter-track {
+    height: .75rem;
+    border-radius: 999px;
+    background: #f3e5ec;
+    overflow: hidden;
+    margin-top: .8rem;
+}
+
+.checkout-meter-fill {
+    display: block;
+    height: 100%;
+    width: var(--mc-meter-value, 0%);
+    border-radius: inherit;
+    background: linear-gradient(90deg, #d77fa8, #8f3f6c);
+    transition: width .25s ease;
+}
+
+.checkout-form-section.is-complete {
+    border-color: #cce9d6;
+}
+
+.checkout-form-section.is-complete .checkout-section-title > span {
+    background: #e9f7ef;
+    color: var(--mc-checkout-success);
+}
+
+.checkout-form-section.has-missing {
+    border-color: #efc7d8;
+}
+
+.checkout-form-section.has-missing .checkout-section-title > span {
+    background: #fff0f5;
+    color: var(--mc-checkout-brand);
+}
+
+.form-group input.is-invalid,
+.form-group select.is-invalid,
+.form-group textarea.is-invalid,
+.form-checkbox input.is-invalid + label {
+    outline: 2px solid rgba(155, 71, 116, .26);
+    border-color: #d77fa8 !important;
+}
+
+.checkout-mobile-paybar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .9rem max(1rem, env(safe-area-inset-left)) calc(.9rem + env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-right));
+    background: rgba(255, 255, 255, .97);
+    border-top: 1px solid var(--mc-checkout-border);
+    box-shadow: 0 -1rem 2.6rem rgba(56, 37, 50, .16);
+    backdrop-filter: blur(14px);
+}
+
+.checkout-mobile-paybar small {
+    display: block;
+    color: var(--mc-checkout-muted);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.checkout-mobile-paybar strong {
+    display: block;
+    color: var(--mc-checkout-ink);
+    font-size: 1.65rem;
+}
+
+.checkout-mobile-paybar button {
+    border: 0;
+    border-radius: 999px;
+    background: var(--mc-checkout-brand);
+    color: #fff;
+    font-weight: 900;
+    min-height: 4.4rem;
+    padding: 0 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    box-shadow: 0 .9rem 2rem rgba(155, 71, 116, .25);
+}
+
+.checkout-mobile-paybar button:disabled {
+    opacity: .65;
+}
+
+@media (max-width: 900px) {
+    .checkout-progress-pro,
+    .checkout-helper-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    body[data-page="checkout"] {
+        padding-bottom: 7.6rem;
+    }
+
+    .checkout-progress-pro {
+        gap: .75rem;
+        margin: 1rem 0 1.3rem;
+    }
+
+    .checkout-progress-step {
+        padding: .9rem 1rem;
+        border-radius: 1.25rem;
+    }
+
+    .checkout-progress-badge {
+        width: 3.1rem;
+        min-width: 3.1rem;
+        height: 3.1rem;
+    }
+
+    .checkout-helper-card,
+    .checkout-completion-card,
+    .checkout-trust-card,
+    .checkout-shipping-meter {
+        border-radius: 1.2rem;
+        padding: 1rem;
+    }
+
+    .checkout-mobile-paybar {
+        display: flex;
+    }
+}
