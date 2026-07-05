@@ -2004,7 +2004,7 @@ body {
 a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-decoration:underline; text-underline-offset:.25rem; }
 
 /* ==========================================================
-   V3.36.5 · Menú móvil de Temporada y header compacto de ficha
+   V3.36.6 · Menú móvil de Temporada y header compacto de ficha
    ========================================================== */
 .season-mobile-submenu {
     display: none;
@@ -2139,7 +2139,7 @@ a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-
 
 
 /* ==========================================================
-   V3.36.5 · Navegación móvil profesional y carruseles globales
+   V3.36.6 · Navegación móvil profesional y carruseles globales
    ========================================================== */
 .product-mobile-brand {
     display: none;
@@ -2412,7 +2412,7 @@ a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-
 
 
 /* ==========================================================
-   V3.36.5 · Corrección móvil: menú, header usable y fondos invisibles
+   V3.36.6 · Corrección móvil: menú, header usable y fondos invisibles
    ========================================================== */
 :root {
     --mc-page-bg: var(--color-background, #fff9fd);
@@ -2611,7 +2611,7 @@ body[data-page="product"] .navbar-actions.mc-header-actions,
 
 
 /* ==========================================================
-   V3.36.5 · Menú móvil estable y clickeable en todas las páginas
+   V3.36.6 · Menú móvil estable y clickeable en todas las páginas
    ========================================================== */
 @media (max-width: 820px) {
     body.mobile-menu-open {
@@ -2680,7 +2680,7 @@ body[data-page="product"] .navbar-actions.mc-header-actions,
 }
 
 /* ==========================================================
-   V3.36.5 · Corrección puntual: acciones móviles fijas en navbar de ficha
+   V3.36.6 · Corrección puntual: acciones móviles fijas en navbar de ficha
    ========================================================== */
 @media (max-width: 700px) {
     body[data-page="product"] .site-header {
@@ -2804,5 +2804,45 @@ body[data-page="product"] .navbar-actions.mc-header-actions,
     body[data-page="product"] .product-page,
     body[data-page="product"] main.product-page {
         padding-top: 0 !important;
+    }
+}
+
+/* ==========================================================
+   V3.36.6 · Botones de inicio activos y coherentes en móvil
+   ========================================================== */
+@media (max-width: 820px) {
+    body[data-page="home"] .site-header,
+    body[data-page="home"] .site-header .container-navbar,
+    body[data-page="home"] .site-header .navbar,
+    body[data-page="home"] .site-header .navbar-actions,
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions {
+        pointer-events: auto !important;
+        opacity: 1 !important;
+        filter: none !important;
+    }
+
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions {
+        position: relative !important;
+        z-index: 2300 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        transform: none !important;
+    }
+
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions button,
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions a,
+    body[data-page="home"] .site-header .mobile-menu-button {
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
+        opacity: 1 !important;
+        filter: none !important;
+    }
+
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions .mc-header-icon,
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions .account-button,
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions .cart-button {
+        position: relative !important;
+        z-index: 2301 !important;
     }
 }

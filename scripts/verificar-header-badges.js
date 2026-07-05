@@ -26,4 +26,4 @@ if (failed.length) {
     process.exit(1);
 }
 
-console.log(`\n✅ Header y badges v3.36.5 verificados (${checks.length} controles).`);
+console.log(`\n✅ Header y badges v3.36.6 verificados (${checks.length} controles).`);
