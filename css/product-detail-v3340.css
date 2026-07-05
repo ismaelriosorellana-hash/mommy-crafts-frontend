@@ -1,5 +1,5 @@
 /* ==========================================================
-   Mommy Crafts · Ficha de producto marketplace · v3.36.8
+   Mommy Crafts · Ficha de producto marketplace · v3.36.9
    Ajuste fino: ficha limpia, datos colapsables y mayor claridad
    ========================================================== */
 
@@ -889,7 +889,7 @@ body[data-page="product"] .related-products {
 }
 
 
-/* v3.36.8 · ajustes solicitados por revisión visual */
+/* v3.36.9 · ajustes solicitados por revisión visual */
 body[data-page="product"] .product-content-nav {
     display: none !important;
 }
@@ -914,7 +914,7 @@ body[data-page="product"] .related-products .container-img {
 }
 
 /* ==========================================================
-   v3.36.8 · Selectores y proceso de compra profesional
+   v3.36.9 · Selectores y proceso de compra profesional
    - Cajas individuales por columna.
    - Sin caja/fondo global detrás de la ficha.
    - Estados claros para talla, variante y compra.
@@ -1186,7 +1186,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
 }
 
 /* ==========================================================
-   v3.36.8 · Ficha móvil: galería limpia, sin logo superior y orden comercial
+   v3.36.9 · Ficha móvil: galería limpia, sin logo superior y orden comercial
    ========================================================== */
 @media (max-width: 700px) {
     body[data-page="product"] .product-page {
@@ -1340,7 +1340,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
     }
 }
 
-/* v3.36.8 · Header móvil específico de ficha cargado junto al CSS de producto */
+/* v3.36.9 · Header móvil específico de ficha cargado junto al CSS de producto */
 @media (max-width: 700px) {
     body[data-page="product"] .promo-banner,
     body[data-page="product"] .container-hero {
@@ -1356,7 +1356,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
 
 
 /* ==========================================================
-   V3.36.8 · Ficha móvil limpia y relacionados sin fondo global
+   V3.36.9 · Ficha móvil limpia y relacionados sin fondo global
    ========================================================== */
 body[data-page="product"] .related-products,
 body[data-page="product"] .related-products .container,
@@ -1466,7 +1466,7 @@ body[data-page="product"] .related-products .container-products::after {
 
 
 /* ==========================================================
-   V3.36.8 · Ficha móvil: header, imagen centrada y carrito fijo real
+   V3.36.9 · Ficha móvil: header, imagen centrada y carrito fijo real
    ========================================================== */
 body[data-page="product"] .related-products,
 body[data-page="product"] .related-products .container,
@@ -1577,7 +1577,7 @@ body[data-page="product"] .related-products .carousel-track {
 
 
 /* ==========================================================
-   V3.36.8 · Header móvil de ficha: acciones en barra superior
+   V3.36.9 · Header móvil de ficha: acciones en barra superior
    ========================================================== */
 @media (max-width: 700px) {
     body[data-page="product"] .site-header .promo-banner,
@@ -1684,7 +1684,7 @@ body[data-page="product"] .related-products .carousel-track {
     }
 }
 
-/* V3.36.8 · Ficha móvil: la galería comienza debajo del navbar, sin acciones flotantes */
+/* V3.36.9 · Ficha móvil: la galería comienza debajo del navbar, sin acciones flotantes */
 @media (max-width: 700px) {
     body[data-page="product"] .product-detail-images {
         position: relative !important;
@@ -1698,7 +1698,7 @@ body[data-page="product"] .related-products .carousel-track {
 }
 
 /* ==========================================================
-   V3.36.8 · Corrección puntual móvil: navbar fijo real en ficha
+   V3.36.9 · Corrección puntual móvil: navbar fijo real en ficha
    - Acciones siempre dentro del navbar, no sobre la imagen.
    - Sin espacio vacío entre navbar e imagen.
    - Botón de cuenta circular como el resto.
@@ -1887,7 +1887,7 @@ body[data-page="product"] .related-products .carousel-track {
 }
 
 /* ==========================================================
-   V3.36.8 · Ajuste fino móvil: imagen cerca del navbar
+   V3.36.9 · Ajuste fino móvil: imagen cerca del navbar
    - Reduce el espacio vacío visible antes de la imagen.
    - Mantiene la imagen centrada y navegable.
    - No afecta escritorio.
@@ -1924,7 +1924,7 @@ body[data-page="product"] .related-products .carousel-track {
 }
 
 /* ==========================================================
-   V3.36.8 · Ajuste puntual móvil: imagen de ficha y botones header inicio
+   V3.36.9 · Ajuste puntual móvil: imagen de ficha y botones header inicio
    - Elimina el bloque vacío superior de la galería móvil.
    - Mantiene la imagen alineada arriba dentro de su recuadro.
    - Unifica el tamaño del botón de cuenta con los demás botones del inicio.
@@ -2012,3 +2012,105 @@ body[data-page="product"] .related-products .carousel-track {
         box-shadow: none !important;
     }
 }
+
+/* ==========================================================
+   V3.36.9 · Ajuste validado por usuario: posición galería móvil
+   - Aplica el margen probado directamente en DevTools.
+   - Sube la tarjeta/columna de imagen para eliminar el espacio vacío.
+   - Solo afecta la ficha de producto móvil.
+   ========================================================== */
+@media (max-width: 700px) {
+    body[data-page="product"] .product-detail-grid,
+    body[data-page="product"] .product-detail-images,
+    body[data-page="product"] .detail-main-image-container {
+        margin-top: -100px !important;
+    }
+}
+
+/* ==========================================================
+   V3.36.9 · Navbar móvil uniforme final
+   - Fuerza todos los botones de acción al tamaño del botón menú.
+   - Debe ganar sobre reglas previas de home, ficha y editor visual.
+   ========================================================== */
+@media (max-width: 820px) {
+    .site-header .mobile-menu-button,
+    .site-header .navbar-actions.mc-header-actions .mc-header-icon,
+    .site-header .navbar-actions.mc-header-actions .icon-btn,
+    .site-header .navbar-actions.mc-header-actions .account-button,
+    .site-header .navbar-actions.mc-header-actions .account-button.account-session-chip,
+    .site-header .navbar-actions.mc-header-actions .compare-button,
+    .site-header .navbar-actions.mc-header-actions .wishlist-button,
+    .site-header .navbar-actions.mc-header-actions .cart-button,
+    .site-header .navbar-actions .mc-header-icon,
+    .site-header .navbar-actions .icon-btn,
+    .site-header .navbar-actions .account-button,
+    .site-header .navbar-actions .account-button.account-session-chip,
+    .site-header .navbar-actions .compare-button,
+    .site-header .navbar-actions .wishlist-button,
+    .site-header .navbar-actions .cart-button,
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions .mc-header-icon,
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions .account-button,
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions .cart-button,
+    body[data-page="product"] .site-header .navbar-actions .icon-btn {
+        width: 3.9rem !important;
+        min-width: 3.9rem !important;
+        max-width: 3.9rem !important;
+        height: 3.9rem !important;
+        min-height: 3.9rem !important;
+        max-height: 3.9rem !important;
+        flex: 0 0 3.9rem !important;
+        aspect-ratio: 1 / 1 !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        box-sizing: border-box !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: visible !important;
+        line-height: 1 !important;
+        background: var(--color-surface, #fff) !important;
+        color: var(--color-secondary, #65445A) !important;
+        box-shadow: inset 0 0 0 1px var(--color-border, #eadfe2) !important;
+        transform: none !important;
+    }
+
+    .site-header .navbar-actions.mc-header-actions,
+    .site-header .navbar-actions,
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions,
+    body[data-page="product"] .site-header .navbar-actions {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: .55rem !important;
+        pointer-events: auto !important;
+    }
+
+    .site-header .navbar-actions.mc-header-actions .account-session-copy,
+    .site-header .navbar-actions .account-session-copy {
+        display: none !important;
+    }
+
+    .site-header .navbar-actions.mc-header-actions .account-session-icon,
+    .site-header .navbar-actions .account-session-icon {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border-radius: 50% !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .site-header .mobile-menu-button i,
+    .site-header .navbar-actions.mc-header-actions i,
+    .site-header .navbar-actions i {
+        font-size: 1.67rem !important;
+        line-height: 1 !important;
+    }
+}
+

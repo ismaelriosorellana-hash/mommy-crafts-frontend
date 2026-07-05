@@ -1,4 +1,4 @@
-# Cambios Frontend v3.36.8
+# Cambios Frontend v3.36.9
 
 Corrección puntual para versión móvil de la ficha de producto.
 
