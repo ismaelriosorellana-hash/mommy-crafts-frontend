@@ -16,8 +16,8 @@ const api = read("js/api.js");
 const products = read("js/products.js");
 const cart = read("js/cart.js");
 
-if (!config.includes('APP_VERSION: "3.36.7"')) {
-    errors.push("js/config.js no informa la versión 3.36.7.");
+if (!config.includes('APP_VERSION: "3.36.8"')) {
+    errors.push("js/config.js no informa la versión 3.36.8.");
 }
 
 if (!config.includes("window.ProductLinks")) {
@@ -98,5 +98,5 @@ if (errors.length) {
     process.exit(1);
 }
 
-console.log("✅ Catálogo 3.36.7 verificado.");
+console.log("✅ Catálogo 3.36.8 verificado.");
 console.log("✅ Ficha directa por slug/ID, relacionados API y enlaces centralizados presentes.");

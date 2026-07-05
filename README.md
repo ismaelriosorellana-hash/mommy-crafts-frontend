@@ -1,11 +1,5 @@
-# Mommy Crafts Frontend v3.36.7
+# Mommy Crafts Frontend v3.36.8
 
-Actualización móvil de navegación, carruseles, ficha de producto y checkout.
+Corrección puntual móvil sobre la ficha de producto y el header del inicio.
 
-Backend requerido: 2.15.1.
-
-## v3.36.7
-
-Corrección móvil puntual:
-- recuadro de imagen de ficha más compacto bajo el navbar;
-- botón de inicio de sesión circular en inicio móvil.
+Backend requerido: 2.15.1. No requiere cambios de variables ni migraciones.

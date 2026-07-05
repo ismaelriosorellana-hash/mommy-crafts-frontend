@@ -11,7 +11,7 @@ const commerceToolsJs = fs.readFileSync(path.join(root, 'js', 'mc-commerce-tools
 const mainCss = fs.readFileSync(path.join(root, 'css', 'main.css'), 'utf8');
 
 const checks = [
-  ['CSS específico v3.36.7 cargado', html.includes('css/product-detail-v3340.css?v=3.36.7')],
+  ['CSS específico v3.36.8 cargado', html.includes('css/product-detail-v3340.css?v=3.36.8')],
   ['Layout marketplace presente', html.includes('product-detail-marketplace')],
   ['Galería con miniaturas laterales presente', html.indexOf('id="detalle-thumbnails"') < html.indexOf('class="detail-main-image-container"')],
   ['Columna de compra separada presente', html.includes('class="product-purchase-panel"')],
@@ -45,9 +45,9 @@ const checks = [
   ['Productos relacionados móviles usan tamaño compacto', /related-products[\s\S]*grid-auto-columns:\s*minmax\(15\.8rem, calc\(\(100vw - 4\.3rem\) \/ 2\)\)/.test(css)],
   ['Acciones móviles de ficha se fuerzan dentro del navbar', commerceToolsJs.includes('resetProductMobileHeaderActions') && commerceToolsJs.includes('navbar.appendChild(actions)')],
   ['Editor visual no desplaza acciones en ficha móvil', siteSettingsJs.includes('isProductMobileNavbarActions') && siteSettingsJs.includes('resetProductMobileNavbarActions')],
-  ['Navbar móvil de ficha tiene acciones en columna derecha', mainCss.includes('V3.36.7 · Corrección puntual') && /body\[data-page=\"product\"\] \.site-header \.navbar-actions[\s\S]*grid-column:\s*3 !important/.test(mainCss)],
-  ['Ficha usa CSS específico v3.36.7', html.includes('css/product-detail-v3340.css?v=3.36.7')],
-  ['Imagen móvil compacta bajo navbar', productCss.includes('V3.36.7 · Ajuste fino móvil') && productCss.includes('clamp(28rem, 82vw, 36rem)')],
+  ['Navbar móvil de ficha tiene acciones en columna derecha', mainCss.includes('V3.36.8 · Corrección puntual') && /body\[data-page=\"product\"\] \.site-header \.navbar-actions[\s\S]*grid-column:\s*3 !important/.test(mainCss)],
+  ['Ficha usa CSS específico v3.36.8', html.includes('css/product-detail-v3340.css?v=3.36.8')],
+  ['Imagen móvil compacta bajo navbar', productCss.includes('V3.36.8 · Ajuste fino móvil') && productCss.includes('clamp(28rem, 82vw, 36rem)')],
 ];
 
 const failed = checks.filter(([, ok]) => !ok);
@@ -60,4 +60,4 @@ if (failed.length) {
   process.exit(1);
 }
 
-console.log(`\n✅ Ficha de producto v3.36.7 verificada (${checks.length} controles).`);
+console.log(`\n✅ Ficha de producto v3.36.8 verificada (${checks.length} controles).`);

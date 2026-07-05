@@ -16,7 +16,7 @@ const checks = [
     ["Header evita parpadeo inicial", commerceCss.includes("evita salto visual del header") && commerceCss.includes("opacity: 0")],
     ["Badges de descuento apilados globalmente", commerceCss.includes("badges apilados en todas las tarjetas") && commerceCss.includes("product-badge[hidden] + .product-discount-badge")],
     ["Descuento ya no depende solo de sugeridos", commerceCss.includes(".container-img .product-discount-badge")],
-    ["Botón cuenta circular inicio móvil v3.36.7", mainCss.includes("V3.36.7 · Botón de cuenta circular en inicio móvil") && mainCss.includes("max-width: 4.6rem !important")],
+    ["Botón cuenta circular inicio móvil v3.36.8", mainCss.includes("V3.36.8 · Botón de cuenta circular en inicio móvil") && mainCss.includes("max-width: 4.6rem !important")],
     ["Temporada móvil usa submenú visible", mainCss.includes("season-mobile-submenu") && uiJs.includes("setMobileOpen")],
     ["Header móvil de ficha conserva acciones", commerceJs.includes("keepActionsInNavbarForProductMobile")],
 ];
@@ -29,4 +29,4 @@ if (failed.length) {
     process.exit(1);
 }
 
-console.log(`\n✅ Header y badges v3.36.7 verificados (${checks.length} controles).`);
+console.log(`\n✅ Header y badges v3.36.8 verificados (${checks.length} controles).`);

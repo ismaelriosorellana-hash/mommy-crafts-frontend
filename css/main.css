@@ -2004,7 +2004,7 @@ body {
 a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-decoration:underline; text-underline-offset:.25rem; }
 
 /* ==========================================================
-   V3.36.7 · Menú móvil de Temporada y header compacto de ficha
+   V3.36.8 · Menú móvil de Temporada y header compacto de ficha
    ========================================================== */
 .season-mobile-submenu {
     display: none;
@@ -2139,7 +2139,7 @@ a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-
 
 
 /* ==========================================================
-   V3.36.7 · Navegación móvil profesional y carruseles globales
+   V3.36.8 · Navegación móvil profesional y carruseles globales
    ========================================================== */
 .product-mobile-brand {
     display: none;
@@ -2412,7 +2412,7 @@ a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-
 
 
 /* ==========================================================
-   V3.36.7 · Corrección móvil: menú, header usable y fondos invisibles
+   V3.36.8 · Corrección móvil: menú, header usable y fondos invisibles
    ========================================================== */
 :root {
     --mc-page-bg: var(--color-background, #fff9fd);
@@ -2611,7 +2611,7 @@ body[data-page="product"] .navbar-actions.mc-header-actions,
 
 
 /* ==========================================================
-   V3.36.7 · Menú móvil estable y clickeable en todas las páginas
+   V3.36.8 · Menú móvil estable y clickeable en todas las páginas
    ========================================================== */
 @media (max-width: 820px) {
     body.mobile-menu-open {
@@ -2680,7 +2680,7 @@ body[data-page="product"] .navbar-actions.mc-header-actions,
 }
 
 /* ==========================================================
-   V3.36.7 · Corrección puntual: acciones móviles fijas en navbar de ficha
+   V3.36.8 · Corrección puntual: acciones móviles fijas en navbar de ficha
    ========================================================== */
 @media (max-width: 700px) {
     body[data-page="product"] .site-header {
@@ -2808,7 +2808,7 @@ body[data-page="product"] .navbar-actions.mc-header-actions,
 }
 
 /* ==========================================================
-   V3.36.7 · Botones de inicio activos y coherentes en móvil
+   V3.36.8 · Botones de inicio activos y coherentes en móvil
    ========================================================== */
 @media (max-width: 820px) {
     body[data-page="home"] .site-header,
@@ -2848,7 +2848,7 @@ body[data-page="product"] .navbar-actions.mc-header-actions,
 }
 
 /* ==========================================================
-   V3.36.7 · Botón de cuenta circular en inicio móvil
+   V3.36.8 · Botón de cuenta circular en inicio móvil
    - Evita que el chip de sesión se vea ovalado.
    - Conserva interacción y contador del header.
    ========================================================== */
@@ -2870,6 +2870,96 @@ body[data-page="product"] .navbar-actions.mc-header-actions,
         justify-content: center !important;
         overflow: visible !important;
         pointer-events: auto !important;
+    }
+
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions .account-session-copy {
+        display: none !important;
+    }
+
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions .account-session-icon {
+        width: auto !important;
+        min-width: 0 !important;
+        height: auto !important;
+        padding: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+}
+
+/* ==========================================================
+   V3.36.8 · Ajuste puntual móvil: imagen de ficha y botones header inicio
+   - Elimina el bloque vacío superior de la galería móvil.
+   - Mantiene la imagen alineada arriba dentro de su recuadro.
+   - Unifica el tamaño del botón de cuenta con los demás botones del inicio.
+   ========================================================== */
+@media (max-width: 700px) {
+    body[data-page="product"] .product-page > .container {
+        padding-top: 0 !important;
+    }
+
+    body[data-page="product"] .product-detail-grid {
+        margin-top: .55rem !important;
+        gap: .85rem !important;
+    }
+
+    body[data-page="product"] .product-detail-images {
+        padding: 0 !important;
+        margin-top: 0 !important;
+        background: transparent !important;
+        min-height: 0 !important;
+    }
+
+    body[data-page="product"] .detail-main-image-container {
+        margin-top: 0 !important;
+        padding: .6rem .75rem .9rem !important;
+        min-height: clamp(27rem, 88vw, 39rem) !important;
+        height: clamp(27rem, 88vw, 39rem) !important;
+        max-height: 39rem !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: center !important;
+        background: #fff !important;
+    }
+
+    body[data-page="product"] .detail-main-image-track {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: center !important;
+    }
+
+    body[data-page="product"] .detail-main-img {
+        width: 100% !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        object-fit: contain !important;
+        object-position: top center !important;
+    }
+}
+
+@media (max-width: 820px) {
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions .mc-header-icon,
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions .icon-btn,
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions .account-button,
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions .account-button.account-session-chip,
+    body[data-page="home"] .site-header .navbar-actions.mc-header-actions .cart-button {
+        width: 5.2rem !important;
+        min-width: 5.2rem !important;
+        max-width: 5.2rem !important;
+        height: 5.2rem !important;
+        min-height: 5.2rem !important;
+        max-height: 5.2rem !important;
+        flex: 0 0 5.2rem !important;
+        aspect-ratio: 1 / 1 !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: visible !important;
     }
 
     body[data-page="home"] .site-header .navbar-actions.mc-header-actions .account-session-copy {
