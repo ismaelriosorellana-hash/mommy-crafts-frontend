@@ -32,4 +32,4 @@ if (failed.length) {
     process.exit(1);
 }
 
-console.log(`\n✅ Home, carruseles y carrito v3.43.0 verificados (${checks.length} controles).`);
+console.log(`\n✅ Home, carruseles y carrito v3.43.1 verificados (${checks.length} controles).`);
