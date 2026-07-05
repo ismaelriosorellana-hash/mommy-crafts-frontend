@@ -1,0 +1,475 @@
+/* ==========================================================
+   Mommy Crafts · Personalización profesional v3.39.0
+   Capa visual y UX del modal de personalización.
+   ========================================================== */
+
+:root {
+    --mc-customization-radius: 2.2rem;
+    --mc-customization-card-radius: 1.6rem;
+    --mc-customization-border: #eadfe2;
+    --mc-customization-bg: #fffafb;
+    --mc-customization-soft: #fff4f6;
+    --mc-customization-ink: #372a32;
+    --mc-customization-muted: #7b6570;
+    --mc-customization-accent: #65445a;
+    --mc-customization-success: #2f7d57;
+}
+
+.modal-overlay.mc-customization-pro {
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1.2rem, 2.5vw, 2.4rem);
+    background: rgba(37, 25, 32, 0.54);
+    backdrop-filter: blur(10px);
+}
+
+.mc-customization-pro .modal-box {
+    width: min(1180px, calc(100vw - 2.4rem));
+    max-height: min(92vh, 920px);
+    overflow: hidden;
+    border: 1px solid rgba(234, 223, 226, 0.95);
+    border-radius: var(--mc-customization-radius);
+    background: #ffffff;
+    box-shadow: 0 28px 80px rgba(55, 42, 50, 0.22);
+}
+
+.mc-customization-pro .modal-header {
+    align-items: center;
+    gap: 1.4rem;
+    padding: 2rem 2.2rem 1.25rem;
+    border-bottom: 1px solid rgba(234, 223, 226, 0.82);
+    background: linear-gradient(135deg, #fff, #fff6f8);
+}
+
+.mc-customization-pro .modal-header h2 {
+    margin: 0.2rem 0 0;
+    font-size: clamp(2.15rem, 2.6vw, 3.3rem);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+}
+
+.mc-customization-pro .modal-eyebrow {
+    color: var(--mc-customization-accent);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.mc-customization-pro .modal-close {
+    width: 4.4rem;
+    height: 4.4rem;
+    border: 1px solid var(--mc-customization-border);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--mc-customization-accent);
+    box-shadow: 0 8px 22px rgba(55, 42, 50, 0.08);
+}
+
+.mc-customization-trust-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+    padding: 1.15rem 2.2rem 0;
+    background: #fff;
+}
+
+.mc-customization-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 4.4rem;
+    padding: 0.85rem 1.05rem;
+    border: 1px solid rgba(234, 223, 226, 0.95);
+    border-radius: 1.4rem;
+    background: #fffafb;
+    color: var(--mc-customization-ink);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.mc-customization-trust-item i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    flex: 0 0 2.8rem;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--mc-customization-accent);
+    box-shadow: inset 0 0 0 1px rgba(234, 223, 226, 0.95);
+}
+
+.mc-customization-pro .modal-steps {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.75rem;
+    padding: 1.2rem 2.2rem;
+    border-bottom: 1px solid rgba(234, 223, 226, 0.72);
+    background: #fff;
+}
+
+.mc-customization-pro .modal-steps .step-line {
+    display: none !important;
+}
+
+.mc-customization-pro .modal-steps .step {
+    position: relative;
+    min-height: 5.2rem;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding: 0.85rem 0.9rem;
+    border: 1px solid var(--mc-customization-border);
+    border-radius: 1.35rem;
+    background: #fff;
+    color: var(--mc-customization-muted);
+    font-size: 1.18rem;
+    font-weight: 800;
+    line-height: 1.15;
+    box-shadow: none;
+}
+
+.mc-customization-pro .modal-steps .step span {
+    width: 2.7rem;
+    height: 2.7rem;
+    min-width: 2.7rem;
+    font-size: 1.15rem;
+}
+
+.mc-customization-pro .modal-steps .step.active {
+    border-color: rgba(101, 68, 90, 0.35);
+    background: linear-gradient(135deg, #fff7f8, #fff);
+    color: var(--mc-customization-accent);
+    box-shadow: 0 12px 30px rgba(101, 68, 90, 0.11);
+}
+
+.mc-customization-pro .modal-steps .step.done {
+    border-color: rgba(47, 125, 87, 0.22);
+    background: rgba(47, 125, 87, 0.06);
+    color: var(--mc-customization-success);
+}
+
+.mc-customization-pro .modal-body-preview {
+    display: grid;
+    grid-template-columns: minmax(310px, 0.82fr) minmax(0, 1.18fr);
+    gap: 1.4rem;
+    padding: 1.35rem 2.2rem;
+    overflow: auto;
+    background: linear-gradient(180deg, #fff, #fffafb);
+}
+
+.mc-customization-pro .live-preview-panel {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    padding: 1.35rem;
+    border: 1px solid var(--mc-customization-border);
+    border-radius: var(--mc-customization-card-radius);
+    background: #fff;
+    box-shadow: 0 18px 48px rgba(55, 42, 50, 0.08);
+}
+
+.mc-customization-pro .live-preview-panel h3 {
+    margin: 0 0 1rem;
+    font-size: 1.55rem;
+    letter-spacing: -0.01em;
+}
+
+.mc-customization-pro .preview-note,
+.mc-customization-pro .style-info-box,
+.mc-customization-pro .upload-info-box,
+.mc-customization-pro .editor-selection-help {
+    border: 1px solid rgba(234, 223, 226, 0.95);
+    border-radius: 1.35rem;
+    background: #fffafb;
+    color: var(--mc-customization-muted);
+}
+
+.mc-customization-pro .product-preview {
+    margin-top: 1rem;
+    border: 1px dashed rgba(101, 68, 90, 0.22);
+    border-radius: 1.8rem;
+    background:
+        radial-gradient(circle at 15% 15%, rgba(255, 241, 244, 0.9), transparent 34%),
+        linear-gradient(135deg, #fff, #fff7f8);
+}
+
+.mc-customization-pro .customization-form {
+    min-width: 0;
+}
+
+.mc-customization-pro .modal-step-content {
+    padding: 1.55rem;
+    border: 1px solid var(--mc-customization-border);
+    border-radius: var(--mc-customization-card-radius);
+    background: #fff;
+    box-shadow: 0 18px 48px rgba(55, 42, 50, 0.07);
+}
+
+.mc-customization-pro .modal-step-content h3 {
+    margin-top: 0;
+    font-size: clamp(1.85rem, 2.2vw, 2.55rem);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+}
+
+.mc-customization-pro .customization-step-description {
+    max-width: 68ch;
+    color: var(--mc-customization-muted);
+    font-size: 1.4rem;
+}
+
+.mc-customization-helper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    margin: 1rem 0 1.2rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(234, 223, 226, 0.95);
+    border-radius: 1.35rem;
+    background: #fffafb;
+    color: var(--mc-customization-muted);
+    font-size: 1.28rem;
+    line-height: 1.4;
+}
+
+.mc-customization-helper i {
+    margin-top: 0.15rem;
+    color: var(--mc-customization-accent);
+}
+
+.mc-customization-validation {
+    display: none;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1.1rem;
+    padding: 0.95rem 1.1rem;
+    border: 1px solid rgba(196, 78, 95, 0.28);
+    border-radius: 1.25rem;
+    background: rgba(196, 78, 95, 0.07);
+    color: #8d2f42;
+    font-weight: 800;
+    font-size: 1.28rem;
+}
+
+.mc-customization-validation.is-visible {
+    display: flex;
+}
+
+.mc-customization-pro .customization-category-grid,
+.mc-customization-pro .customizable-products-grid,
+.mc-customization-pro .option-grid,
+.mc-customization-pro .color-options-grid {
+    gap: 1rem;
+}
+
+.mc-customization-pro .customization-category-card,
+.mc-customization-pro .customizable-product-card,
+.mc-customization-pro .option-card,
+.mc-customization-pro .color-option-card,
+.mc-customization-pro .customization-size-option {
+    border-color: rgba(234, 223, 226, 0.95);
+    border-radius: 1.35rem;
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(55, 42, 50, 0.055);
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.mc-customization-pro .customization-category-card:hover,
+.mc-customization-pro .customizable-product-card:hover,
+.mc-customization-pro .option-card:hover,
+.mc-customization-pro .color-option-card:hover,
+.mc-customization-pro .customization-size-option:hover {
+    transform: translateY(-2px);
+    border-color: rgba(101, 68, 90, 0.28);
+    box-shadow: 0 18px 36px rgba(55, 42, 50, 0.09);
+}
+
+.mc-customization-pro .customization-category-card.selected,
+.mc-customization-pro .customizable-product-card.selected,
+.mc-customization-pro .option-card:has(input:checked),
+.mc-customization-pro .color-option-card.selected,
+.mc-customization-pro .customization-size-option.selected {
+    border-color: rgba(101, 68, 90, 0.55);
+    background: linear-gradient(135deg, #fff6f8, #fff);
+    box-shadow: 0 18px 40px rgba(101, 68, 90, 0.12);
+}
+
+.mc-customization-pro .upload-area {
+    border-radius: 1.6rem;
+    border-color: rgba(101, 68, 90, 0.22);
+    background: linear-gradient(135deg, #fffafb, #fff);
+}
+
+.mc-customization-pro .text-fields .field-group,
+.mc-customization-pro .field-group {
+    border-radius: 1.35rem;
+}
+
+.mc-customization-pro input[type="text"],
+.mc-customization-pro textarea,
+.mc-customization-pro select {
+    border-radius: 1.1rem;
+}
+
+.mc-customization-pro .modal-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 2.2rem;
+    border-top: 1px solid rgba(234, 223, 226, 0.9);
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+}
+
+.mc-customization-pro .customization-running-total {
+    min-width: 18rem;
+    padding: 0.85rem 1.05rem;
+    border: 1px solid var(--mc-customization-border);
+    border-radius: 1.25rem;
+    background: #fffafb;
+}
+
+.mc-customization-pro .modal-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.mc-customization-pro .modal-footer .btn-primary,
+.mc-customization-pro .modal-footer .btn-secondary,
+.mc-customization-pro .summary-actions .btn-primary,
+.mc-customization-pro .summary-actions .btn-secondary {
+    min-height: 4.4rem;
+    border-radius: 999px;
+    padding-inline: 1.55rem;
+    font-weight: 900;
+}
+
+.mc-customization-pro .modal-summary {
+    padding: 2rem 2.2rem;
+    overflow: auto;
+    background: #fff;
+}
+
+.mc-customization-pro .customization-summary-preview {
+    margin-bottom: 1.2rem;
+    border: 1px solid var(--mc-customization-border);
+    border-radius: 1.6rem;
+    background: #fffafb;
+    overflow: hidden;
+}
+
+.mc-customization-pro .customization-summary-preview img {
+    display: block;
+    width: 100%;
+    max-height: 420px;
+    object-fit: contain;
+    background: #fff;
+}
+
+@media (max-width: 900px) {
+    .modal-overlay.mc-customization-pro {
+        align-items: stretch;
+        padding: 0;
+    }
+
+    .mc-customization-pro .modal-box {
+        width: 100vw;
+        max-height: 100dvh;
+        min-height: 100dvh;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .mc-customization-pro .modal-header {
+        padding: 1.25rem 1.35rem 0.9rem;
+    }
+
+    .mc-customization-pro .modal-header h2 {
+        font-size: 2.1rem;
+    }
+
+    .mc-customization-trust-strip {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+        padding: 0.85rem 1.35rem 0;
+    }
+
+    .mc-customization-trust-item {
+        min-height: 3.8rem;
+        font-size: 1.15rem;
+        padding: 0.7rem 0.85rem;
+    }
+
+    .mc-customization-pro .modal-steps {
+        display: flex;
+        gap: 0.65rem;
+        overflow-x: auto;
+        padding: 1rem 1.35rem;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .mc-customization-pro .modal-steps .step {
+        min-width: 11rem;
+        min-height: 4.6rem;
+        scroll-snap-align: start;
+    }
+
+    .mc-customization-pro .modal-body-preview {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 1.35rem 9rem;
+    }
+
+    .mc-customization-pro .live-preview-panel {
+        position: relative;
+        top: auto;
+        padding: 1rem;
+    }
+
+    .mc-customization-pro .product-preview {
+        max-height: 300px;
+        overflow: hidden;
+    }
+
+    .mc-customization-pro .modal-step-content {
+        padding: 1.15rem;
+        border-radius: 1.45rem;
+    }
+
+    .mc-customization-pro .customization-category-grid,
+    .mc-customization-pro .customizable-products-grid,
+    .mc-customization-pro .option-grid,
+    .mc-customization-pro .color-options-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .mc-customization-pro .modal-footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0.9rem 1.1rem calc(0.9rem + env(safe-area-inset-bottom));
+    }
+
+    .mc-customization-pro .customization-running-total {
+        min-width: 12rem;
+        flex: 1;
+    }
+
+    .mc-customization-pro .modal-footer-actions {
+        flex: 1.4;
+    }
+
+    .mc-customization-pro .modal-footer-actions .btn-primary,
+    .mc-customization-pro .modal-footer-actions .btn-secondary {
+        flex: 1;
+        padding-inline: 1rem;
+    }
+}

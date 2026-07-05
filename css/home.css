@@ -941,3 +941,13 @@ body[data-page="home"] .categories-grid::after {
         grid-auto-columns: minmax(15.6rem, calc((100vw - 4.5rem) / 2)) !important;
     }
 }
+
+/* V3.39.0 · carruseles sin fondo global preservados */
+body[data-page="home"] .carousel-wrapper,
+body[data-page="home"] .carousel-container,
+body[data-page="home"] .carousel-track,
+body[data-page="home"] .categories-carousel,
+body[data-page="home"] .featured-carousel {
+    background: transparent !important;
+    background-image: none !important;
+}
