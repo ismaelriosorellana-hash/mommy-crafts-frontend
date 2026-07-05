@@ -81,7 +81,7 @@
         const validation = $(".mc-customization-validation", section || modal);
         if (!validation) return;
         validation.classList.add("is-visible");
-        validation.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        validation.scrollIntoView({ block: "nearest", behavior: "auto" });
     }
 
     function saveDraft() {
@@ -141,14 +141,37 @@
         const target = $(".customization-form", modal);
         if (!target) return;
 
+        let timer = 0;
+        let lastStep = currentStep();
+        const isMobile = () => window.matchMedia?.("(max-width: 760px)")?.matches;
+
         const observer = new MutationObserver(() => {
-            hideValidation(modal);
-            const step = currentStep();
-            const activeStep = $(`.modal-steps .step[data-step="${step}"]`, modal);
-            activeStep?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
-            if (step === 6) {
-                window.setTimeout(restoreDraft, 80);
-            }
+            window.clearTimeout(timer);
+            timer = window.setTimeout(() => {
+                hideValidation(modal);
+                const step = currentStep();
+                if (step === lastStep) return;
+                lastStep = step;
+
+                const activeStep = $(`.modal-steps .step[data-step="${step}"]`, modal);
+                if (activeStep && typeof activeStep.scrollIntoView === "function") {
+                    activeStep.scrollIntoView({
+                        inline: "center",
+                        block: "nearest",
+                        behavior: "auto"
+                    });
+                }
+
+                // En móvil evitamos cualquier scroll forzado del cuerpo del modal.
+                // El scroll queda completamente nativo para prevenir congelamientos.
+                if (!isMobile()) {
+                    $(".modal-body", modal)?.scrollTo?.({ top: 0, left: 0, behavior: "auto" });
+                }
+
+                if (step === 6) {
+                    window.setTimeout(restoreDraft, 80);
+                }
+            }, 90);
         });
 
         observer.observe(target, {

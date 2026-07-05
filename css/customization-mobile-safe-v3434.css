@@ -1,54 +1,68 @@
-/* Mommy Crafts · Personalización móvil estable v3.43.3
-   Corrección anti-congelamiento: sin touch-action:none global,
-   sin footer fijo encima del contenido y sin scroll forzado continuo. */
+/* Mommy Crafts · Personalización móvil segura v3.43.4
+   Solución anti-congelamiento: el modal móvil usa scroll nativo del navegador,
+   sin JavaScript de scroll, sin touch-action restrictivo y sin contenedores anidados bloqueantes. */
 
 @media (max-width: 760px) {
     body.modal-open {
         overflow: hidden !important;
-        touch-action: auto !important;
     }
 
     #modal-personalizar.modal-overlay,
     #modal-personalizar.modal-overlay.mc-customization-pro {
-        align-items: stretch !important;
-        justify-content: stretch !important;
+        position: fixed !important;
+        inset: 0 !important;
+        display: none !important;
+        align-items: initial !important;
+        justify-content: initial !important;
         padding: 0 !important;
-        overflow: hidden !important;
-        touch-action: auto !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        background: rgba(31, 24, 27, .68) !important;
     }
 
-    #modal-personalizar .modal-box {
+    #modal-personalizar.modal-overlay.active,
+    #modal-personalizar.modal-overlay[aria-hidden="false"] {
+        display: block !important;
+    }
+
+    #modal-personalizar .modal-box,
+    #modal-personalizar.mc-customization-pro .modal-box,
+    #modal-personalizar .modal-box.modal-box {
         width: 100vw !important;
         max-width: 100vw !important;
-        height: 100dvh !important;
-        min-height: 100dvh !important;
-        max-height: 100dvh !important;
+        min-height: 100svh !important;
+        height: auto !important;
+        max-height: none !important;
+        display: block !important;
+        overflow: visible !important;
         border: 0 !important;
         border-radius: 0 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        overflow: hidden !important;
         background: #fff !important;
-        touch-action: auto !important;
+        box-shadow: none !important;
+        animation: none !important;
     }
 
     #modal-personalizar .modal-header {
-        flex: 0 0 auto !important;
-        min-height: auto !important;
-        padding: .95rem 1.1rem .75rem !important;
         position: relative !important;
         top: auto !important;
-        z-index: 12 !important;
+        z-index: 5 !important;
+        min-height: auto !important;
+        padding: 1rem 1.05rem .8rem !important;
         background: rgba(255, 255, 255, .98) !important;
+        border-bottom: 1px solid rgba(234, 223, 226, .9) !important;
     }
 
     #modal-personalizar .modal-header .modal-eyebrow {
-        font-size: .92rem !important;
-        margin-bottom: .15rem !important;
+        margin-bottom: .2rem !important;
+        font-size: .86rem !important;
+        letter-spacing: .09em !important;
     }
 
     #modal-personalizar .modal-header h2 {
-        font-size: 1.7rem !important;
+        max-width: calc(100vw - 7rem) !important;
+        font-size: 1.68rem !important;
         line-height: 1.08 !important;
         gap: .65rem !important;
     }
@@ -57,7 +71,7 @@
         width: 3.8rem !important;
         min-width: 3.8rem !important;
         height: 3.8rem !important;
-        touch-action: manipulation !important;
+        border-radius: 50% !important;
     }
 
     #modal-personalizar .mc-customization-trust-strip {
@@ -65,84 +79,82 @@
     }
 
     #modal-personalizar .modal-steps {
-        flex: 0 0 auto !important;
+        position: relative !important;
+        z-index: 4 !important;
         display: flex !important;
-        justify-content: flex-start !important;
         align-items: stretch !important;
+        justify-content: flex-start !important;
         gap: .55rem !important;
         width: 100% !important;
         max-width: 100vw !important;
-        min-height: 5.65rem !important;
+        min-height: 5.5rem !important;
         padding: .75rem 1rem !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
-        scroll-snap-type: none !important;
         -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-x !important;
+        scroll-snap-type: none !important;
         scrollbar-width: none !important;
-        border-top: 1px solid rgba(234, 223, 226, .75) !important;
+        border-top: 1px solid rgba(234, 223, 226, .65) !important;
         border-bottom: 1px solid rgba(234, 223, 226, .9) !important;
-        background: rgba(255, 255, 255, .98) !important;
+        background: #fff !important;
     }
 
     #modal-personalizar .modal-steps::-webkit-scrollbar {
         display: none !important;
     }
 
+    #modal-personalizar .modal-steps .step-line {
+        display: none !important;
+    }
+
     #modal-personalizar .modal-steps .step {
         flex: 0 0 auto !important;
-        min-width: 8.65rem !important;
-        min-height: 4.05rem !important;
-        padding: .62rem .72rem !important;
-        gap: .5rem !important;
-        border-radius: 1.05rem !important;
-        font-size: 1rem !important;
-        scroll-snap-align: none !important;
+        min-width: 8.6rem !important;
+        min-height: 4rem !important;
+        padding: .62rem .7rem !important;
+        border-radius: 1rem !important;
+        gap: .45rem !important;
         white-space: nowrap !important;
-        touch-action: manipulation !important;
+        font-size: .98rem !important;
+        line-height: 1 !important;
     }
 
     #modal-personalizar .modal-steps .step span {
-        width: 2.3rem !important;
-        min-width: 2.3rem !important;
-        height: 2.3rem !important;
-        font-size: 1rem !important;
+        width: 2.25rem !important;
+        min-width: 2.25rem !important;
+        height: 2.25rem !important;
+        font-size: .98rem !important;
     }
 
     #modal-personalizar .modal-body,
-    #modal-personalizar .modal-body-preview {
-        flex: 1 1 auto !important;
-        min-height: 0 !important;
+    #modal-personalizar .modal-body-preview,
+    #modal-personalizar.mc-customization-pro .modal-body-preview {
         display: flex !important;
         flex-direction: column !important;
-        gap: .85rem !important;
-        padding: .85rem 1rem 1rem !important;
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        overscroll-behavior: contain !important;
-        touch-action: pan-y !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        padding: .9rem 1rem 1.1rem !important;
+        gap: .9rem !important;
+        overflow: visible !important;
         background: linear-gradient(180deg, #fff, #fff7fa) !important;
-        scroll-behavior: auto !important;
     }
 
-    #modal-personalizar .live-preview-panel {
+    #modal-personalizar .live-preview-panel,
+    #modal-personalizar.mc-customization-pro .live-preview-panel {
         position: relative !important;
         top: auto !important;
-        z-index: 1 !important;
         order: 0 !important;
-        flex: 0 0 auto !important;
         width: 100% !important;
         min-height: 0 !important;
         max-height: none !important;
-        padding: .82rem !important;
+        padding: .78rem !important;
         border: 1px solid rgba(234, 223, 226, .95) !important;
-        border-radius: 1.3rem !important;
+        border-radius: 1.25rem !important;
         background: #fff !important;
-        box-shadow: 0 10px 30px rgba(55, 42, 50, .055) !important;
+        box-shadow: 0 8px 22px rgba(55, 42, 50, .055) !important;
         overflow: hidden !important;
-        isolation: isolate !important;
-        touch-action: pan-y !important;
     }
 
     #modal-personalizar .live-preview-panel h3,
@@ -150,27 +162,25 @@
         display: none !important;
     }
 
-    #modal-personalizar .product-preview {
+    #modal-personalizar .product-preview,
+    #modal-personalizar.mc-customization-pro .product-preview {
         width: 100% !important;
-        min-height: 17.5rem !important;
-        height: clamp(17.5rem, 46vw, 22rem) !important;
-        max-height: 22rem !important;
+        min-height: 15.5rem !important;
+        height: 15.5rem !important;
+        max-height: 15.5rem !important;
         margin: 0 !important;
-        border-radius: 1.2rem !important;
-        overflow: hidden !important;
         display: grid !important;
         place-items: center !important;
-        touch-action: pan-y !important;
-        isolation: isolate !important;
+        overflow: hidden !important;
+        border-radius: 1.05rem !important;
     }
 
     #modal-personalizar .preview-product-shape {
-        width: min(100%, 21rem) !important;
-        max-width: 21rem !important;
-        max-height: 21rem !important;
+        width: min(100%, 18rem) !important;
+        max-width: 18rem !important;
+        max-height: 18rem !important;
         aspect-ratio: 1 / 1 !important;
         overflow: hidden !important;
-        isolation: isolate !important;
     }
 
     #modal-personalizar #preview-product-image {
@@ -184,42 +194,41 @@
     #modal-personalizar #preview-secondary-text {
         max-width: 68% !important;
         max-height: 68% !important;
-        touch-action: pan-y !important;
     }
 
     #modal-personalizar .preview-image-controls,
+    #modal-personalizar .image-editor-controls,
     #modal-personalizar .text-editor-controls {
-        max-width: 100% !important;
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        flex-wrap: nowrap !important;
-        -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-x !important;
-        padding: .65rem !important;
-        margin-top: .7rem !important;
-        border-radius: 1.15rem !important;
-        background: rgba(255, 255, 255, .98) !important;
         position: relative !important;
+        left: auto !important;
+        right: auto !important;
         bottom: auto !important;
         z-index: 2 !important;
+        max-width: 100% !important;
+        margin-top: .65rem !important;
+        padding: .6rem !important;
+        display: flex !important;
+        gap: .45rem !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: 1rem !important;
+        background: rgba(255, 255, 255, .98) !important;
     }
 
     #modal-personalizar .edit-btn {
-        flex: 0 0 3.7rem !important;
-        width: 3.7rem !important;
-        height: 3.7rem !important;
-        touch-action: manipulation !important;
+        flex: 0 0 3.55rem !important;
+        width: 3.55rem !important;
+        height: 3.55rem !important;
     }
 
     #modal-personalizar .customization-form {
         order: 1 !important;
-        position: relative !important;
-        z-index: 2 !important;
         width: 100% !important;
         min-width: 0 !important;
         padding: 0 !important;
         overflow: visible !important;
-        touch-action: pan-y !important;
     }
 
     #modal-personalizar .modal-step-content {
@@ -227,10 +236,10 @@
         min-width: 0 !important;
         min-height: auto !important;
         padding: 1rem !important;
-        border-radius: 1.35rem !important;
+        border-radius: 1.25rem !important;
         overflow: visible !important;
-        touch-action: pan-y !important;
-        box-shadow: 0 10px 30px rgba(55, 42, 50, .055) !important;
+        background: #fff !important;
+        box-shadow: 0 8px 22px rgba(55, 42, 50, .05) !important;
     }
 
     #modal-personalizar .modal-step-content.active {
@@ -238,11 +247,10 @@
     }
 
     #modal-personalizar .modal-step-content h3,
-    #modal-personalizar .modal-step-content > h3,
     #modal-personalizar .customization-product-panel-header h3 {
-        font-size: 1.62rem !important;
-        line-height: 1.15 !important;
         margin: 0 0 .75rem !important;
+        font-size: 1.55rem !important;
+        line-height: 1.15 !important;
     }
 
     #modal-personalizar .customization-step-description,
@@ -250,11 +258,11 @@
     #modal-personalizar .style-info-box,
     #modal-personalizar .upload-info-box,
     #modal-personalizar .editor-selection-help {
-        font-size: 1.14rem !important;
+        margin: .5rem 0 .8rem !important;
+        padding: .75rem .85rem !important;
+        border-radius: 1rem !important;
+        font-size: 1.08rem !important;
         line-height: 1.35 !important;
-        margin: .55rem 0 .85rem !important;
-        padding: .78rem .88rem !important;
-        border-radius: 1.1rem !important;
     }
 
     #modal-personalizar .customization-category-grid,
@@ -270,8 +278,6 @@
         grid-template-columns: 1fr !important;
         gap: .8rem !important;
         overflow: visible !important;
-        touch-action: pan-y !important;
-        scroll-snap-type: none !important;
     }
 
     #modal-personalizar .option-grid,
@@ -288,9 +294,7 @@
     #modal-personalizar .customization-size-option {
         width: 100% !important;
         min-width: 0 !important;
-        min-height: 7.1rem !important;
         transform: none !important;
-        touch-action: manipulation !important;
     }
 
     #modal-personalizar .customization-category-card:hover,
@@ -302,43 +306,46 @@
     }
 
     #modal-personalizar .customization-category-card {
-        grid-template-columns: 4rem minmax(0, 1fr) !important;
-        padding: .9rem !important;
+        min-height: 7rem !important;
+        grid-template-columns: 3.8rem minmax(0, 1fr) !important;
+        padding: .85rem !important;
     }
 
     #modal-personalizar .customization-category-card > i {
-        width: 4rem !important;
-        height: 4rem !important;
-        font-size: 1.55rem !important;
+        width: 3.8rem !important;
+        height: 3.8rem !important;
+        font-size: 1.45rem !important;
     }
 
     #modal-personalizar .customization-category-content strong,
     #modal-personalizar .customizable-product-card strong,
     #modal-personalizar .option-card span,
     #modal-personalizar .color-option-card span {
-        font-size: 1.15rem !important;
+        font-size: 1.12rem !important;
         line-height: 1.2 !important;
     }
 
     #modal-personalizar .customization-category-count,
     #modal-personalizar .customization-category-price,
     #modal-personalizar .customizable-product-card span {
-        font-size: 1rem !important;
+        font-size: .98rem !important;
     }
 
     #modal-personalizar .customizable-product-card {
-        grid-template-columns: 6.2rem minmax(0, 1fr) !important;
-        gap: .9rem !important;
-        padding: .85rem !important;
+        min-height: 7rem !important;
+        grid-template-columns: 5.8rem minmax(0, 1fr) !important;
+        gap: .85rem !important;
+        padding: .8rem !important;
     }
 
     #modal-personalizar .customizable-product-card img {
-        width: 6.2rem !important;
-        height: 6.2rem !important;
+        width: 5.8rem !important;
+        height: 5.8rem !important;
         border-radius: .9rem !important;
     }
 
     #modal-personalizar .customization-product-panel-header {
+        display: flex !important;
         align-items: flex-start !important;
         flex-direction: column !important;
         gap: .65rem !important;
@@ -348,36 +355,24 @@
     #modal-personalizar .customization-base-price {
         width: 100% !important;
         justify-items: start !important;
-        padding: .75rem .9rem !important;
-        border: 1px solid rgba(234, 223, 226, .95) !important;
-        border-radius: 1.1rem !important;
-        background: #fff7fa !important;
-    }
-
-    #modal-personalizar .customization-base-price strong {
-        font-size: 1.45rem !important;
+        padding: .72rem .85rem !important;
+        border-radius: 1rem !important;
     }
 
     #modal-personalizar .option-card {
-        min-height: 8.1rem !important;
-        padding: .9rem .65rem !important;
-    }
-
-    #modal-personalizar .option-card i {
-        font-size: 1.75rem !important;
+        min-height: 7.8rem !important;
+        padding: .85rem .6rem !important;
     }
 
     #modal-personalizar .color-option-card {
-        min-height: 7.65rem !important;
-        padding: .85rem .55rem !important;
+        min-height: 7.3rem !important;
+        padding: .8rem .55rem !important;
     }
 
     #modal-personalizar .customization-size-section {
         margin-top: 1rem !important;
         padding: .9rem !important;
-        border: 1px solid rgba(234, 223, 226, .95) !important;
-        border-radius: 1.2rem !important;
-        background: #fffafb !important;
+        border-radius: 1.1rem !important;
     }
 
     #modal-personalizar .customization-size-options {
@@ -387,102 +382,86 @@
     }
 
     #modal-personalizar .upload-area {
-        min-height: 14.5rem !important;
-        margin-top: .85rem !important;
-        padding: 1.2rem !important;
-        border-radius: 1.35rem !important;
+        min-height: 13rem !important;
+        margin-top: .8rem !important;
+        padding: 1.1rem !important;
+        border-radius: 1.2rem !important;
         position: relative !important;
-        z-index: 3 !important;
         overflow: hidden !important;
-        touch-action: manipulation !important;
-    }
-
-    #modal-personalizar .upload-area > i {
-        font-size: 2.4rem !important;
-    }
-
-    #modal-personalizar .upload-area strong {
-        font-size: 1.22rem !important;
-    }
-
-    #modal-personalizar .upload-area span {
-        font-size: 1.05rem !important;
     }
 
     #modal-personalizar .field-group {
         width: 100% !important;
         min-width: 0 !important;
-        padding: .95rem !important;
-        border-radius: 1.15rem !important;
+        padding: .92rem !important;
+        border-radius: 1.1rem !important;
     }
 
     #modal-personalizar input[type="text"],
     #modal-personalizar textarea,
     #modal-personalizar select {
         width: 100% !important;
-        min-height: 4.5rem !important;
-        font-size: 1.32rem !important;
+        min-height: 4.35rem !important;
+        font-size: 1.22rem !important;
     }
 
     #modal-personalizar textarea {
-        min-height: 10rem !important;
+        min-height: 9rem !important;
     }
 
-    #modal-personalizar .modal-footer {
-        flex: 0 0 auto !important;
+    #modal-personalizar .modal-footer,
+    #modal-personalizar.mc-customization-pro .modal-footer {
         position: relative !important;
         left: auto !important;
         right: auto !important;
         bottom: auto !important;
-        z-index: 40 !important;
+        z-index: 3 !important;
         display: grid !important;
-        grid-template-columns: minmax(9.2rem, .75fr) minmax(0, 1.25fr) !important;
+        grid-template-columns: minmax(8.8rem, .75fr) minmax(0, 1.25fr) !important;
+        gap: .7rem !important;
         align-items: center !important;
-        gap: .75rem !important;
+        width: 100% !important;
         padding: .78rem 1rem calc(.78rem + env(safe-area-inset-bottom)) !important;
         background: rgba(255, 255, 255, .98) !important;
-        box-shadow: 0 -10px 28px rgba(70, 42, 52, .13) !important;
-        backdrop-filter: blur(12px) !important;
         border-top: 1px solid rgba(234, 223, 226, .95) !important;
+        box-shadow: 0 -8px 22px rgba(70, 42, 52, .1) !important;
     }
 
     #modal-personalizar .customization-running-total {
         min-width: 0 !important;
-        padding: .75rem !important;
-        border-radius: 1rem !important;
+        padding: .72rem !important;
+        border-radius: .95rem !important;
     }
 
     #modal-personalizar .customization-running-total span {
-        font-size: .95rem !important;
+        font-size: .9rem !important;
     }
 
     #modal-personalizar .customization-running-total strong {
-        font-size: 1.35rem !important;
+        font-size: 1.26rem !important;
     }
 
     #modal-personalizar .modal-footer-actions {
         width: 100% !important;
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
-        gap: .55rem !important;
+        gap: .52rem !important;
     }
 
     #modal-personalizar .modal-footer-actions .btn-primary,
     #modal-personalizar .modal-footer-actions .btn-secondary {
-        min-height: 4.2rem !important;
-        padding-inline: .7rem !important;
-        font-size: 1.1rem !important;
+        min-height: 4.05rem !important;
+        padding-inline: .65rem !important;
+        font-size: 1.04rem !important;
         white-space: nowrap !important;
-        touch-action: manipulation !important;
     }
 
     #modal-personalizar .modal-summary {
-        height: 100dvh !important;
-        max-height: 100dvh !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        padding: 1.2rem 1rem calc(8.5rem + env(safe-area-inset-bottom)) !important;
-        touch-action: pan-y !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        padding: 1.15rem 1rem calc(1.2rem + env(safe-area-inset-bottom)) !important;
+        background: #fff !important;
     }
 }
 
@@ -499,6 +478,6 @@
     }
 
     #modal-personalizar .modal-header h2 {
-        font-size: 1.55rem !important;
+        font-size: 1.5rem !important;
     }
 }
