@@ -1,0 +1,88 @@
+/* Mommy Crafts · Vista previa móvil completa v3.43.5
+   Ajuste seguro: no controla gestos ni scroll; solo corrige el tamaño visible de la vista previa
+   y del resumen final dentro del modal de personalización en móviles. */
+
+@media (max-width: 760px) {
+    #modal-personalizar .live-preview-panel,
+    #modal-personalizar.mc-customization-pro .live-preview-panel {
+        overflow: visible !important;
+    }
+
+    #modal-personalizar .product-preview,
+    #modal-personalizar.mc-customization-pro .product-preview {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        aspect-ratio: 1 / 1 !important;
+        display: grid !important;
+        place-items: center !important;
+        overflow: visible !important;
+        padding: .45rem !important;
+    }
+
+    #modal-personalizar .preview-product-shape,
+    #modal-personalizar.mc-customization-pro .preview-product-shape {
+        width: min(100%, calc(100vw - 3.8rem)) !important;
+        max-width: 34rem !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        aspect-ratio: 1 / 1 !important;
+        display: grid !important;
+        place-items: center !important;
+        overflow: hidden !important;
+    }
+
+    #modal-personalizar #preview-product-image {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+        object-position: center center !important;
+        display: block !important;
+    }
+
+    #modal-personalizar #preview-user-image {
+        max-width: 56% !important;
+        max-height: 56% !important;
+        object-fit: contain !important;
+    }
+
+    #modal-personalizar #preview-main-text,
+    #modal-personalizar #preview-secondary-text {
+        max-width: 72% !important;
+    }
+
+    #modal-personalizar .modal-summary,
+    #modal-personalizar.mc-customization-pro .modal-summary {
+        overflow: visible !important;
+    }
+
+    #modal-personalizar .customization-summary-preview,
+    #modal-personalizar.mc-customization-pro .customization-summary-preview {
+        width: min(100%, 34rem) !important;
+        max-width: 100% !important;
+        margin: 1rem auto 1.25rem !important;
+        overflow: hidden !important;
+        border-radius: 1.35rem !important;
+    }
+
+    #modal-personalizar .customization-summary-preview img,
+    #modal-personalizar.mc-customization-pro .customization-summary-preview img {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        aspect-ratio: auto !important;
+        object-fit: contain !important;
+        object-position: center center !important;
+        background: #fff !important;
+    }
+
+    #modal-personalizar .customization-summary-preview-loading {
+        min-height: min(78vw, 34rem) !important;
+    }
+}
