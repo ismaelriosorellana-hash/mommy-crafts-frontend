@@ -1,4 +1,4 @@
-# Mommy Crafts Frontend v3.36.9
+# Mommy Crafts Frontend v3.37.0
 
 Corrección puntual móvil sobre la ficha de producto y el header del inicio.
 

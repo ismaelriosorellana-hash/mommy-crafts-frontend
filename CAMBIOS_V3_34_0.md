@@ -1,4 +1,4 @@
-# Cambios Frontend 3.36.9
+# Cambios Frontend 3.37.0
 
 ## Etapa 2B · Selectores y proceso de compra
 

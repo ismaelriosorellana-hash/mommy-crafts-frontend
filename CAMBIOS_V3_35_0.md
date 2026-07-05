@@ -1,4 +1,4 @@
-# Cambios frontend v3.36.9
+# Cambios frontend v3.37.0
 
 ## Etapa 2C ampliada
 

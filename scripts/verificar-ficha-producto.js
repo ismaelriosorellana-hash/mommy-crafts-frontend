@@ -9,9 +9,10 @@ const js = fs.readFileSync(path.join(root, 'js', 'products.js'), 'utf8');
 const siteSettingsJs = fs.readFileSync(path.join(root, 'js', 'site-settings.js'), 'utf8');
 const commerceToolsJs = fs.readFileSync(path.join(root, 'js', 'mc-commerce-tools-v3311.js'), 'utf8');
 const mainCss = fs.readFileSync(path.join(root, 'css', 'main.css'), 'utf8');
+const mobileCss = fs.readFileSync(path.join(root, 'css', 'mobile-polish-v3370.css'), 'utf8');
 
 const checks = [
-  ['CSS específico v3.36.9 cargado', html.includes('css/product-detail-v3340.css?v=3.36.9')],
+  ['CSS específico v3.37.0 cargado', html.includes('css/product-detail-v3340.css?v=3.37.0')],
   ['Layout marketplace presente', html.includes('product-detail-marketplace')],
   ['Galería con miniaturas laterales presente', html.indexOf('id="detalle-thumbnails"') < html.indexOf('class="detail-main-image-container"')],
   ['Columna de compra separada presente', html.includes('class="product-purchase-panel"')],
@@ -45,9 +46,9 @@ const checks = [
   ['Productos relacionados móviles usan tamaño compacto', /related-products[\s\S]*grid-auto-columns:\s*minmax\(15\.8rem, calc\(\(100vw - 4\.3rem\) \/ 2\)\)/.test(css)],
   ['Acciones móviles de ficha se fuerzan dentro del navbar', commerceToolsJs.includes('resetProductMobileHeaderActions') && commerceToolsJs.includes('navbar.appendChild(actions)')],
   ['Editor visual no desplaza acciones en ficha móvil', siteSettingsJs.includes('isProductMobileNavbarActions') && siteSettingsJs.includes('resetProductMobileNavbarActions')],
-  ['Navbar móvil de ficha tiene acciones en columna derecha', mainCss.includes('V3.36.9 · Corrección puntual') && /body\[data-page=\"product\"\] \.site-header \.navbar-actions[\s\S]*grid-column:\s*3 !important/.test(mainCss)],
-  ['Ficha usa CSS específico v3.36.9', html.includes('css/product-detail-v3340.css?v=3.36.9')],
-  ['Imagen móvil compacta bajo navbar', productCss.includes('V3.36.9 · Ajuste validado por usuario') && productCss.includes('margin-top: -100px !important')],
+  ['Navbar móvil de ficha tiene acciones en columna derecha', /body\[data-page="product"\] \.navbar-actions[\s\S]*grid-column:\s*3 !important/.test(mobileCss)],
+  ['Ficha usa CSS específico v3.37.0', html.includes('css/product-detail-v3340.css?v=3.37.0')],
+  ['Imagen móvil compacta bajo navbar', mobileCss.includes('Ajuste validado manualmente') && mobileCss.includes('margin-top: -25px !important')],
 ];
 
 const failed = checks.filter(([, ok]) => !ok);
@@ -60,4 +61,4 @@ if (failed.length) {
   process.exit(1);
 }
 
-console.log(`\n✅ Ficha de producto v3.36.9 verificada (${checks.length} controles).`);
+console.log(`\n✅ Ficha de producto v3.37.0 verificada (${checks.length} controles).`);
