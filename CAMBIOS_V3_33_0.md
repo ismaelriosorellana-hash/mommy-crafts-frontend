@@ -1,4 +1,4 @@
-# Mommy Crafts Frontend 3.36.6 — Etapa 2A
+# Mommy Crafts Frontend 3.36.7 — Etapa 2A
 
 ## Ficha de producto de alto impacto
 

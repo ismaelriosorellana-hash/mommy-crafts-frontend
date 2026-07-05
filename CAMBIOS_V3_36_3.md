@@ -1,4 +1,4 @@
-# Mommy Crafts Frontend v3.36.6
+# Mommy Crafts Frontend v3.36.7
 
 Corrección móvil enfocada en navegación, ficha de producto, carruseles y checkout.
 

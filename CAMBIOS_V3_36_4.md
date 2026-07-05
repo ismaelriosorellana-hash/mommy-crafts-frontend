@@ -1,4 +1,4 @@
-# Cambios v3.36.6
+# Cambios v3.36.7
 
 ## Correcciones móviles
 

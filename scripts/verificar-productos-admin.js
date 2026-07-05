@@ -62,8 +62,8 @@ if (!css.includes("admin-product-tabs")) {
     errors.push("admin.css no contiene los estilos de pestañas de producto.");
 }
 
-if (!config.includes('APP_VERSION: "3.36.6"')) {
-    errors.push("CONFIG.APP_VERSION no corresponde a 3.36.6.");
+if (!config.includes('APP_VERSION: "3.36.7"')) {
+    errors.push("CONFIG.APP_VERSION no corresponde a 3.36.7.");
 }
 
 if (errors.length) {
@@ -71,5 +71,5 @@ if (errors.length) {
     process.exit(1);
 }
 
-console.log("✅ Panel de productos 3.36.6 verificado.");
+console.log("✅ Panel de productos 3.36.7 verificado.");
 console.log("✅ SKU, logística, SEO, variantes y completitud están presentes.");
