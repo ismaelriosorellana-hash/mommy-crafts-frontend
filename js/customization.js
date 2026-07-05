@@ -2042,61 +2042,111 @@ function drag(
     if (!element) return;
 
     let active = false;
+    let pending = false;
+    let pointerId = null;
     let startX = 0;
     let startY = 0;
     let initialX = 0;
     let initialY = 0;
 
-    element.addEventListener("pointerdown", (event) => {
-        if (element.hidden) return;
+    const isMobileViewport = () => window.matchMedia?.("(max-width: 760px)")?.matches;
+
+    const canEdit = () => {
+        if (element.hidden) return false;
 
         if (
             type === "image" &&
             ![5, 6].includes(state.step)
         ) {
-            return;
+            return false;
         }
 
         if (
             ["main", "secondary"].includes(type) &&
             state.step !== 6
         ) {
-            return;
+            return false;
         }
+
+        return true;
+    };
+
+    element.addEventListener("pointerdown", (event) => {
+        if (!canEdit()) return;
 
         selectObject(type);
 
         const transform = getTransform();
 
-        active = true;
         startX = event.clientX;
         startY = event.clientY;
         initialX = transform.x;
         initialY = transform.y;
+        pointerId = event.pointerId;
 
-        element.setPointerCapture?.(event.pointerId);
-        event.preventDefault();
-        event.stopPropagation();
+        if (event.pointerType === "mouse" || !isMobileViewport()) {
+            active = true;
+            pending = false;
+            element.setPointerCapture?.(event.pointerId);
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+
+        // En móvil no bloqueamos el scroll inmediatamente. Solo empezamos a mover
+        // el objeto si el gesto parece una edición real y no un deslizamiento vertical.
+        pending = true;
+        active = false;
     });
 
     element.addEventListener("pointermove", (event) => {
+        if (!active && !pending) return;
+
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        const absX = Math.abs(dx);
+        const absY = Math.abs(dy);
+
+        if (pending) {
+            if (Math.max(absX, absY) < 8) return;
+
+            if (isMobileViewport() && absY > absX * 1.15) {
+                pending = false;
+                active = false;
+                pointerId = null;
+                return;
+            }
+
+            pending = false;
+            active = true;
+            element.setPointerCapture?.(event.pointerId);
+        }
+
         if (!active) return;
 
         const transform = getTransform();
 
-        transform.x = initialX + event.clientX - startX;
-        transform.y = initialY + event.clientY - startY;
+        transform.x = initialX + dx;
+        transform.y = initialY + dy;
 
         applyTransform();
+        event.preventDefault();
+        event.stopPropagation();
     });
 
-    const stop = () => {
+    const stop = (event) => {
+        if (pointerId !== null && event?.pointerId === pointerId) {
+            element.releasePointerCapture?.(pointerId);
+        }
         active = false;
+        pending = false;
+        pointerId = null;
     };
 
     element.addEventListener("pointerup", stop);
     element.addEventListener("pointercancel", stop);
 }
+
     function bind() {
         const current = els();
         if (!current.overlay) return;
