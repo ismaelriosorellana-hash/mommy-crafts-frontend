@@ -82,7 +82,7 @@ const config = fs.readFileSync(
     "utf8"
 );
 
-if (!config.includes('APP_VERSION: "3.43.2"')) {
+if (!config.includes('APP_VERSION: "3.43.3"')) {
     errors.push("js/config.js no informa la versión 3.32.0.");
 }
 

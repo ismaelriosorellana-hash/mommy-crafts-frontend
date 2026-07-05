@@ -14,8 +14,8 @@ const pages = ['index.html','catalogo.html','producto.html','carrito.html','comp
 
 for (const page of pages) {
   const html = read(page);
-  mustInclude(html, 'css/customization-mobile-v3432.css?v=3.43.2', `${page} carga CSS móvil estable`);
-  mustInclude(html, 'js/customization-mobile-v3432.js?v=3.43.2', `${page} carga JS móvil estable`);
+  mustInclude(html, 'css/customization-mobile-v3432.css?v=3.43.3', `${page} carga CSS móvil estable`);
+  mustInclude(html, 'js/customization-mobile-v3432.js?v=3.43.3', `${page} carga JS móvil estable`);
 }
 
 mustInclude(css, '#modal-personalizar .modal-box', 'CSS controla el modal de personalización móvil');
@@ -29,11 +29,16 @@ mustInclude(css, '#modal-personalizar .customizable-products-grid', 'lista de pr
 mustInclude(css, '#modal-personalizar .option-grid', 'lista de estilos queda controlada en móvil');
 mustInclude(css, '#modal-personalizar .color-options-grid', 'lista de colores queda controlada en móvil');
 mustInclude(css, '#modal-personalizar .upload-area', 'paso de carga de imagen queda contenido en móvil');
-mustInclude(css, '#modal-personalizar .modal-footer', 'footer móvil queda fijo sin tapar contenido');
+mustInclude(css, '#modal-personalizar .modal-footer', 'footer móvil queda controlado sin tapar contenido');
+mustInclude(css, 'touch-action: auto !important', 'CSS evita bloquear gestos táctiles globales');
+mustInclude(css, 'position: relative !important', 'footer ya no queda fijo sobre el contenido');
 
-mustInclude(js, 'scrollMobileModal', 'JS reajusta scroll al cambiar de paso');
+mustInclude(js, 'scrollToStepTop', 'JS reajusta scroll al cambiar de paso sin observer continuo');
+mustInclude(js, 'observer.observe(modal, { attributes: true', 'JS solo observa apertura/cierre del modal');
 mustInclude(js, 'modal-steps .step', 'JS centra el paso activo en la barra de pasos');
-mustInclude(js, 'customization-mobile-v3432', 'JS móvil corresponde a la versión 3.43.2');
+mustInclude(js, 'v3.43.3', 'JS móvil corresponde a la versión 3.43.3');
+if (js.includes('subtree: true')) fail('JS móvil no debe observar todo el árbol del formulario'); else ok('JS móvil no usa observer continuo sobre el formulario');
+if (js.includes('behavior: "smooth"')) fail('JS móvil no debe usar scroll smooth repetido'); else ok('JS móvil evita scroll smooth repetido');
 mustInclude(baseJs, 'En móvil no bloqueamos el scroll inmediatamente', 'drag móvil evita bloquear scroll vertical');
 mustInclude(baseJs, 'absY > absX * 1.15', 'drag móvil distingue scroll vertical de edición');
 
