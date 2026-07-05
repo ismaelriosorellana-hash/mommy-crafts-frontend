@@ -1,4 +1,4 @@
-# Cambios Frontend 3.36.1
+# Cambios Frontend 3.36.2
 
 ## Objetivo
 

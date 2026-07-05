@@ -1,5 +1,5 @@
 /* ==========================================================
-   Mommy Crafts · Ficha de producto marketplace · v3.36.1
+   Mommy Crafts · Ficha de producto marketplace · v3.36.2
    Ajuste fino: ficha limpia, datos colapsables y mayor claridad
    ========================================================== */
 
@@ -889,7 +889,7 @@ body[data-page="product"] .related-products {
 }
 
 
-/* v3.36.1 · ajustes solicitados por revisión visual */
+/* v3.36.2 · ajustes solicitados por revisión visual */
 body[data-page="product"] .product-content-nav {
     display: none !important;
 }
@@ -914,7 +914,7 @@ body[data-page="product"] .related-products .container-img {
 }
 
 /* ==========================================================
-   v3.36.1 · Selectores y proceso de compra profesional
+   v3.36.2 · Selectores y proceso de compra profesional
    - Cajas individuales por columna.
    - Sin caja/fondo global detrás de la ficha.
    - Estados claros para talla, variante y compra.
@@ -1186,7 +1186,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
 }
 
 /* ==========================================================
-   v3.36.1 · Ficha móvil: galería limpia, sin logo superior y orden comercial
+   v3.36.2 · Ficha móvil: galería limpia, sin logo superior y orden comercial
    ========================================================== */
 @media (max-width: 700px) {
     body[data-page="product"] .product-page {
@@ -1340,7 +1340,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
     }
 }
 
-/* v3.36.1 · Header móvil específico de ficha cargado junto al CSS de producto */
+/* v3.36.2 · Header móvil específico de ficha cargado junto al CSS de producto */
 @media (max-width: 700px) {
     body[data-page="product"] .promo-banner,
     body[data-page="product"] .container-hero {
@@ -1351,5 +1351,115 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
         position: sticky;
         top: 0;
         z-index: 1200;
+    }
+}
+
+
+/* ==========================================================
+   V3.36.2 · Ficha móvil limpia y relacionados sin fondo global
+   ========================================================== */
+body[data-page="product"] .related-products,
+body[data-page="product"] .related-products .container,
+body[data-page="product"] .related-products .container-products {
+    background: var(--color-background) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+body[data-page="product"] .related-products .container-products::before,
+body[data-page="product"] .related-products .container-products::after {
+    display: none !important;
+    content: none !important;
+}
+
+@media (max-width: 700px) {
+    body[data-page="product"] .breadcrumb {
+        display: none !important;
+    }
+
+    body[data-page="product"] .product-detail-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+
+    body[data-page="product"] .product-detail-images {
+        order: 1 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: #fff !important;
+        box-shadow: none !important;
+    }
+
+    body[data-page="product"] .detail-thumbnails {
+        display: none !important;
+    }
+
+    body[data-page="product"] .detail-main-image-container {
+        min-height: min(100vw, 45rem) !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: #fff !important;
+        box-shadow: none !important;
+    }
+
+    body[data-page="product"] .detail-main-img {
+        padding: 1rem !important;
+        max-height: min(100vw, 45rem) !important;
+    }
+
+    body[data-page="product"] .detail-zoom-hint {
+        display: none !important;
+    }
+
+    body[data-page="product"] .product-detail-info {
+        order: 2 !important;
+        padding: 1.45rem !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: #fff !important;
+        box-shadow: none !important;
+    }
+
+    body[data-page="product"] .product-purchase-panel {
+        order: 3 !important;
+        margin-inline: 0 !important;
+        border-radius: 1.45rem !important;
+    }
+
+    body[data-page="product"] .product-detail-content {
+        order: 4 !important;
+        margin-top: .8rem !important;
+    }
+
+    body[data-page="product"] .related-products {
+        order: 5 !important;
+        margin-top: 2.2rem !important;
+    }
+
+    body[data-page="product"] .product-heading-block {
+        border-bottom: 0 !important;
+        padding-bottom: .4rem !important;
+    }
+
+    body[data-page="product"] .detail-title {
+        font-size: clamp(2.15rem, 6.3vw, 2.65rem) !important;
+        line-height: 1.22 !important;
+    }
+
+    body[data-page="product"] .detail-rating {
+        margin-top: .85rem !important;
+    }
+
+    body[data-page="product"] .product-actions {
+        position: static !important;
+        margin: 1.1rem 0 0 !important;
+        padding: 1.1rem 0 0 !important;
+        border-top: 1px solid rgba(146, 75, 103, .12) !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
     }
 }

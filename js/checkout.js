@@ -296,9 +296,9 @@
                 note.textContent = "El stock se reserva durante 3 horas mientras envías el comprobante. Mommy Crafts validará la transferencia.";
             }
         }
-        if (submitButton) submitButton.innerHTML = method === "mercadopago"
-            ? '<i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Ir a Mercado Pago'
-            : '<i class="fa-solid fa-lock" aria-hidden="true"></i> Confirmar pedido';
+        if (submitButton) {
+            submitButton.innerHTML = '<i class="fa-solid fa-lock" aria-hidden="true"></i> Ir a Pagar';
+        }
     }
 
     async function loadMercadoPagoAvailability() {

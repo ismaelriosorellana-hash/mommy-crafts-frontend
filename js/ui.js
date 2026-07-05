@@ -460,6 +460,125 @@ function initSeasonFlyout() {
     window.addEventListener("scroll", reposition, { passive: true });
 }
 
+
+    function initMobileCategoryDropdowns(menu) {
+        if (!menu) return;
+
+        const isMobile = () => window.matchMedia("(max-width: 820px)").matches;
+
+        menu.addEventListener("click", (event) => {
+            const trigger = event.target.closest(".has-dropdown > a[aria-haspopup]");
+            if (!trigger || !menu.contains(trigger) || !isMobile()) return;
+
+            event.preventDefault();
+            const item = trigger.closest(".has-dropdown");
+            const open = !item.classList.contains("is-mobile-open");
+
+            menu.querySelectorAll(".has-dropdown.is-mobile-open").forEach((current) => {
+                if (current !== item) {
+                    current.classList.remove("is-mobile-open");
+                    current.querySelector(":scope > a[aria-haspopup]")?.setAttribute("aria-expanded", "false");
+                }
+            });
+
+            item.classList.toggle("is-mobile-open", open);
+            trigger.setAttribute("aria-expanded", String(open));
+        });
+    }
+
+    function enableSmoothDragScroll(scrollArea) {
+        if (!scrollArea || scrollArea.dataset.mcSmoothDragBound === "true") return;
+        scrollArea.dataset.mcSmoothDragBound = "true";
+        scrollArea.classList.add("drag-scroll-ready");
+
+        let pointerDown = false;
+        let pointerId = null;
+        let startX = 0;
+        let startLeft = 0;
+        let dragged = false;
+        let lastX = 0;
+        let lastTime = 0;
+        let velocity = 0;
+        let raf = 0;
+
+        const stopMomentum = () => {
+            if (raf) cancelAnimationFrame(raf);
+            raf = 0;
+        };
+
+        const momentum = () => {
+            if (Math.abs(velocity) < .08) {
+                raf = 0;
+                return;
+            }
+            scrollArea.scrollLeft -= velocity;
+            velocity *= .92;
+            raf = requestAnimationFrame(momentum);
+        };
+
+        scrollArea.addEventListener("pointerdown", (event) => {
+            if (event.pointerType === "touch" || event.button !== 0) return;
+            if (scrollArea.scrollWidth <= scrollArea.clientWidth + 2) return;
+            pointerDown = true;
+            pointerId = event.pointerId;
+            startX = event.clientX;
+            lastX = event.clientX;
+            lastTime = performance.now();
+            startLeft = scrollArea.scrollLeft;
+            dragged = false;
+            velocity = 0;
+            stopMomentum();
+        });
+
+        scrollArea.addEventListener("pointermove", (event) => {
+            if (!pointerDown || event.pointerId !== pointerId) return;
+            const dx = event.clientX - startX;
+            if (!dragged && Math.abs(dx) > 5) {
+                dragged = true;
+                scrollArea.classList.add("is-dragging-scroll");
+                scrollArea.setPointerCapture?.(pointerId);
+            }
+            if (!dragged) return;
+            event.preventDefault();
+            scrollArea.scrollLeft = startLeft - dx;
+            const now = performance.now();
+            const elapsed = Math.max(16, now - lastTime);
+            velocity = ((event.clientX - lastX) / elapsed) * 16;
+            lastX = event.clientX;
+            lastTime = now;
+        });
+
+        const finish = (event) => {
+            if (!pointerDown || (event?.pointerId !== undefined && event.pointerId !== pointerId)) return;
+            pointerDown = false;
+            scrollArea.classList.remove("is-dragging-scroll");
+            if (dragged) {
+                scrollArea.dataset.suppressClick = "true";
+                window.setTimeout(() => delete scrollArea.dataset.suppressClick, 100);
+                stopMomentum();
+                raf = requestAnimationFrame(momentum);
+            }
+            try { if (pointerId !== null) scrollArea.releasePointerCapture?.(pointerId); } catch {}
+            pointerId = null;
+        };
+
+        scrollArea.addEventListener("pointerup", finish);
+        scrollArea.addEventListener("pointercancel", finish);
+        scrollArea.addEventListener("lostpointercapture", finish);
+        scrollArea.addEventListener("click", (event) => {
+            if (scrollArea.dataset.suppressClick === "true") {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }, true);
+    }
+
+    function initGlobalSmoothCarousels() {
+        document
+            .querySelectorAll(".carousel-container, .categories-grid, .related-products .container-products")
+            .forEach(enableSmoothDragScroll);
+    }
+
     function initMobileMenu() {
         const button =
             document.getElementById(
@@ -472,6 +591,8 @@ function initSeasonFlyout() {
             );
 
         if (!button || !menu) return;
+
+        initMobileCategoryDropdowns(menu);
 
         button.addEventListener(
             "click",
@@ -935,6 +1056,7 @@ function initSeasonFlyout() {
             ]);
 
             renderCategoryDropdown();
+            initGlobalSmoothCarousels();
         } catch (error) {
             console.error(
                 "No fue posible cargar las categorías:",
@@ -970,6 +1092,7 @@ function initSeasonFlyout() {
             initSupportLinks();
             initSmartSearch();
             initFooter();
+            initGlobalSmoothCarousels();
             loadGlobalData();
         }
     );
