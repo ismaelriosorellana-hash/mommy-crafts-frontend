@@ -579,6 +579,37 @@ function initSeasonFlyout() {
             .forEach(enableSmoothDragScroll);
     }
 
+
+
+    function ensureMobileMenuStructure(menu) {
+        if (!menu) return;
+
+        const dropdown = menu.querySelector("#categories-dropdown");
+        if (dropdown && !dropdown.querySelector("a")) {
+            dropdown.innerHTML = "";
+            const categories = (window.Categories?.getMenuCategories?.() || [])
+                .filter((category) => categoryName(category) !== "Todos");
+            const fallback = categories.length
+                ? categories
+                : (window.CONFIG?.CATEGORIES || ["Librería", "Vasos", "Poleras", "Temporada"])
+                    .filter((name) => name && name !== "Todos")
+                    .map((nombre) => ({ nombre }));
+
+            fallback.forEach((category) => {
+                if (categoryName(category) === "Temporada") {
+                    dropdown.appendChild(createSeasonItem());
+                    return;
+                }
+                dropdown.appendChild(createNormalCategoryItem(category));
+            });
+        }
+
+        menu.querySelectorAll(".has-dropdown > a[aria-haspopup]").forEach((trigger) => {
+            trigger.setAttribute("role", "button");
+            trigger.setAttribute("aria-expanded", String(trigger.closest(".has-dropdown")?.classList.contains("is-mobile-open")));
+        });
+    }
+
     function initMobileMenu() {
         const button =
             document.getElementById(
@@ -592,6 +623,7 @@ function initSeasonFlyout() {
 
         if (!button || !menu) return;
 
+        ensureMobileMenuStructure(menu);
         initMobileCategoryDropdowns(menu);
 
         if (button.dataset.mobileMenuBound !== "true") {
@@ -609,7 +641,7 @@ function initSeasonFlyout() {
             menu.addEventListener("click", (event) => {
                 const link = event.target.closest("a");
                 if (!link || !menu.contains(link)) return;
-                if (window.matchMedia("(max-width: 820px)").matches && link.matches(".has-dropdown > a[aria-haspopup], .season-menu-trigger")) return;
+                if (window.matchMedia("(max-width: 820px)").matches && (link.matches(".has-dropdown > a[aria-haspopup], .season-menu-trigger") || link.closest(".dropdown")?.querySelector(".season-mobile-submenu"))) return;
                 menu.classList.remove("is-open");
                 document.body.classList.remove("mobile-menu-open");
                 button.setAttribute("aria-expanded", "false");
@@ -1066,6 +1098,8 @@ function initSeasonFlyout() {
             ]);
 
             renderCategoryDropdown();
+            ensureMobileMenuStructure(document.getElementById("main-menu"));
+            initSeasonFlyout();
             initGlobalSmoothCarousels();
         } catch (error) {
             console.error(

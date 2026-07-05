@@ -274,7 +274,7 @@
     }
 
     function selectedPaymentMethod(form = document.getElementById("form-pedido")) {
-        return form?.querySelector('input[name="pedido-pago"]:checked')?.value || "transferencia";
+        return form?.querySelector('input[name="pedido-pago"]:checked')?.value || "mercadopago";
     }
 
     function updatePaymentMethodUI() {
@@ -290,10 +290,10 @@
             if (method === "mercadopago") {
                 note.textContent = mercadoPagoAvailable
                     ? "Serás redirigido al entorno seguro de Mercado Pago. El pedido se confirmará automáticamente cuando se apruebe el pago."
-                    : "Mercado Pago todavía no está disponible. Selecciona transferencia bancaria.";
+                    : "Mercado Pago no está disponible temporalmente. Intenta nuevamente en unos minutos.";
                 note.classList.toggle("error", !mercadoPagoAvailable);
             } else {
-                note.textContent = "El stock se reserva durante 3 horas mientras envías el comprobante. Mommy Crafts validará la transferencia.";
+                note.textContent = "Serás redirigido al entorno seguro de Mercado Pago. El pedido se confirmará automáticamente cuando se apruebe el pago.";
             }
         }
         if (submitButton) {
@@ -337,9 +337,9 @@
             window.location.href = "acceso.html?modo=login&next=finalizar-compra.html";
             return;
         }
-        const paymentMethod = String(formData.get("pedido-pago") || "transferencia");
+        const paymentMethod = "mercadopago";
         if (paymentMethod === "mercadopago" && !mercadoPagoAvailable) {
-            alert("Mercado Pago todavía no está disponible. Selecciona transferencia bancaria.");
+            alert("Mercado Pago no está disponible temporalmente. Intenta nuevamente en unos minutos.");
             return;
         }
         if (submitButton) { submitButton.disabled = true; submitButton.innerHTML = "Guardando pedido..."; }
