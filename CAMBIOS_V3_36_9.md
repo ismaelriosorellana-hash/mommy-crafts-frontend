@@ -1,4 +1,4 @@
-# Cambios V3.37.1
+# Cambios V3.38.0
 
 ## Corrección móvil puntual
 

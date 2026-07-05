@@ -1,4 +1,4 @@
-# Cambios Frontend 3.37.1
+# Cambios Frontend 3.38.0
 
 ## Objetivo
 
