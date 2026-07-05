@@ -140,12 +140,29 @@
     }
 
 
+    function isProductMobileNavbarActions(selector) {
+        return selector === ".site-header .navbar-actions"
+            && document.body?.dataset?.page === "product"
+            && window.matchMedia("(max-width: 700px)").matches;
+    }
+
+    function resetProductMobileNavbarActions(element) {
+        if (!element) return;
+        element.style.setProperty("translate", "0px 0px", "important");
+        element.style.setProperty("transform", "none", "important");
+        element.style.setProperty("position", "static", "important");
+        element.style.setProperty("inset", "auto", "important");
+        element.style.setProperty("margin", "0", "important");
+    }
+
     function applyElementPosition(selector, value) {
-        const offsetX = Number(value?.offsetX) || 0;
-        const offsetY = Number(value?.offsetY) || 0;
+        const isProductMobileActions = isProductMobileNavbarActions(selector);
+        const offsetX = isProductMobileActions ? 0 : Number(value?.offsetX) || 0;
+        const offsetY = isProductMobileActions ? 0 : Number(value?.offsetY) || 0;
 
         document.querySelectorAll(selector).forEach((element) => {
             element.style.setProperty("translate", `${offsetX}px ${offsetY}px`, "important");
+            if (isProductMobileActions) resetProductMobileNavbarActions(element);
         });
     }
 

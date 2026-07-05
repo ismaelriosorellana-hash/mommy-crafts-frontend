@@ -2004,7 +2004,7 @@ body {
 a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-decoration:underline; text-underline-offset:.25rem; }
 
 /* ==========================================================
-   V3.36.4 · Menú móvil de Temporada y header compacto de ficha
+   V3.36.5 · Menú móvil de Temporada y header compacto de ficha
    ========================================================== */
 .season-mobile-submenu {
     display: none;
@@ -2139,7 +2139,7 @@ a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-
 
 
 /* ==========================================================
-   V3.36.4 · Navegación móvil profesional y carruseles globales
+   V3.36.5 · Navegación móvil profesional y carruseles globales
    ========================================================== */
 .product-mobile-brand {
     display: none;
@@ -2412,7 +2412,7 @@ a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-
 
 
 /* ==========================================================
-   V3.36.4 · Corrección móvil: menú, header usable y fondos invisibles
+   V3.36.5 · Corrección móvil: menú, header usable y fondos invisibles
    ========================================================== */
 :root {
     --mc-page-bg: var(--color-background, #fff9fd);
@@ -2611,7 +2611,7 @@ body[data-page="product"] .navbar-actions.mc-header-actions,
 
 
 /* ==========================================================
-   V3.36.4 · Menú móvil estable y clickeable en todas las páginas
+   V3.36.5 · Menú móvil estable y clickeable en todas las páginas
    ========================================================== */
 @media (max-width: 820px) {
     body.mobile-menu-open {
@@ -2676,5 +2676,133 @@ body[data-page="product"] .navbar-actions.mc-header-actions,
         opacity: 1 !important;
         visibility: visible !important;
         pointer-events: auto !important;
+    }
+}
+
+/* ==========================================================
+   V3.36.5 · Corrección puntual: acciones móviles fijas en navbar de ficha
+   ========================================================== */
+@media (max-width: 700px) {
+    body[data-page="product"] .site-header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 2500 !important;
+        background: rgba(255, 249, 253, .99) !important;
+    }
+
+    body[data-page="product"] .site-header .promo-banner,
+    body[data-page="product"] .site-header .container-hero,
+    body[data-page="product"] .site-header .search-shell {
+        display: none !important;
+    }
+
+    body[data-page="product"] .site-header .container-navbar {
+        position: relative !important;
+        top: auto !important;
+        z-index: 2501 !important;
+        width: 100% !important;
+        min-height: 5.8rem !important;
+        background: rgba(255, 249, 253, .99) !important;
+        border-bottom: 1px solid rgba(146, 75, 103, .14) !important;
+        box-shadow: 0 .35rem 1rem rgba(83, 49, 64, .05) !important;
+    }
+
+    body[data-page="product"] .site-header .navbar {
+        width: min(100% - 1.6rem, var(--container-width)) !important;
+        min-height: 5.8rem !important;
+        display: grid !important;
+        grid-template-columns: 4.2rem minmax(7.8rem, 1fr) auto !important;
+        align-items: center !important;
+        gap: .52rem !important;
+        margin-inline: auto !important;
+        padding: .62rem 0 !important;
+        overflow: visible !important;
+    }
+
+    body[data-page="product"] .site-header .mobile-menu-button {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        position: relative !important;
+        inset: auto !important;
+        width: 4.05rem !important;
+        min-width: 4.05rem !important;
+        height: 4.05rem !important;
+        margin: 0 !important;
+        translate: 0 0 !important;
+        transform: none !important;
+        z-index: 2504 !important;
+    }
+
+    body[data-page="product"] .site-header .product-mobile-brand {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 0 !important;
+        height: 4.05rem !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        translate: 0 0 !important;
+        transform: none !important;
+    }
+
+    body[data-page="product"] .site-header .product-mobile-brand img {
+        width: min(13.2rem, 32vw) !important;
+        max-width: 100% !important;
+        max-height: 3rem !important;
+        object-fit: contain !important;
+    }
+
+    body[data-page="product"] .site-header .navbar-actions,
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions {
+        grid-column: 3 !important;
+        grid-row: 1 !important;
+        position: static !important;
+        inset: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        justify-self: end !important;
+        align-self: center !important;
+        gap: .28rem !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: calc(100vw - 18rem) !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        translate: 0 0 !important;
+        transform: none !important;
+        opacity: 1 !important;
+        filter: none !important;
+        pointer-events: auto !important;
+        z-index: 2504 !important;
+    }
+
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions .mc-header-icon,
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions .account-button,
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions .cart-button,
+    body[data-page="product"] .site-header .navbar-actions .icon-btn {
+        width: 3.35rem !important;
+        min-width: 3.35rem !important;
+        height: 3.35rem !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 999px !important;
+        translate: 0 0 !important;
+        transform: none !important;
+    }
+
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions .mc-header-icon i,
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions .account-button i,
+    body[data-page="product"] .site-header .navbar-actions.mc-header-actions .cart-button > i {
+        font-size: 1.34rem !important;
+    }
+
+    body[data-page="product"] .product-page,
+    body[data-page="product"] main.product-page {
+        padding-top: 0 !important;
     }
 }

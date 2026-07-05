@@ -1,5 +1,5 @@
 /* ==========================================================
-   Mommy Crafts · Ficha de producto marketplace · v3.36.4
+   Mommy Crafts · Ficha de producto marketplace · v3.36.5
    Ajuste fino: ficha limpia, datos colapsables y mayor claridad
    ========================================================== */
 
@@ -889,7 +889,7 @@ body[data-page="product"] .related-products {
 }
 
 
-/* v3.36.4 · ajustes solicitados por revisión visual */
+/* v3.36.5 · ajustes solicitados por revisión visual */
 body[data-page="product"] .product-content-nav {
     display: none !important;
 }
@@ -914,7 +914,7 @@ body[data-page="product"] .related-products .container-img {
 }
 
 /* ==========================================================
-   v3.36.4 · Selectores y proceso de compra profesional
+   v3.36.5 · Selectores y proceso de compra profesional
    - Cajas individuales por columna.
    - Sin caja/fondo global detrás de la ficha.
    - Estados claros para talla, variante y compra.
@@ -1186,7 +1186,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
 }
 
 /* ==========================================================
-   v3.36.4 · Ficha móvil: galería limpia, sin logo superior y orden comercial
+   v3.36.5 · Ficha móvil: galería limpia, sin logo superior y orden comercial
    ========================================================== */
 @media (max-width: 700px) {
     body[data-page="product"] .product-page {
@@ -1340,7 +1340,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
     }
 }
 
-/* v3.36.4 · Header móvil específico de ficha cargado junto al CSS de producto */
+/* v3.36.5 · Header móvil específico de ficha cargado junto al CSS de producto */
 @media (max-width: 700px) {
     body[data-page="product"] .promo-banner,
     body[data-page="product"] .container-hero {
@@ -1356,7 +1356,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
 
 
 /* ==========================================================
-   V3.36.4 · Ficha móvil limpia y relacionados sin fondo global
+   V3.36.5 · Ficha móvil limpia y relacionados sin fondo global
    ========================================================== */
 body[data-page="product"] .related-products,
 body[data-page="product"] .related-products .container,
@@ -1466,7 +1466,7 @@ body[data-page="product"] .related-products .container-products::after {
 
 
 /* ==========================================================
-   V3.36.4 · Ficha móvil: header, imagen centrada y carrito fijo real
+   V3.36.5 · Ficha móvil: header, imagen centrada y carrito fijo real
    ========================================================== */
 body[data-page="product"] .related-products,
 body[data-page="product"] .related-products .container,
@@ -1577,7 +1577,7 @@ body[data-page="product"] .related-products .carousel-track {
 
 
 /* ==========================================================
-   V3.36.4 · Header móvil de ficha: acciones en barra superior
+   V3.36.5 · Header móvil de ficha: acciones en barra superior
    ========================================================== */
 @media (max-width: 700px) {
     body[data-page="product"] .site-header .promo-banner,
@@ -1681,5 +1681,18 @@ body[data-page="product"] .related-products .carousel-track {
 
     body[data-page="product"] .product-page {
         padding-top: 0 !important;
+    }
+}
+
+/* V3.36.5 · Ficha móvil: la galería comienza debajo del navbar, sin acciones flotantes */
+@media (max-width: 700px) {
+    body[data-page="product"] .product-detail-images {
+        position: relative !important;
+        z-index: 1 !important;
+    }
+
+    body[data-page="product"] .product-gallery-card,
+    body[data-page="product"] .main-image-wrapper {
+        overflow: hidden !important;
     }
 }

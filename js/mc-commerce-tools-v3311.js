@@ -271,6 +271,17 @@
             window.matchMedia("(max-width: 700px)").matches;
     }
 
+    function resetProductMobileHeaderActions(actions) {
+        if (!actions) return;
+        actions.style.setProperty("position", "static", "important");
+        actions.style.setProperty("inset", "auto", "important");
+        actions.style.setProperty("translate", "0px 0px", "important");
+        actions.style.setProperty("transform", "none", "important");
+        actions.style.setProperty("margin", "0", "important");
+        actions.style.setProperty("opacity", "1", "important");
+        actions.style.setProperty("pointer-events", "auto", "important");
+    }
+
     function keepActionsInNavbarForProductMobile(siteHeader, actions) {
         if (!isProductMobileHeader()) return false;
         const navbar = siteHeader?.querySelector(".container-navbar .navbar");
@@ -278,6 +289,7 @@
         if (actions.parentElement !== navbar) {
             navbar.appendChild(actions);
         }
+        resetProductMobileHeaderActions(actions);
         return true;
     }
 

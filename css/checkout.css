@@ -47,7 +47,7 @@
 
 
 /* ==========================================================
-   V3.36.4 · Checkout móvil: medios de pago compactos y claros
+   V3.36.5 · Checkout móvil: medios de pago compactos y claros
    ========================================================== */
 .checkout-form .payment-options label {
     align-items: flex-start;
@@ -114,7 +114,7 @@
 
 
 /* ==========================================================
-   V3.36.4 · Checkout móvil: pago al final y CTA único
+   V3.36.5 · Checkout móvil: pago al final y CTA único
    ========================================================== */
 @media (max-width: 980px) {
     .checkout-layout {
@@ -161,7 +161,7 @@
 
 
 /* ==========================================================
-   V3.36.4 · Checkout: Mercado Pago como medio único público
+   V3.36.5 · Checkout: Mercado Pago como medio único público
    ========================================================== */
 .checkout-form .payment-options {
     grid-template-columns: 1fr !important;
