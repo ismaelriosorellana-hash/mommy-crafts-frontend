@@ -103,6 +103,15 @@
         return id ? `pedido.html?id=${encodeURIComponent(id)}` : "cuenta.html#pedidos";
     }
 
+    function orderTrackingHref(order) {
+        const id = order?.id || order?._id || orderId || "";
+        const number = order?.numeroPedido || pending.numeroPedido || "";
+        const url = new URL("seguimiento-pedido.html", location.href);
+        if (id) url.searchParams.set("id", id);
+        if (number) url.searchParams.set("pedido", number);
+        return `${url.pathname.split("/").pop()}${url.search}`;
+    }
+
     function hasCustomerSession() {
         return Boolean(
             window.CustomerAuth?.getToken?.() &&
@@ -293,6 +302,7 @@
                         <div class="payment-result-actions">
                             <button class="btn-primary" id="payment-retry" type="button" hidden>Intentar pago nuevamente</button>
                             <a class="btn-secondary" id="payment-account-link" href="cuenta.html#pedidos" hidden>Ver mis pedidos</a>
+                            <a class="btn-secondary" id="payment-tracking-link" href="seguimiento-pedido.html" hidden>Seguir pedido</a>
                             <a class="btn-secondary" href="catalogo.html">Seguir comprando</a>
                         </div>
                     </section>
@@ -312,6 +322,7 @@
             orderBox: document.getElementById("payment-result-order"),
             retry: document.getElementById("payment-retry"),
             accountLink: document.getElementById("payment-account-link"),
+            trackingLink: document.getElementById("payment-tracking-link"),
             nextArea: document.getElementById("payment-result-next-area"),
             sideArea: document.getElementById("payment-result-side-area")
         };
@@ -374,6 +385,11 @@
         if (!els.accountLink.hidden && order) {
             els.accountLink.href = orderDetailHref(order);
             els.accountLink.textContent = "Ver detalle del pedido";
+        }
+
+        if (els.trackingLink) {
+            els.trackingLink.hidden = !order;
+            if (order) els.trackingLink.href = orderTrackingHref(order);
         }
 
         if (order?.estadoPago === "pagado") {

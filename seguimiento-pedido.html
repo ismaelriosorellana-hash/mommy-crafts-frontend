@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://mommy-crafts-backend.onrender.com https://res.cloudinary.com https://*.cloudinary.com; media-src 'self' blob:; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="description" content="Consulta el estado de tu pedido en Mommy Crafts.">
+    <title>Seguimiento de pedido | Mommy Crafts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="css/main.css?v=3.44.0">
+    <link rel="stylesheet" href="css/account.css?v=3.44.0">
+    <link rel="stylesheet" href="css/order-tracking-v3440.css?v=3.44.0">
+    <link rel="stylesheet" href="css/experience-v327.css?v=3.44.0">
+    <link rel="stylesheet" href="css/site-studio.css?v=3.44.0">
+    <link rel="stylesheet" href="css/mc-commerce-tools-v3311.css?v=3.44.0">
+    <link rel="stylesheet" href="css/mobile-polish-v3370.css?v=3.44.0">
+    <link rel="stylesheet" href="css/mobile-menu-v3380.css?v=3.44.0">
+</head>
+<body class="account-page tracking-page" data-page="tracking" data-account-page="tracking">
+    <a class="skip-link" href="#main-content">Saltar al contenido</a>
+    <header class="account-header">
+        <div class="container account-header-inner">
+            <a class="account-brand" href="index.html" aria-label="Ir a Mommy Crafts">
+                <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png" alt="">
+                <img src="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png" alt="Mommy Crafts">
+            </a>
+            <div class="account-header-links">
+                <a href="catalogo.html">Ver productos</a>
+                <a href="cuenta.html#pedidos">Mi cuenta</a>
+                <div class="navbar-actions">
+                    <a class="icon-btn cart-button" href="carrito.html" aria-label="Ver carrito">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="badge" id="cart-count">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="account-main">
+        <section class="tracking-hero">
+            <div class="tracking-hero-card">
+                <p class="section-kicker">Seguimiento</p>
+                <h1>Revisa el avance de tu pedido</h1>
+                <p>Consulta pago, revisión del diseño, fabricación y entrega desde un solo lugar. Para productos personalizados, la vista final queda asociada al pedido.</p>
+                <div class="tracking-hero-points" aria-label="Información de seguimiento">
+                    <div class="tracking-hero-point"><i class="fa-solid fa-circle-check" aria-hidden="true"></i><span>Estado de pago y preparación actualizado.</span></div>
+                    <div class="tracking-hero-point"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span>Seguimiento especial para diseños personalizados.</span></div>
+                    <div class="tracking-hero-point"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>Acceso rápido a WhatsApp si necesitas ayuda.</span></div>
+                </div>
+            </div>
+
+            <aside class="tracking-form-card">
+                <h2>Buscar pedido</h2>
+                <form class="tracking-form" id="tracking-form">
+                    <div class="tracking-field">
+                        <label for="tracking-order-number">Número de pedido</label>
+                        <input id="tracking-order-number" name="pedido" type="text" autocomplete="off" placeholder="Ej: MC-000123" required>
+                    </div>
+                    <div class="tracking-field">
+                        <label for="tracking-email">Correo usado en la compra</label>
+                        <input id="tracking-email" name="email" type="email" autocomplete="email" placeholder="correo@ejemplo.cl" required>
+                    </div>
+                    <button class="btn-primary" type="submit">Consultar estado</button>
+                </form>
+                <p class="tracking-help">Usamos el correo para proteger la información del pedido.</p>
+                <div class="tracking-login-note">
+                    <strong>¿Tienes cuenta?</strong>
+                    <p>También puedes revisar tus pedidos vinculados desde tu cuenta de cliente.</p>
+                    <a class="btn-secondary" id="tracking-session-button" href="cuenta.html#pedidos" hidden>Ir a mis pedidos</a>
+                </div>
+            </aside>
+        </section>
+
+        <section class="tracking-layout" aria-live="polite">
+            <div id="tracking-result"></div>
+            <aside id="tracking-side"></aside>
+        </section>
+    </main>
+
+    <footer class="account-legal-footer">
+        <a href="quienes-somos.html">Quiénes somos</a>
+        <a href="preguntas-frecuentes.html">Preguntas frecuentes</a>
+        <a href="despachos-retiros.html">Despachos y retiros</a>
+        <a href="privacidad.html">Privacidad</a>
+        <a href="terminos.html">Términos</a>
+        <a href="seguridad.html">Seguridad</a>
+    </footer>
+
+    <script src="js/config.js?v=3.44.0" defer></script>
+    <script src="js/api.js?v=3.44.0" defer></script>
+    <script src="js/categories.js?v=3.44.0" defer></script>
+    <script src="js/site-settings.js?v=3.44.0" defer></script>
+    <script src="js/site-studio.js?v=3.44.0" defer></script>
+    <script src="js/customer-auth.js?v=3.44.0" defer></script>
+    <script src="js/cart.js?v=3.44.0" defer></script>
+    <script src="js/order-tracking-v3440.js?v=3.44.0" defer></script>
+    <script src="js/experience-v327.js?v=3.44.0" defer></script>
+    <script src="js/mc-commerce-tools-v3311.js?v=3.44.0" defer></script>
+</body>
+</html>
