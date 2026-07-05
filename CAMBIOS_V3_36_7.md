@@ -1,4 +1,4 @@
-# Mommy Crafts Frontend v3.37.0
+# Mommy Crafts Frontend v3.37.1
 
 Corrección puntual móvil posterior a v3.36.6.
 

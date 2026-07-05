@@ -17,7 +17,7 @@ const checks = [
     ["Header evita parpadeo inicial", commerceCss.includes("evita salto visual del header") && commerceCss.includes("opacity: 0")],
     ["Badges de descuento apilados globalmente", commerceCss.includes("badges apilados en todas las tarjetas") && commerceCss.includes("product-badge[hidden] + .product-discount-badge")],
     ["Descuento ya no depende solo de sugeridos", commerceCss.includes(".container-img .product-discount-badge")],
-    ["Navbar móvil uniforme v3.37.0", mobileCss.includes("--mc-mobile-action-size: 39px") && mobileCss.includes("margin-top: -25px !important")],
+    ["Navbar móvil uniforme v3.37.1", mobileCss.includes("--mc-mobile-action-size: 39px") && mobileCss.includes("margin-top: -25px !important")],
     ["Temporada móvil usa submenú visible", (mainCss.includes("season-mobile-submenu") || mobileCss.includes("season-mobile-submenu")) && uiJs.includes("setMobileOpen")],
     ["Header móvil de ficha conserva acciones", commerceJs.includes("keepActionsInNavbarForProductMobile")],
 ];
@@ -30,4 +30,4 @@ if (failed.length) {
     process.exit(1);
 }
 
-console.log(`\n✅ Header y badges v3.37.0 verificados (${checks.length} controles).`);
+console.log(`\n✅ Header y badges v3.37.1 verificados (${checks.length} controles).`);

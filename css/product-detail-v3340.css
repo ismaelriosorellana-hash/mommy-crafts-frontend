@@ -1,5 +1,5 @@
 /* ==========================================================
-   Mommy Crafts · Ficha de producto marketplace · v3.37.0
+   Mommy Crafts · Ficha de producto marketplace · v3.37.1
    Ajuste fino: ficha limpia, datos colapsables y mayor claridad
    ========================================================== */
 
@@ -889,7 +889,7 @@ body[data-page="product"] .related-products {
 }
 
 
-/* v3.37.0 · ajustes solicitados por revisión visual */
+/* v3.37.1 · ajustes solicitados por revisión visual */
 body[data-page="product"] .product-content-nav {
     display: none !important;
 }
@@ -914,7 +914,7 @@ body[data-page="product"] .related-products .container-img {
 }
 
 /* ==========================================================
-   v3.37.0 · Selectores y proceso de compra profesional
+   v3.37.1 · Selectores y proceso de compra profesional
    - Cajas individuales por columna.
    - Sin caja/fondo global detrás de la ficha.
    - Estados claros para talla, variante y compra.
@@ -1186,7 +1186,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
 }
 
 /* ==========================================================
-   v3.37.0 · Ficha móvil: galería limpia, sin logo superior y orden comercial
+   v3.37.1 · Ficha móvil: galería limpia, sin logo superior y orden comercial
    ========================================================== */
 @media (max-width: 700px) {
     body[data-page="product"] .product-page {
@@ -1340,7 +1340,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
     }
 }
 
-/* v3.37.0 · Header móvil específico de ficha cargado junto al CSS de producto */
+/* v3.37.1 · Header móvil específico de ficha cargado junto al CSS de producto */
 @media (max-width: 700px) {
     body[data-page="product"] .promo-banner,
     body[data-page="product"] .container-hero {
@@ -1356,7 +1356,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
 
 
 /* ==========================================================
-   V3.37.0 · Ficha móvil limpia y relacionados sin fondo global
+   V3.37.1 · Ficha móvil limpia y relacionados sin fondo global
    ========================================================== */
 body[data-page="product"] .related-products,
 body[data-page="product"] .related-products .container,
@@ -1466,7 +1466,7 @@ body[data-page="product"] .related-products .container-products::after {
 
 
 /* ==========================================================
-   V3.37.0 · Ficha móvil: header, imagen centrada y carrito fijo real
+   V3.37.1 · Ficha móvil: header, imagen centrada y carrito fijo real
    ========================================================== */
 body[data-page="product"] .related-products,
 body[data-page="product"] .related-products .container,
@@ -1577,7 +1577,7 @@ body[data-page="product"] .related-products .carousel-track {
 
 
 /* ==========================================================
-   V3.37.0 · Header móvil de ficha: acciones en barra superior
+   V3.37.1 · Header móvil de ficha: acciones en barra superior
    ========================================================== */
 @media (max-width: 700px) {
     body[data-page="product"] .site-header .promo-banner,
@@ -1684,7 +1684,7 @@ body[data-page="product"] .related-products .carousel-track {
     }
 }
 
-/* V3.37.0 · Ficha móvil: la galería comienza debajo del navbar, sin acciones flotantes */
+/* V3.37.1 · Ficha móvil: la galería comienza debajo del navbar, sin acciones flotantes */
 @media (max-width: 700px) {
     body[data-page="product"] .product-detail-images {
         position: relative !important;
@@ -1698,7 +1698,7 @@ body[data-page="product"] .related-products .carousel-track {
 }
 
 /* ==========================================================
-   V3.37.0 · Corrección puntual móvil: navbar fijo real en ficha
+   V3.37.1 · Corrección puntual móvil: navbar fijo real en ficha
    - Acciones siempre dentro del navbar, no sobre la imagen.
    - Sin espacio vacío entre navbar e imagen.
    - Botón de cuenta circular como el resto.
@@ -1887,7 +1887,7 @@ body[data-page="product"] .related-products .carousel-track {
 }
 
 /* ==========================================================
-   V3.37.0 · Ajuste fino móvil: imagen cerca del navbar
+   V3.37.1 · Ajuste fino móvil: imagen cerca del navbar
    - Reduce el espacio vacío visible antes de la imagen.
    - Mantiene la imagen centrada y navegable.
    - No afecta escritorio.

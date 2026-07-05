@@ -1,4 +1,4 @@
-# Cambios frontend v3.37.0
+# Cambios frontend v3.37.1
 
 ## Correcciones
 

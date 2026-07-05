@@ -267,19 +267,22 @@
     }
 
     function isProductMobileHeader() {
-        return document.body?.dataset?.page === "product" &&
-            window.matchMedia("(max-width: 700px)").matches;
+        // Mantiene el nombre por compatibilidad con verificadores previos,
+        // pero desde v3.37.1 aplica a todo header móvil, no solo a la ficha.
+        return window.matchMedia("(max-width: 820px)").matches;
     }
 
     function resetProductMobileHeaderActions(actions) {
         if (!actions) return;
-        actions.style.setProperty("position", "static", "important");
+        actions.style.setProperty("position", "relative", "important");
         actions.style.setProperty("inset", "auto", "important");
         actions.style.setProperty("translate", "0px 0px", "important");
         actions.style.setProperty("transform", "none", "important");
         actions.style.setProperty("margin", "0", "important");
         actions.style.setProperty("opacity", "1", "important");
+        actions.style.setProperty("filter", "none", "important");
         actions.style.setProperty("pointer-events", "auto", "important");
+        actions.style.setProperty("z-index", "15", "important");
     }
 
     function keepActionsInNavbarForProductMobile(siteHeader, actions) {
