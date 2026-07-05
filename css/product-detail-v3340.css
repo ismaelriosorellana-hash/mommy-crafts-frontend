@@ -2023,7 +2023,7 @@ body[data-page="product"] .related-products .carousel-track {
     body[data-page="product"] .product-detail-grid,
     body[data-page="product"] .product-detail-images,
     body[data-page="product"] .detail-main-image-container {
-        margin-top: -100px !important;
+        margin-top: -40px !important;
     }
 }
 
