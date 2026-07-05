@@ -10,8 +10,8 @@ const js = fs.readFileSync(path.join(root, "js", "customization-professional-v33
 const pages = ["index.html", "catalogo.html", "comparacion.html", "carrito.html", "producto.html"];
 
 const checks = [
-    ["CONFIG versión 3.40.0", config.includes('APP_VERSION: "3.40.0"')],
-    ["CSS profesional existe", css.includes("Personalización profesional v3.40.0")],
+    ["CONFIG versión 3.40.1", config.includes('APP_VERSION: "3.40.1"')],
+    ["CSS profesional existe", css.includes("Personalización profesional v3.40.1")],
     ["CSS modal profesional", css.includes(".mc-customization-pro .modal-box")],
     ["CSS trust strip", css.includes(".mc-customization-trust-strip")],
     ["CSS móvil modal", css.includes("@media (max-width: 900px)")],
@@ -24,11 +24,11 @@ for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
     checks.push([
         `${page} carga CSS profesional`,
-        html.includes('css/customization-professional-v3390.css?v=3.40.0')
+        html.includes('css/customization-professional-v3390.css?v=3.40.1')
     ]);
     checks.push([
         `${page} carga JS profesional`,
-        html.includes('js/customization-professional-v3390.js?v=3.40.0')
+        html.includes('js/customization-professional-v3390.js?v=3.40.1')
     ]);
 }
 
@@ -40,4 +40,4 @@ if (failed.length) {
     process.exit(1);
 }
 
-console.log(`\n✅ Personalización profesional v3.40.0 verificada (${checks.length} controles).`);
+console.log(`\n✅ Personalización profesional v3.40.1 verificada (${checks.length} controles).`);

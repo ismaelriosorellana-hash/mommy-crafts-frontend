@@ -1523,7 +1523,7 @@ function advanceToStep(nextStep, delay = 180) {
 
         return {
             version: 3,
-            source: "visible-preview-v3400",
+            source: "visible-preview-v3401",
             previewWidth,
             previewHeight,
             productSource:
@@ -1799,7 +1799,7 @@ function advanceToStep(nextStep, delay = 180) {
             height: size,
             mainSpec,
             secondarySpec,
-            previewSource: activeSnapshot?.source || "generated-v3400"
+            previewSource: activeSnapshot?.source || "generated-v3401"
         };
     }
 
@@ -1919,10 +1919,10 @@ function advanceToStep(nextStep, delay = 180) {
                     width: rendered.width,
                     height: rendered.height,
                     asset: upload.assets?.preview || null,
-                    source: rendered.previewSource || "visible-preview-v3400"
+                    source: rendered.previewSource || "visible-preview-v3401"
                 },
                 summaryPreviewUrl: upload.assets?.preview?.url || upload.assets?.preview?.secure_url || "",
-                previewSource: rendered.previewSource || "visible-preview-v3400",
+                previewSource: rendered.previewSource || "visible-preview-v3401",
                 createdAt: new Date().toISOString()
             };
 

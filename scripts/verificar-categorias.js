@@ -28,11 +28,11 @@ const checks = [
     ["Navegación admin incluye Categorías", adminCommon.includes('id: "categorias"')],
     ["Páginas públicas cargan categories.js", htmlFiles.every((name) => {
         const html = fs.readFileSync(path.join(root, name), "utf8");
-        return !html.includes("js/products.js") || html.includes("js/categories.js?v=3.40.0");
+        return !html.includes("js/products.js") || html.includes("js/categories.js?v=3.40.1");
     })],
     ["Inicio muestra categorías aunque no tengan productos", !productsJs.includes("publicProducts.some((product) =>")],
     ["Carruseles permiten arrastre con clic", homeJs.includes("enableDragScroll") && homeJs.includes("pointermove")],
-    ["Carruseles sin fondo global", homeCss.includes("V3.40.0") && homeCss.includes("background: transparent !important")],
+    ["Carruseles sin fondo global", homeCss.includes("V3.40.1") && homeCss.includes("background: transparent !important")],
     ["Banner móvil reducido a cinta", homeCss.includes("33vw") && homeCss.includes("background-size: contain")]
 ];
 
@@ -44,4 +44,4 @@ if (failed.length) {
     process.exit(1);
 }
 
-console.log(`\n✅ Categorías administrables v3.40.0 verificadas (${checks.length} controles).`);
+console.log(`\n✅ Categorías administrables v3.40.1 verificadas (${checks.length} controles).`);
