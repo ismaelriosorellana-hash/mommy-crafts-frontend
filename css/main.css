@@ -2004,7 +2004,7 @@ body {
 a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-decoration:underline; text-underline-offset:.25rem; }
 
 /* ==========================================================
-   V3.36.2 · Menú móvil de Temporada y header compacto de ficha
+   V3.36.3 · Menú móvil de Temporada y header compacto de ficha
    ========================================================== */
 .season-mobile-submenu {
     display: none;
@@ -2139,7 +2139,7 @@ a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-
 
 
 /* ==========================================================
-   V3.36.2 · Navegación móvil profesional y carruseles globales
+   V3.36.3 · Navegación móvil profesional y carruseles globales
    ========================================================== */
 .product-mobile-brand {
     display: none;
@@ -2407,5 +2407,204 @@ a.promo-banner-text:hover,a.promo-banner-text:focus-visible { opacity:.78; text-
 
     body[data-page="product"] .product-page {
         padding-top: 0 !important;
+    }
+}
+
+
+/* ==========================================================
+   V3.36.3 · Corrección móvil: menú, header usable y fondos invisibles
+   ========================================================== */
+:root {
+    --mc-page-bg: var(--color-background, #fff9fd);
+}
+
+body[data-page="home"] .navbar-actions.mc-header-actions,
+body[data-page="product"] .navbar-actions.mc-header-actions,
+.site-header .navbar-actions.mc-header-actions {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    filter: none !important;
+    z-index: 1265 !important;
+}
+
+.site-header .navbar-actions.mc-header-actions button,
+.site-header .navbar-actions.mc-header-actions a,
+.site-header .mobile-menu-button {
+    pointer-events: auto !important;
+}
+
+.carousel-wrapper,
+.carousel-container,
+.carousel-track,
+.category-rail-shell,
+.categories-grid,
+.section-products,
+.featured-section,
+.trending-section,
+.best-sellers-section,
+.new-section,
+.all-products-section,
+.related-products,
+.related-products .container,
+.related-products .container-products,
+.products-carousel,
+.product-carousel,
+.home-carousel {
+    background: var(--mc-page-bg) !important;
+    background-color: var(--mc-page-bg) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+.carousel-wrapper::before,
+.carousel-wrapper::after,
+.carousel-container::before,
+.carousel-container::after,
+.carousel-track::before,
+.carousel-track::after,
+.category-rail-shell::before,
+.category-rail-shell::after,
+.categories-grid::before,
+.categories-grid::after,
+.related-products::before,
+.related-products::after,
+.related-products .container::before,
+.related-products .container::after,
+.related-products .container-products::before,
+.related-products .container-products::after {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+}
+
+@media (max-width: 820px) {
+    body:has(.menu.is-open) {
+        overflow: hidden;
+    }
+
+    .site-header .container-navbar {
+        position: relative;
+        z-index: 1260;
+    }
+
+    .site-header .navbar {
+        position: relative;
+        z-index: 1261;
+    }
+
+    .menu {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        pointer-events: none !important;
+    }
+
+    .menu.is-open {
+        pointer-events: auto !important;
+    }
+
+    .menu > li,
+    .menu > li > a,
+    .menu .dropdown,
+    .menu .category-dropdown-link,
+    .season-mobile-submenu,
+    .season-mobile-submenu-link {
+        pointer-events: auto !important;
+    }
+
+    .menu > li > a,
+    .category-dropdown-link,
+    .season-mobile-submenu-link {
+        touch-action: manipulation;
+    }
+
+    .menu .has-dropdown.is-mobile-open > .dropdown,
+    .season-mobile-submenu:not([hidden]) {
+        display: grid !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+
+    .menu .dropdown {
+        overflow: visible !important;
+    }
+}
+
+@media (max-width: 700px) {
+    body[data-page="product"] .container-navbar {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1300 !important;
+        background: rgba(255,249,253,.98) !important;
+    }
+
+    body[data-page="product"] .navbar {
+        display: grid !important;
+        grid-template-columns: 4.2rem minmax(8rem, 1fr) auto !important;
+        align-items: center !important;
+        gap: .7rem !important;
+        min-height: 5.8rem !important;
+        padding: .72rem 0 !important;
+    }
+
+    body[data-page="product"] .mobile-menu-button {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        position: relative !important;
+        z-index: 1304 !important;
+    }
+
+    body[data-page="product"] .product-mobile-brand {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 0 !important;
+    }
+
+    body[data-page="product"] .product-mobile-brand img {
+        width: min(14.8rem, 36vw) !important;
+        max-height: 3.25rem !important;
+        object-fit: contain !important;
+    }
+
+    body[data-page="product"] .navbar-actions.mc-header-actions,
+    body[data-page="product"] .navbar-actions {
+        grid-column: 3 !important;
+        grid-row: 1 !important;
+        position: relative !important;
+        inset: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        justify-self: end !important;
+        gap: .38rem !important;
+        margin: 0 !important;
+        width: auto !important;
+        transform: none !important;
+        translate: none !important;
+        z-index: 1304 !important;
+    }
+
+    body[data-page="product"] .navbar-actions.mc-header-actions .mc-header-icon,
+    body[data-page="product"] .navbar-actions.mc-header-actions .account-button,
+    body[data-page="product"] .navbar-actions.mc-header-actions .cart-button,
+    body[data-page="product"] .icon-btn {
+        width: 3.65rem !important;
+        min-width: 3.65rem !important;
+        height: 3.65rem !important;
+        box-shadow: 0 .4rem 1rem rgba(83,49,64,.08) !important;
+    }
+
+    body[data-page="product"] .navbar-actions.mc-header-actions .mc-header-icon i,
+    body[data-page="product"] .navbar-actions.mc-header-actions .account-button i,
+    body[data-page="product"] .navbar-actions.mc-header-actions .cart-button > i {
+        font-size: 1.52rem !important;
+    }
+
+    body[data-page="product"] .navbar > .search-shell {
+        display: none !important;
     }
 }

@@ -511,7 +511,7 @@
 }
 
 
-/* V3.36.2 · Home móvil más limpio, carruseles modulares y arrastre natural */
+/* V3.36.3 · Home móvil más limpio, carruseles modulares y arrastre natural */
 .category-rail-shell,
 .carousel-wrapper,
 .carousel-container {
@@ -717,7 +717,7 @@ body[data-page="home"] .carousel-track {
 }
 
 /* ==========================================================
-   V3.36.2 · Home más fluido, banner móvil ajustado y carruseles sin fondo
+   V3.36.3 · Home más fluido, banner móvil ajustado y carruseles sin fondo
    ========================================================== */
 body[data-page="home"] {
     background: var(--color-background) !important;
@@ -843,7 +843,7 @@ body[data-page="home"] .categories-grid.is-dragging-scroll {
 
 
 /* ==========================================================
-   V3.36.2 · Home sin fondos visibles y banner móvil contenido
+   V3.36.3 · Home sin fondos visibles y banner móvil contenido
    ========================================================== */
 body[data-page="home"] .section-products,
 body[data-page="home"] .featured-section,
@@ -888,5 +888,56 @@ body[data-page="home"] .carousel-wrapper {
     body[data-page="home"] .content-banner {
         height: 100% !important;
         min-height: 0 !important;
+    }
+}
+
+
+/* ==========================================================
+   V3.36.3 · Carruseles sin fondo visible y móvil estable
+   ========================================================== */
+body[data-page="home"] .categories-section,
+body[data-page="home"] .trending-section,
+body[data-page="home"] .best-sellers-section,
+body[data-page="home"] .new-section,
+body[data-page="home"] .all-products-section,
+body[data-page="home"] .section-products,
+body[data-page="home"] .category-rail-shell,
+body[data-page="home"] .carousel-wrapper,
+body[data-page="home"] .carousel-container,
+body[data-page="home"] .carousel-track,
+body[data-page="home"] .categories-grid {
+    background: var(--color-background) !important;
+    background-color: var(--color-background) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+    isolation: auto !important;
+}
+
+body[data-page="home"] .carousel-wrapper::before,
+body[data-page="home"] .carousel-wrapper::after,
+body[data-page="home"] .carousel-container::before,
+body[data-page="home"] .carousel-container::after,
+body[data-page="home"] .carousel-track::before,
+body[data-page="home"] .carousel-track::after,
+body[data-page="home"] .category-rail-shell::before,
+body[data-page="home"] .category-rail-shell::after,
+body[data-page="home"] .categories-grid::before,
+body[data-page="home"] .categories-grid::after {
+    display: none !important;
+    content: none !important;
+}
+
+@media (max-width: 700px) {
+    body[data-page="home"] .carousel-container,
+    body[data-page="home"] .categories-grid {
+        scroll-behavior: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: x proximity !important;
+        touch-action: pan-x pan-y !important;
+    }
+
+    body[data-page="home"] .carousel-track {
+        grid-auto-columns: minmax(15.6rem, calc((100vw - 4.5rem) / 2)) !important;
     }
 }

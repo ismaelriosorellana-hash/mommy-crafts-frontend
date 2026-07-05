@@ -382,7 +382,7 @@
             }));
 
             if (paymentMethod === "mercadopago") {
-                submitButton.innerHTML = "Preparando Mercado Pago...";
+                submitButton.innerHTML = '<i class="fa-solid fa-lock" aria-hidden="true"></i> Ir a Pagar';
                 try {
                     const preference = await API.request(`/pagos/mercadopago/pedidos/${encodeURIComponent(response.pedidoId)}/preferencia`, {
                         method: "POST", headers: { "Content-Type": "application/json" }, body: "{}", timeoutMs: 70000

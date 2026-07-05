@@ -594,27 +594,37 @@ function initSeasonFlyout() {
 
         initMobileCategoryDropdowns(menu);
 
-        button.addEventListener(
-            "click",
-            () => {
-                const open =
-                    menu.classList.toggle(
-                        "is-open"
-                    );
+        if (button.dataset.mobileMenuBound !== "true") {
+            button.dataset.mobileMenuBound = "true";
+            button.addEventListener("click", () => {
+                const open = menu.classList.toggle("is-open");
+                document.body.classList.toggle("mobile-menu-open", open);
+                button.setAttribute("aria-expanded", String(open));
+                button.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+            });
+        }
 
-                button.setAttribute(
-                    "aria-expanded",
-                    String(open)
-                );
+        if (menu.dataset.mobileMenuCloseBound !== "true") {
+            menu.dataset.mobileMenuCloseBound = "true";
+            menu.addEventListener("click", (event) => {
+                const link = event.target.closest("a");
+                if (!link || !menu.contains(link)) return;
+                if (window.matchMedia("(max-width: 820px)").matches && link.matches(".has-dropdown > a[aria-haspopup], .season-menu-trigger")) return;
+                menu.classList.remove("is-open");
+                document.body.classList.remove("mobile-menu-open");
+                button.setAttribute("aria-expanded", "false");
+                button.setAttribute("aria-label", "Abrir menú");
+            });
+        }
 
-                button.setAttribute(
-                    "aria-label",
-                    open
-                        ? "Cerrar menú"
-                        : "Abrir menú"
-                );
-            }
-        );
+        document.addEventListener("keydown", (event) => {
+            if (event.key !== "Escape" || !menu.classList.contains("is-open")) return;
+            menu.classList.remove("is-open");
+            document.body.classList.remove("mobile-menu-open");
+            button.setAttribute("aria-expanded", "false");
+            button.setAttribute("aria-label", "Abrir menú");
+            button.focus();
+        });
     }
 
     function initSupportLinks() {
@@ -1081,6 +1091,7 @@ function initSeasonFlyout() {
     document.addEventListener(
         "studio:navigation-applied",
         () => {
+            initMobileMenu();
             loadGlobalData();
         }
     );

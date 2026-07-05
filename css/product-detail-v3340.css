@@ -1,5 +1,5 @@
 /* ==========================================================
-   Mommy Crafts · Ficha de producto marketplace · v3.36.2
+   Mommy Crafts · Ficha de producto marketplace · v3.36.3
    Ajuste fino: ficha limpia, datos colapsables y mayor claridad
    ========================================================== */
 
@@ -889,7 +889,7 @@ body[data-page="product"] .related-products {
 }
 
 
-/* v3.36.2 · ajustes solicitados por revisión visual */
+/* v3.36.3 · ajustes solicitados por revisión visual */
 body[data-page="product"] .product-content-nav {
     display: none !important;
 }
@@ -914,7 +914,7 @@ body[data-page="product"] .related-products .container-img {
 }
 
 /* ==========================================================
-   v3.36.2 · Selectores y proceso de compra profesional
+   v3.36.3 · Selectores y proceso de compra profesional
    - Cajas individuales por columna.
    - Sin caja/fondo global detrás de la ficha.
    - Estados claros para talla, variante y compra.
@@ -1186,7 +1186,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
 }
 
 /* ==========================================================
-   v3.36.2 · Ficha móvil: galería limpia, sin logo superior y orden comercial
+   v3.36.3 · Ficha móvil: galería limpia, sin logo superior y orden comercial
    ========================================================== */
 @media (max-width: 700px) {
     body[data-page="product"] .product-page {
@@ -1340,7 +1340,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
     }
 }
 
-/* v3.36.2 · Header móvil específico de ficha cargado junto al CSS de producto */
+/* v3.36.3 · Header móvil específico de ficha cargado junto al CSS de producto */
 @media (max-width: 700px) {
     body[data-page="product"] .promo-banner,
     body[data-page="product"] .container-hero {
@@ -1356,7 +1356,7 @@ body[data-page="product"] .product-actions .btn-primary:disabled {
 
 
 /* ==========================================================
-   V3.36.2 · Ficha móvil limpia y relacionados sin fondo global
+   V3.36.3 · Ficha móvil limpia y relacionados sin fondo global
    ========================================================== */
 body[data-page="product"] .related-products,
 body[data-page="product"] .related-products .container,
@@ -1461,5 +1461,116 @@ body[data-page="product"] .related-products .container-products::after {
         background: transparent !important;
         box-shadow: none !important;
         backdrop-filter: none !important;
+    }
+}
+
+
+/* ==========================================================
+   V3.36.3 · Ficha móvil: header, imagen centrada y carrito fijo real
+   ========================================================== */
+body[data-page="product"] .related-products,
+body[data-page="product"] .related-products .container,
+body[data-page="product"] .related-products .container-products,
+body[data-page="product"] .related-products .carousel-wrapper,
+body[data-page="product"] .related-products .carousel-container,
+body[data-page="product"] .related-products .carousel-track {
+    background: var(--color-background) !important;
+    background-color: var(--color-background) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+@media (max-width: 700px) {
+    body[data-page="product"] {
+        padding-bottom: calc(7.2rem + env(safe-area-inset-bottom));
+    }
+
+    body[data-page="product"] .product-page {
+        padding-top: 0 !important;
+    }
+
+    body[data-page="product"] .product-detail-images {
+        width: 100% !important;
+        margin-inline: 0 !important;
+        background: #fff !important;
+    }
+
+    body[data-page="product"] .detail-main-image-container {
+        width: 100% !important;
+        min-height: min(100vw, 42rem) !important;
+        height: min(100vw, 42rem) !important;
+        display: grid !important;
+        place-items: center !important;
+        overflow: hidden !important;
+        background: #fff !important;
+    }
+
+    body[data-page="product"] .detail-main-image-track {
+        width: 100% !important;
+        height: 100% !important;
+        display: grid !important;
+        place-items: center !important;
+    }
+
+    body[data-page="product"] .detail-main-img {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+        object-position: center center !important;
+        margin: auto !important;
+        padding: 1rem !important;
+    }
+
+    body[data-page="product"] .product-purchase-panel {
+        padding-bottom: 1rem !important;
+    }
+
+    body[data-page="product"] .product-actions {
+        position: fixed !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        z-index: 1600 !important;
+        display: grid !important;
+        grid-template-columns: 6.8rem minmax(0, 1fr) !important;
+        gap: .75rem !important;
+        margin: 0 !important;
+        padding: .82rem 1rem calc(.82rem + env(safe-area-inset-bottom)) !important;
+        border-top: 1px solid rgba(146, 75, 103, .16) !important;
+        border-radius: 1.35rem 1.35rem 0 0 !important;
+        background: rgba(255,255,255,.98) !important;
+        box-shadow: 0 -1rem 2.8rem rgba(70,42,52,.12) !important;
+        backdrop-filter: blur(14px) !important;
+    }
+
+    body[data-page="product"] .product-selection-status {
+        grid-column: 1 / -1 !important;
+        margin: 0 0 .25rem !important;
+    }
+
+    body[data-page="product"] .quantity-control {
+        margin: 0 !important;
+    }
+
+    body[data-page="product"] .quantity-control label {
+        display: none !important;
+    }
+
+    body[data-page="product"] .quantity-control input,
+    body[data-page="product"] .product-actions .btn-primary {
+        min-height: 4.8rem !important;
+    }
+
+    body[data-page="product"] .product-actions .btn-secondary,
+    body[data-page="product"] .product-actions .mc-detail-compare-button {
+        display: none !important;
+    }
+
+    body[data-page="product"] .related-products .container-products {
+        background: var(--color-background) !important;
+        box-shadow: none !important;
     }
 }

@@ -1,4 +1,4 @@
-# Cambios Frontend v3.36.2
+# Cambios Frontend v3.36.3
 
 Ajuste fino de la ficha de producto después de revisión visual.
 

@@ -165,10 +165,45 @@
         document.querySelector(".site-header")?.classList.toggle("studio-header-sticky", Boolean(components.headerSticky));
     }
 
+
+
+    function normalizeNavigationItems(items = []) {
+        const normalized = Array.isArray(items)
+            ? items.filter((item) => item && item.enabled !== false).map((item, index) => ({ ...item, order: Number(item.order ?? ((index + 1) * 10)) }))
+            : [];
+
+        const hasKind = (kind) => normalized.some((item) => item.kind === kind);
+        const hasUrl = (url) => normalized.some((item) => String(item.url || "").includes(url));
+
+        if (!normalized.length || !hasUrl("index.html")) {
+            normalized.unshift({ kind: "link", label: "Inicio", url: "index.html", order: 10, enabled: true });
+        }
+
+        if (!hasUrl("catalogo.html")) {
+            normalized.splice(Math.min(1, normalized.length), 0, { kind: "link", label: "Todos", url: "catalogo.html", order: 20, enabled: true });
+        }
+
+        if (!hasKind("categories")) {
+            normalized.splice(Math.min(2, normalized.length), 0, { kind: "categories", label: "Categorías", url: "catalogo.html", order: 30, enabled: true });
+        }
+
+        if (!hasKind("customization")) {
+            normalized.push({ kind: "customization", label: "Personaliza tu producto", url: "#", order: 90, enabled: true });
+        }
+
+        return normalized
+            .filter((item, index, list) => {
+                if (item.kind === "categories") return list.findIndex((other) => other.kind === "categories") === index;
+                if (item.kind === "customization") return list.findIndex((other) => other.kind === "customization") === index;
+                return true;
+            })
+            .sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
+    }
+
     function applyNavigation(navigation = {}) {
         const menu = document.getElementById("main-menu");
         if (!Array.isArray(navigation.items)) return;
-        const items = navigation.items.filter((item) => item.enabled !== false).sort((a, b) => Number(a.order) - Number(b.order));
+        const items = normalizeNavigationItems(navigation.items);
         document.querySelectorAll(".content-site-nav").forEach((nav) => {
             nav.replaceChildren();
             items.filter((item) => item.kind === "link").slice(0, 6).forEach((item) => {

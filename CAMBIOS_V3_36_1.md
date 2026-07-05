@@ -1,4 +1,4 @@
-# Frontend v3.36.2 — Ajustes de home, carruseles y ficha móvil
+# Frontend v3.36.3 — Ajustes de home, carruseles y ficha móvil
 
 ## Cambios
 
