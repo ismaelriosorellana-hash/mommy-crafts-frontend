@@ -10,7 +10,7 @@ const API_BASE_URL =
         : "https://mommy-crafts-backend.onrender.com/api";
 
 window.CONFIG = Object.freeze({
-    APP_VERSION: "3.40.1",
+    APP_VERSION: "3.41.0",
 
     FREE_SHIPPING_THRESHOLD: 25000,
 
@@ -147,8 +147,11 @@ HOME_BANNERS: Object.freeze([
                 <rect width="800" height="800" fill="#f7eef1"/>
                 <circle cx="400" cy="340" r="90" fill="#e9a8b5"/>
                 <path d="M230 610c35-110 115-165 170-165s135 55 170 165" fill="#e9a8b5"/>
-                <text x="400" y="700" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#7f5963">
-                    Imagen no disponible
+                <text x="400" y="680" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#7f5963">
+                    Elige tu producto
+                </text>
+                <text x="400" y="724" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#7f5963">
+                    para verlo aquí
                 </text>
             </svg>
         `)

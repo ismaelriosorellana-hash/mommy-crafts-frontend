@@ -2,7 +2,8 @@
 
 (function () {
     const MODAL_SELECTOR = "#modal-personalizar";
-    const DRAFT_KEY = "mommycrafts_customization_draft_v3390";
+    const DRAFT_KEY = "mommycrafts_customization_draft_v3410";
+    const LEGACY_DRAFT_KEYS = ["mommycrafts_customization_draft_v3390"];
     const STEP_HINTS = {
         1: "Elige el tipo de producto que quieres personalizar.",
         2: "Selecciona el producto base. El precio se actualizará automáticamente.",
@@ -97,7 +98,17 @@
         }
     }
 
+    function clearLegacyDrafts() {
+        try {
+            LEGACY_DRAFT_KEYS.forEach((key) => sessionStorage.removeItem(key));
+        } catch (_) {
+            // sessionStorage puede no estar disponible en algunos navegadores privados.
+        }
+    }
+
     function restoreDraft() {
+        if (currentStep() !== 6) return;
+
         let payload = null;
         try {
             payload = JSON.parse(sessionStorage.getItem(DRAFT_KEY) || "null");
@@ -135,6 +146,9 @@
             const step = currentStep();
             const activeStep = $(`.modal-steps .step[data-step="${step}"]`, modal);
             activeStep?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+            if (step === 6) {
+                window.setTimeout(restoreDraft, 80);
+            }
         });
 
         observer.observe(target, {
@@ -181,7 +195,8 @@
 
         const openObserver = new MutationObserver(() => {
             if (modal.getAttribute("aria-hidden") === "false") {
-                restoreDraft();
+                clearLegacyDrafts();
+                hideValidation(modal);
             }
         });
         openObserver.observe(modal, { attributes: true, attributeFilter: ["aria-hidden"] });

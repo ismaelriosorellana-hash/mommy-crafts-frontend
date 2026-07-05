@@ -636,6 +636,11 @@ function clearStepsAfter(step) {
 
         const current = els();
 
+        if (state.step !== 6) {
+            if (current.mainText) current.mainText.hidden = true;
+            if (current.secondaryText) current.secondaryText.hidden = true;
+        }
+
         if (current.previous) {
             current.previous.disabled = state.step === 1;
         }
