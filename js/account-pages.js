@@ -560,10 +560,40 @@
         `;
     }
 
+    function assetUrl(asset) {
+        if (!asset) return "";
+        if (typeof asset === "string") return asset;
+        return asset.secure_url || asset.url || asset.src || "";
+    }
+
+    function orderItemImage(item) {
+        const customization = item?.personalizacion || {};
+        const summary = item?.personalizacionResumen || {};
+        const simpleAssets = Array.isArray(customization?.assets?.images)
+            ? customization.assets.images
+            : [];
+
+        return assetUrl(summary.vistaPrevia) ||
+            assetUrl(summary.preview) ||
+            assetUrl(customization?.assets?.preview) ||
+            assetUrl(customization?.assets?.finalPreview) ||
+            assetUrl(customization?.finalPreview?.asset) ||
+            assetUrl(customization?.finalPreviewUrl) ||
+            assetUrl(simpleAssets[0]) ||
+            assetUrl(customization?.assets?.original) ||
+            assetUrl(customization?.image?.asset) ||
+            item.imagen ||
+            CONFIG.placeholderImage;
+    }
+
     function itemBlock(item) {
+        const image = orderItemImage(item);
+        const personalized = item.personalizacionResumen?.tipo && item.personalizacionResumen.tipo !== "ninguna";
         return `
-            <article class="customer-order-item">
-                <img src="${escapeHtml(item.imagen || CONFIG.placeholderImage)}" alt="${escapeHtml(item.nombre)}">
+            <article class="customer-order-item${personalized ? " is-personalized-order-item" : ""}">
+                <a class="customer-order-item-image-link" href="${escapeHtml(image)}" target="_blank" rel="noopener">
+                    <img src="${escapeHtml(image)}" alt="${escapeHtml(personalized ? `Vista personalizada de ${item.nombre}` : item.nombre)}">
+                </a>
 
                 <div>
                     <h3>${escapeHtml(item.nombre)}</h3>

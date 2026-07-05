@@ -185,22 +185,40 @@
         }
     }
 
+    function hasPersonalizedPreview(item) {
+        const customization = item?.customization || item?.personalizacion || null;
+        if (!customization) return false;
+        const image = window.Cart?.getDisplayImage?.(item) || "";
+        return Boolean(
+            customization?.assets?.preview?.url ||
+            customization?.assets?.preview?.secure_url ||
+            customization?.finalPreview?.asset?.url ||
+            customization?.finalPreview?.asset?.secure_url ||
+            customization?.summaryPreviewUrl ||
+            customization?.previewUrl ||
+            image
+        );
+    }
+
     function renderCheckoutItems() {
         const container = document.getElementById("checkout-items");
         if (!container) return;
         container.replaceChildren();
         read().forEach((item) => {
             const row = document.createElement("article");
-            row.className = "checkout-summary-item";
+            const personalized = hasPersonalizedPreview(item);
+            row.className = personalized ? "checkout-summary-item is-personalized-summary" : "checkout-summary-item";
             const image = window.Cart.getDisplayImage(item);
+            const description = window.Cart.customizationDescription(item.customization) || "Producto sin personalización";
             row.innerHTML = `
-                <div class="checkout-summary-image-wrap">
-                    <img src="${escapeAttribute(image)}" alt="${escapeAttribute(item.name)}">
+                <div class="checkout-summary-image-wrap${personalized ? " is-personalized" : ""}">
+                    <img src="${escapeAttribute(image)}" alt="${escapeAttribute(personalized ? `Diseño personalizado de ${item.name}` : item.name)}">
                     <span>${item.quantity}</span>
                 </div>
                 <div class="checkout-summary-item-info">
                     <strong>${escapeHtml(item.name)}</strong>
-                    <small>${escapeHtml(window.Cart.customizationDescription(item.customization) || "Producto sin personalización")}</small>
+                    <small>${escapeHtml(description)}</small>
+                    ${personalized ? '<small class="checkout-summary-design-note">Vista final según la personalización realizada</small>' : ''}
                     <span>${formatPrice(item.price)} c/u</span>
                 </div>
                 <b>${formatPrice(item.price * item.quantity)}</b>
@@ -354,12 +372,21 @@
                         nombre: formData.get("nombre"), rut: formData.get("rut"), email: formData.get("email"), telefono: formData.get("telefono"),
                         direccion: formData.get("direccion"), comuna: formData.get("comuna")
                     },
-                    items: items.map((item) => ({
-                        lineaId: item.lineId, productoId: item.productId, nombre: item.name, imagen: window.Cart.getDisplayImage(item), cantidad: item.quantity,
-                        precioUnitario: item.price, varianteId: item.customization?.variantId || "", color: item.customization?.productVariant || "",
-                        sku: item.customization?.sku || "", talla: item.customization?.talla || item.customization?.size || "",
-                        personalizacion: item.customization, entrega: item.delivery
-                    })),
+                    items: items.map((item) => {
+                        const imagenResumen = window.Cart.getDisplayImage(item);
+                        return {
+                            lineaId: item.lineId, productoId: item.productId, nombre: item.name, imagen: imagenResumen, cantidad: item.quantity,
+                            precioUnitario: item.price, varianteId: item.customization?.variantId || "", color: item.customization?.productVariant || "",
+                            sku: item.customization?.sku || "", talla: item.customization?.talla || item.customization?.size || "",
+                            personalizacion: item.customization,
+                            personalizacionResumen: item.customization ? {
+                                tipo: item.customization.type === "light" ? "simple" : "avanzada",
+                                descripcion: window.Cart.customizationDescription(item.customization) || "Producto personalizado",
+                                vistaPrevia: imagenResumen
+                            } : { tipo: "ninguna", descripcion: "Sin personalización", vistaPrevia: imagenResumen },
+                            entrega: item.delivery
+                        };
+                    }),
                     entrega: {
                         metodo: formData.get("metodo-entrega"),
                         direccion: formData.get("metodo-entrega") === "envio" ? formData.get("direccion") : "",

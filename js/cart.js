@@ -139,15 +139,33 @@
         return parts.join(" · ");
     }
 
+    function firstAssetUrl(asset) {
+        if (!asset) return "";
+        if (typeof asset === "string") return asset;
+        return asset.secure_url || asset.url || asset.src || asset.href || "";
+    }
+
     function getDisplayImage(item) {
-        const customization = item?.customization || {};
-        return customization?.assets?.preview?.url ||
-            customization?.finalPreview?.asset?.url ||
-            customization?.assets?.images?.[0]?.url ||
-            customization?.assets?.images?.[0]?.secure_url ||
-            customization?.assets?.original?.url ||
-            customization?.image?.asset?.url ||
+        const customization = item?.customization || item?.personalizacion || {};
+        const summary = item?.personalizacionResumen || item?.customizationSummary || {};
+        const imageAssets = Array.isArray(customization?.assets?.images)
+            ? customization.assets.images
+            : [];
+
+        return firstAssetUrl(summary.vistaPrevia) ||
+            firstAssetUrl(summary.preview) ||
+            firstAssetUrl(customization?.assets?.preview) ||
+            firstAssetUrl(customization?.assets?.finalPreview) ||
+            firstAssetUrl(customization?.finalPreview?.asset) ||
+            firstAssetUrl(customization?.finalPreviewUrl) ||
+            firstAssetUrl(customization?.summaryPreviewUrl) ||
+            firstAssetUrl(customization?.previewUrl) ||
+            firstAssetUrl(customization?.image?.preview) ||
+            firstAssetUrl(imageAssets[0]) ||
+            firstAssetUrl(customization?.assets?.original) ||
+            firstAssetUrl(customization?.image?.asset) ||
             item?.image ||
+            item?.imagen ||
             CONFIG.placeholderImage;
     }
 
@@ -315,6 +333,7 @@
         normalizeDelivery,
         customizationDescription,
         getDisplayImage,
+        firstAssetUrl,
         formatPrice,
         freeShippingThreshold: FREE_SHIPPING_THRESHOLD,
         renderCartPage

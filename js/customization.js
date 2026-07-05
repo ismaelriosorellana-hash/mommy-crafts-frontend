@@ -1323,6 +1323,10 @@ function advanceToStep(nextStep, delay = 180) {
 
         clearSummaryPreview();
         const previewGeneration = state.summaryPreviewGeneration;
+        const previewSnapshot = capturePreviewSnapshot(
+            $("#texto-principal")?.value.trim() || "",
+            $("#texto-secundario")?.value.trim() || ""
+        );
 
         const previewCard = document.createElement("figure");
         previewCard.className = "customization-summary-preview";
@@ -1346,7 +1350,8 @@ function advanceToStep(nextStep, delay = 180) {
 
             const rendered = await createFinalPreviewBlob(
                 $("#texto-principal")?.value.trim() || "",
-                $("#texto-secundario")?.value.trim() || ""
+                $("#texto-secundario")?.value.trim() || "",
+                previewSnapshot
             );
 
             const generatedUrl = URL.createObjectURL(rendered.blob);
@@ -1488,28 +1493,109 @@ function advanceToStep(nextStep, delay = 180) {
         return lines.length ? lines : [""];
     }
 
-    function textSpecification(type, value) {
+    function previewPixelValue(value, fallback = 0) {
+        const parsed = Number.parseFloat(String(value || ""));
+        return Number.isFinite(parsed) ? parsed : fallback;
+    }
+
+    function previewRatio(value, total, fallback) {
+        const raw = String(value || "").trim();
+        if (raw.endsWith("%")) {
+            const percent = Number.parseFloat(raw);
+            return Number.isFinite(percent) ? percent / 100 : fallback;
+        }
+        const parsed = previewPixelValue(raw, Number.NaN);
+        return Number.isFinite(parsed) && total > 0 ? parsed / total : fallback;
+    }
+
+    function capturePreviewSnapshot(mainText, secondaryText) {
+        const current = els();
+        const shape = current.preview?.querySelector(".preview-product-shape");
+        const rect = shape?.getBoundingClientRect();
+        const previewWidth = Math.max(1, rect?.width || state.previewWidth || 420);
+        const previewHeight = Math.max(1, rect?.height || previewWidth);
+
+        const imageComputed = current.userImage ? window.getComputedStyle(current.userImage) : null;
+        const mainElement = textElement("main");
+        const secondaryElement = textElement("secondary");
+        const mainComputed = mainElement ? window.getComputedStyle(mainElement) : null;
+        const secondaryComputed = secondaryElement ? window.getComputedStyle(secondaryElement) : null;
+
+        return {
+            version: 3,
+            source: "visible-preview-v3400",
+            previewWidth,
+            previewHeight,
+            productSource:
+                current.productImage?.currentSrc ||
+                current.productImage?.src ||
+                state.variant?.imagen ||
+                state.product?.imagenPrincipal ||
+                "",
+            image: {
+                source: current.userImage?.currentSrc || current.userImage?.src || "",
+                visible: Boolean(state.imageFile && current.userImage?.src && !current.userImage.hidden),
+                baseXRatio: previewRatio(imageComputed?.left, previewWidth, 0.5),
+                baseYRatio: previewRatio(imageComputed?.top, previewHeight, 0.45),
+                maxWidthRatio: previewRatio(imageComputed?.maxWidth, previewWidth, 0.45),
+                maxHeightRatio: previewRatio(imageComputed?.maxHeight, previewHeight, 0.45),
+                transform: { ...state.image }
+            },
+            texts: {
+                main: {
+                    value: mainText,
+                    topRatio: previewRatio(mainComputed?.top, previewHeight, 0.36),
+                    maxWidthRatio: previewRatio(mainComputed?.maxWidth, previewWidth, 0.70),
+                    fontSizePx: previewPixelValue(mainComputed?.fontSize, 24),
+                    fontWeight: mainComputed?.fontWeight || "700",
+                    fontFamily: state.main.fontFamily || mainComputed?.fontFamily || "'Dancing Script', cursive",
+                    colorHex: state.main.color || mainComputed?.color || "#372a32",
+                    transform: { ...state.main }
+                },
+                secondary: {
+                    value: secondaryText,
+                    topRatio: previewRatio(secondaryComputed?.top, previewHeight, 0.52),
+                    maxWidthRatio: previewRatio(secondaryComputed?.maxWidth, previewWidth, 0.70),
+                    fontSizePx: previewPixelValue(secondaryComputed?.fontSize, 17),
+                    fontWeight: secondaryComputed?.fontWeight || "500",
+                    fontFamily: state.secondary.fontFamily || secondaryComputed?.fontFamily || "'Caveat', cursive",
+                    colorHex: state.secondary.color || secondaryComputed?.color || "#372a32",
+                    transform: { ...state.secondary }
+                }
+            }
+        };
+    }
+
+    function textSpecification(type, value, snapshot = null) {
         const transform = textState(type);
+        const snapshotText = snapshot?.texts?.[type] || null;
         const element = textElement(type);
         const computed = element
             ? window.getComputedStyle(element)
             : null;
 
         const baseSize = Number.parseFloat(
-            computed?.fontSize || (type === "main" ? "24" : "17")
+            snapshotText?.fontSizePx ||
+            computed?.fontSize ||
+            (type === "main" ? "24" : "17")
         ) || (type === "main" ? 24 : 17);
+
+        const textTransform = snapshotText?.transform || transform;
 
         return {
             value,
-            fontFamily: transform.fontFamily || "'Dancing Script', cursive",
+            fontFamily: snapshotText?.fontFamily || transform.fontFamily || "'Dancing Script', cursive",
+            fontWeight: snapshotText?.fontWeight || computed?.fontWeight || (type === "main" ? "700" : "500"),
+            topRatio: snapshotText?.topRatio || (type === "main" ? 0.36 : 0.52),
+            maxWidthRatio: snapshotText?.maxWidthRatio || 0.70,
             baseFontSizePx: Math.round(baseSize * 100) / 100,
             fontSizePx:
-                Math.round(baseSize * transform.scale * 100) / 100,
-            colorHex: transform.color || "#372a32",
-            x: Math.round(transform.x * 100) / 100,
-            y: Math.round(transform.y * 100) / 100,
-            scale: Math.round(transform.scale * 1000) / 1000,
-            rotation: Math.round(transform.rotation * 100) / 100
+                Math.round(baseSize * textTransform.scale * 100) / 100,
+            colorHex: snapshotText?.colorHex || transform.color || "#372a32",
+            x: Math.round(textTransform.x * 100) / 100,
+            y: Math.round(textTransform.y * 100) / 100,
+            scale: Math.round(textTransform.scale * 1000) / 1000,
+            rotation: Math.round(textTransform.rotation * 100) / 100
         };
     }
 
@@ -1523,17 +1609,12 @@ function advanceToStep(nextStep, delay = 180) {
         if (!specification.value) return;
 
         const ratio = canvas.width / previewWidth;
-        const baseY = type === "main" ? 0.36 : 0.52;
-        const element = textElement(type);
-        const computed = element
-            ? window.getComputedStyle(element)
-            : null;
-        const weight = computed?.fontWeight || (type === "main" ? "700" : "500");
+        const baseY = specification.topRatio || (type === "main" ? 0.36 : 0.52);
         const outputFontSize = Math.max(
             18,
             specification.fontSizePx * ratio
         );
-        const maxWidth = canvas.width * 0.70;
+        const maxWidth = canvas.width * (specification.maxWidthRatio || 0.70);
 
         context.save();
         context.translate(
@@ -1544,7 +1625,7 @@ function advanceToStep(nextStep, delay = 180) {
         context.fillStyle = specification.colorHex;
         context.textAlign = "center";
         context.textBaseline = "middle";
-        context.font = `${weight} ${outputFontSize}px ${specification.fontFamily}`;
+        context.font = `${specification.fontWeight || "700"} ${outputFontSize}px ${specification.fontFamily}`;
 
         const lines = splitTextLines(
             context,
@@ -1566,12 +1647,12 @@ function advanceToStep(nextStep, delay = 180) {
         context.restore();
     }
 
-    async function createFinalPreviewBlob(mainText, secondaryText) {
+    async function createFinalPreviewBlob(mainText, secondaryText, snapshot = null) {
         const current = els();
-        const shape = current.preview?.querySelector(".preview-product-shape");
+        const activeSnapshot = snapshot || capturePreviewSnapshot(mainText, secondaryText);
         const previewWidth = Math.max(
             1,
-            shape?.getBoundingClientRect().width ||
+            activeSnapshot?.previewWidth ||
             state.previewWidth ||
             420
         );
@@ -1603,6 +1684,7 @@ function advanceToStep(nextStep, delay = 180) {
         context.fillRect(0, 0, size, size);
 
         const productSource =
+            activeSnapshot?.productSource ||
             current.productImage?.currentSrc ||
             current.productImage?.src ||
             state.variant?.imagen ||
@@ -1653,30 +1735,33 @@ function advanceToStep(nextStep, delay = 180) {
 
         const ratio = size / previewWidth;
 
-        if (state.imageFile && current.userImage?.src) {
-            const customerImage = await loadCanvasImage(current.userImage.src);
+        const imageSnapshot = activeSnapshot?.image || {};
+        if (imageSnapshot.visible && imageSnapshot.source) {
+            const customerImage = await loadCanvasImage(imageSnapshot.source);
 
             try {
-                const maxSide = size * 0.45;
+                const transform = imageSnapshot.transform || state.image;
+                const maxWidth = size * (imageSnapshot.maxWidthRatio || 0.45);
+                const maxHeight = size * (imageSnapshot.maxHeightRatio || 0.45);
                 const baseRatio = Math.min(
-                    maxSide / customerImage.image.naturalWidth,
-                    maxSide / customerImage.image.naturalHeight
+                    maxWidth / customerImage.image.naturalWidth,
+                    maxHeight / customerImage.image.naturalHeight
                 );
                 const width =
                     customerImage.image.naturalWidth *
                     baseRatio *
-                    state.image.scale;
+                    transform.scale;
                 const height =
                     customerImage.image.naturalHeight *
                     baseRatio *
-                    state.image.scale;
+                    transform.scale;
 
                 context.save();
                 context.translate(
-                    size * 0.50 + state.image.x * ratio,
-                    size * 0.45 + state.image.y * ratio
+                    size * (imageSnapshot.baseXRatio || 0.50) + transform.x * ratio,
+                    size * (imageSnapshot.baseYRatio || 0.45) + transform.y * ratio
                 );
-                context.rotate(state.image.rotation * Math.PI / 180);
+                context.rotate(transform.rotation * Math.PI / 180);
                 context.drawImage(
                     customerImage.image,
                     -width / 2,
@@ -1690,8 +1775,8 @@ function advanceToStep(nextStep, delay = 180) {
             }
         }
 
-        const mainSpec = textSpecification("main", mainText);
-        const secondarySpec = textSpecification("secondary", secondaryText);
+        const mainSpec = textSpecification("main", mainText, activeSnapshot);
+        const secondarySpec = textSpecification("secondary", secondaryText, activeSnapshot);
 
         drawTextOnCanvas(
             context,
@@ -1713,7 +1798,8 @@ function advanceToStep(nextStep, delay = 180) {
             width: size,
             height: size,
             mainSpec,
-            secondarySpec
+            secondarySpec,
+            previewSource: activeSnapshot?.source || "generated-v3400"
         };
     }
 
@@ -1773,7 +1859,8 @@ function advanceToStep(nextStep, delay = 180) {
                 ? state.summaryPreviewRender
                 : await createFinalPreviewBlob(
                     mainText,
-                    secondaryText
+                    secondaryText,
+                    capturePreviewSnapshot(mainText, secondaryText)
                 );
 
             if (!rendered?.blob) {
@@ -1831,8 +1918,11 @@ function advanceToStep(nextStep, delay = 180) {
                 finalPreview: {
                     width: rendered.width,
                     height: rendered.height,
-                    asset: upload.assets?.preview || null
+                    asset: upload.assets?.preview || null,
+                    source: rendered.previewSource || "visible-preview-v3400"
                 },
+                summaryPreviewUrl: upload.assets?.preview?.url || upload.assets?.preview?.secure_url || "",
+                previewSource: rendered.previewSource || "visible-preview-v3400",
                 createdAt: new Date().toISOString()
             };
 
