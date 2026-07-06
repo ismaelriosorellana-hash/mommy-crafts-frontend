@@ -17,7 +17,7 @@ function assert(condition, message) {
 const html = read('finalizar-compra.html');
 const css = read('css/checkout-readable-v3431.css');
 
-assert(html.includes('checkout-readable-v3431.css?v=3.54.0'), 'finalizar-compra carga la capa de legibilidad v3.47.0');
+assert(html.includes('checkout-readable-v3431.css?v=3.54.1'), 'finalizar-compra carga la capa de legibilidad v3.47.0');
 assert(css.includes('grid-template-columns: 8.8rem minmax(0, 1fr) auto'), 'resumen personalizado reserva columna suficiente para imagen grande en escritorio');
 assert(css.includes('grid-template-columns: 8.2rem minmax(0, 1fr)'), 'resumen personalizado reserva columna suficiente para imagen grande en móvil');
 assert(css.includes('white-space: normal !important'), 'descripciones del resumen pueden ocupar más de una línea sin solaparse');

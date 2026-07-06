@@ -24,8 +24,8 @@ const cuenta = read("cuenta.html");
 const css = read("css/account-dashboard-v3470.css");
 const js = read("js/account-dashboard-v3470.js");
 
-ok(cuenta.includes("css/account-dashboard-v3470.css?v=3.54.0"), "cuenta carga estilos de dashboard cliente v3.47.0");
-ok(cuenta.includes("js/account-dashboard-v3470.js?v=3.54.0"), "cuenta carga lógica de dashboard cliente v3.47.0");
+ok(cuenta.includes("css/account-dashboard-v3470.css?v=3.54.1"), "cuenta carga estilos de dashboard cliente v3.47.0");
+ok(cuenta.includes("js/account-dashboard-v3470.js?v=3.54.1"), "cuenta carga lógica de dashboard cliente v3.47.0");
 ok(cuenta.includes("customer-account-overview"), "cuenta incluye resumen superior de pedidos");
 ok(cuenta.includes("customer-next-step"), "cuenta incluye bloque de siguiente acción");
 ok(cuenta.includes("account-shortcuts-v3470"), "cuenta incluye accesos rápidos de cliente");

@@ -192,6 +192,7 @@
 
                 const response = await fetch(buildUrl(endpoint), {
                     method: "GET",
+                    cache: method === "GET" ? "no-store" : "default",
                     ...fetchOptions,
                     headers,
                     signal: controller.signal,
