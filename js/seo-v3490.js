@@ -1,8 +1,8 @@
 "use strict";
 
 (function () {
-    const DEFAULT_TITLE = "Mommy Crafts | Productos personalizados en Chile";
-    const DEFAULT_DESCRIPTION = "Productos personalizados, regalos sublimados y detalles únicos preparados con revisión previa, atención cercana y entrega coordinada en Chile.";
+    const DEFAULT_TITLE = "Mommy Crafts | Tienda online oficial de productos personalizados";
+    const DEFAULT_DESCRIPTION = "Sitio oficial de Mommy Crafts Chile: regalos personalizados, productos sublimados, papelería creativa y detalles únicos con atención por WhatsApp y ventas@mommycrafts.cl.";
     const DEFAULT_IMAGE = "https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png";
     const SITE_URL = String(window.CONFIG?.SITE_URL || window.location.origin || "https://mommycrafts.cl").replace(/\/+$/, "");
     const SITE_NAME = window.CONFIG?.SITE_NAME || "Mommy Crafts";
@@ -180,7 +180,9 @@
             "@context": "https://schema.org",
             "@type": "Organization",
             name: BRAND_NAME,
+            alternateName: ["mommycrafts.cl", "Mommy Crafts Chile"],
             url: SITE_URL,
+            "@id": `${SITE_URL}/#organization`,
             logo: DEFAULT_IMAGE,
             sameAs: [
                 window.CONFIG?.social?.instagram,
@@ -203,7 +205,9 @@
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: SITE_NAME,
+            alternateName: "mommycrafts.cl",
             url: SITE_URL,
+            "@id": `${SITE_URL}/#website`,
             potentialAction: {
                 "@type": "SearchAction",
                 target: `${SITE_URL}/catalogo.html?q={search_term_string}`,

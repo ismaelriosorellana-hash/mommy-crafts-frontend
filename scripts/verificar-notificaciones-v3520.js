@@ -12,7 +12,7 @@ const dashboardHtml = read("admin/index.html");
 const dashboardJs = read("admin/js/dashboard.js");
 
 const checks = [
-    ["APP_VERSION 3.55.0", config.includes('APP_VERSION: "3.55.0"')],
+    ["APP_VERSION 3.56.0", config.includes('APP_VERSION: "3.56.0"')],
     ["bloque Notificaciones de pedidos", dashboardHtml.includes("Notificaciones de pedidos")],
     ["métrica correo", dashboardHtml.includes("metric-notification-email")],
     ["métrica proveedor", dashboardHtml.includes("metric-notification-provider")],
@@ -30,4 +30,4 @@ if (failed.length) {
     process.exit(1);
 }
 
-console.log("✅ Notificaciones frontend v3.55.0 verificadas");
+console.log("✅ Notificaciones frontend v3.56.0 verificadas");
