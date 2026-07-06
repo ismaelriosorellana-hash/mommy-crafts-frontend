@@ -39,8 +39,8 @@ const orders = read("admin/js/orders-admin.js");
 const css = read("admin/css/admin-orders-pro-v3450.css");
 const pro = read("admin/js/orders-admin-pro-v3450.js");
 
-mustInclude(page, "css/admin-orders-pro-v3450.css?v=3.51.0", "pedidos.html carga la capa visual profesional v3.47.0");
-mustInclude(page, "js/orders-admin-pro-v3450.js?v=3.51.0", "pedidos.html carga el complemento operativo v3.47.0");
+mustInclude(page, "css/admin-orders-pro-v3450.css?v=3.52.0", "pedidos.html carga la capa visual profesional v3.47.0");
+mustInclude(page, "js/orders-admin-pro-v3450.js?v=3.52.0", "pedidos.html carga el complemento operativo v3.47.0");
 mustInclude(page, "Controla pedidos, pagos, personalizaciones, diseño, fabricación y entrega", "introducción del panel explica el flujo operativo");
 
 mustInclude(orders, "renderOrderInsights", "panel calcula métricas operativas de pedidos");

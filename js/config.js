@@ -10,7 +10,7 @@ const API_BASE_URL =
         : "https://mommy-crafts-backend.onrender.com/api";
 
 window.CONFIG = Object.freeze({
-    APP_VERSION: "3.51.0",
+    APP_VERSION: "3.52.0",
     SITE_URL: "https://mommycrafts.onrender.com",
     SITE_NAME: "Mommy Crafts",
     BRAND_NAME: "Mommy Crafts",

@@ -215,7 +215,8 @@ async function loadDashboard() {
         const [
             metrics,
             orders,
-            lowStock
+            lowStock,
+            notifications
         ] = await Promise.all([
             AdminAPI.request(
                 "/admin/dashboard"
@@ -225,7 +226,12 @@ async function loadDashboard() {
             ),
             AdminAPI.request(
                 "/admin/inventario/stock-bajo"
-            )
+            ),
+            AdminAPI.request(
+                "/admin/notificaciones/estado"
+            ).catch((error) => ({
+                error: error.message
+            }))
         ]);
 
         document.getElementById(
@@ -253,6 +259,10 @@ async function loadDashboard() {
 
         renderSystemStatus(
             metrics.sistema || null
+        );
+
+        renderNotificationStatus(
+            notifications || null
         );
 
         renderRecentOrders(
@@ -376,6 +386,90 @@ function renderSystemStatus(system) {
         `Entorno: ${system.entorno || "sin dato"}. ` +
         `API activa hace ${formatUptime(system.uptimeSegundos)}. ` +
         `Última revisión: ${AdminUI.dateTime(system.fecha)}.`;
+}
+
+function renderNotificationStatus(data) {
+    const emailStatus =
+        document.getElementById(
+            "metric-notification-email"
+        );
+
+    const provider =
+        document.getElementById(
+            "metric-notification-provider"
+        );
+
+    const adminEmail =
+        document.getElementById(
+            "metric-notification-admin"
+        );
+
+    const whatsapp =
+        document.getElementById(
+            "metric-notification-whatsapp"
+        );
+
+    const detail =
+        document.getElementById(
+            "metric-notification-detail"
+        );
+
+    if (!emailStatus || !provider || !adminEmail || !whatsapp || !detail) {
+        return;
+    }
+
+    if (!data || data.error) {
+        emailStatus.textContent =
+            "Sin datos";
+        provider.textContent =
+            "--";
+        adminEmail.textContent =
+            "--";
+        whatsapp.textContent =
+            "--";
+        detail.textContent =
+            data?.error ||
+            "No fue posible leer el estado de notificaciones.";
+        return;
+    }
+
+    const status =
+        data.estado ||
+        {};
+
+    emailStatus.textContent =
+        status.configured
+            ? "Operativo"
+            : status.enabled === false
+                ? "Desactivado"
+                : "Pendiente";
+
+    provider.textContent =
+        status.provider ||
+        "--";
+
+    adminEmail.textContent =
+        status.adminEmailConfigured
+            ? "Configurado"
+            : "No configurado";
+
+    whatsapp.textContent =
+        status.whatsappSupportConfigured
+            ? "Configurado"
+            : "Manual";
+
+    const from =
+        status.fromMasked
+            ? ` Remitente: ${status.fromMasked}.`
+            : "";
+
+    const adminCopies =
+        Array.isArray(status.adminEmailsMasked) && status.adminEmailsMasked.length
+            ? ` Avisos internos: ${status.adminEmailsMasked.join(", ")}.`
+            : "";
+
+    detail.textContent =
+        `${status.mensaje || "Estado de notificaciones revisado."}${from}${adminCopies}`;
 }
 
 function renderRecentOrders(orders) {
