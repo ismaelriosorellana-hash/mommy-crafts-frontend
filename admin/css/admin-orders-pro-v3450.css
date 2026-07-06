@@ -1,0 +1,432 @@
+/* Mommy Crafts · Frontend 3.46.0 · Panel admin de pedidos profesional */
+
+body[data-admin-page="pedidos"] .orders-page-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+body[data-admin-page="pedidos"] .admin-card:has(#orders-table) {
+    overflow: hidden;
+}
+
+.orders-admin-insights {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    padding: 16px;
+    border-bottom: 1px solid var(--admin-border);
+    background: linear-gradient(135deg, #fff9fd 0%, #ffffff 62%, #fff2fa 100%);
+}
+
+.orders-admin-kpi {
+    min-height: 112px;
+    display: grid;
+    gap: 7px;
+    align-content: start;
+    padding: 16px;
+    border: 1px solid rgba(240, 214, 230, 0.92);
+    border-radius: 17px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 12px 26px rgba(113, 54, 79, 0.055);
+}
+
+.orders-admin-kpi span {
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.orders-admin-kpi strong {
+    color: var(--admin-text);
+    font-size: clamp(1.55rem, 3vw, 2.25rem);
+    line-height: 1;
+}
+
+.orders-admin-kpi small {
+    color: var(--admin-muted);
+    line-height: 1.38;
+}
+
+.orders-admin-kpi.success {
+    border-color: rgba(36, 122, 82, 0.18);
+}
+
+.orders-admin-kpi.warning {
+    border-color: rgba(165, 106, 0, 0.2);
+}
+
+.orders-admin-kpi.info {
+    border-color: rgba(53, 105, 168, 0.18);
+}
+
+.orders-admin-table-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 18px 6px;
+}
+
+.orders-admin-table-heading h3 {
+    margin: 0;
+    font-size: 1.04rem;
+}
+
+.orders-admin-table-heading p {
+    margin: 4px 0 0;
+    color: var(--admin-muted);
+    font-size: 0.86rem;
+}
+
+.orders-admin-table-heading > span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--admin-surface-soft);
+    color: var(--admin-primary-dark);
+    font-weight: 850;
+    white-space: nowrap;
+}
+
+.orders-admin-table {
+    min-width: 1040px;
+}
+
+.orders-admin-table td {
+    vertical-align: top;
+}
+
+.orders-admin-order-code {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.orders-admin-order-code + small,
+.orders-admin-table td > small {
+    display: block;
+    margin-top: 5px;
+    color: var(--admin-muted);
+    font-size: 0.79rem;
+}
+
+.orders-admin-client-meta {
+    margin-top: 4px;
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+    line-height: 1.38;
+    overflow-wrap: anywhere;
+}
+
+.order-priority {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: #ece8ea;
+    color: #5e5559;
+    font-size: 0.72rem;
+    font-weight: 850;
+    white-space: nowrap;
+}
+
+.order-priority.success {
+    background: #dff3e8;
+    color: var(--admin-success);
+}
+
+.order-priority.warning {
+    background: #fff0cd;
+    color: var(--admin-warning);
+}
+
+.order-priority.danger {
+    background: #fde3e7;
+    color: var(--admin-danger);
+}
+
+.order-priority.info {
+    background: #e1ecfa;
+    color: var(--admin-info);
+}
+
+.orders-admin-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.orders-admin-mini-progress .order-admin-progress {
+    grid-template-columns: repeat(7, minmax(22px, 1fr));
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+.orders-admin-mini-progress .order-admin-progress span {
+    min-width: 0;
+    min-height: 24px;
+    padding: 3px 5px;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: 0;
+}
+
+.orders-admin-mini-progress .order-admin-progress i {
+    font-size: 0.72rem;
+}
+
+.order-admin-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: start;
+    margin-bottom: 18px;
+    padding: 18px;
+    border: 1px solid var(--admin-border);
+    border-radius: 20px;
+    background: linear-gradient(135deg, #fff2fa, #ffffff 58%, #fff9fd);
+    box-shadow: 0 12px 34px rgba(113, 54, 79, 0.07);
+}
+
+.order-admin-hero-main {
+    min-width: 0;
+}
+
+.order-admin-hero-main h4 {
+    margin: 8px 0 5px;
+    font-size: clamp(1.32rem, 3vw, 2rem);
+    line-height: 1.05;
+}
+
+.order-admin-hero-main p {
+    margin: 0;
+    color: var(--admin-muted);
+    line-height: 1.45;
+}
+
+.order-admin-hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.order-admin-progress {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 7px;
+    width: 100%;
+}
+
+.order-admin-progress span {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 9px;
+    border: 1px solid var(--admin-border);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--admin-muted);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.order-admin-progress span.active {
+    border-color: rgba(142, 69, 106, 0.22);
+    background: var(--admin-primary-soft);
+    color: var(--admin-primary-dark);
+}
+
+.order-admin-progress.cancelled {
+    grid-template-columns: 1fr;
+}
+
+.order-admin-progress.cancelled span {
+    border-color: rgba(185, 58, 75, 0.2);
+    background: #fde3e7;
+    color: var(--admin-danger);
+}
+
+body[data-admin-page="pedidos"] .admin-modal-panel {
+    width: min(100%, 1180px);
+}
+
+body[data-admin-page="pedidos"] .order-product-main {
+    grid-template-columns: 76px minmax(0, 1fr) auto;
+}
+
+body[data-admin-page="pedidos"] .order-product-main > img {
+    width: 76px;
+    height: 76px;
+}
+
+body[data-admin-page="pedidos"] .order-assets-grid {
+    align-items: stretch;
+}
+
+body[data-admin-page="pedidos"] .order-asset-card {
+    grid-template-columns: minmax(140px, 190px) minmax(0, 1fr);
+}
+
+@media (max-width: 1180px) {
+    .orders-admin-insights {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .order-admin-progress {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 820px) {
+    body[data-admin-page="pedidos"] .admin-page-intro {
+        align-items: stretch;
+    }
+
+    body[data-admin-page="pedidos"] .orders-page-actions,
+    body[data-admin-page="pedidos"] .orders-page-actions .admin-button {
+        width: 100%;
+    }
+
+    .orders-admin-insights {
+        grid-template-columns: 1fr;
+        padding: 12px;
+    }
+
+    .orders-admin-table-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 16px 14px 6px;
+    }
+
+    .orders-admin-table {
+        min-width: 0;
+        border-collapse: separate;
+        border-spacing: 0 12px;
+        padding: 0 12px 14px;
+    }
+
+    .orders-admin-table thead {
+        display: none;
+    }
+
+    .orders-admin-table tbody,
+    .orders-admin-table tr,
+    .orders-admin-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .orders-admin-table tr {
+        overflow: hidden;
+        border: 1px solid var(--admin-border);
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 12px 25px rgba(113, 54, 79, 0.055);
+    }
+
+    .orders-admin-table td {
+        display: grid;
+        grid-template-columns: 112px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(240, 214, 230, 0.78);
+    }
+
+    .orders-admin-table td:last-child {
+        border-bottom: 0;
+    }
+
+    .orders-admin-table td::before {
+        content: attr(data-label);
+        color: var(--admin-muted);
+        font-size: 0.74rem;
+        font-weight: 850;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .orders-admin-actions {
+        justify-content: flex-start;
+    }
+
+    .order-admin-hero {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+
+    .order-admin-hero-actions {
+        justify-content: flex-start;
+    }
+
+    .order-admin-progress {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .order-admin-progress span {
+        justify-content: flex-start;
+        white-space: normal;
+    }
+
+    body[data-admin-page="pedidos"] .order-product-main {
+        grid-template-columns: 68px minmax(0, 1fr);
+    }
+
+    body[data-admin-page="pedidos"] .order-product-main > strong {
+        grid-column: 2;
+    }
+
+    body[data-admin-page="pedidos"] .order-assets-grid,
+    body[data-admin-page="pedidos"] .order-text-grid,
+    body[data-admin-page="pedidos"] .order-customization-summary {
+        grid-template-columns: 1fr;
+    }
+
+    body[data-admin-page="pedidos"] .order-asset-card {
+        grid-template-columns: 108px minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 520px) {
+    .orders-admin-table td {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .orders-admin-kpi {
+        min-height: auto;
+    }
+
+    .order-admin-progress {
+        grid-template-columns: 1fr;
+    }
+
+    body[data-admin-page="pedidos"] .order-asset-card {
+        grid-template-columns: 1fr;
+    }
+
+    body[data-admin-page="pedidos"] .order-asset-card > a,
+    body[data-admin-page="pedidos"] .order-asset-placeholder {
+        max-height: 220px;
+    }
+}

@@ -10,10 +10,12 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Pedidos | Mommy Crafts</title>
     <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
-    <link rel="stylesheet" href="css/admin.css?v=3.44.0">
+    <link rel="stylesheet" href="css/admin.css?v=3.46.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="css/admin-experience-v327.css?v=3.44.0">
-    <link rel="stylesheet" href="../css/mobile-polish-v3370.css?v=3.44.0">
+    <link rel="stylesheet" href="css/admin-experience-v327.css?v=3.46.0">
+    <link rel="stylesheet" href="css/admin-orders-pro-v3450.css?v=3.46.0">
+    <link rel="stylesheet" href="css/admin-notifications-v3460.css?v=3.46.0">
+    <link rel="stylesheet" href="../css/mobile-polish-v3370.css?v=3.46.0">
 </head>
 <body data-admin-page="pedidos" data-admin-title="Pedidos">
     <section id="admin-page-content">
@@ -21,13 +23,20 @@
 <div class="admin-page-intro">
     <div>
         <h2>Gestión de pedidos</h2>
-        <p>Revisa clientes, productos, pagos y estados.</p>
+        <p>Controla pedidos, pagos, personalizaciones, diseño, fabricación y entrega desde una vista operativa.</p>
     </div>
 
-    <button class="admin-button secondary" id="orders-refresh" type="button">
+    <div class="orders-page-actions">
+        <a class="admin-button secondary" href="../seguimiento-pedido.html" target="_blank" rel="noopener">
+            <i class="fa-solid fa-route"></i>
+            Ver seguimiento cliente
+        </a>
+
+        <button class="admin-button secondary" id="orders-refresh" type="button">
         <i class="fa-solid fa-rotate"></i>
         Actualizar
-    </button>
+        </button>
+    </div>
 </div>
 
 <div class="admin-toolbar">
@@ -85,10 +94,12 @@
 
     </section>
 
-    <script src="../js/config.js?v=3.44.0"></script>
-    <script src="js/admin-api.js?v=3.44.0"></script>
-    <script src="js/admin-common.js?v=3.44.0"></script>
-    <script src="js/admin-experience-v327.js?v=3.44.0"></script>
-    <script src="js/orders-admin.js?v=3.44.0"></script>
+    <script src="../js/config.js?v=3.46.0"></script>
+    <script src="js/admin-api.js?v=3.46.0"></script>
+    <script src="js/admin-common.js?v=3.46.0"></script>
+    <script src="js/admin-experience-v327.js?v=3.46.0"></script>
+    <script src="js/orders-admin.js?v=3.46.0"></script>
+    <script src="js/orders-admin-pro-v3450.js?v=3.46.0"></script>
+    <script src="js/orders-admin-notifications-v3460.js?v=3.46.0"></script>
 </body>
 </html>

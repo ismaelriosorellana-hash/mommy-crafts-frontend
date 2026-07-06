@@ -17,8 +17,24 @@ document.addEventListener(
 
         document.getElementById("orders-table")
             .addEventListener("click", (event) => {
+                const copyButton = event.target.closest("[data-copy-order-id]");
+                if (copyButton) {
+                    event.preventDefault();
+                    copyOrderSummary(copyButton.dataset.copyOrderId);
+                    return;
+                }
+
                 const button = event.target.closest("[data-order-id]");
                 if (button) openOrder(button.dataset.orderId);
+            });
+
+        document.getElementById("order-detail")
+            .addEventListener("click", (event) => {
+                const copyButton = event.target.closest("[data-copy-order-id]");
+                if (copyButton) {
+                    event.preventDefault();
+                    copyOrderSummary(copyButton.dataset.copyOrderId);
+                }
             });
 
         document.getElementById("order-save")
@@ -405,6 +421,262 @@ function designWhatsAppUrl(order, item) {
     return `https://wa.me/${phone}?text=${message}`;
 }
 
+const ORDER_STATUS_LABELS = Object.freeze({
+    pendiente: "Pendiente",
+    confirmado: "Confirmado",
+    validacion_diseno: "Validación de diseño",
+    en_produccion: "En producción",
+    listo: "Listo",
+    enviado: "Enviado",
+    entregado: "Entregado",
+    cancelado: "Cancelado"
+});
+
+const PAYMENT_STATUS_LABELS = Object.freeze({
+    pendiente: "Pendiente",
+    pendiente_comprobante: "Pendiente comprobante",
+    comprobante_recibido: "Comprobante recibido",
+    en_revision: "En revisión",
+    pagado: "Pagado",
+    rechazado: "Rechazado",
+    vencido: "Vencido",
+    reembolsado: "Reembolsado"
+});
+
+const ORDER_FLOW = [
+    { key: "pendiente", label: "Recibido", icon: "fa-receipt" },
+    { key: "confirmado", label: "Confirmado", icon: "fa-circle-check" },
+    { key: "validacion_diseno", label: "Diseño", icon: "fa-pen-ruler" },
+    { key: "en_produccion", label: "Producción", icon: "fa-gears" },
+    { key: "listo", label: "Listo", icon: "fa-box" },
+    { key: "enviado", label: "Entrega", icon: "fa-truck" },
+    { key: "entregado", label: "Entregado", icon: "fa-house-circle-check" }
+];
+
+function orderStatusLabel(status) {
+    const key = String(status || "").trim();
+    return ORDER_STATUS_LABELS[key] || key.replaceAll("_", " ") || "Sin estado";
+}
+
+function paymentStatusLabel(status) {
+    const key = String(status || "").trim();
+    return PAYMENT_STATUS_LABELS[key] || key.replaceAll("_", " ") || "Sin estado";
+}
+
+function orderItemsCount(order) {
+    return (order.items || []).reduce((total, item) => total + (Number(item.cantidad) || 1), 0);
+}
+
+function orderHasCustomization(order) {
+    return (order.items || []).some((item) => {
+        const resumen = item.personalizacionResumen?.tipo;
+        return resumen && resumen !== "ninguna" || Boolean(customizationOf(item));
+    });
+}
+
+function orderProgressIndex(order) {
+    const status = String(order?.estadoPedido || "pendiente");
+    if (status === "cancelado") return -1;
+    const index = ORDER_FLOW.findIndex((step) => step.key === status);
+    return index >= 0 ? index : 0;
+}
+
+function orderAgeLabel(order) {
+    const createdAt = new Date(order?.createdAt || 0).getTime();
+    if (!createdAt) return "Fecha no informada";
+
+    const diff = Date.now() - createdAt;
+    const hours = Math.floor(diff / 36e5);
+    if (hours < 1) return "Hace menos de 1 hora";
+    if (hours < 24) return `Hace ${hours} h`;
+
+    const days = Math.floor(hours / 24);
+    return days === 1 ? "Hace 1 día" : `Hace ${days} días`;
+}
+
+function orderUrgency(order) {
+    const status = String(order?.estadoPedido || "");
+    const payment = String(order?.estadoPago || "");
+
+    if (status === "cancelado" || payment === "rechazado" || payment === "vencido") {
+        return { tone: "danger", label: "Revisar" };
+    }
+
+    if (payment !== "pagado") {
+        return { tone: "warning", label: "Pago pendiente" };
+    }
+
+    if (["validacion_diseno", "en_produccion"].includes(status)) {
+        return { tone: "info", label: "En proceso" };
+    }
+
+    if (["listo", "enviado"].includes(status)) {
+        return { tone: "success", label: "Coordinar entrega" };
+    }
+
+    return { tone: "info", label: "Operativo" };
+}
+
+function customerWhatsAppUrl(order) {
+    const phone = whatsappDigits(order?.cliente?.telefono);
+    if (!phone) return "";
+
+    const message = encodeURIComponent(
+        `Hola ${order.cliente?.nombre || ""}, te contactamos por tu pedido ${order.numeroPedido} en Mommy Crafts. Estado actual: ${orderStatusLabel(order.estadoPedido)}.`
+    );
+
+    return `https://wa.me/${phone}?text=${message}`;
+}
+
+function buildOrderSummaryText(order) {
+    const products = (order.items || [])
+        .map((item) => `- ${item.nombre} x${Number(item.cantidad) || 1}${item.color ? ` · ${item.color}` : ""}`)
+        .join("\n");
+
+    return [
+        `Pedido: ${order.numeroPedido || "—"}`,
+        `Cliente: ${order.cliente?.nombre || "—"}`,
+        `Correo: ${order.cliente?.email || "—"}`,
+        `Teléfono: ${order.cliente?.telefono || "—"}`,
+        `Total: ${AdminUI.money(order.total)}`,
+        `Pago: ${paymentStatusLabel(order.estadoPago)}`,
+        `Estado: ${orderStatusLabel(order.estadoPedido)}`,
+        "",
+        "Productos:",
+        products || "Sin productos registrados",
+        "",
+        `Entrega: ${order.entrega?.metodo === "retiro" ? "Retiro" : "Envío"}`,
+        order.entrega?.direccion || order.cliente?.direccion
+            ? `Dirección: ${order.entrega?.direccion || order.cliente?.direccion || ""}, ${order.entrega?.comuna || order.cliente?.comuna || ""}`
+            : ""
+    ].filter((line) => line !== "").join("\n");
+}
+
+async function copyOrderSummary(id) {
+    const order = adminOrders.find((entry) => String(entry._id) === String(id));
+    if (!order) return;
+
+    const text = buildOrderSummaryText(order);
+
+    try {
+        if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            const input = document.createElement("textarea");
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            input.remove();
+        }
+
+        AdminUI.toast("Resumen del pedido copiado.", "success");
+    } catch {
+        AdminUI.toast("No fue posible copiar el resumen.", "error");
+    }
+}
+
+function renderOrderInsights() {
+    const total = adminOrders.length;
+    const paid = adminOrders.filter((order) => order.estadoPago === "pagado").length;
+    const pendingPayment = adminOrders.filter((order) => order.estadoPago !== "pagado").length;
+    const production = adminOrders.filter((order) => ["validacion_diseno", "en_produccion"].includes(order.estadoPedido)).length;
+    const ready = adminOrders.filter((order) => ["listo", "enviado"].includes(order.estadoPedido)).length;
+    const revenue = adminOrders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
+
+    return `
+        <section class="orders-admin-insights" aria-label="Resumen operativo de pedidos">
+            <article class="orders-admin-kpi">
+                <span>Pedidos filtrados</span>
+                <strong>${total}</strong>
+                <small>Según búsqueda y estado actual</small>
+            </article>
+
+            <article class="orders-admin-kpi success">
+                <span>Pagados</span>
+                <strong>${paid}</strong>
+                <small>${AdminUI.money(revenue)} en la vista actual</small>
+            </article>
+
+            <article class="orders-admin-kpi warning">
+                <span>Pago pendiente</span>
+                <strong>${pendingPayment}</strong>
+                <small>Revisar comprobantes o Mercado Pago</small>
+            </article>
+
+            <article class="orders-admin-kpi info">
+                <span>Producción / entrega</span>
+                <strong>${production + ready}</strong>
+                <small>${production} en proceso · ${ready} por entregar</small>
+            </article>
+        </section>
+    `;
+}
+
+function renderOrderProgress(order) {
+    const progressIndex = orderProgressIndex(order);
+    const cancelled = String(order?.estadoPedido || "") === "cancelado";
+
+    if (cancelled) {
+        return `
+            <div class="order-admin-progress cancelled">
+                <span><i class="fa-solid fa-ban"></i> Pedido cancelado</span>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="order-admin-progress">
+            ${ORDER_FLOW.map((step, index) => `
+                <span class="${index <= progressIndex ? "active" : ""}">
+                    <i class="fa-solid ${step.icon}"></i>
+                    ${AdminUI.escapeHtml(step.label)}
+                </span>
+            `).join("")}
+        </div>
+    `;
+}
+
+function renderOrderHero(order) {
+    const whatsappUrl = customerWhatsAppUrl(order);
+    const urgency = orderUrgency(order);
+    const customized = orderHasCustomization(order);
+
+    return `
+        <section class="order-admin-hero">
+            <div class="order-admin-hero-main">
+                <span class="order-priority ${AdminUI.escapeHtml(urgency.tone)}">
+                    ${AdminUI.escapeHtml(urgency.label)}
+                </span>
+
+                <h4>${AdminUI.escapeHtml(order.numeroPedido || "Pedido")}</h4>
+
+                <p>
+                    ${AdminUI.escapeHtml(order.cliente?.nombre || "Cliente sin nombre")} ·
+                    ${orderItemsCount(order)} unidad${orderItemsCount(order) === 1 ? "" : "es"} ·
+                    ${customized ? "Incluye personalización" : "Sin personalización"}
+                </p>
+            </div>
+
+            <div class="order-admin-hero-actions">
+                ${whatsappUrl ? `
+                    <a class="admin-button secondary small" href="${AdminUI.escapeHtml(whatsappUrl)}" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        WhatsApp
+                    </a>
+                ` : ""}
+
+                <button class="admin-button secondary small" type="button" data-copy-order-id="${AdminUI.escapeHtml(order._id)}">
+                    <i class="fa-regular fa-copy"></i>
+                    Copiar resumen
+                </button>
+            </div>
+
+            ${renderOrderProgress(order)}
+        </section>
+    `;
+}
+
 function renderOrderItem(item, order) {
     const whatsappUrl = designWhatsAppUrl(order, item);
     const canPublishDesign = order?.estadoPago === "pagado";
@@ -535,18 +807,31 @@ function renderOrders() {
 
     if (!adminOrders.length) {
         container.innerHTML = `
-            <div class="admin-empty">No se encontraron pedidos.</div>
+            <div class="admin-empty">
+                <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
+                <p>No se encontraron pedidos con los filtros actuales.</p>
+            </div>
         `;
         return;
     }
 
     container.innerHTML = `
-        <table class="admin-table">
+        ${renderOrderInsights()}
+
+        <div class="orders-admin-table-heading">
+            <div>
+                <h3>Pedidos activos</h3>
+                <p class="orders-last-sync">Vista actualizada hace unos segundos.</p>
+            </div>
+            <span>${adminOrders.length} resultado${adminOrders.length === 1 ? "" : "s"}</span>
+        </div>
+
+        <table class="admin-table orders-admin-table">
             <thead>
                 <tr>
                     <th>Pedido</th>
                     <th>Cliente</th>
-                    <th>Fecha</th>
+                    <th>Avance</th>
                     <th>Total</th>
                     <th>Pago</th>
                     <th>Estado</th>
@@ -555,34 +840,65 @@ function renderOrders() {
             </thead>
 
             <tbody>
-                ${adminOrders.map((order) => `
+                ${adminOrders.map((order) => {
+                    const urgency = orderUrgency(order);
+                    const whatsappUrl = customerWhatsAppUrl(order);
+                    const hasCustomization = orderHasCustomization(order);
+                    const units = orderItemsCount(order);
+
+                    return `
                     <tr>
-                        <td><strong>${AdminUI.escapeHtml(order.numeroPedido)}</strong></td>
-                        <td>
+                        <td data-label="Pedido">
+                            <div class="orders-admin-order-code">
+                                <strong>${AdminUI.escapeHtml(order.numeroPedido)}</strong>
+                                <span class="order-priority ${AdminUI.escapeHtml(urgency.tone)}">${AdminUI.escapeHtml(urgency.label)}</span>
+                            </div>
+                            <small>${AdminUI.escapeHtml(orderAgeLabel(order))}</small>
+                        </td>
+                        <td data-label="Cliente">
                             <strong>${AdminUI.escapeHtml(order.cliente?.nombre || "—")}</strong>
-                            <div style="margin-top:4px;color:var(--admin-muted);font-size:.82rem">
+                            <div class="orders-admin-client-meta">
                                 ${AdminUI.escapeHtml(order.cliente?.email || "")}
+                                ${order.cliente?.telefono ? `<br>${AdminUI.escapeHtml(order.cliente.telefono)}` : ""}
                             </div>
                         </td>
-                        <td>${AdminUI.dateTime(order.createdAt)}</td>
-                        <td><strong>${AdminUI.money(order.total)}</strong></td>
-                        <td>
+                        <td data-label="Avance">
+                            <div class="orders-admin-mini-progress">
+                                ${renderOrderProgress(order)}
+                            </div>
+                            <small>
+                                ${units} unidad${units === 1 ? "" : "es"}
+                                ${hasCustomization ? " · personalizado" : ""}
+                            </small>
+                        </td>
+                        <td data-label="Total"><strong>${AdminUI.money(order.total)}</strong></td>
+                        <td data-label="Pago">
                             <span class="admin-status ${AdminUI.statusClass(order.estadoPago)}">
-                                ${AdminUI.escapeHtml(order.estadoPago || "pendiente")}
+                                ${AdminUI.escapeHtml(paymentStatusLabel(order.estadoPago))}
                             </span>
                         </td>
-                        <td>
+                        <td data-label="Estado">
                             <span class="admin-status ${AdminUI.statusClass(order.estadoPedido)}">
-                                ${AdminUI.escapeHtml(String(order.estadoPedido || "").replaceAll("_", " "))}
+                                ${AdminUI.escapeHtml(orderStatusLabel(order.estadoPedido))}
                             </span>
                         </td>
-                        <td>
-                            <button class="admin-button secondary small" type="button" data-order-id="${order._id}">
-                                Ver pedido
-                            </button>
+                        <td data-label="Acciones">
+                            <div class="orders-admin-actions">
+                                <button class="admin-button secondary small" type="button" data-order-id="${AdminUI.escapeHtml(order._id)}">
+                                    Ver
+                                </button>
+                                <button class="admin-button secondary small" type="button" data-copy-order-id="${AdminUI.escapeHtml(order._id)}" title="Copiar resumen">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                                ${whatsappUrl ? `
+                                    <a class="admin-button secondary small" href="${AdminUI.escapeHtml(whatsappUrl)}" target="_blank" rel="noopener" title="Contactar por WhatsApp">
+                                        <i class="fa-brands fa-whatsapp"></i>
+                                    </a>
+                                ` : ""}
+                            </div>
                         </td>
                     </tr>
-                `).join("")}
+                `;}).join("")}
             </tbody>
         </table>
     `;
@@ -606,6 +922,8 @@ function openOrder(id) {
         .join("");
 
     document.getElementById("order-detail").innerHTML = `
+        ${renderOrderHero(order)}
+
         <div class="admin-grid two">
             <section class="admin-card">
                 <div class="admin-card-body">

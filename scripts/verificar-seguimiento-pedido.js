@@ -18,9 +18,9 @@ const payment = read("js/payment-result.js");
 const config = read("js/config.js");
 
 check("existe página seguimiento-pedido.html", exists("seguimiento-pedido.html"));
-check("seguimiento carga CSS v3.44.0", page.includes("css/order-tracking-v3440.css?v=3.44.0"));
-check("seguimiento carga JS v3.44.0", page.includes("js/order-tracking-v3440.js?v=3.44.0"));
-check("versión de app actualizada a 3.44.0", config.includes('APP_VERSION: "3.44.0"'));
+check("seguimiento carga CSS v3.46.0", page.includes("css/order-tracking-v3440.css?v=3.46.0"));
+check("seguimiento carga JS v3.46.0", page.includes("js/order-tracking-v3440.js?v=3.46.0"));
+check("versión de app actualizada a 3.46.0", config.includes('APP_VERSION: "3.46.0"'));
 check("formulario pide número de pedido y correo", page.includes("tracking-order-number") && page.includes("tracking-email"));
 check("incluye consulta pública preparada", js.includes("/pedidos/seguimiento") && js.includes("tryPublicLookup"));
 check("incluye carga por cuenta con sesión", js.includes("CustomerAuth.getOrder") && js.includes("hasSession"));
@@ -31,7 +31,7 @@ check("incluye contacto por WhatsApp", js.includes("wa.me") && js.includes("what
 check("CSS contiene layout escritorio", css.includes("tracking-layout") && css.includes("grid-template-columns"));
 check("CSS contiene layout móvil", css.includes("@media (max-width: 900px)") && css.includes("grid-template-columns: 1fr"));
 check("post-pago enlaza seguimiento", payment.includes("payment-tracking-link") && payment.includes("orderTrackingHref"));
-check("no hay referencias antiguas 3.43.5 en seguimiento", !page.includes("3.43.5") && !js.includes("3.43.5") && !css.includes("3.43.5"));
+check("no hay referencias antiguas en seguimiento", !/3\.(4[0-4])\.[0-9]/.test(page + js + css));
 
 const failed = checks.filter((item) => !item.ok);
 for (const item of checks) {

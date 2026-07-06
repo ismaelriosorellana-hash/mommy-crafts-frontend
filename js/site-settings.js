@@ -141,7 +141,7 @@
 
 
     function isProductMobileNavbarActions(selector) {
-        // Conserva el nombre por compatibilidad. Desde v3.38.0,
+        // Conserva el nombre por compatibilidad. Desde v3.46.0,
         // el editor visual no desplaza las acciones del header en ningún móvil.
         return selector === ".site-header .navbar-actions"
             && window.matchMedia("(max-width: 820px)").matches;
