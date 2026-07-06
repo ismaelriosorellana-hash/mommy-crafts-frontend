@@ -1,6 +1,8 @@
 "use strict";
 
 (function () {
+    let lastLabel = "";
+
     function updateLastSync() {
         const label = document.querySelector(".orders-last-sync");
         if (!label) return;
@@ -10,28 +12,20 @@
             minute: "2-digit"
         }).format(new Date());
 
-        label.textContent = `Vista actualizada a las ${now}.`;
+        const text = `Vista actualizada a las ${now}.`;
+        if (lastLabel === text && label.textContent === text) return;
+        lastLabel = text;
+        label.textContent = text;
     }
 
     function markOrdersPageReady() {
         if (document.body?.dataset?.adminPage !== "pedidos") return;
         document.body.classList.add("orders-admin-pro-ready");
-        updateLastSync();
+        window.requestAnimationFrame(updateLastSync);
     }
 
     document.addEventListener("admin:ready", markOrdersPageReady);
-
-    const observer = new MutationObserver(() => {
-        if (document.body?.dataset?.adminPage === "pedidos") updateLastSync();
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const table = document.getElementById("orders-table");
-        if (table) {
-            observer.observe(table, {
-                childList: true,
-                subtree: true
-            });
-        }
+    document.addEventListener("orders:rendered", () => {
+        window.requestAnimationFrame(updateLastSync);
     });
 })();

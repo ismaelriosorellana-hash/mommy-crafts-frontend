@@ -9,8 +9,8 @@ const checks = [
   ['js/checkout-professional-v3420.js', 'injectProgress'],
   ['js/checkout-professional-v3420.js', 'formatRut'],
   ['js/checkout-professional-v3420.js', 'checkout-mobile-pay-button'],
-  ['finalizar-compra.html', 'css/checkout-professional-v3420.css?v=3.46.1'],
-  ['finalizar-compra.html', 'js/checkout-professional-v3420.js?v=3.46.1']
+  ['finalizar-compra.html', 'css/checkout-professional-v3420.css?v=3.46.2'],
+  ['finalizar-compra.html', 'js/checkout-professional-v3420.js?v=3.46.2']
 ];
 const failures = [];
 for (const [file, text] of checks) {
@@ -25,4 +25,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(` - ${failure}`));
   process.exit(1);
 }
-console.log('✅ Checkout profesional v3.46.1 verificado.');
+console.log('✅ Checkout profesional v3.46.2 verificado.');

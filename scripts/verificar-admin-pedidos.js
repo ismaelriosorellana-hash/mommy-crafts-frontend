@@ -39,8 +39,8 @@ const orders = read("admin/js/orders-admin.js");
 const css = read("admin/css/admin-orders-pro-v3450.css");
 const pro = read("admin/js/orders-admin-pro-v3450.js");
 
-mustInclude(page, "css/admin-orders-pro-v3450.css?v=3.46.1", "pedidos.html carga la capa visual profesional v3.46.1");
-mustInclude(page, "js/orders-admin-pro-v3450.js?v=3.46.1", "pedidos.html carga el complemento operativo v3.46.1");
+mustInclude(page, "css/admin-orders-pro-v3450.css?v=3.46.2", "pedidos.html carga la capa visual profesional v3.46.2");
+mustInclude(page, "js/orders-admin-pro-v3450.js?v=3.46.2", "pedidos.html carga el complemento operativo v3.46.2");
 mustInclude(page, "Controla pedidos, pagos, personalizaciones, diseño, fabricación y entrega", "introducción del panel explica el flujo operativo");
 
 mustInclude(orders, "renderOrderInsights", "panel calcula métricas operativas de pedidos");
@@ -56,7 +56,9 @@ mustInclude(css, ".order-admin-progress", "CSS define línea de avance del pedid
 mustInclude(css, "@media (max-width: 820px)", "CSS incluye adaptación móvil del panel de pedidos");
 
 mustInclude(pro, "orders-admin-pro-ready", "JS complementario marca el panel profesional como activo");
-mustInclude(pro, "orders-last-sync", "JS complementario actualiza hora de sincronización visual");
+mustInclude(pro, "orders:rendered", "JS complementario actualiza hora solo después del render seguro");
+mustInclude(pro, "updateLastSync", "JS complementario conserva hora de sincronización visual");
+if (pro.includes("new MutationObserver")) fail("JS complementario no debe usar MutationObserver en Pedidos"); else ok("JS complementario no usa MutationObserver");
 
 mustNotExist("js/customization-mobile-v3432.js", "no volvió el JS móvil antiguo de personalización");
 mustNotExist("css/customization-mobile-v3432.css", "no volvió el CSS móvil antiguo de personalización");

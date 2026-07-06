@@ -902,6 +902,8 @@ function renderOrders() {
             </tbody>
         </table>
     `;
+
+    document.dispatchEvent(new CustomEvent("orders:rendered"));
 }
 
 function openOrder(id) {
