@@ -16,8 +16,8 @@ const api = read("js/api.js");
 const products = read("js/products.js");
 const cart = read("js/cart.js");
 
-if (!config.includes('APP_VERSION: "3.48.0"')) {
-    errors.push("js/config.js no informa la versión 3.48.0.");
+if (!config.includes('APP_VERSION: "3.49.0"')) {
+    errors.push("js/config.js no informa la versión 3.49.0.");
 }
 
 if (!config.includes("window.ProductLinks")) {
@@ -82,8 +82,8 @@ try {
 
     const idLink = browser.ProductLinks.detail({ id: "123" });
 
-    if (slugLink !== "producto.html?slug=cuaderno-devocional&variante=azul&talla=M") {
-        errors.push(`ProductLinks generó un enlace por slug inesperado: ${slugLink}`);
+    if (slugLink !== "/producto/cuaderno-devocional?variante=azul&talla=M") {
+        errors.push(`ProductLinks generó un enlace SEO por slug inesperado: ${slugLink}`);
     }
 
     if (idLink !== "producto.html?id=123") {
@@ -98,5 +98,5 @@ if (errors.length) {
     process.exit(1);
 }
 
-console.log("✅ Catálogo 3.47.0 verificado.");
+console.log("✅ Catálogo 3.49.0 verificado.");
 console.log("✅ Ficha directa por slug/ID, relacionados API y enlaces centralizados presentes.");

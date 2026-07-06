@@ -24,16 +24,16 @@ function hasMeta(html, key, value) {
 }
 
 const config = read("js/config.js");
-const seo = read("js/seo-v3480.js");
+const seo = read("js/seo-v3490.js");
 const products = read("js/products.js");
 const contentPages = read("js/content-pages.js");
 const robots = read("robots.txt");
 const sitemap = read("sitemap.xml");
 const headers = read("_headers");
 
-ok(config.includes('APP_VERSION: "3.48.0"'), "CONFIG informa versión 3.48.0");
+ok(config.includes('APP_VERSION: "3.49.0"'), "CONFIG informa versión 3.49.0");
 ok(config.includes('SITE_URL: "https://mommycrafts.onrender.com"'), "CONFIG define URL pública oficial");
-ok(exists("js/seo-v3480.js"), "helper SEO v3.48.0 existe");
+ok(exists("js/seo-v3490.js"), "helper SEO v3.49.0 existe");
 ok(seo.includes("updateProduct(product)"), "helper SEO actualiza metadatos de producto");
 ok(seo.includes('"@type": "Product"'), "helper SEO genera Schema.org Product");
 ok(seo.includes('"@type": "Organization"'), "helper SEO genera Schema.org Organization");
@@ -71,7 +71,7 @@ const noindexPages = [
 
 for (const page of [...indexedPages, ...noindexPages]) {
     const html = read(page);
-    ok(html.includes("js/seo-v3480.js?v=3.48.0"), `${page} carga helper SEO`);
+    ok(html.includes("js/seo-v3490.js?v=3.49.0"), `${page} carga helper SEO`);
     ok(/<link\b(?=[^>]*rel=["']canonical["'])(?=[^>]*href=["']https:\/\/mommycrafts\.onrender\.com)/i.test(html), `${page} incluye canonical absoluto`);
     ok(hasMeta(html, "og:title"), `${page} incluye og:title`);
     ok(hasMeta(html, "og:description"), `${page} incluye og:description`);
@@ -95,7 +95,11 @@ ok(sitemap.includes("https://mommycrafts.onrender.com/despachos-retiros.html"), 
 ok(!sitemap.includes("/admin/"), "sitemap no incluye admin");
 ok(!sitemap.includes("/carrito.html"), "sitemap no incluye carrito");
 ok(exists("scripts/generar-sitemap.js"), "script funcional para sitemap dinámico existe");
-ok(read("scripts/generar-sitemap.js").includes("/producto.html?slug="), "sitemap dinámico puede agregar productos por slug");
+ok(read("scripts/generar-sitemap.js").includes("/producto/${encodeURIComponent(slug)}"), "sitemap dinámico agrega productos con URL SEO /producto/slug");
+ok(read("js/config.js").includes("/producto/${encodeURIComponent(slug)}"), "ProductLinks usa URLs públicas /producto/slug");
+ok(read("js/products.js").includes("match(/^\\/producto\\/"), "ficha de producto reconoce rutas /producto/slug cuando el frontend las recibe");
+ok(read("admin/js/products-admin.js").includes("mommycrafts.onrender.com/producto/"), "admin muestra vista previa SEO con URL amigable");
+ok(read("render.yaml.example").includes("source: /producto/*"), "render.yaml.example documenta rewrite SEO de productos");
 
 ok(headers.includes("/sitemap.xml"), "headers configuran sitemap.xml");
 ok(headers.includes("/robots.txt"), "headers configuran robots.txt");
@@ -115,4 +119,4 @@ if (errors) {
     process.exit(1);
 }
 
-console.log("\n✅ SEO, rendimiento y confianza v3.48.0 verificados.");
+console.log("\n✅ SEO, rendimiento y confianza v3.49.0 verificados.");

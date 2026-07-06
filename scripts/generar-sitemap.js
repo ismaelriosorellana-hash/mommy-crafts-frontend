@@ -41,7 +41,7 @@ function normalizeProducts(payload) {
 function productUrl(product) {
     const slug = String(product.slug || "").trim();
     const id = String(product._id || product.id || "").trim();
-    if (slug) return `/producto.html?slug=${encodeURIComponent(slug)}`;
+    if (slug) return `/producto/${encodeURIComponent(slug)}`;
     if (id) return `/producto.html?id=${encodeURIComponent(id)}`;
     return "";
 }

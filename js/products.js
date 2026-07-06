@@ -3072,7 +3072,9 @@ function renderSizeSelector(product) {
                 window.location.search
             );
 
-        const productSlug = params.get("slug");
+        const pathMatch = (window.location.pathname || "")
+            .match(/^\/producto\/([^/?#]+)\/?$/i);
+        const productSlug = params.get("slug") || (pathMatch ? decodeURIComponent(pathMatch[1]) : "");
         const productId = params.get("id");
 
         if (!productSlug && !productId) {
@@ -3110,11 +3112,11 @@ function renderSizeSelector(product) {
 
             if (!productSlug && product.slug) {
                 params.delete("id");
-                params.set("slug", product.slug);
+                const query = params.toString();
                 window.history.replaceState(
                     null,
                     "",
-                    `${window.location.pathname}?${params.toString()}`
+                    `/producto/${encodeURIComponent(product.slug)}${query ? `?${query}` : ""}`
                 );
             }
 

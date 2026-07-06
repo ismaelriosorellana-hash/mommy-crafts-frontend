@@ -18,9 +18,9 @@ const payment = read("js/payment-result.js");
 const config = read("js/config.js");
 
 check("existe página seguimiento-pedido.html", exists("seguimiento-pedido.html"));
-check("seguimiento carga CSS v3.47.0", page.includes("css/order-tracking-v3440.css?v=3.48.0"));
-check("seguimiento carga JS v3.47.0", page.includes("js/order-tracking-v3440.js?v=3.48.0"));
-check("versión de app actualizada a 3.48.0", config.includes('APP_VERSION: "3.48.0"'));
+check("seguimiento carga CSS v3.47.0", page.includes("css/order-tracking-v3440.css?v=3.49.0"));
+check("seguimiento carga JS v3.47.0", page.includes("js/order-tracking-v3440.js?v=3.49.0"));
+check("versión de app actualizada a 3.49.0", config.includes('APP_VERSION: "3.49.0"'));
 check("formulario pide número de pedido y correo", page.includes("tracking-order-number") && page.includes("tracking-email"));
 check("incluye consulta pública preparada", js.includes("/pedidos/seguimiento") && js.includes("tryPublicLookup"));
 check("incluye carga por cuenta con sesión", js.includes("CustomerAuth.getOrder") && js.includes("hasSession"));

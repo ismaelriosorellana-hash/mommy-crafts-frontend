@@ -10,7 +10,7 @@ const API_BASE_URL =
         : "https://mommy-crafts-backend.onrender.com/api";
 
 window.CONFIG = Object.freeze({
-    APP_VERSION: "3.48.0",
+    APP_VERSION: "3.49.0",
     SITE_URL: "https://mommycrafts.onrender.com",
     SITE_NAME: "Mommy Crafts",
     BRAND_NAME: "Mommy Crafts",
@@ -171,10 +171,6 @@ window.ProductLinks = Object.freeze({
 
         const slug = String(product.slug || "").trim();
         const id = String(product.id || product._id || "").trim();
-        const params = new URLSearchParams();
-
-        if (slug) params.set("slug", slug);
-        else if (id) params.set("id", id);
 
         const variant =
             options.variantId ||
@@ -187,6 +183,43 @@ window.ProductLinks = Object.freeze({
             options.talla ||
             product.size ||
             "";
+
+        const optionParams = new URLSearchParams();
+        if (variant) optionParams.set("variante", String(variant));
+        if (size) optionParams.set("talla", String(size));
+
+        if (slug) {
+            const query = optionParams.toString();
+            return `/producto/${encodeURIComponent(slug)}${query ? `?${query}` : ""}`;
+        }
+
+        if (id) {
+            const params = new URLSearchParams();
+            params.set("id", id);
+            for (const [key, value] of optionParams.entries()) {
+                params.set(key, value);
+            }
+            return `producto.html?${params.toString()}`;
+        }
+
+        return "catalogo.html";
+    },
+
+    legacyDetail(productOrId, options = {}) {
+        const product =
+            productOrId && typeof productOrId === "object"
+                ? productOrId
+                : { id: productOrId };
+
+        const slug = String(product.slug || "").trim();
+        const id = String(product.id || product._id || "").trim();
+        const params = new URLSearchParams();
+
+        if (slug) params.set("slug", slug);
+        else if (id) params.set("id", id);
+
+        const variant = options.variantId || options.variante || product.variantId || "";
+        const size = options.size || options.talla || product.size || "";
 
         if (variant) params.set("variante", String(variant));
         if (size) params.set("talla", String(size));

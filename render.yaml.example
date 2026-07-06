@@ -6,6 +6,21 @@ services:
     name: mommy-crafts-frontend
     buildCommand: node scripts/generar-sitemap.js || echo "Static site ready"
     staticPublishPath: .
+    routes:
+      # Rutas SEO prerenderizadas por el backend para compartir productos y sitemap dinámico.
+      # Ajusta el dominio si tu backend tiene otro nombre en Render.
+      - type: rewrite
+        source: /producto/*
+        destination: https://mommy-crafts-backend.onrender.com/producto/*
+      - type: rewrite
+        source: /p/*
+        destination: https://mommy-crafts-backend.onrender.com/p/*
+      - type: rewrite
+        source: /sitemap.xml
+        destination: https://mommy-crafts-backend.onrender.com/sitemap.xml
+      - type: rewrite
+        source: /robots.txt
+        destination: https://mommy-crafts-backend.onrender.com/robots.txt
     headers:
       - path: /*
         name: Content-Security-Policy
