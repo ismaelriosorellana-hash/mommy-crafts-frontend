@@ -251,6 +251,10 @@ async function loadDashboard() {
         ).textContent =
             metrics.stockBajo || 0;
 
+        renderSystemStatus(
+            metrics.sistema || null
+        );
+
         renderRecentOrders(
             Array.isArray(orders)
                 ? orders.slice(0, 6)
@@ -280,6 +284,98 @@ async function loadDashboard() {
             "error"
         );
     }
+}
+
+function formatUptime(seconds) {
+    const total =
+        Number(seconds) ||
+        0;
+
+    const hours =
+        Math.floor(total / 3600);
+
+    const minutes =
+        Math.floor((total % 3600) / 60);
+
+    if (hours > 0) {
+        return `${hours} h ${minutes} min`;
+    }
+
+    return `${minutes} min`;
+}
+
+function renderSystemStatus(system) {
+    const apiStatus =
+        document.getElementById(
+            "metric-api-status"
+        );
+
+    const dbStatus =
+        document.getElementById(
+            "metric-db-status"
+        );
+
+    const backendVersion =
+        document.getElementById(
+            "metric-backend-version"
+        );
+
+    const frontendVersion =
+        document.getElementById(
+            "metric-frontend-version"
+        );
+
+    const detail =
+        document.getElementById(
+            "metric-system-detail"
+        );
+
+    if (!apiStatus || !dbStatus || !backendVersion || !frontendVersion || !detail) {
+        return;
+    }
+
+    if (!system) {
+        apiStatus.textContent =
+            "Sin datos";
+        dbStatus.textContent =
+            "Sin datos";
+        backendVersion.textContent =
+            "--";
+        frontendVersion.textContent =
+            CONFIG.APP_VERSION ||
+            "--";
+        detail.textContent =
+            "No fue posible leer el estado técnico desde el backend.";
+        return;
+    }
+
+    const database =
+        system.database ||
+        {};
+
+    apiStatus.textContent =
+        "Operativa";
+
+    dbStatus.textContent =
+        database.ok
+            ? "Conectada"
+            : String(
+                database.estado ||
+                "Revisar"
+            );
+
+    backendVersion.textContent =
+        system.version ||
+        "--";
+
+    frontendVersion.textContent =
+        CONFIG.APP_VERSION ||
+        "--";
+
+    detail.textContent =
+        `Entorno: ${system.entorno || "sin dato"}. ` +
+        `API activa hace ${formatUptime(system.uptimeSegundos)}. ` +
+        `Última revisión: ${AdminUI.dateTime(system.fecha)}.`;
 }
 
 function renderRecentOrders(orders) {
