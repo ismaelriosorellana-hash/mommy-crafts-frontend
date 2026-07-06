@@ -216,7 +216,8 @@ async function loadDashboard() {
             metrics,
             orders,
             lowStock,
-            notifications
+            notifications,
+            launchSecurity
         ] = await Promise.all([
             AdminAPI.request(
                 "/admin/dashboard"
@@ -229,6 +230,11 @@ async function loadDashboard() {
             ),
             AdminAPI.request(
                 "/admin/notificaciones/estado"
+            ).catch((error) => ({
+                error: error.message
+            })),
+            AdminAPI.request(
+                "/admin/seguridad/estado"
             ).catch((error) => ({
                 error: error.message
             }))
@@ -263,6 +269,10 @@ async function loadDashboard() {
 
         renderNotificationStatus(
             notifications || null
+        );
+
+        renderLaunchSecurityStatus(
+            launchSecurity || null
         );
 
         renderRecentOrders(
@@ -470,6 +480,135 @@ function renderNotificationStatus(data) {
 
     detail.textContent =
         `${status.mensaje || "Estado de notificaciones revisado."}${from}${adminCopies}`;
+}
+
+
+function launchStatusLabel(value) {
+    if (value === "listo") {
+        return "Listo";
+    }
+
+    if (value === "con_observaciones") {
+        return "Con observaciones";
+    }
+
+    if (value === "bloqueado") {
+        return "Revisar críticos";
+    }
+
+    return "Sin datos";
+}
+
+function renderLaunchSecurityStatus(data) {
+    const statusEl =
+        document.getElementById(
+            "metric-launch-status"
+        );
+
+    const criticalEl =
+        document.getElementById(
+            "metric-launch-critical"
+        );
+
+    const warningsEl =
+        document.getElementById(
+            "metric-launch-warnings"
+        );
+
+    const okEl =
+        document.getElementById(
+            "metric-launch-ok"
+        );
+
+    const detail =
+        document.getElementById(
+            "metric-launch-detail"
+        );
+
+    const list =
+        document.getElementById(
+            "admin-launch-checks"
+        );
+
+    if (!statusEl || !criticalEl || !warningsEl || !okEl || !detail || !list) {
+        return;
+    }
+
+    if (!data || data.error) {
+        statusEl.textContent =
+            "Sin datos";
+        criticalEl.textContent =
+            "--";
+        warningsEl.textContent =
+            "--";
+        okEl.textContent =
+            "--";
+        detail.textContent =
+            data?.error ||
+            "No fue posible revisar la seguridad final desde el backend.";
+        list.innerHTML = "";
+        return;
+    }
+
+    const resumen =
+        data.resumen ||
+        {};
+
+    statusEl.textContent =
+        launchStatusLabel(
+            data.estado
+        );
+
+    criticalEl.textContent =
+        resumen.critical ??
+        0;
+
+    warningsEl.textContent =
+        resumen.warnings ??
+        0;
+
+    okEl.textContent =
+        resumen.ok ??
+        0;
+
+    const domains =
+        data.dominios ||
+        {};
+
+    detail.textContent =
+        `Estado ${launchStatusLabel(data.estado).toLowerCase()}. ` +
+        `Frontend: ${domains.frontend || "sin configurar"}. ` +
+        `Backend: ${domains.backend || "sin configurar"}. ` +
+        `Última revisión: ${AdminUI.dateTime(data.fecha)}.`;
+
+    const checks =
+        Array.isArray(data.checks)
+            ? data.checks
+            : [];
+
+    const visible = checks
+        .filter((check) => !check.ok)
+        .slice(0, 8);
+
+    if (!visible.length) {
+        list.innerHTML = `
+            <div class="admin-alert success" style="margin-top:14px">
+                No hay puntos críticos pendientes en la revisión automática. Continúa con la prueba completa de compra real antes del lanzamiento.
+            </div>
+        `;
+        return;
+    }
+
+    list.innerHTML = `
+        <div class="admin-launch-list" style="display:grid;gap:10px;margin-top:14px">
+            ${visible.map((check) => `
+                <div class="admin-alert ${check.severity === "warning" ? "warning" : "danger"}">
+                    <strong>${AdminUI.escapeHtml(check.label)}</strong><br>
+                    ${AdminUI.escapeHtml(check.message)}
+                </div>
+            `).join("")}
+        </div>
+    `;
 }
 
 function renderRecentOrders(orders) {
