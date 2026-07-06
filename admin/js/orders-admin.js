@@ -28,14 +28,45 @@ document.addEventListener(
                 if (button) openOrder(button.dataset.orderId);
             });
 
-        document.getElementById("order-detail")
-            .addEventListener("click", (event) => {
-                const copyButton = event.target.closest("[data-copy-order-id]");
-                if (copyButton) {
-                    event.preventDefault();
-                    copyOrderSummary(copyButton.dataset.copyOrderId);
-                }
-            });
+        const orderDetail = document.getElementById("order-detail");
+
+        orderDetail.addEventListener("click", (event) => {
+            const copyButton = event.target.closest("[data-copy-order-id]");
+            if (copyButton) {
+                event.preventDefault();
+                copyOrderSummary(copyButton.dataset.copyOrderId);
+                return;
+            }
+
+            if (event.target.closest("[data-notification-preview]")) {
+                event.preventDefault();
+                loadNotificationPreview();
+                return;
+            }
+
+            if (event.target.closest("[data-notification-copy]")) {
+                event.preventDefault();
+                copyNotificationPreview();
+                return;
+            }
+
+            if (event.target.closest("[data-notification-whatsapp]")) {
+                event.preventDefault();
+                openNotificationWhatsapp();
+                return;
+            }
+
+            if (event.target.closest("[data-notification-send-email]")) {
+                event.preventDefault();
+                sendNotificationEmail();
+            }
+        });
+
+        orderDetail.addEventListener("change", (event) => {
+            if (event.target?.id === "order-notification-event") {
+                loadNotificationPreview();
+            }
+        });
 
         document.getElementById("order-save")
             .addEventListener("click", saveOrder);
@@ -442,6 +473,137 @@ const PAYMENT_STATUS_LABELS = Object.freeze({
     vencido: "Vencido",
     reembolsado: "Reembolsado"
 });
+
+
+const ORDER_NOTIFICATION_LABELS = Object.freeze({
+    order_created: "Pedido recibido",
+    payment_confirmed: "Pago confirmado",
+    design_review: "Diseño en revisión",
+    production_started: "Pedido en producción",
+    ready: "Pedido listo",
+    shipped: "Pedido enviado",
+    delivered: "Pedido entregado",
+    cancelled: "Pedido cancelado",
+    status_update: "Estado actualizado"
+});
+
+const ORDER_NOTIFICATION_FLOW = [
+    "order_created",
+    "payment_confirmed",
+    "design_review",
+    "production_started",
+    "ready",
+    "shipped",
+    "delivered",
+    "cancelled",
+    "status_update"
+];
+
+function notificationLabel(event) {
+    const key = String(event || "").trim();
+    return ORDER_NOTIFICATION_LABELS[key] || key.replaceAll("_", " ") || "Actualización";
+}
+
+function recommendedNotificationEvent(order) {
+    const payment = String(order?.estadoPago || "").trim();
+    const status = String(order?.estadoPedido || "").trim();
+
+    if (status === "cancelado") return "cancelled";
+    if (status === "entregado") return "delivered";
+    if (status === "enviado") return "shipped";
+    if (status === "listo") return "ready";
+    if (status === "en_produccion") return "production_started";
+    if (status === "validacion_diseno") return "design_review";
+    if (payment === "pagado") return "payment_confirmed";
+    if (status === "pendiente") return "order_created";
+
+    return "status_update";
+}
+
+function selectedNotificationEvent() {
+    const select = document.getElementById("order-notification-event");
+    const value = String(select?.value || "").trim();
+    return ORDER_NOTIFICATION_LABELS[value] ? value : "status_update";
+}
+
+function renderNotificationPreviewState(message, tone = "muted") {
+    return `
+        <div class="order-notification-preview ${AdminUI.escapeHtml(tone)}">
+            ${AdminUI.escapeHtml(message)}
+        </div>
+    `;
+}
+
+function renderOrderCommunication(order) {
+    const recommended = recommendedNotificationEvent(order);
+    const email = order?.cliente?.email || "";
+    const phone = order?.cliente?.telefono || "";
+
+    return `
+        <details class="admin-order-accordion order-communication-panel" open>
+            <summary>
+                <span>Comunicación con el cliente</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </summary>
+            <section class="admin-card">
+                <div class="admin-card-body">
+                    <div class="order-communication-head">
+                        <div>
+                            <h4>Notificaciones de pedido</h4>
+                            <p>Prepara mensajes claros para correo o WhatsApp según el estado actual.</p>
+                        </div>
+                        <span class="order-priority info">Post-compra</span>
+                    </div>
+
+                    <div class="admin-form-grid">
+                        <div class="admin-field">
+                            <label for="order-notification-event">Tipo de mensaje</label>
+                            <select id="order-notification-event">
+                                ${ORDER_NOTIFICATION_FLOW.map((event) => `
+                                    <option value="${AdminUI.escapeHtml(event)}" ${event === recommended ? "selected" : ""}>
+                                        ${AdminUI.escapeHtml(notificationLabel(event))}
+                                    </option>
+                                `).join("")}
+                            </select>
+                        </div>
+
+                        <div class="order-communication-targets">
+                            <span><i class="fa-regular fa-envelope"></i> ${AdminUI.escapeHtml(email || "Sin correo")}</span>
+                            <span><i class="fa-brands fa-whatsapp"></i> ${AdminUI.escapeHtml(phone || "Sin teléfono")}</span>
+                        </div>
+                    </div>
+
+                    <div id="order-notification-preview-wrap">
+                        ${renderNotificationPreviewState("Cargando mensaje sugerido...")}
+                    </div>
+
+                    <div class="order-communication-actions">
+                        <button class="admin-button secondary small" type="button" data-notification-preview>
+                            <i class="fa-solid fa-rotate"></i>
+                            Actualizar vista previa
+                        </button>
+                        <button class="admin-button secondary small" type="button" data-notification-copy>
+                            <i class="fa-regular fa-copy"></i>
+                            Copiar texto
+                        </button>
+                        <button class="admin-button secondary small" type="button" data-notification-whatsapp>
+                            <i class="fa-brands fa-whatsapp"></i>
+                            Abrir WhatsApp
+                        </button>
+                        <button class="admin-button small" type="button" data-notification-send-email>
+                            <i class="fa-regular fa-paper-plane"></i>
+                            Enviar correo
+                        </button>
+                    </div>
+
+                    <p class="order-communication-note">
+                        El correo se enviará solo si el backend tiene configurado Resend. Si no, el sistema dejará el mensaje listo para copiar o enviar por WhatsApp.
+                    </p>
+                </div>
+            </section>
+        </details>
+    `;
+}
 
 const ORDER_FLOW = [
     { key: "pendiente", label: "Recibido", icon: "fa-receipt" },
@@ -914,6 +1076,7 @@ function openOrder(id) {
     if (!order) return;
 
     currentOrderId = String(order._id);
+    window.currentOrderNotificationPreview = null;
     document.getElementById("order-modal-title").textContent = order.numeroPedido;
 
     const syncButton = document.getElementById("order-sync-payment");
@@ -925,6 +1088,7 @@ function openOrder(id) {
 
     document.getElementById("order-detail").innerHTML = `
         ${renderOrderHero(order)}
+        ${renderOrderCommunication(order)}
 
         <div class="admin-grid two">
             <section class="admin-card">
@@ -1158,6 +1322,8 @@ function openOrder(id) {
         </details>
     `;
 
+    loadNotificationPreview();
+
     document.querySelectorAll(".upload-final-design").forEach((button) => {
         button.addEventListener("click", async () => {
             const block = button.closest("[data-line-id]");
@@ -1246,6 +1412,132 @@ function openOrder(id) {
     });
 
     AdminUI.openModal("order-modal");
+}
+
+
+async function loadNotificationPreview() {
+    if (!currentOrderId) return null;
+
+    const wrap = document.getElementById("order-notification-preview-wrap");
+    const event = selectedNotificationEvent();
+    if (!wrap) return null;
+
+    wrap.innerHTML = renderNotificationPreviewState("Preparando mensaje...");
+
+    try {
+        const preview = await AdminAPI.request(
+            `/admin/pedidos/${encodeURIComponent(currentOrderId)}/notificaciones/${encodeURIComponent(event)}`
+        );
+
+        window.currentOrderNotificationPreview = preview;
+        wrap.innerHTML = `
+            <article class="order-notification-preview ready">
+                <div class="order-notification-meta">
+                    <span>${AdminUI.escapeHtml(preview.etiqueta || notificationLabel(event))}</span>
+                    <strong>${AdminUI.escapeHtml(preview.asunto || "Actualización de pedido")}</strong>
+                </div>
+                <textarea id="order-notification-text" readonly>${AdminUI.escapeHtml(preview.whatsappTexto || preview.texto || "")}</textarea>
+                <div class="order-notification-links">
+                    ${preview.seguimientoUrl ? `<a href="${AdminUI.escapeHtml(safeUrl(preview.seguimientoUrl))}" target="_blank" rel="noopener">Ver seguimiento del cliente</a>` : ""}
+                    ${preview.correoPara ? `<span>Correo: ${AdminUI.escapeHtml(preview.correoPara)}</span>` : `<span>Correo no registrado</span>`}
+                </div>
+            </article>
+        `;
+
+        return preview;
+    } catch (error) {
+        window.currentOrderNotificationPreview = null;
+        wrap.innerHTML = renderNotificationPreviewState(error.message, "danger");
+        return null;
+    }
+}
+
+async function getNotificationPreview() {
+    return window.currentOrderNotificationPreview || await loadNotificationPreview();
+}
+
+async function copyNotificationPreview() {
+    const preview = await getNotificationPreview();
+    const text = preview?.whatsappTexto || preview?.texto || "";
+
+    if (!text) {
+        AdminUI.toast("No hay mensaje para copiar.", "error");
+        return;
+    }
+
+    try {
+        if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            const input = document.createElement("textarea");
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            input.remove();
+        }
+
+        AdminUI.toast("Mensaje copiado.", "success");
+    } catch {
+        AdminUI.toast("No fue posible copiar el mensaje.", "error");
+    }
+}
+
+async function openNotificationWhatsapp() {
+    const preview = await getNotificationPreview();
+    const url = safeUrl(preview?.whatsappUrl);
+
+    if (!url) {
+        AdminUI.toast("Este pedido no tiene teléfono válido para WhatsApp.", "error");
+        return;
+    }
+
+    window.open(url, "_blank", "noopener");
+}
+
+async function sendNotificationEmail() {
+    if (!currentOrderId) return;
+
+    const button = document.querySelector("[data-notification-send-email]");
+    const event = selectedNotificationEvent();
+    const original = button?.innerHTML || "";
+
+    if (button) {
+        button.disabled = true;
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando';
+    }
+
+    try {
+        const result = await AdminAPI.request(
+            `/admin/pedidos/${encodeURIComponent(currentOrderId)}/notificaciones/${encodeURIComponent(event)}`,
+            {
+                method: "POST",
+                body: { email: true }
+            }
+        );
+
+        const sent = Boolean(result?.correo?.sent);
+        const skipped = Boolean(result?.correo?.skipped);
+        const reason = result?.correo?.reason || "";
+
+        if (sent) {
+            AdminUI.toast("Correo enviado al cliente.", "success");
+        } else if (skipped) {
+            AdminUI.toast(reason || "Correo no enviado: mensaje preparado.", "info");
+        } else {
+            AdminUI.toast(reason || "No fue posible enviar el correo.", "error");
+        }
+
+        await loadOrders();
+        if (currentOrderId) openOrder(currentOrderId);
+    } catch (error) {
+        AdminUI.toast(error.message, "error");
+    } finally {
+        if (button) {
+            button.disabled = false;
+            button.innerHTML = original;
+        }
+    }
 }
 
 async function syncPayment() {
