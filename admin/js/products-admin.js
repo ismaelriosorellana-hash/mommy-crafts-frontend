@@ -663,7 +663,7 @@ function updateProductFormStatus() {
         description || "Agrega una descripción SEO clara para explicar qué hace especial este producto.";
 
     document.getElementById("product-seo-preview-url").textContent =
-        `mommycrafts.onrender.com/producto/${slug || "nombre-del-producto"}`;
+        `mommycrafts.cl/producto/${slug || "nombre-del-producto"}`;
 
     const checks = [
         { label: "nombre", ok: Boolean(productName) },

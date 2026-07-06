@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const SITE_URL = "https://mommycrafts.onrender.com";
+const SITE_URL = "https://mommycrafts.cl";
 const API_URL = "https://mommy-crafts-backend.onrender.com/api/productos?limite=200";
 const TODAY = new Date().toISOString().slice(0, 10);
 

@@ -10,4 +10,4 @@ Disallow: /seguimiento-pedido.html
 Disallow: /pagina.html
 Allow: /
 
-Sitemap: https://mommycrafts.onrender.com/sitemap.xml
+Sitemap: https://mommycrafts.cl/sitemap.xml
