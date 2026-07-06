@@ -189,8 +189,9 @@
             ].filter(Boolean),
             contactPoint: {
                 "@type": "ContactPoint",
-                contactType: "customer support",
+                contactType: "sales and customer support",
                 telephone: window.CONFIG?.soporteTelefono || "+56 9 5463 3848",
+                email: window.CONFIG?.ventasEmail || window.CONFIG?.soporteEmail || "ventas@mommycrafts.cl",
                 areaServed: "CL",
                 availableLanguage: "Spanish"
             }

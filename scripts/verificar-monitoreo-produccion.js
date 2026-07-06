@@ -15,8 +15,8 @@ const dashboardHtml = read("admin/index.html");
 const dashboardJs = read("admin/js/dashboard.js");
 const adminApi = read("admin/js/admin-api.js");
 
-if (!config.includes('APP_VERSION: "3.54.2"')) {
-    errors.push("js/config.js debe informar APP_VERSION 3.54.2.");
+if (!config.includes('APP_VERSION: "3.55.0"')) {
+    errors.push("js/config.js debe informar APP_VERSION 3.55.0.");
 }
 
 [
@@ -56,5 +56,5 @@ if (errors.length) {
     process.exit(1);
 }
 
-console.log("✅ Monitoreo de producción frontend v3.54.2 verificado.");
+console.log("✅ Monitoreo de producción frontend v3.55.0 verificado.");
 console.log("✅ Dashboard muestra API, MongoDB, versión backend y versión frontend.");

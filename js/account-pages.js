@@ -64,6 +64,10 @@
         return labels[value] || value || "Pendiente";
     }
 
+    function canCancelOrder(order) {
+        return Boolean(order?.puedeCancelar);
+    }
+
     function showAlert(element, message, success = false) {
         if (!element) return;
         element.hidden = !message;
@@ -215,6 +219,11 @@
                             Pagar con Mercado Pago
                         </button>
                     ` : ""}
+                    ${canCancelOrder(order) ? `
+                        <button class="btn-secondary customer-cancel-order" type="button" data-cancel-order="${escapeHtml(order.id)}">
+                            Cancelar pedido pendiente
+                        </button>
+                    ` : ""}
                 </div>
             </article>
         `;
@@ -259,6 +268,35 @@
                 `;
 
             list.addEventListener("click", async (event) => {
+                const cancelButton = event.target.closest("[data-cancel-order]");
+
+                if (cancelButton) {
+                    const confirmed = window.confirm(
+                        "¿Quieres cancelar este pedido pendiente? Solo se puede hacer si aún no fue pagado."
+                    );
+
+                    if (!confirmed) return;
+
+                    const originalCancel = cancelButton.textContent;
+                    cancelButton.disabled = true;
+                    cancelButton.textContent = "Cancelando...";
+
+                    try {
+                        await CustomerAuth.cancelOrder(
+                            cancelButton.dataset.cancelOrder
+                        );
+
+                        alert("Pedido pendiente cancelado correctamente.");
+                        location.reload();
+                    } catch (error) {
+                        alert(error.message || "No fue posible cancelar el pedido.");
+                        cancelButton.disabled = false;
+                        cancelButton.textContent = originalCancel;
+                    }
+
+                    return;
+                }
+
                 const button = event.target.closest("[data-pay-order]");
                 if (!button) return;
 
@@ -719,7 +757,57 @@
     }
 
 
+    function cancelOrderBlock(order) {
+        if (!canCancelOrder(order)) return "";
+
+        return `
+            <section class="account-detail-card customer-cancel-order-card">
+                <h2>Cancelar pedido pendiente</h2>
+                <p>
+                    Este pedido aún no figura como pagado. Si lo hiciste por error, puedes cancelarlo para que no quede pendiente en tu cuenta.
+                </p>
+                <button
+                    class="btn-secondary customer-cancel-order"
+                    type="button"
+                    data-cancel-order="${escapeHtml(order.id || order._id)}"
+                >
+                    Cancelar pedido pendiente
+                </button>
+                <p class="account-help-text">
+                    Si ya pagaste o necesitas un cambio/reembolso, contáctanos a ventas@mommycrafts.cl o por WhatsApp.
+                </p>
+            </section>
+        `;
+    }
+
     function bindOrderActions(order, container) {
+        container.querySelectorAll("[data-cancel-order]").forEach((button) => {
+            button.addEventListener("click", async () => {
+                const confirmed = window.confirm(
+                    "¿Quieres cancelar este pedido pendiente? Solo se puede hacer si aún no fue pagado."
+                );
+
+                if (!confirmed) return;
+
+                const original = button.textContent;
+                button.disabled = true;
+                button.textContent = "Cancelando...";
+
+                try {
+                    await CustomerAuth.cancelOrder(
+                        button.dataset.cancelOrder
+                    );
+
+                    alert("Pedido pendiente cancelado correctamente.");
+                    location.replace("cuenta.html#pedidos");
+                } catch (error) {
+                    alert(error.message || "No fue posible cancelar el pedido.");
+                    button.disabled = false;
+                    button.textContent = original;
+                }
+            });
+        });
+
         container.querySelector(".receipt-upload-form")?.addEventListener(
             "submit",
             async (event) => {
@@ -859,6 +947,7 @@
 
                     ${transferBlock(order)}
                     ${mercadoPagoBlock(order)}
+                    ${cancelOrderBlock(order)}
                 </section>
 
                 <aside>

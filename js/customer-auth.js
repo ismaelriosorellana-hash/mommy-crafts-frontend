@@ -279,6 +279,23 @@
         );
     }
 
+    async function cancelOrder(
+        orderId
+    ) {
+        return authRequest(
+            `/cuenta/pedidos/${encodeURIComponent(orderId)}/cancelar`,
+            {
+                method:
+                    "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: "{}"
+            }
+        );
+    }
+
     async function createPaymentPreference(
         orderId
     ) {
@@ -474,6 +491,7 @@
             revokeSessions,
             getOrders,
             getOrder,
+            cancelOrder,
             createPaymentPreference,
             renderAccountMenu,
             requireCustomer
