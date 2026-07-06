@@ -11,13 +11,14 @@
         <meta name="description" content="Cuenta de clientes de Mommy Crafts.">
         <title>Mi cuenta | Mommy Crafts</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
-        <link rel="stylesheet" href="css/main.css?v=3.46.2">
-        <link rel="stylesheet" href="css/account.css?v=3.46.2">
-            <link rel="stylesheet" href="css/experience-v327.css?v=3.46.2">
-        <link rel="stylesheet" href="css/site-studio.css?v=3.46.2">
-    <link rel="stylesheet" href="css/mc-commerce-tools-v3311.css?v=3.46.2">
-    <link rel="stylesheet" href="css/mobile-polish-v3370.css?v=3.46.2">
-    <link rel="stylesheet" href="css/mobile-menu-v3380.css?v=3.46.2">
+        <link rel="stylesheet" href="css/main.css?v=3.47.0">
+        <link rel="stylesheet" href="css/account.css?v=3.47.0">
+        <link rel="stylesheet" href="css/account-dashboard-v3470.css?v=3.47.0">
+            <link rel="stylesheet" href="css/experience-v327.css?v=3.47.0">
+        <link rel="stylesheet" href="css/site-studio.css?v=3.47.0">
+    <link rel="stylesheet" href="css/mc-commerce-tools-v3311.css?v=3.47.0">
+    <link rel="stylesheet" href="css/mobile-polish-v3370.css?v=3.47.0">
+    <link rel="stylesheet" href="css/mobile-menu-v3380.css?v=3.47.0">
 </head>
     <body class="account-page" data-account-page="account">
         <a class="skip-link" href="#main-content">Saltar al contenido</a>
@@ -41,11 +42,57 @@
         </header>
         <main id="main-content" class="account-main">
 
-<section class="account-hero">
-    <p class="section-kicker">Tu espacio personal</p>
-    <h1 class="section-title" id="account-welcome">Mi cuenta</h1>
-    <p>Revisa tus compras y mantén actualizados tus datos.</p>
+<section class="account-hero account-hero-v3470">
+    <div>
+        <p class="section-kicker">Tu espacio personal</p>
+        <h1 class="section-title" id="account-welcome">Mi cuenta</h1>
+        <p>Revisa tus compras, diseños, entregas y datos desde un solo lugar.</p>
+    </div>
+    <div class="account-hero-actions-v3470" aria-label="Acciones rápidas de cuenta">
+        <a class="btn-primary" href="catalogo.html">Comprar nuevamente</a>
+        <a class="btn-secondary" href="seguimiento-pedido.html">Seguir pedido</a>
+    </div>
 </section>
+
+<section class="account-overview-v3470" id="customer-account-overview" aria-live="polite">
+    <article class="account-overview-card-v3470 is-loading">
+        <span>Pedidos activos</span>
+        <strong>—</strong>
+        <small>Cargando información...</small>
+    </article>
+    <article class="account-overview-card-v3470 is-loading">
+        <span>Pagos pendientes</span>
+        <strong>—</strong>
+        <small>Cargando información...</small>
+    </article>
+    <article class="account-overview-card-v3470 is-loading">
+        <span>Diseños en revisión</span>
+        <strong>—</strong>
+        <small>Cargando información...</small>
+    </article>
+</section>
+
+<section class="account-next-step-v3470" id="customer-next-step" hidden></section>
+
+<section class="account-shortcuts-v3470" aria-label="Accesos rápidos de cliente">
+    <a href="#pedidos">
+        <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+        <span>Mis pedidos</span>
+    </a>
+    <a href="seguimiento-pedido.html">
+        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+        <span>Seguimiento</span>
+    </a>
+    <a href="catalogo.html">
+        <i class="fa-solid fa-store" aria-hidden="true"></i>
+        <span>Catálogo</span>
+    </a>
+    <a href="carrito.html">
+        <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+        <span>Carrito</span>
+    </a>
+</section>
+
 <div class="account-dashboard-grid">
     <section class="account-panel" id="perfil">
         <h2>Mis datos</h2>
@@ -178,15 +225,16 @@
             <a href="seguridad.html">Seguridad</a>
         </footer>
 
-        <script src="js/config.js?v=3.46.2" defer></script>
-        <script src="js/api.js?v=3.46.2" defer></script>
-    <script src="js/categories.js?v=3.46.2" defer></script>
-    <script src="js/site-settings.js?v=3.46.2" defer></script>
-    <script src="js/site-studio.js?v=3.46.2" defer></script>
-        <script src="js/customer-auth.js?v=3.46.2" defer></script>
-        <script src="js/cart.js?v=3.46.2" defer></script>
-        <script src="js/account-pages.js?v=3.46.2" defer></script>
-            <script src="js/experience-v327.js?v=3.46.2" defer></script>
-        <script src="js/mc-commerce-tools-v3311.js?v=3.46.2" defer></script>
+        <script src="js/config.js?v=3.47.0" defer></script>
+        <script src="js/api.js?v=3.47.0" defer></script>
+    <script src="js/categories.js?v=3.47.0" defer></script>
+    <script src="js/site-settings.js?v=3.47.0" defer></script>
+    <script src="js/site-studio.js?v=3.47.0" defer></script>
+        <script src="js/customer-auth.js?v=3.47.0" defer></script>
+        <script src="js/cart.js?v=3.47.0" defer></script>
+        <script src="js/account-pages.js?v=3.47.0" defer></script>
+        <script src="js/account-dashboard-v3470.js?v=3.47.0" defer></script>
+            <script src="js/experience-v327.js?v=3.47.0" defer></script>
+        <script src="js/mc-commerce-tools-v3311.js?v=3.47.0" defer></script>
 </body>
     </html>

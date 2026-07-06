@@ -1,0 +1,264 @@
+/* ==========================================================
+   V3.47.0 · Cuenta de cliente mejorada
+   ========================================================== */
+.account-hero-v3470 {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: clamp(2.2rem, 4vw, 3.2rem);
+    border: 1px solid rgba(146, 75, 103, .14);
+    border-radius: 2.4rem;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(255, 230, 245, .9), transparent 24rem),
+        linear-gradient(135deg, #fff, #fff8fc 62%, #fff1f8);
+    box-shadow: 0 1.8rem 4.6rem rgba(101, 68, 90, .08);
+}
+
+.account-hero-v3470 .section-title {
+    margin-bottom: .5rem;
+}
+
+.account-hero-actions-v3470 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.account-overview-v3470 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.4rem;
+    margin: 2rem 0;
+}
+
+.account-overview-card-v3470 {
+    position: relative;
+    min-height: 11.2rem;
+    padding: 1.7rem;
+    border: 1px solid rgba(146, 75, 103, .14);
+    border-radius: 1.8rem;
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.account-overview-card-v3470::after {
+    content: "";
+    position: absolute;
+    right: -2rem;
+    bottom: -2.8rem;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background: rgba(246, 220, 229, .45);
+}
+
+.account-overview-card-v3470 span,
+.account-overview-card-v3470 small,
+.account-overview-card-v3470 strong {
+    position: relative;
+    z-index: 1;
+}
+
+.account-overview-card-v3470 span {
+    display: block;
+    color: var(--color-muted);
+    font-size: 1.28rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.account-overview-card-v3470 strong {
+    display: block;
+    margin-top: .5rem;
+    color: var(--color-primary-deep, #4f2a3e);
+    font-size: clamp(2.4rem, 3vw, 3.2rem);
+    line-height: 1;
+}
+
+.account-overview-card-v3470 small {
+    display: block;
+    margin-top: .9rem;
+    color: var(--color-text-soft, #6f5b67);
+    font-size: 1.28rem;
+    line-height: 1.45;
+}
+
+.account-overview-card-v3470.is-loading {
+    opacity: .78;
+}
+
+.account-next-step-v3470 {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 1.4rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.7rem;
+    border: 1px solid rgba(146, 75, 103, .18);
+    border-radius: 1.8rem;
+    background: linear-gradient(135deg, #fff, #fff7fc);
+    box-shadow: var(--shadow-sm);
+}
+
+.account-next-step-v3470 i {
+    display: grid;
+    place-items: center;
+    width: 4.8rem;
+    height: 4.8rem;
+    border-radius: 50%;
+    background: #ffe6f5;
+    color: var(--color-primary-dark, #8e456a);
+    font-size: 1.7rem;
+}
+
+.account-next-step-v3470 strong {
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--color-primary-deep, #4f2a3e);
+    font-size: 1.7rem;
+}
+
+.account-next-step-v3470 p {
+    margin: 0;
+    color: var(--color-text-soft, #6f5b67);
+    line-height: 1.5;
+}
+
+.account-next-step-v3470 .btn-secondary,
+.account-next-step-v3470 .btn-primary {
+    white-space: nowrap;
+}
+
+.account-shortcuts-v3470 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.4rem;
+}
+
+.account-shortcuts-v3470 a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 6.2rem;
+    padding: 1.3rem 1.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1.6rem;
+    background: #fff;
+    color: var(--color-secondary);
+    font-weight: 850;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.account-shortcuts-v3470 a:hover,
+.account-shortcuts-v3470 a:focus-visible {
+    transform: translateY(-.2rem);
+    border-color: rgba(146, 75, 103, .28);
+    box-shadow: 0 1.2rem 2.8rem rgba(101, 68, 90, .08);
+}
+
+.account-shortcuts-v3470 i {
+    display: grid;
+    place-items: center;
+    width: 3.8rem;
+    height: 3.8rem;
+    border-radius: 50%;
+    background: #fff1f8;
+    color: var(--color-primary-dark, #8e456a);
+}
+
+.account-order-card.is-account-highlight-v3470 {
+    border-color: rgba(146, 75, 103, .32);
+    background: linear-gradient(135deg, #fff, #fff9fd);
+}
+
+.account-order-card .account-order-action-row-v3470 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .8rem;
+    margin-top: 1rem;
+}
+
+.account-order-card .account-order-action-row-v3470 a,
+.account-order-card .account-order-action-row-v3470 button {
+    min-height: 3.8rem;
+}
+
+@media (max-width: 900px) {
+    .account-hero-v3470 {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .account-hero-actions-v3470 {
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .account-overview-v3470 {
+        grid-template-columns: 1fr;
+    }
+
+    .account-shortcuts-v3470 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .account-next-step-v3470 {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .account-next-step-v3470 a {
+        grid-column: 1 / -1;
+        justify-self: stretch;
+        text-align: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .account-hero-v3470 {
+        padding: 1.8rem;
+        border-radius: 1.8rem;
+    }
+
+    .account-hero-actions-v3470 .btn-primary,
+    .account-hero-actions-v3470 .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .account-overview-card-v3470 {
+        min-height: 9.8rem;
+        padding: 1.45rem;
+    }
+
+    .account-shortcuts-v3470 {
+        gap: .8rem;
+    }
+
+    .account-shortcuts-v3470 a {
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: .7rem;
+        min-height: 8.4rem;
+        padding: 1rem .8rem;
+        text-align: center;
+        font-size: 1.25rem;
+    }
+
+    .account-next-step-v3470 {
+        gap: 1rem;
+        padding: 1.4rem;
+        border-radius: 1.6rem;
+    }
+
+    .account-next-step-v3470 i {
+        width: 4.2rem;
+        height: 4.2rem;
+    }
+}

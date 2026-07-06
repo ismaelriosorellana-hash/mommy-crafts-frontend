@@ -13,15 +13,15 @@ const checkoutCss = fs.readFileSync(path.join(root, "css", "checkout.css"), "utf
 const accountCss = fs.readFileSync(path.join(root, "css", "account.css"), "utf8");
 
 const checks = [
-    ["CONFIG versión 3.46.2", config.includes('APP_VERSION: "3.46.2"')],
+    ["CONFIG versión 3.47.0", config.includes('APP_VERSION: "3.47.0"')],
     ["Carrito prioriza preview personalizada", cart.includes("function getDisplayImage") && cart.includes("summaryPreviewUrl") && cart.includes("finalPreview?.asset")],
     ["Resumen checkout usa imagen personalizada", checkout.includes("hasPersonalizedPreview") && checkout.includes("Vista final según la personalización realizada")],
     ["Pedido envía personalizacionResumen", checkout.includes("personalizacionResumen") && checkout.includes("vistaPrevia: imagenResumen")],
     ["Personalizador captura preview visible", customization.includes("capturePreviewSnapshot") && customization.includes("visible-preview-v3401")],
     ["Personalizador guarda previewSource", customization.includes("previewSource") && customization.includes("summaryPreviewUrl")],
     ["Detalle pedido recupera preview", accountPages.includes("orderItemImage") && accountPages.includes("is-personalized-order-item")],
-    ["CSS checkout preview fiel", checkoutCss.includes("V3.46.2 · Resumen de pedido") && checkoutCss.includes("object-fit: contain")],
-    ["CSS detalle pedido preview fiel", accountCss.includes("V3.46.2 · Detalle de pedido") && accountCss.includes("customer-order-item-image-link")]
+    ["CSS checkout preview fiel", checkoutCss.includes("V3.47.0 · Resumen de pedido") && checkoutCss.includes("object-fit: contain")],
+    ["CSS detalle pedido preview fiel", accountCss.includes("V3.47.0 · Detalle de pedido") && accountCss.includes("customer-order-item-image-link")]
 ];
 
 const failed = checks.filter(([, ok]) => !ok);
@@ -32,4 +32,4 @@ if (failed.length) {
     process.exit(1);
 }
 
-console.log(`\n✅ Resumen de pedido personalizado v3.46.2 verificado (${checks.length} controles).`);
+console.log(`\n✅ Resumen de pedido personalizado v3.47.0 verificado (${checks.length} controles).`);

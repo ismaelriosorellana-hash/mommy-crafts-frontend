@@ -1,4 +1,4 @@
-/* Mommy Crafts V3.46.2
+/* Mommy Crafts V3.47.0
    Cambios aislados: iconos del header, herramientas de producto,
    vista rápida y comparación. No redefine el diseño general. */
 
@@ -617,7 +617,7 @@ body.mc-quick-view-open {
     }
 }
 
-/* V3.46.2 · posiciones independientes y compatibles con las animaciones internas */
+/* V3.47.0 · posiciones independientes y compatibles con las animaciones internas */
 .container-hero .hero > .mc-header-right-group {
     justify-self: end;
     display: flex;
@@ -719,7 +719,7 @@ html.mc-site-settings-ready .site-header .navbar-actions {
 }
 
 
-/* V3.46.2 · descuento siempre debajo de etiqueta y lejos de comparar */
+/* V3.47.0 · descuento siempre debajo de etiqueta y lejos de comparar */
 .container-img {
     --mc-card-tool-safe-area: 6.8rem;
 }
