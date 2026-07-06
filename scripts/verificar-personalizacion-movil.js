@@ -17,15 +17,15 @@ const pages = ['index.html','catalogo.html','producto.html','carrito.html','comp
 
 for (const page of pages) {
   const html = read(page);
-  mustInclude(html, 'css/customization-mobile-safe-v3434.css?v=3.46.0', `${page} carga CSS móvil seguro v3.46.0`);
-  mustInclude(html, 'css/customization-mobile-preview-v3435.css?v=3.46.0', `${page} carga corrección de vista previa móvil v3.46.0`);
+  mustInclude(html, 'css/customization-mobile-safe-v3434.css?v=3.46.1', `${page} carga CSS móvil seguro v3.46.1`);
+  mustInclude(html, 'css/customization-mobile-preview-v3435.css?v=3.46.1', `${page} carga corrección de vista previa móvil v3.46.1`);
   mustNotInclude(html, 'js/customization-mobile-v3432.js', `${page} no carga JS móvil anterior que podía congelar`);
   mustNotInclude(html, 'css/customization-mobile-v3432.css', `${page} no carga CSS móvil anterior`);
 }
 
-mustInclude(css, 'Personalización móvil segura v3.46.0', 'CSS móvil seguro corresponde a v3.46.0');
+mustInclude(css, 'Personalización móvil segura v3.46.1', 'CSS móvil seguro corresponde a v3.46.1');
 
-mustInclude(previewCss, 'Vista previa móvil completa v3.46.0', 'CSS de vista previa móvil corresponde a v3.46.0');
+mustInclude(previewCss, 'Vista previa móvil completa v3.46.1', 'CSS de vista previa móvil corresponde a v3.46.1');
 mustInclude(previewCss, 'aspect-ratio: 1 / 1 !important', 'vista previa móvil mantiene proporción cuadrada completa');
 mustInclude(previewCss, 'max-height: none !important', 'vista previa y resumen final no se recortan por alto máximo');
 mustInclude(previewCss, '#modal-personalizar .customization-summary-preview img', 'imagen del resumen final queda controlada en móvil');

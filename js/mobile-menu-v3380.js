@@ -1,7 +1,7 @@
 "use strict";
 
 (function () {
-    const VERSION = "3.46.0";
+    const VERSION = "3.46.1";
     const MOBILE_QUERY = "(max-width: 820px)";
     const DRAWER_ID = "mc-mobile-menu-panel";
     const BACKDROP_ID = "mc-mobile-menu-backdrop";

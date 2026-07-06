@@ -268,7 +268,7 @@
 
     function isProductMobileHeader() {
         // Mantiene el nombre por compatibilidad con verificadores previos,
-        // pero desde v3.46.0 aplica a todo header móvil, no solo a la ficha.
+        // pero desde v3.46.1 aplica a todo header móvil, no solo a la ficha.
         return window.matchMedia("(max-width: 820px)").matches;
     }
 

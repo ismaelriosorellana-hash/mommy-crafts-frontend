@@ -511,7 +511,7 @@
 }
 
 
-/* V3.46.0 · Home móvil más limpio, carruseles modulares y arrastre natural */
+/* V3.46.1 · Home móvil más limpio, carruseles modulares y arrastre natural */
 .category-rail-shell,
 .carousel-wrapper,
 .carousel-container {
@@ -717,7 +717,7 @@ body[data-page="home"] .carousel-track {
 }
 
 /* ==========================================================
-   V3.46.0 · Home más fluido, banner móvil ajustado y carruseles sin fondo
+   V3.46.1 · Home más fluido, banner móvil ajustado y carruseles sin fondo
    ========================================================== */
 body[data-page="home"] {
     background: var(--color-background) !important;
@@ -843,7 +843,7 @@ body[data-page="home"] .categories-grid.is-dragging-scroll {
 
 
 /* ==========================================================
-   V3.46.0 · Home sin fondos visibles y banner móvil contenido
+   V3.46.1 · Home sin fondos visibles y banner móvil contenido
    ========================================================== */
 body[data-page="home"] .section-products,
 body[data-page="home"] .featured-section,
@@ -893,7 +893,7 @@ body[data-page="home"] .carousel-wrapper {
 
 
 /* ==========================================================
-   V3.46.0 · Carruseles sin fondo visible y móvil estable
+   V3.46.1 · Carruseles sin fondo visible y móvil estable
    ========================================================== */
 body[data-page="home"] .categories-section,
 body[data-page="home"] .trending-section,
@@ -942,7 +942,7 @@ body[data-page="home"] .categories-grid::after {
     }
 }
 
-/* V3.46.0 · carruseles sin fondo global preservados */
+/* V3.46.1 · carruseles sin fondo global preservados */
 body[data-page="home"] .carousel-wrapper,
 body[data-page="home"] .carousel-container,
 body[data-page="home"] .carousel-track,

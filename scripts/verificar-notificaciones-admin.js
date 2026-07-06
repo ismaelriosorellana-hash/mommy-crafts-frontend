@@ -23,21 +23,20 @@ function assert(condition, message) {
 }
 
 const html = read("admin/pedidos.html");
-const css = read("admin/css/admin-notifications-v3460.css");
-const js = read("admin/js/orders-admin-notifications-v3460.js");
+const baseOrders = read("admin/js/orders-admin.js");
+const proOrders = read("admin/js/orders-admin-pro-v3450.js");
 
-assert(html.includes("admin-notifications-v3460.css?v=3.46.0"), "Panel de pedidos carga CSS de notificaciones v3.46.0.");
-assert(html.includes("orders-admin-notifications-v3460.js?v=3.46.0"), "Panel de pedidos carga JS de notificaciones v3.46.0.");
-assert(css.includes(".admin-notification-panel"), "CSS define panel visual de mensajes automáticos.");
-assert(css.includes("@media (max-width: 760px)"), "Panel de mensajes tiene adaptación móvil.");
-assert(js.includes("/admin/pedidos/${encodeURIComponent(orderId)}/notificaciones"), "JS consulta plantillas de notificación del backend.");
-assert(js.includes("notification-copy"), "JS permite copiar mensaje para WhatsApp.");
-assert(js.includes("notification-send-email"), "JS permite enviar o registrar correo desde admin.");
-assert(js.includes("order_created") && js.includes("payment_confirmed") && js.includes("ready"), "JS incluye plantillas principales de pedido.");
+assert(html.includes("orders-admin.js?v=3.46.1"), "Panel de pedidos carga módulo base de pedidos v3.46.1.");
+assert(html.includes("orders-admin-pro-v3450.js?v=3.46.1"), "Panel de pedidos mantiene mejoras visuales operativas.");
+assert(!html.includes("orders-admin-notifications-v3460.js"), "Panel de pedidos no carga JS de notificaciones que podía congelar la vista.");
+assert(!html.includes("admin-notifications-v3460.css"), "Panel de pedidos no carga CSS de notificaciones pausado.");
+assert(baseOrders.includes("loadOrders") && baseOrders.includes("renderOrders"), "Módulo base de pedidos conserva carga y renderizado.");
+assert(proOrders.includes("orders-admin-pro-ready"), "Capa profesional de pedidos sigue activa.");
+assert(html.includes("admin/pedidos") || html.includes("data-admin-page=\"pedidos\""), "Página de pedidos conserva identificador de módulo admin.");
 
 if (process.exitCode) {
-    console.error("\nVerificación de notificaciones admin con errores.");
+    console.error("\nVerificación de pedidos/notificaciones con errores.");
     process.exit(process.exitCode);
 }
 
-console.log("\nVerificación de notificaciones admin completada.");
+console.log("\nVerificación de pedidos/notificaciones completada.");
