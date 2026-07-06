@@ -12,7 +12,7 @@ const mainCss = fs.readFileSync(path.join(root, 'css', 'main.css'), 'utf8');
 const mobileCss = fs.readFileSync(path.join(root, 'css', 'mobile-polish-v3370.css'), 'utf8');
 
 const checks = [
-  ['CSS específico v3.47.0 cargado', html.includes('css/product-detail-v3340.css?v=3.47.0')],
+  ['CSS específico v3.47.0 cargado', html.includes('css/product-detail-v3340.css?v=3.48.0')],
   ['Layout marketplace presente', html.includes('product-detail-marketplace')],
   ['Galería con miniaturas laterales presente', html.indexOf('id="detalle-thumbnails"') < html.indexOf('class="detail-main-image-container"')],
   ['Columna de compra separada presente', html.includes('class="product-purchase-panel"')],
@@ -20,10 +20,10 @@ const checks = [
   ['Título equilibrado, no gigante', /\.detail-title[\s\S]*font-size:\s*clamp\(2\.8rem,\s*2\.35vw,\s*3\.6rem\)/.test(css)],
   ['Título móvil armónico', /@media \(max-width: 700px\)[\s\S]*\.detail-title[\s\S]*font-size:\s*clamp\(2\.35rem/.test(css)],
   ['Resumen duplicado bajo título eliminado', !html.includes('id="detalle-resumen"') || /summary\.hidden = true/.test(js)],
-  ['Bloque “Lo que debes saber” es colapsable', html.includes('<details class="product-key-facts"') && html.includes('<summary>')],
+  ['Bloque “Lo que debes saber” es colapsable', /<details\b(?=[^>]*class=["'][^"']*product-key-facts)/.test(html) && /<summary[>\s]/.test(html)],
   ['Navegación de botones inferior eliminada', !html.includes('class="product-content-nav"')],
   ['Referencia/SKU presente', html.includes('id="detalle-referencia"')],
-  ['Rating funciona como enlace a reseñas', html.includes('id="detalle-rating" href="#product-reviews-preview"')],
+  ['Rating funciona como enlace a reseñas', /<a\b(?=[^>]*id=["']detalle-rating["'])(?=[^>]*href=["']#product-reviews-preview["'])/.test(html)],
   ['Texto de entrega actualizado', html.includes('Opciones de entrega') && !html.includes('Ver entrega')],
   ['Personalización usa ancho completo', /\.light-customization-heading[\s\S]*grid-template-columns:\s*1fr/.test(css)],
   ['Caja global de la ficha eliminada', /\.product-detail-grid[\s\S]*background:\s*transparent !important;[\s\S]*box-shadow:\s*none !important/.test(css)],
@@ -47,7 +47,7 @@ const checks = [
   ['Acciones móviles de ficha se fuerzan dentro del navbar', commerceToolsJs.includes('resetProductMobileHeaderActions') && commerceToolsJs.includes('navbar.appendChild(actions)')],
   ['Editor visual no desplaza acciones en ficha móvil', siteSettingsJs.includes('isProductMobileNavbarActions') && siteSettingsJs.includes('resetProductMobileNavbarActions')],
   ['Navbar móvil de ficha tiene acciones en columna derecha', /body\[data-page="product"\] \.navbar-actions[\s\S]*grid-column:\s*3 !important/.test(mobileCss)],
-  ['Ficha usa CSS específico v3.47.0', html.includes('css/product-detail-v3340.css?v=3.47.0')],
+  ['Ficha usa CSS específico v3.47.0', html.includes('css/product-detail-v3340.css?v=3.48.0')],
   ['Imagen móvil compacta bajo navbar', mobileCss.includes('Ajuste validado manualmente') && mobileCss.includes('margin-top: -25px !important')],
 ];
 

@@ -543,6 +543,8 @@
         if (description && content.seoDescription) {
             description.setAttribute("content", content.seoDescription);
         }
+
+        window.MommySEO?.updateContentPage(content);
     }
 
     function render(content, source = "api") {

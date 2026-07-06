@@ -16,8 +16,8 @@ const api = read("js/api.js");
 const products = read("js/products.js");
 const cart = read("js/cart.js");
 
-if (!config.includes('APP_VERSION: "3.47.0"')) {
-    errors.push("js/config.js no informa la versión 3.47.0.");
+if (!config.includes('APP_VERSION: "3.48.0"')) {
+    errors.push("js/config.js no informa la versión 3.48.0.");
 }
 
 if (!config.includes("window.ProductLinks")) {

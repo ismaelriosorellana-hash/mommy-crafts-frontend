@@ -1210,6 +1210,10 @@ function createProductCard(product) {
     const addButton = fragment.querySelector(".add-cart");
 
     article.dataset.productId = product.id;
+    if (image) {
+        image.loading = "lazy";
+        image.decoding = "async";
+    }
     category.textContent = product.categoria;
     name.textContent = product.nombre;
 
@@ -2715,6 +2719,8 @@ function renderSizeSelector(product) {
                     155
                 );
         }
+
+        window.MommySEO?.updateProduct(product);
 
         document.getElementById(
             "detalle-nombre-producto"

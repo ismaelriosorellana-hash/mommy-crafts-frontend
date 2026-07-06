@@ -4,12 +4,12 @@ services:
   - type: web
     runtime: static
     name: mommy-crafts-frontend
-    buildCommand: echo "Static site ready"
+    buildCommand: node scripts/generar-sitemap.js || echo "Static site ready"
     staticPublishPath: .
     headers:
       - path: /*
         name: Content-Security-Policy
-        value: "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; frame-src 'none'; form-action 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://mommy-crafts-backend.onrender.com; media-src 'self' blob:; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests"
+        value: "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; frame-src 'none'; form-action 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://mommy-crafts-backend.onrender.com https://res.cloudinary.com https://*.cloudinary.com; media-src 'self' blob:; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests"
       - path: /*
         name: X-Content-Type-Options
         value: nosniff
@@ -28,3 +28,28 @@ services:
       - path: /admin/*
         name: Cache-Control
         value: no-store, max-age=0, must-revalidate
+
+      - path: /acceso.html
+        name: X-Robots-Tag
+        value: noindex, nofollow, noarchive
+      - path: /cuenta.html
+        name: X-Robots-Tag
+        value: noindex, nofollow, noarchive
+      - path: /pedido.html
+        name: X-Robots-Tag
+        value: noindex, nofollow, noarchive
+      - path: /pago.html
+        name: X-Robots-Tag
+        value: noindex, nofollow, noarchive
+      - path: /carrito.html
+        name: X-Robots-Tag
+        value: noindex, nofollow, noarchive
+      - path: /finalizar-compra.html
+        name: X-Robots-Tag
+        value: noindex, nofollow, noarchive
+      - path: /seguimiento-pedido.html
+        name: X-Robots-Tag
+        value: noindex, nofollow, noarchive
+      - path: /pagina.html
+        name: X-Robots-Tag
+        value: noindex, nofollow, noarchive
