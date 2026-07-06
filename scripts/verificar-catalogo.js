@@ -16,8 +16,8 @@ const api = read("js/api.js");
 const products = read("js/products.js");
 const cart = read("js/cart.js");
 
-if (!config.includes('APP_VERSION: "3.54.1"')) {
-    errors.push("js/config.js no informa la versión 3.54.1.");
+if (!config.includes('APP_VERSION: "3.54.2"')) {
+    errors.push("js/config.js no informa la versión 3.54.2.");
 }
 
 if (!config.includes("window.ProductLinks")) {
@@ -98,5 +98,5 @@ if (errors.length) {
     process.exit(1);
 }
 
-console.log("✅ Catálogo 3.54.1 verificado.");
+console.log("✅ Catálogo 3.54.2 verificado.");
 console.log("✅ Ficha directa por slug/ID, relacionados API y enlaces centralizados presentes.");

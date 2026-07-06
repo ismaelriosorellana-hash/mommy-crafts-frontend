@@ -295,10 +295,21 @@
         return form?.querySelector('input[name="pedido-pago"]:checked')?.value || "mercadopago";
     }
 
+    function getCheckoutSubmitButton(form = document.getElementById("form-pedido")) {
+        return form?.querySelector('[type="submit"]') || document.getElementById("btn-enviar-pedido");
+    }
+
+    function setCheckoutSubmitButton(content, disabled) {
+        const submitButton = getCheckoutSubmitButton();
+        if (!submitButton) return;
+        if (typeof disabled === "boolean") submitButton.disabled = disabled;
+        submitButton.innerHTML = content;
+    }
+
     function updatePaymentMethodUI() {
         const method = selectedPaymentMethod();
         const note = document.getElementById("payment-method-note");
-        const submitButton = document.getElementById("btn-enviar-pedido");
+        const submitButton = getCheckoutSubmitButton();
         document.querySelectorAll(".payment-options label").forEach((label) => {
             const input = label.querySelector('input[name="pedido-pago"]');
             label.classList.toggle("is-selected", Boolean(input?.checked));
@@ -346,7 +357,7 @@
     async function submitOrder(event) {
         event.preventDefault();
         const form = event.currentTarget;
-        const submitButton = form.querySelector('[type="submit"]');
+        const submitButton = getCheckoutSubmitButton(form);
         const formData = new FormData(form);
         const items = read();
         if (!items.length) { window.location.href = "carrito.html"; return; }
@@ -409,7 +420,9 @@
             }));
 
             if (paymentMethod === "mercadopago") {
-                submitButton.innerHTML = '<i class="fa-solid fa-lock" aria-hidden="true"></i> Ir a Pagar';
+                if (submitButton) {
+                    submitButton.innerHTML = '<i class="fa-solid fa-lock" aria-hidden="true"></i> Ir a Pagar';
+                }
                 try {
                     const preference = await API.request(`/pagos/mercadopago/pedidos/${encodeURIComponent(response.pedidoId)}/preferencia`, {
                         method: "POST", headers: { "Content-Type": "application/json" }, body: "{}", timeoutMs: 70000
