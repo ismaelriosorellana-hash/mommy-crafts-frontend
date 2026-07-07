@@ -46,6 +46,14 @@
             whatsappNumber: "56954633848",
             updatedAt: null
         },
+        analytics: {
+            enabled: false,
+            ga4MeasurementId: "",
+            clarityProjectId: "",
+            anonymizeIp: true,
+            trackEcommerce: true,
+            updatedAt: null
+        },
         colors: {
             primary: "#FCC0E6",
             primaryDark: "#8E456A",
@@ -130,6 +138,10 @@
             storeStatus: {
                 ...defaults.storeStatus,
                 ...(value.storeStatus || {})
+            },
+            analytics: {
+                ...defaults.analytics,
+                ...(value.analytics || {})
             }
         };
     }
@@ -196,6 +208,46 @@
         return String(value || "").replace(/[^0-9]/g, "").slice(0, 20);
     }
 
+    function sanitizeGa4Id(value) {
+        return String(value || "").trim().toUpperCase().slice(0, 32);
+    }
+
+    function sanitizeClarityId(value) {
+        return String(value || "").trim().replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 64);
+    }
+
+    function renderAnalyticsFields() {
+        const analytics = state.settings.analytics || DEFAULTS.analytics;
+        const enabled = Boolean(analytics.enabled);
+        const ga4 = sanitizeGa4Id(analytics.ga4MeasurementId);
+        const clarity = sanitizeClarityId(analytics.clarityProjectId);
+        const statusBadge = $("#analytics-status");
+        const preview = $("#analytics-preview");
+        const enabledInput = $("#analytics-enabled");
+        const ga4Input = $("#analytics-ga4-id");
+        const clarityInput = $("#analytics-clarity-id");
+        const ecommerceInput = $("#analytics-ecommerce");
+
+        if (enabledInput) enabledInput.checked = enabled;
+        if (ga4Input) ga4Input.value = ga4;
+        if (clarityInput) clarityInput.value = clarity;
+        if (ecommerceInput) ecommerceInput.checked = analytics.trackEcommerce !== false;
+
+        const ready = enabled && (ga4 || clarity);
+        if (statusBadge) {
+            statusBadge.className = `admin-status ${ready ? "success" : enabled ? "warning" : "info"}`;
+            statusBadge.textContent = ready ? "Activa" : enabled ? "Faltan IDs" : "Desactivada";
+        }
+        if (preview) {
+            preview.className = `admin-alert ${ready ? "success" : enabled ? "warning" : "info"}`;
+            preview.textContent = ready
+                ? `Analítica preparada: ${ga4 ? "GA4" : ""}${ga4 && clarity ? " + " : ""}${clarity ? "Clarity" : ""}.`
+                : enabled
+                    ? "La analítica está activada, pero debes ingresar al menos un ID válido para cargar herramientas externas."
+                    : "La analítica está desactivada. El sitio no cargará GA4 ni Clarity.";
+        }
+    }
+
     function renderStoreStatusFields() {
         const status = state.settings.storeStatus || DEFAULTS.storeStatus;
         const pausedInput = $("#store-paused");
@@ -222,6 +274,7 @@
     function renderForm() {
         const { logo, title } = state.settings.branding;
         renderStoreStatusFields();
+        renderAnalyticsFields();
         $("#site-logo-alt").value = logo.alt || "";
         setRange("site-logo-width", logo.width);
         setRange("site-logo-x", logo.offsetX);
@@ -353,6 +406,14 @@
                 paused: $("#store-paused")?.checked === true,
                 message: ($("#store-pause-message")?.value || DEFAULTS.storeStatus.message).trim(),
                 whatsappNumber: sanitizeWhatsApp($("#store-pause-whatsapp")?.value || DEFAULTS.storeStatus.whatsappNumber)
+            },
+            analytics: {
+                ...state.settings.analytics,
+                enabled: $("#analytics-enabled")?.checked === true,
+                ga4MeasurementId: sanitizeGa4Id($("#analytics-ga4-id")?.value || ""),
+                clarityProjectId: sanitizeClarityId($("#analytics-clarity-id")?.value || ""),
+                anonymizeIp: true,
+                trackEcommerce: $("#analytics-ecommerce")?.checked !== false
             },
             colors
         };
@@ -596,6 +657,26 @@
                     }
                 });
                 renderStoreStatusFields();
+            });
+        });
+
+        ["analytics-enabled", "analytics-ga4-id", "analytics-clarity-id", "analytics-ecommerce"].forEach((id) => {
+            const element = $(`#${id}`);
+            if (!element) return;
+            const eventName = element.type === "checkbox" ? "change" : "input";
+            element.addEventListener(eventName, () => {
+                state.settings = mergeSettings({
+                    ...state.settings,
+                    analytics: {
+                        ...state.settings.analytics,
+                        enabled: $("#analytics-enabled")?.checked === true,
+                        ga4MeasurementId: sanitizeGa4Id($("#analytics-ga4-id")?.value || ""),
+                        clarityProjectId: sanitizeClarityId($("#analytics-clarity-id")?.value || ""),
+                        anonymizeIp: true,
+                        trackEcommerce: $("#analytics-ecommerce")?.checked !== false
+                    }
+                });
+                renderAnalyticsFields();
             });
         });
 

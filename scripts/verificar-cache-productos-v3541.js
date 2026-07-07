@@ -14,8 +14,8 @@ function check(condition, message) {
     }
 }
 
-check(config.includes('APP_VERSION: "3.57.0"'), "APP_VERSION debe ser 3.57.0");
+check(config.includes('APP_VERSION: "3.58.0"'), "APP_VERSION debe ser 3.58.0");
 check(api.includes('cache: method === "GET" ? "no-store" : "default"'), "fetch GET debe usar cache no-store");
 check(!api.includes('cache: "force-cache"'), "api.js no debe forzar cache en solicitudes API");
 
-console.log("✅ Cache de productos frontend v3.57.0 verificado");
+console.log("✅ Cache de productos frontend v3.58.0 verificado");

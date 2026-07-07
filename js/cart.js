@@ -79,10 +79,12 @@
         const customizationKey = customization ? JSON.stringify(customization) : "";
         const existing = items.find((item) => item.productId === product.id && (item.customizationKey || "") === customizationKey);
 
+        let addedItem;
         if (existing) {
             existing.quantity += safeQuantity;
+            addedItem = existing;
         } else {
-            items.push({
+            addedItem = {
                 lineId: window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
                 productId: product.id,
                 productSlug: product.slug || "",
@@ -93,10 +95,14 @@
                 customization,
                 customizationKey,
                 delivery: normalizeDelivery({ ...(product.delivery ?? product.entrega ?? {}), diasPreparacion: product.diasPreparacion ?? 3 })
-            });
+            };
+            items.push(addedItem);
         }
 
         write(items);
+        window.dispatchEvent(new CustomEvent("cart:item-added", {
+            detail: { product, item: addedItem, quantity: safeQuantity }
+        }));
         return true;
     }
 

@@ -403,6 +403,7 @@
     }
 
     function renderOrder(order) {
+        window.dispatchEvent(new CustomEvent("payment:order-rendered", { detail: order }));
         if (order.estadoPago === "pagado") {
             sessionStorage.removeItem("mommycrafts_pending_payment");
             setView(
