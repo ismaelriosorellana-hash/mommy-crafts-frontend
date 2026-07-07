@@ -1,0 +1,80 @@
+/* Mommy Crafts · Frontend 3.59.0 · Preferencias de privacidad y analítica */
+.mc-privacy-banner {
+    position: fixed;
+    left: max(16px, env(safe-area-inset-left));
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 9999;
+    display: none;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 16px;
+    border: 1px solid rgba(101, 68, 90, 0.16);
+    border-radius: 20px;
+    background: rgba(255, 252, 253, 0.98);
+    box-shadow: 0 18px 48px rgba(47, 41, 44, 0.18);
+    color: #2f292c;
+}
+
+.mc-privacy-banner.is-visible {
+    display: block;
+}
+
+.mc-privacy-banner h2 {
+    margin: 0 0 8px;
+    color: #65445a;
+    font-size: 1.05rem;
+}
+
+.mc-privacy-banner p {
+    margin: 0;
+    line-height: 1.5;
+    color: #5f555a;
+}
+
+.mc-privacy-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.mc-privacy-actions button,
+.mc-privacy-actions a {
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 10px 14px;
+    text-decoration: none;
+}
+
+.mc-privacy-accept {
+    background: #65445a;
+    color: #fff;
+}
+
+.mc-privacy-decline {
+    background: #f7eef1;
+    color: #65445a;
+}
+
+.mc-privacy-link {
+    background: transparent;
+    color: #65445a;
+}
+
+@media (max-width: 640px) {
+    .mc-privacy-banner {
+        border-radius: 18px;
+        padding: 14px;
+    }
+    .mc-privacy-actions {
+        flex-direction: column;
+    }
+    .mc-privacy-actions button,
+    .mc-privacy-actions a {
+        width: 100%;
+        text-align: center;
+    }
+}

@@ -10,10 +10,10 @@ const assert = (condition, message) => {
 };
 
 const config = read("js/config.js");
-assert(config.includes('APP_VERSION: "3.58.0"'), "APP_VERSION debe ser 3.58.0");
+assert(config.includes('APP_VERSION: "3.59.0"'), "APP_VERSION debe ser 3.59.0");
 assert(config.includes("ANALYTICS"), "config.js debe declarar ANALYTICS");
 
-const analytics = read("js/analytics-v3580.js");
+const analytics = read("js/analytics-v3590.js");
 [
     "gtag/js",
     "clarity.ms/tag",
@@ -22,7 +22,7 @@ const analytics = read("js/analytics-v3580.js");
     "begin_checkout",
     "purchase",
     "contact_whatsapp"
-].forEach((token) => assert(analytics.includes(token), `analytics-v3580.js debe incluir ${token}`));
+].forEach((token) => assert(analytics.includes(token), `analytics-v3590.js debe incluir ${token}`));
 
 const settingsAdmin = read("admin/js/site-settings-admin.js");
 [
@@ -49,9 +49,9 @@ const publicPages = fs.readdirSync(root).filter((file) => file.endsWith(".html")
 assert(publicPages.length >= 10, "Debe haber páginas HTML públicas para verificar");
 publicPages.forEach((file) => {
     const html = read(file);
-    assert(html.includes("js/analytics-v3580.js?v=3.58.0"), `${file} debe cargar analytics-v3580.js`);
+    assert(html.includes("js/analytics-v3590.js?v=3.59.0"), `${file} debe cargar analytics-v3590.js`);
     assert(html.includes("googletagmanager.com"), `${file} debe permitir GA4 en CSP meta`);
     assert(html.includes("clarity.ms"), `${file} debe permitir Clarity en CSP meta`);
 });
 
-console.log("✅ Analítica frontend v3.58.0 verificada");
+console.log("✅ Analítica frontend v3.59.0 verificada");

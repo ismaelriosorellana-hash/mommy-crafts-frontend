@@ -431,7 +431,7 @@ body[data-admin-page="pedidos"] .order-asset-card {
     }
 }
 
-/* Mommy Crafts · Frontend 3.58.0 · Comunicación post-compra */
+/* Mommy Crafts · Frontend 3.59.0 · Comunicación post-compra */
 .order-communication-panel .admin-card-body {
     display: grid;
     gap: 16px;

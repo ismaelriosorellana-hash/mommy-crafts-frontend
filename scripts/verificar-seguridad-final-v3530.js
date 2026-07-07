@@ -16,7 +16,7 @@ function assertIncludes(file, content, expected) {
 }
 
 const config = read("js/config.js");
-assertIncludes("js/config.js", config, 'APP_VERSION: "3.58.0"');
+assertIncludes("js/config.js", config, 'APP_VERSION: "3.59.0"');
 
 const dashboardHtml = read("admin/index.html");
 assertIncludes("admin/index.html", dashboardHtml, "admin-launch-security-status");
@@ -34,4 +34,4 @@ assertIncludes("_headers", headers, "X-Frame-Options: DENY");
 assertIncludes("_headers", headers, "Strict-Transport-Security");
 assertIncludes("_headers", headers, "X-Robots-Tag: noindex");
 
-console.log("✅ Seguridad final frontend v3.58.0 verificada.");
+console.log("✅ Seguridad final frontend v3.59.0 verificada.");
