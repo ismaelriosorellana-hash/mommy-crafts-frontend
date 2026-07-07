@@ -10,7 +10,7 @@ const API_BASE_URL =
         : "https://mommy-crafts-backend.onrender.com/api";
 
 window.CONFIG = Object.freeze({
-    APP_VERSION: "3.60.0",
+    APP_VERSION: "3.60.1",
     SITE_URL: "https://mommycrafts.cl",
     SITE_NAME: "Mommy Crafts",
     BRAND_NAME: "Mommy Crafts",
@@ -135,9 +135,9 @@ HOME_BANNERS: Object.freeze([
 
     soporteTelefono: "+56 9 5463 3848",
     whatsapp: "56954633848",
-    soporteEmail: "ventas@mommycrafts.cl",
-    ventasEmail: "ventas@mommycrafts.cl",
-    correoVentas: "ventas@mommycrafts.cl",
+    soporteEmail: "venta@mommycrafts.cl",
+    ventasEmail: "venta@mommycrafts.cl",
+    correoVentas: "venta@mommycrafts.cl",
     soporteMensaje: "Necesito ayuda con un producto",
 
     social: Object.freeze({

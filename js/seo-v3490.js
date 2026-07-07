@@ -2,7 +2,7 @@
 
 (function () {
     const DEFAULT_TITLE = "Mommy Crafts | Tienda online oficial de productos personalizados";
-    const DEFAULT_DESCRIPTION = "Sitio oficial de Mommy Crafts Chile: regalos personalizados, productos sublimados, papelería creativa y detalles únicos con atención por WhatsApp y ventas@mommycrafts.cl.";
+    const DEFAULT_DESCRIPTION = "Sitio oficial de Mommy Crafts Chile: regalos personalizados, productos sublimados, papelería creativa y detalles únicos con atención por WhatsApp y venta@mommycrafts.cl.";
     const DEFAULT_IMAGE = "https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png";
     const SITE_URL = String(window.CONFIG?.SITE_URL || window.location.origin || "https://mommycrafts.cl").replace(/\/+$/, "");
     const SITE_NAME = window.CONFIG?.SITE_NAME || "Mommy Crafts";
@@ -193,7 +193,7 @@
                 "@type": "ContactPoint",
                 contactType: "sales and customer support",
                 telephone: window.CONFIG?.soporteTelefono || "+56 9 5463 3848",
-                email: window.CONFIG?.ventasEmail || window.CONFIG?.soporteEmail || "ventas@mommycrafts.cl",
+                email: window.CONFIG?.ventasEmail || window.CONFIG?.soporteEmail || "venta@mommycrafts.cl",
                 areaServed: "CL",
                 availableLanguage: "Spanish"
             }

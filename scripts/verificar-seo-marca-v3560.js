@@ -12,13 +12,13 @@ const sitemap = read("sitemap.xml");
 const robots = read("robots.txt");
 
 const checks = [
-  ["version config", config.includes('APP_VERSION: "3.60.0"')],
+  ["version config", config.includes('APP_VERSION: "3.60.1"')],
   ["home title marca", index.includes("Tienda online oficial de productos personalizados")],
   ["home canonical final", index.includes('href="https://mommycrafts.cl/" rel="canonical"')],
   ["schema organization static", index.includes('id="brand-organization-static"')],
   ["instagram visible", index.includes("https://www.instagram.com/mommycrafts.cl/")],
   ["tiktok visible", index.includes("https://www.tiktok.com/@mommycrafts.cl")],
-  ["correo ventas visible", index.includes("ventas@mommycrafts.cl")],
+  ["correo ventas visible", index.includes("venta@mommycrafts.cl")],
   ["robots dominio final", robots.includes("Sitemap: https://mommycrafts.cl/sitemap.xml")],
   ["sitemap sin netlify", !/netlify\.app/i.test(sitemap + index + config + seo)],
   ["sitemap sin onrender", !/mommycrafts\.onrender\.com/i.test(sitemap + robots)],
@@ -27,9 +27,9 @@ const checks = [
 
 const failed = checks.filter(([, ok]) => !ok);
 if (failed.length) {
-  console.error("❌ SEO de marca v3.60.0 con errores:");
+  console.error("❌ SEO de marca v3.60.1 con errores:");
   failed.forEach(([name]) => console.error(`- ${name}`));
   process.exit(1);
 }
 
-console.log("✅ SEO de marca y limpieza Netlify frontend v3.60.0 verificado");
+console.log("✅ SEO de marca y limpieza Netlify frontend v3.60.1 verificado");

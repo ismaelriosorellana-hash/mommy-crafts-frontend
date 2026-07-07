@@ -774,7 +774,7 @@
                     Cancelar pedido pendiente
                 </button>
                 <p class="account-help-text">
-                    Si ya pagaste o necesitas un cambio/reembolso, contáctanos a ventas@mommycrafts.cl o por WhatsApp.
+                    Si ya pagaste o necesitas un cambio/reembolso, contáctanos a venta@mommycrafts.cl o por WhatsApp.
                 </p>
             </section>
         `;
