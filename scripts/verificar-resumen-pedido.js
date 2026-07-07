@@ -13,7 +13,7 @@ const checkoutCss = fs.readFileSync(path.join(root, "css", "checkout.css"), "utf
 const accountCss = fs.readFileSync(path.join(root, "css", "account.css"), "utf8");
 
 const checks = [
-    ["CONFIG versión 3.61.1", config.includes('APP_VERSION: "3.61.1"')],
+    ["CONFIG versión 3.62.0", config.includes('APP_VERSION: "3.62.0"')],
     ["Carrito prioriza preview personalizada", cart.includes("function getDisplayImage") && cart.includes("summaryPreviewUrl") && cart.includes("finalPreview?.asset")],
     ["Resumen checkout usa imagen personalizada", checkout.includes("hasPersonalizedPreview") && checkout.includes("Vista final según la personalización realizada")],
     ["Pedido envía personalizacionResumen", checkout.includes("personalizacionResumen") && checkout.includes("vistaPrevia: imagenResumen")],

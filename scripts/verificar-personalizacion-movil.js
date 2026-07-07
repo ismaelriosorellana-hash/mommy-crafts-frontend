@@ -17,8 +17,8 @@ const pages = ['index.html','catalogo.html','producto.html','carrito.html','comp
 
 for (const page of pages) {
   const html = read(page);
-  mustInclude(html, 'css/customization-mobile-safe-v3434.css?v=3.61.1', `${page} carga CSS móvil seguro v3.47.0`);
-  mustInclude(html, 'css/customization-mobile-preview-v3435.css?v=3.61.1', `${page} carga corrección de vista previa móvil v3.47.0`);
+  mustInclude(html, 'css/customization-mobile-safe-v3434.css?v=3.62.0', `${page} carga CSS móvil seguro v3.47.0`);
+  mustInclude(html, 'css/customization-mobile-preview-v3435.css?v=3.62.0', `${page} carga corrección de vista previa móvil v3.47.0`);
   mustNotInclude(html, 'js/customization-mobile-v3432.js', `${page} no carga JS móvil anterior que podía congelar`);
   mustNotInclude(html, 'css/customization-mobile-v3432.css', `${page} no carga CSS móvil anterior`);
 }

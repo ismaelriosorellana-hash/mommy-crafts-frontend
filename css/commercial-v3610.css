@@ -1,4 +1,4 @@
-/* Mommy Crafts v3.61.1 - mejora comercial y conversión */
+/* Mommy Crafts v3.62.0 - mejora comercial y conversión */
 .commercial-section {
     margin-top: clamp(2rem, 4vw, 4rem);
     margin-bottom: clamp(2rem, 4vw, 4rem);
@@ -210,7 +210,7 @@
 }
 
 
-/* V3.61.1 · orden comercial de home */
+/* V3.62.0 · orden comercial de home */
 .how-it-works-compact {
     scroll-margin-top: 7.5rem;
 }
@@ -232,5 +232,244 @@
 @media (max-width: 720px) {
     .how-it-works-compact {
         scroll-margin-top: 5.5rem;
+    }
+}
+
+
+/* V3.62.0 · página Cómo comprar y guía en ficha */
+.how-buy-page .content-hero {
+    background: linear-gradient(135deg, rgba(247, 238, 241, .94), rgba(255, 255, 255, .96));
+}
+
+.how-buy-layout {
+    display: grid;
+    gap: clamp(1rem, 3vw, 2rem);
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    margin-bottom: clamp(2rem, 5vw, 4rem);
+    margin-top: clamp(1.5rem, 4vw, 3rem);
+}
+
+.how-buy-main {
+    display: grid;
+    gap: 1rem;
+}
+
+.how-buy-card,
+.how-buy-help-card,
+.product-how-buy-link a {
+    background: rgba(255, 255, 255, .92);
+    border: 1px solid rgba(154, 102, 120, .16);
+    box-shadow: 0 18px 38px rgba(86, 55, 66, .08);
+}
+
+.how-buy-card {
+    border-radius: 1.45rem;
+    padding: clamp(1.1rem, 3vw, 1.65rem);
+}
+
+.how-buy-card h2,
+.how-buy-help-card h2 {
+    color: #4f323b;
+    margin-bottom: .65rem;
+}
+
+.how-buy-card p,
+.how-buy-card li,
+.how-buy-help-card p {
+    color: #755862;
+    line-height: 1.7;
+}
+
+.how-buy-steps,
+.how-buy-detail-grid {
+    display: grid;
+    gap: .95rem;
+    margin-top: 1.1rem;
+}
+
+.how-buy-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.how-buy-detail-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.how-buy-steps article,
+.how-buy-detail-grid article {
+    background: #fff8fa;
+    border: 1px solid rgba(184, 109, 134, .15);
+    border-radius: 1.15rem;
+    padding: 1rem;
+}
+
+.how-buy-steps span,
+.how-buy-detail-grid i,
+.product-how-buy-link span {
+    align-items: center;
+    background: #f3d5dc;
+    border-radius: 999px;
+    color: #6e3f4f;
+    display: inline-flex;
+    font-weight: 900;
+    height: 2.35rem;
+    justify-content: center;
+    margin-bottom: .7rem;
+    width: 2.35rem;
+}
+
+.how-buy-steps h3,
+.how-buy-detail-grid h3 {
+    color: #4f323b;
+    font-size: 1rem;
+    margin: 0 0 .45rem;
+}
+
+.how-buy-note {
+    align-items: flex-start;
+    background: #f7eef1;
+    border-radius: 1.1rem;
+    color: #6f4b58;
+    display: flex;
+    gap: .75rem;
+    margin-top: 1rem;
+    padding: .9rem 1rem;
+}
+
+.how-buy-timeline {
+    display: grid;
+    gap: .75rem;
+    margin: 1rem 0 0;
+    padding-left: 1.2rem;
+}
+
+.how-buy-card details {
+    border-bottom: 1px solid rgba(154, 102, 120, .14);
+    padding: .75rem 0;
+}
+
+.how-buy-card summary {
+    color: #4f323b;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.how-buy-aside {
+    align-self: start;
+    display: grid;
+    gap: 1rem;
+    position: sticky;
+    top: 1rem;
+}
+
+.how-buy-help-card {
+    border-radius: 1.45rem;
+    padding: 1.25rem;
+}
+
+.how-buy-help-card > i {
+    background: #25d366;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 1.4rem;
+    height: 3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: .85rem;
+    width: 3rem;
+}
+
+.how-buy-help-card a,
+.how-buy-mini-links a {
+    align-items: center;
+    border-radius: 999px;
+    display: inline-flex;
+    font-weight: 800;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.how-buy-help-card a {
+    background: #25d366;
+    color: #fff;
+    margin-top: .85rem;
+    padding: .75rem 1rem;
+    width: 100%;
+}
+
+.how-buy-mini-links {
+    display: grid;
+    gap: .55rem;
+}
+
+.how-buy-mini-links a {
+    background: #fff;
+    border: 1px solid rgba(154, 102, 120, .15);
+    color: #6e3f4f;
+    padding: .75rem 1rem;
+}
+
+.product-how-buy-link {
+    margin-bottom: 1rem;
+}
+
+.product-how-buy-link a {
+    align-items: center;
+    border-radius: 1.25rem;
+    color: inherit;
+    display: grid;
+    gap: .9rem;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    padding: 1rem;
+    text-decoration: none;
+}
+
+.product-how-buy-link strong {
+    color: #4f323b;
+    display: block;
+    margin-bottom: .25rem;
+}
+
+.product-how-buy-link p {
+    color: #755862;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.product-how-buy-link a:hover,
+.product-how-buy-link a:focus-visible {
+    border-color: rgba(154, 102, 120, .34);
+    box-shadow: 0 20px 38px rgba(86, 55, 66, .12);
+}
+
+@media (max-width: 980px) {
+    .how-buy-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .how-buy-aside {
+        position: static;
+    }
+
+    .how-buy-steps,
+    .how-buy-detail-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 680px) {
+    .how-buy-steps,
+    .how-buy-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-how-buy-link a {
+        align-items: flex-start;
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .product-how-buy-link a > i {
+        display: none;
     }
 }
