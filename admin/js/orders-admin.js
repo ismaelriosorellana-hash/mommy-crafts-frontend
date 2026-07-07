@@ -597,7 +597,7 @@ function renderOrderCommunication(order) {
                     </div>
 
                     <p class="order-communication-note">
-                        El correo se enviará solo si el backend tiene configurado Resend. Si no, el sistema dejará el mensaje listo para copiar o enviar por WhatsApp.
+                        El correo se enviará con la plantilla oficial Mommy Crafts si Resend está configurado. Si no, el sistema deja el mensaje listo para copiar o enviar por WhatsApp.
                     </p>
                 </div>
             </section>

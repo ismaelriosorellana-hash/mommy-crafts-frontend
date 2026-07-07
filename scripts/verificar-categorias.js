@@ -28,7 +28,7 @@ const checks = [
     ["Navegación admin incluye Categorías", adminCommon.includes('id: "categorias"')],
     ["Páginas públicas cargan categories.js", htmlFiles.every((name) => {
         const html = fs.readFileSync(path.join(root, name), "utf8");
-        return !html.includes("js/products.js") || html.includes("js/categories.js?v=3.59.0");
+        return !html.includes("js/products.js") || html.includes("js/categories.js?v=3.60.0");
     })],
     ["Inicio muestra categorías aunque no tengan productos", !productsJs.includes("publicProducts.some((product) =>")],
     ["Carruseles permiten arrastre con clic", homeJs.includes("enableDragScroll") && homeJs.includes("pointermove")],

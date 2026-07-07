@@ -12,7 +12,7 @@ const mainCss = fs.readFileSync(path.join(root, 'css', 'main.css'), 'utf8');
 const mobileCss = fs.readFileSync(path.join(root, 'css', 'mobile-polish-v3370.css'), 'utf8');
 
 const checks = [
-  ['CSS específico v3.47.0 cargado', html.includes('css/product-detail-v3340.css?v=3.59.0')],
+  ['CSS específico v3.47.0 cargado', html.includes('css/product-detail-v3340.css?v=3.60.0')],
   ['Layout marketplace presente', html.includes('product-detail-marketplace')],
   ['Galería con miniaturas laterales presente', html.indexOf('id="detalle-thumbnails"') < html.indexOf('class="detail-main-image-container"')],
   ['Columna de compra separada presente', html.includes('class="product-purchase-panel"')],
@@ -47,7 +47,7 @@ const checks = [
   ['Acciones móviles de ficha se fuerzan dentro del navbar', commerceToolsJs.includes('resetProductMobileHeaderActions') && commerceToolsJs.includes('navbar.appendChild(actions)')],
   ['Editor visual no desplaza acciones en ficha móvil', siteSettingsJs.includes('isProductMobileNavbarActions') && siteSettingsJs.includes('resetProductMobileNavbarActions')],
   ['Navbar móvil de ficha tiene acciones en columna derecha', /body\[data-page="product"\] \.navbar-actions[\s\S]*grid-column:\s*3 !important/.test(mobileCss)],
-  ['Ficha usa CSS específico v3.47.0', html.includes('css/product-detail-v3340.css?v=3.59.0')],
+  ['Ficha usa CSS específico v3.47.0', html.includes('css/product-detail-v3340.css?v=3.60.0')],
   ['Imagen móvil compacta bajo navbar', mobileCss.includes('Ajuste validado manualmente') && mobileCss.includes('margin-top: -25px !important')],
 ];
 

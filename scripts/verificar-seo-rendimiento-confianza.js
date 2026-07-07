@@ -31,9 +31,9 @@ const robots = read("robots.txt");
 const sitemap = read("sitemap.xml");
 const headers = read("_headers");
 
-ok(config.includes('APP_VERSION: "3.59.0"'), "CONFIG informa versión 3.59.0");
+ok(config.includes('APP_VERSION: "3.60.0"'), "CONFIG informa versión 3.60.0");
 ok(config.includes('SITE_URL: "https://mommycrafts.cl"'), "CONFIG define URL pública oficial");
-ok(exists("js/seo-v3490.js"), "helper SEO v3.59.0 existe");
+ok(exists("js/seo-v3490.js"), "helper SEO v3.60.0 existe");
 ok(seo.includes("updateProduct(product)"), "helper SEO actualiza metadatos de producto");
 ok(seo.includes('"@type": "Product"'), "helper SEO genera Schema.org Product");
 ok(seo.includes('"@type": "Organization"'), "helper SEO genera Schema.org Organization");
@@ -71,7 +71,7 @@ const noindexPages = [
 
 for (const page of [...indexedPages, ...noindexPages]) {
     const html = read(page);
-    ok(html.includes("js/seo-v3490.js?v=3.59.0"), `${page} carga helper SEO`);
+    ok(html.includes("js/seo-v3490.js?v=3.60.0"), `${page} carga helper SEO`);
     ok(/<link\b(?=[^>]*rel=["']canonical["'])(?=[^>]*href=["']https:\/\/mommycrafts\.cl)/i.test(html), `${page} incluye canonical absoluto`);
     ok(hasMeta(html, "og:title"), `${page} incluye og:title`);
     ok(hasMeta(html, "og:description"), `${page} incluye og:description`);
@@ -119,4 +119,4 @@ if (errors) {
     process.exit(1);
 }
 
-console.log("\n✅ SEO, rendimiento y confianza v3.59.0 verificados.");
+console.log("\n✅ SEO, rendimiento y confianza v3.60.0 verificados.");
