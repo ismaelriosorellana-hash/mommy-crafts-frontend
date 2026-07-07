@@ -11,7 +11,7 @@ const check = (condition, message) => {
   if (!condition) errors.push(message);
 };
 
-check(config.includes('APP_VERSION: "3.62.0"'), 'CONFIG.APP_VERSION debe ser 3.62.0.');
+check(config.includes('APP_VERSION: "3.62.1"'), 'CONFIG.APP_VERSION debe ser 3.62.1.');
 check(html.includes('id="btn-enviar-pedido"'), 'finalizar-compra.html debe mantener el botón de pago.');
 check(html.includes('form="form-pedido"'), 'El botón de pago externo debe seguir asociado al formulario.');
 check(checkout.includes('function getCheckoutSubmitButton'), 'checkout.js debe tener helper para encontrar el botón externo.');
@@ -20,9 +20,9 @@ check(!checkout.includes('const submitButton = form.querySelector(\'[type="submi
 check(!checkout.includes('submitButton.innerHTML = \'<i class="fa-solid fa-lock" aria-hidden="true"></i> Ir a Pagar\';\n                try'), 'No debe quedar reset sin validar submitButton antes de Mercado Pago.');
 
 if (errors.length) {
-  console.error('❌ Verificación checkout pago v3.62.0 con errores:');
+  console.error('❌ Verificación checkout pago v3.62.1 con errores:');
   errors.forEach((error) => console.error(`- ${error}`));
   process.exit(1);
 }
 
-console.log('✅ Checkout pago frontend v3.62.0 verificado.');
+console.log('✅ Checkout pago frontend v3.62.1 verificado.');

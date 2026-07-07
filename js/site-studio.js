@@ -187,6 +187,17 @@
             normalized.splice(Math.min(2, normalized.length), 0, { kind: "categories", label: "Categorías", url: "catalogo.html", order: 30, enabled: true });
         }
 
+        const hasHowToBuy = normalized.some((item) => {
+            const url = String(item.url || "").toLowerCase();
+            const label = String(item.label || "").toLowerCase();
+            return url.includes("como-comprar.html") || label.includes("cómo comprar") || label.includes("como comprar");
+        });
+
+        if (!hasHowToBuy) {
+            const insertIndex = Math.min(3, normalized.length);
+            normalized.splice(insertIndex, 0, { kind: "link", label: "Cómo comprar", url: "como-comprar.html", order: 35, enabled: true });
+        }
+
         if (!hasKind("customization")) {
             normalized.push({ kind: "customization", label: "Personaliza tu producto", url: "#", order: 90, enabled: true });
         }

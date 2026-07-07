@@ -136,6 +136,7 @@
                 <ul class="mc-mobile-menu-list">
                     ${rowHtml({ href: "index.html", label: "Inicio", helper: "Volver a la portada", icon: "fa-solid fa-house" })}
                     ${rowHtml({ href: "catalogo.html", label: "Todos los productos", helper: "Explora el catálogo completo", icon: "fa-solid fa-border-all" })}
+                    ${rowHtml({ href: "como-comprar.html", label: "Cómo comprar", helper: "Paso a paso y guía de personalización", icon: "fa-solid fa-circle-question" })}
                     ${rowHtml({ label: "Categorías", helper: "Ver secciones y subcategorías", icon: "fa-solid fa-layer-group", arrow: true, action: "view", target: VIEW_CATEGORIES })}
                     ${rowHtml({ label: "Personaliza tu producto", helper: "Cuéntanos tu idea y adjunta referencias", icon: "fa-solid fa-pen-ruler", action: "customize" })}
                 </ul>

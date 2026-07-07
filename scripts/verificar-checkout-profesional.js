@@ -9,8 +9,8 @@ const checks = [
   ['js/checkout-professional-v3420.js', 'injectProgress'],
   ['js/checkout-professional-v3420.js', 'formatRut'],
   ['js/checkout-professional-v3420.js', 'checkout-mobile-pay-button'],
-  ['finalizar-compra.html', 'css/checkout-professional-v3420.css?v=3.62.0'],
-  ['finalizar-compra.html', 'js/checkout-professional-v3420.js?v=3.62.0']
+  ['finalizar-compra.html', 'css/checkout-professional-v3420.css?v=3.62.1'],
+  ['finalizar-compra.html', 'js/checkout-professional-v3420.js?v=3.62.1']
 ];
 const failures = [];
 for (const [file, text] of checks) {
