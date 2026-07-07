@@ -1,0 +1,210 @@
+/* Mommy Crafts v3.61.0 - mejora comercial y conversión */
+.commercial-section {
+    margin-top: clamp(2rem, 4vw, 4rem);
+    margin-bottom: clamp(2rem, 4vw, 4rem);
+}
+
+.commercial-section-header {
+    max-width: 760px;
+    margin-bottom: 1.5rem;
+}
+
+.commercial-section-header p {
+    color: #755862;
+    line-height: 1.7;
+    margin-top: .55rem;
+}
+
+.commercial-steps-grid,
+.occasion-grid,
+.product-guide-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.commercial-steps-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.commercial-step-card,
+.occasion-card,
+.product-guide-card,
+.commercial-whatsapp-strip {
+    background: rgba(255, 255, 255, .88);
+    border: 1px solid rgba(154, 102, 120, .16);
+    box-shadow: 0 16px 34px rgba(86, 55, 66, .08);
+}
+
+.commercial-step-card,
+.product-guide-card {
+    border-radius: 1.35rem;
+    padding: 1.15rem;
+}
+
+.commercial-step-number {
+    align-items: center;
+    background: #f3d5dc;
+    border-radius: 999px;
+    color: #6e3f4f;
+    display: inline-flex;
+    font-weight: 800;
+    height: 2.35rem;
+    justify-content: center;
+    margin-bottom: .85rem;
+    width: 2.35rem;
+}
+
+.commercial-step-card h3,
+.product-guide-card h3 {
+    color: #4f323b;
+    font-size: 1rem;
+    margin: 0 0 .45rem;
+}
+
+.commercial-step-card p,
+.product-guide-card p {
+    color: #755862;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.commercial-whatsapp-strip {
+    align-items: center;
+    border-radius: 1.35rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding: 1rem 1.15rem;
+}
+
+.commercial-whatsapp-strip strong,
+.commercial-whatsapp-strip span {
+    display: block;
+}
+
+.commercial-whatsapp-strip strong {
+    color: #4f323b;
+    margin-bottom: .25rem;
+}
+
+.commercial-whatsapp-strip span {
+    color: #755862;
+}
+
+.commercial-whatsapp-link,
+.product-guide-card a {
+    align-items: center;
+    background: #25d366;
+    border-radius: 999px;
+    color: #fff;
+    display: inline-flex;
+    font-weight: 800;
+    justify-content: center;
+    padding: .72rem 1rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.occasion-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.occasion-card {
+    align-items: center;
+    border-radius: 1.25rem;
+    color: #593946;
+    display: flex;
+    flex-direction: column;
+    gap: .65rem;
+    min-height: 8.2rem;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+    text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.occasion-card:hover,
+.occasion-card:focus-visible {
+    border-color: rgba(154, 102, 120, .34);
+    box-shadow: 0 20px 38px rgba(86, 55, 66, .12);
+    transform: translateY(-2px);
+}
+
+.occasion-card i {
+    color: #b86d86;
+    font-size: 1.65rem;
+}
+
+.occasion-card span {
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.product-commercial-guide {
+    margin: clamp(1.5rem, 4vw, 3rem) auto;
+    max-width: 1180px;
+    padding: 0 1rem;
+}
+
+.product-guide-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.product-guide-card i {
+    align-items: center;
+    background: #f7eef1;
+    border-radius: 999px;
+    color: #ad667c;
+    display: inline-flex;
+    font-size: 1.25rem;
+    height: 2.7rem;
+    justify-content: center;
+    margin-bottom: .85rem;
+    width: 2.7rem;
+}
+
+.product-guide-card a {
+    margin-top: 1rem;
+}
+
+@media (max-width: 1024px) {
+    .commercial-steps-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .occasion-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .commercial-section {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .commercial-steps-grid,
+    .occasion-grid,
+    .product-guide-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .commercial-whatsapp-strip {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .commercial-whatsapp-link,
+    .product-guide-card a {
+        width: 100%;
+    }
+
+    .occasion-card {
+        min-height: auto;
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+    }
+}

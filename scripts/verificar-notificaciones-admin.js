@@ -21,8 +21,8 @@ const html = read("admin/pedidos.html");
 const baseOrders = read("admin/js/orders-admin.js");
 const proOrders = read("admin/js/orders-admin-pro-v3450.js");
 
-assert(html.includes("orders-admin.js?v=3.60.1"), "Panel de pedidos carga módulo base de pedidos v3.47.0.");
-assert(html.includes("orders-admin-pro-v3450.js?v=3.60.1"), "Panel de pedidos mantiene mejoras visuales operativas.");
+assert(html.includes("orders-admin.js?v=3.61.0"), "Panel de pedidos carga módulo base de pedidos v3.47.0.");
+assert(html.includes("orders-admin-pro-v3450.js?v=3.61.0"), "Panel de pedidos mantiene mejoras visuales operativas.");
 assert(!html.includes("orders-admin-notifications-v3460.js"), "Panel de pedidos no carga JS de notificaciones que podía congelar la vista.");
 assert(!html.includes("admin-notifications-v3460.css"), "Panel de pedidos no carga CSS de notificaciones pausado.");
 assert(!exists("admin/js/orders-admin-notifications-v3460.js"), "Paquete limpio sin JS pausado de notificaciones.");
