@@ -20,7 +20,7 @@ const consent = read("js/privacy-consent-v3590.js");
 const privacy = read("privacidad.html");
 const index = read("index.html");
 
-ok(config.includes('APP_VERSION: "3.61.0"'), "APP_VERSION 3.61.0 configurada");
+ok(config.includes('APP_VERSION: "3.61.1"'), "APP_VERSION 3.61.1 configurada");
 ok(analytics.includes("mc_analytics_consent"), "analítica respeta preferencia local");
 ok(analytics.includes("privacy:analytics-consent"), "analítica escucha cambios de consentimiento");
 ok(consent.includes("Aceptar medición") && consent.includes("Solo necesarias"), "banner de privacidad contiene acciones claras");
@@ -29,4 +29,4 @@ ok(privacy.includes("data-open-privacy-preferences"), "privacidad permite gestio
 ok(index.includes("privacy-consent-v3590.css") && index.includes("privacy-consent-v3590.js"), "home carga consentimiento de privacidad");
 
 if (process.exitCode) process.exit(process.exitCode);
-console.log("✅ Privacidad y consentimiento de analítica v3.61.0 verificados");
+console.log("✅ Privacidad y consentimiento de analítica v3.61.1 verificados");

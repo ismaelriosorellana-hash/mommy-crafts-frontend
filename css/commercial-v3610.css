@@ -1,4 +1,4 @@
-/* Mommy Crafts v3.61.0 - mejora comercial y conversión */
+/* Mommy Crafts v3.61.1 - mejora comercial y conversión */
 .commercial-section {
     margin-top: clamp(2rem, 4vw, 4rem);
     margin-bottom: clamp(2rem, 4vw, 4rem);
@@ -206,5 +206,31 @@
         flex-direction: row;
         justify-content: flex-start;
         text-align: left;
+    }
+}
+
+
+/* V3.61.1 · orden comercial de home */
+.how-it-works-compact {
+    scroll-margin-top: 7.5rem;
+}
+
+.how-it-works-compact .commercial-section-header {
+    max-width: 680px;
+}
+
+.how-it-works-compact .commercial-step-card {
+    padding: 1rem;
+}
+
+.how-it-works-compact .commercial-step-number {
+    height: 2rem;
+    width: 2rem;
+    margin-bottom: .65rem;
+}
+
+@media (max-width: 720px) {
+    .how-it-works-compact {
+        scroll-margin-top: 5.5rem;
     }
 }

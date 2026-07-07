@@ -12,7 +12,7 @@ const sitemap = read("sitemap.xml");
 const robots = read("robots.txt");
 
 const checks = [
-  ["version config", config.includes('APP_VERSION: "3.61.0"')],
+  ["version config", config.includes('APP_VERSION: "3.61.1"')],
   ["home title marca", index.includes("Tienda online oficial de productos personalizados")],
   ["home canonical final", index.includes('href="https://mommycrafts.cl/" rel="canonical"')],
   ["schema organization static", index.includes('id="brand-organization-static"')],
@@ -27,9 +27,9 @@ const checks = [
 
 const failed = checks.filter(([, ok]) => !ok);
 if (failed.length) {
-  console.error("❌ SEO de marca v3.61.0 con errores:");
+  console.error("❌ SEO de marca v3.61.1 con errores:");
   failed.forEach(([name]) => console.error(`- ${name}`));
   process.exit(1);
 }
 
-console.log("✅ SEO de marca y limpieza Netlify frontend v3.61.0 verificado");
+console.log("✅ SEO de marca y limpieza Netlify frontend v3.61.1 verificado");
