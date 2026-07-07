@@ -1,4 +1,4 @@
-/* Mommy Crafts v3.62.2 - mejora comercial y conversión */
+/* Mommy Crafts v3.63.0 - mejora comercial y conversión */
 .commercial-section {
     margin-top: clamp(2rem, 4vw, 4rem);
     margin-bottom: clamp(2rem, 4vw, 4rem);
@@ -210,7 +210,7 @@
 }
 
 
-/* V3.62.2 · orden comercial de home */
+/* V3.63.0 · orden comercial de home */
 .how-it-works-compact {
     scroll-margin-top: 7.5rem;
 }
@@ -236,7 +236,7 @@
 }
 
 
-/* V3.62.2 · página Cómo comprar y guía en ficha */
+/* V3.63.0 · página Cómo comprar y guía en ficha */
 .how-buy-page .content-hero {
     background: linear-gradient(135deg, rgba(247, 238, 241, .94), rgba(255, 255, 255, .96));
 }
@@ -474,7 +474,7 @@
     }
 }
 
-/* V3.62.2 · acceso visible a Cómo comprar en ficha */
+/* V3.63.0 · acceso visible a Cómo comprar en ficha */
 .product-confidence-how-buy {
     background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,244,248,.92));
     border-color: rgba(189, 104, 132, .22);
@@ -485,7 +485,7 @@
 }
 
 
-/* V3.62.2 · Cómo comprar separado y visible */
+/* V3.63.0 · Cómo comprar separado y visible */
 .product-how-buy-standalone {
     margin: clamp(1.25rem, 3vw, 2rem) auto clamp(1.2rem, 3vw, 1.8rem);
     width: min(1180px, calc(100% - 2rem));

@@ -17,8 +17,8 @@ function fail(message) {
 }
 
 const config = read("js/config.js");
-if (!config.includes('APP_VERSION: "3.62.2"')) {
-    fail("js/config.js no informa APP_VERSION 3.62.2.");
+if (!config.includes('APP_VERSION: "3.63.0"')) {
+    fail("js/config.js no informa APP_VERSION 3.63.0.");
 }
 if (!config.includes(`SITE_URL: "${finalDomain}"`)) {
     fail("js/config.js no usa mommycrafts.cl como SITE_URL.");
@@ -53,4 +53,4 @@ if (!adminProducts.includes("mommycrafts.cl/producto/")) {
     fail("Admin productos no muestra vista previa SEO con dominio final.");
 }
 
-console.log("✅ Dominio final frontend v3.62.2 verificado.");
+console.log("✅ Dominio final frontend v3.63.0 verificado.");

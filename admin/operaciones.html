@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://www.googletagmanager.com https://www.clarity.ms https://*.clarity.ms; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https: https://www.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms; connect-src 'self' https://mommy-crafts-backend.onrender.com https://res.cloudinary.com https://*.cloudinary.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://www.clarity.ms https://*.clarity.ms; media-src 'self' blob:; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Operaciones | Mommy Crafts</title>
+    <link rel="icon" href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png">
+    <link rel="stylesheet" href="css/admin.css?v=3.63.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/admin-experience-v327.css?v=3.63.0">
+    <link rel="stylesheet" href="css/admin-operations-v3630.css?v=3.63.0">
+    <link rel="stylesheet" href="../css/mobile-polish-v3370.css?v=3.63.0">
+</head>
+<body data-admin-page="operaciones" data-admin-title="Operaciones">
+    <section id="admin-page-content">
+
+<div class="admin-page-intro operations-hero">
+    <div>
+        <p class="admin-section-kicker">Centro operativo</p>
+        <h2>Producción, entregas y stock</h2>
+        <p>Prioriza qué revisar primero, qué pedidos producir, qué entregar y qué productos reponer antes de abrir ventas masivas.</p>
+    </div>
+
+    <div class="orders-page-actions">
+        <a class="admin-button secondary" href="pedidos.html">
+            <i class="fa-solid fa-bag-shopping"></i>
+            Ver pedidos
+        </a>
+        <a class="admin-button secondary" href="inventario.html">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            Inventario
+        </a>
+        <button class="admin-button" id="operations-refresh" type="button">
+            <i class="fa-solid fa-rotate"></i>
+            Actualizar
+        </button>
+    </div>
+</div>
+
+<section class="operations-status-note" id="operations-last-sync">
+    Cargando centro operativo...
+</section>
+
+<div class="admin-grid metrics operations-metrics">
+    <article class="admin-card admin-metric">
+        <div>
+            <div class="admin-metric-label">Activos</div>
+            <div class="admin-metric-value" id="ops-active">0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-layer-group"></i></div>
+    </article>
+
+    <article class="admin-card admin-metric warning">
+        <div>
+            <div class="admin-metric-label">Pagos pendientes</div>
+            <div class="admin-metric-value" id="ops-payments">0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-credit-card"></i></div>
+    </article>
+
+    <article class="admin-card admin-metric info">
+        <div>
+            <div class="admin-metric-label">Diseños / producción</div>
+            <div class="admin-metric-value" id="ops-production">0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+    </article>
+
+    <article class="admin-card admin-metric success">
+        <div>
+            <div class="admin-metric-label">Por entregar</div>
+            <div class="admin-metric-value" id="ops-delivery">0</div>
+        </div>
+        <div class="admin-metric-icon"><i class="fa-solid fa-truck"></i></div>
+    </article>
+</div>
+
+<div class="admin-grid two operations-layout">
+    <section class="admin-card operations-panel priority-panel">
+        <div class="admin-card-header">
+            <div>
+                <p class="admin-section-kicker">Prioridad diaria</p>
+                <h3>Qué revisar primero</h3>
+            </div>
+            <a class="admin-button ghost small" href="pedidos.html">Abrir pedidos</a>
+        </div>
+        <div class="admin-card-body" id="ops-priorities"></div>
+    </section>
+
+    <section class="admin-card operations-panel">
+        <div class="admin-card-header">
+            <div>
+                <p class="admin-section-kicker">Stock</p>
+                <h3>Productos para reponer</h3>
+            </div>
+            <a class="admin-button ghost small" href="inventario.html">Gestionar</a>
+        </div>
+        <div class="admin-card-body" id="ops-stock"></div>
+    </section>
+</div>
+
+<div class="admin-grid two operations-layout">
+    <section class="admin-card operations-panel">
+        <div class="admin-card-header">
+            <div>
+                <p class="admin-section-kicker">Fabricación</p>
+                <h3>Pedidos en diseño o producción</h3>
+            </div>
+        </div>
+        <div class="admin-card-body" id="ops-production-list"></div>
+    </section>
+
+    <section class="admin-card operations-panel">
+        <div class="admin-card-header">
+            <div>
+                <p class="admin-section-kicker">Ventas recientes</p>
+                <h3>Productos con movimiento en 7 días</h3>
+            </div>
+            <a class="admin-button ghost small" href="reportes.html">Reportes</a>
+        </div>
+        <div class="admin-card-body" id="ops-top-products"></div>
+    </section>
+</div>
+
+<section class="admin-card operations-guide">
+    <div class="admin-card-header">
+        <div>
+            <p class="admin-section-kicker">Rutina sugerida</p>
+            <h3>Cómo usar este panel</h3>
+        </div>
+        <i class="fa-solid fa-list-check admin-security-symbol" aria-hidden="true"></i>
+    </div>
+    <div class="admin-card-body operations-checklist">
+        <article>
+            <strong>1. Revisa pagos pendientes</strong>
+            <p>Confirma pagos, comprobantes o envía recordatorio antes de producir.</p>
+        </article>
+        <article>
+            <strong>2. Avanza diseños y producción</strong>
+            <p>Prioriza los pedidos pagados con personalización o con varios días activos.</p>
+        </article>
+        <article>
+            <strong>3. Coordina entregas</strong>
+            <p>Todo pedido listo debe pasar rápido a retiro, despacho o confirmación de entrega.</p>
+        </article>
+        <article>
+            <strong>4. Revisa stock</strong>
+            <p>Usa stock bajo y productos con movimiento para decidir qué reponer primero.</p>
+        </article>
+    </div>
+</section>
+
+    </section>
+
+    <script src="../js/config.js?v=3.63.0"></script>
+    <script src="js/admin-api.js?v=3.63.0"></script>
+    <script src="js/admin-common.js?v=3.63.0"></script>
+    <script src="js/admin-experience-v327.js?v=3.63.0"></script>
+    <script src="js/operations-admin-v3630.js?v=3.63.0"></script>
+</body>
+</html>

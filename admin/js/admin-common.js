@@ -24,6 +24,12 @@
             icon: "fa-bag-shopping"
         },
         {
+            id: "operaciones",
+            label: "Operaciones",
+            href: "operaciones.html",
+            icon: "fa-list-check"
+        },
+        {
             id: "categorias",
             label: "Categorías",
             href: "categorias.html",

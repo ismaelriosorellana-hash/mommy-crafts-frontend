@@ -27,9 +27,9 @@ const html = read(files.pedidosHtml);
 const js = read(files.pedidosJs);
 const css = read(files.pedidosCss);
 
-assert(config.includes('APP_VERSION: "3.62.2"'), "APP_VERSION debe ser 3.62.2.");
-assert(html.includes("orders-admin.js?v=3.62.2"), "Pedidos debe cargar JS con versión 3.62.2.");
-assert(html.includes("admin-orders-pro-v3450.css?v=3.62.2"), "Pedidos debe cargar CSS con versión 3.62.2.");
+assert(config.includes('APP_VERSION: "3.63.0"'), "APP_VERSION debe ser 3.63.0.");
+assert(html.includes("orders-admin.js?v=3.63.0"), "Pedidos debe cargar JS con versión 3.63.0.");
+assert(html.includes("admin-orders-pro-v3450.css?v=3.63.0"), "Pedidos debe cargar CSS con versión 3.63.0.");
 
 [
     "renderOrderCommunication",
@@ -65,4 +65,4 @@ assert(html.includes("admin-orders-pro-v3450.css?v=3.62.2"), "Pedidos debe carga
 assert(!html.includes("notificaciones-pausado"), "No debe volver un módulo antiguo de notificaciones pausado.");
 assert(!js.includes("MutationObserver"), "Pedidos no debe usar MutationObserver para esta mejora.");
 
-console.log("✅ Comunicación de pedidos v3.62.2 verificada.");
+console.log("✅ Comunicación de pedidos v3.63.0 verificada.");

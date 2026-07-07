@@ -62,8 +62,8 @@ if (!css.includes("admin-product-tabs")) {
     errors.push("admin.css no contiene los estilos de pestañas de producto.");
 }
 
-if (!config.includes('APP_VERSION: "3.62.2"')) {
-    errors.push("CONFIG.APP_VERSION no corresponde a 3.62.2.");
+if (!config.includes('APP_VERSION: "3.63.0"')) {
+    errors.push("CONFIG.APP_VERSION no corresponde a 3.63.0.");
 }
 
 if (errors.length) {

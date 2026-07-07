@@ -15,7 +15,7 @@ const index = read('index.html');
 const product = read('producto.html');
 const sitemap = read('sitemap.xml');
 const css = read('css/commercial-v3610.css');
-assert(config.includes('APP_VERSION: "3.62.2"'), 'APP_VERSION debe ser 3.62.2');
+assert(config.includes('APP_VERSION: "3.63.0"'), 'APP_VERSION debe ser 3.63.0');
 assert(page.includes('Cómo comprar y personalizar tu producto'), 'debe existir página Cómo comprar');
 assert(page.includes('Cómo personalizar mi producto'), 'debe incluir apartado de personalización');
 assert(page.includes('https://mommycrafts.cl/como-comprar.html'), 'debe tener canonical/OG al dominio final');
@@ -25,4 +25,4 @@ assert(product.includes('class="product-how-buy-link"'), 'ficha debe incluir enl
 assert(product.indexOf('class="product-how-buy-link"') < product.indexOf('detalle-descripcion-panel'), 'enlace debe estar antes de Descripción del producto');
 assert(sitemap.includes('https://mommycrafts.cl/como-comprar.html'), 'sitemap debe incluir como-comprar.html');
 assert(css.includes('.how-buy-layout'), 'CSS debe incluir estilos para la página Cómo comprar');
-console.log('✅ Página Cómo comprar y personalización v3.62.2 verificada');
+console.log('✅ Página Cómo comprar y personalización v3.63.0 verificada');
