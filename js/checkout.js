@@ -356,6 +356,11 @@
 
     async function submitOrder(event) {
         event.preventDefault();
+        if (window.StoreStatus?.isPaused?.()) {
+            window.StoreStatus.renderNotice?.("#checkout-content, main, .checkout-shell", { compact: true });
+            window.StoreStatus.preventPurchase?.(event);
+            return;
+        }
         const form = event.currentTarget;
         const submitButton = getCheckoutSubmitButton(form);
         const formData = new FormData(form);
@@ -452,6 +457,12 @@
         if (!read().length) {
             document.getElementById("checkout-empty")?.removeAttribute("hidden");
             document.getElementById("checkout-content")?.setAttribute("hidden", "");
+            return;
+        }
+        if (window.StoreStatus?.isPaused?.()) {
+            document.getElementById("checkout-content")?.setAttribute("hidden", "");
+            document.getElementById("checkout-empty")?.removeAttribute("hidden");
+            window.StoreStatus.renderNotice?.("main, .checkout-shell, body", { compact: true });
             return;
         }
         prefillCheckoutWithAccount();

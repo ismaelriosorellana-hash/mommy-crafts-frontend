@@ -10,11 +10,11 @@
 <meta content="#FFF9FD" name="theme-color"/>
 <title>Apariencia del sitio | Mommy Crafts</title>
 <link href="https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png" rel="icon"/>
-<link href="css/admin.css?v=3.56.0" rel="stylesheet"/>
+<link href="css/admin.css?v=3.57.0" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
-<link href="css/admin-experience-v327.css?v=3.56.0" rel="stylesheet"/>
-<link href="css/header-layout-v3312.css?v=3.56.0" rel="stylesheet"/>
-    <link rel="stylesheet" href="../css/mobile-polish-v3370.css?v=3.56.0">
+<link href="css/admin-experience-v327.css?v=3.57.0" rel="stylesheet"/>
+<link href="css/header-layout-v3312.css?v=3.57.0" rel="stylesheet"/>
+    <link rel="stylesheet" href="../css/mobile-polish-v3370.css?v=3.57.0">
 </head>
 <body data-admin-page="apariencia" data-admin-title="Apariencia del sitio">
 <div id="admin-page-content">
@@ -44,6 +44,35 @@
 <div class="admin-alert" hidden="" id="site-settings-message"></div>
 <div class="site-settings-layout">
 <div class="site-settings-controls">
+
+<section class="admin-card" data-settings-section="store-pause">
+<div class="admin-card-header">
+<div>
+<p class="admin-section-kicker">Operación temporal</p>
+<h3>Modo pausa de compras</h3>
+</div>
+<span class="admin-status info" id="store-pause-status">Tienda abierta</span>
+</div>
+<div class="admin-card-body">
+<p class="site-settings-help">Activa este interruptor cuando necesites mantener la tienda visible, pero sin permitir carrito, checkout ni pagos reales.</p>
+<label class="admin-field full site-toggle-field">
+<input id="store-paused" type="checkbox"/>
+<span>Pausar temporalmente las compras</span>
+</label>
+<label class="admin-field full">
+<span>Mensaje público</span>
+<textarea id="store-pause-message" maxlength="500" rows="4" placeholder="Nuestra tienda online estará disponible próximamente..."></textarea>
+<small>Este mensaje se mostrará en la tienda pública mientras el modo pausa esté activo.</small>
+</label>
+<label class="admin-field">
+<span>WhatsApp para consultas</span>
+<input id="store-pause-whatsapp" maxlength="20" inputmode="tel" placeholder="56954633848" type="text"/>
+<small>Usa solo números, por ejemplo 56954633848.</small>
+</label>
+<div class="admin-alert info" id="store-pause-preview">La tienda está abierta y puede recibir pedidos.</div>
+</div>
+</section>
+
 <section class="admin-card" data-settings-section="">
 <div class="admin-card-header">
 <div>
@@ -243,10 +272,10 @@
 </div>
 </section>
 </div>
-<script defer="" src="../js/config.js?v=3.56.0"></script>
-<script defer="" src="js/admin-api.js?v=3.56.0"></script>
-<script defer="" src="js/admin-common.js?v=3.56.0"></script>
-<script defer="" src="js/site-settings-admin.js?v=3.56.0"></script>
-<script src="js/admin-experience-v327.js?v=3.56.0"></script>
+<script defer="" src="../js/config.js?v=3.57.0"></script>
+<script defer="" src="js/admin-api.js?v=3.57.0"></script>
+<script defer="" src="js/admin-common.js?v=3.57.0"></script>
+<script defer="" src="js/site-settings-admin.js?v=3.57.0"></script>
+<script src="js/admin-experience-v327.js?v=3.57.0"></script>
 </body>
 </html>

@@ -69,6 +69,10 @@
     }
 
     function add(product, quantity = 1, customization = null) {
+        if (window.StoreStatus?.isPaused?.()) {
+            window.StoreStatus.preventPurchase?.();
+            return false;
+        }
         if (!product?.id) return false;
         const items = read();
         const safeQuantity = Math.max(1, Number(quantity) || 1);
@@ -315,8 +319,17 @@
         subtotalElement.textContent = formatPrice(subtotalValue);
         shippingElement.textContent = subtotalValue >= FREE_SHIPPING_THRESHOLD ? "Gratis en Santiago" : `Gratis desde ${formatPrice(FREE_SHIPPING_THRESHOLD)}`;
         totalElement.textContent = formatPrice(subtotalValue);
-        checkoutLink?.classList.remove("is-disabled");
-        checkoutLink?.removeAttribute("aria-disabled");
+        if (window.StoreStatus?.isPaused?.()) {
+            checkoutLink?.classList.add("is-disabled");
+            checkoutLink?.setAttribute("aria-disabled", "true");
+            checkoutLink?.setAttribute("href", window.StoreStatus.whatsappUrl?.() || "#");
+            checkoutLink?.setAttribute("target", "_blank");
+            checkoutLink?.setAttribute("rel", "noopener noreferrer");
+            window.StoreStatus.renderNotice?.(".cart-layout, main, .container", { compact: true });
+        } else {
+            checkoutLink?.classList.remove("is-disabled");
+            checkoutLink?.removeAttribute("aria-disabled");
+        }
         renderSuggestions(items);
     }
 

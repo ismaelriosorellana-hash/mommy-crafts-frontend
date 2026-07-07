@@ -40,6 +40,12 @@
                 { text: "Productos personalizados para cada ocasión", url: "catalogo.html" }
             ]
         },
+        storeStatus: {
+            paused: false,
+            message: "Nuestra tienda online estará disponible próximamente. Si necesitas consultar por un producto, escríbenos por WhatsApp.",
+            whatsappNumber: "56954633848",
+            updatedAt: null
+        },
         colors: {
             primary: "#FCC0E6",
             primaryDark: "#8E456A",
@@ -120,6 +126,10 @@
                 items: Array.isArray(value.announcementBar?.items)
                     ? value.announcementBar.items.map((item) => ({ ...item }))
                     : defaults.announcementBar.items.map((item) => ({ ...item }))
+            },
+            storeStatus: {
+                ...defaults.storeStatus,
+                ...(value.storeStatus || {})
             }
         };
     }
@@ -181,8 +191,37 @@
         if (text) text.value = color.toUpperCase();
     }
 
+
+    function sanitizeWhatsApp(value) {
+        return String(value || "").replace(/[^0-9]/g, "").slice(0, 20);
+    }
+
+    function renderStoreStatusFields() {
+        const status = state.settings.storeStatus || DEFAULTS.storeStatus;
+        const pausedInput = $("#store-paused");
+        const messageInput = $("#store-pause-message");
+        const whatsappInput = $("#store-pause-whatsapp");
+        const statusBadge = $("#store-pause-status");
+        const preview = $("#store-pause-preview");
+        if (pausedInput) pausedInput.checked = Boolean(status.paused);
+        if (messageInput) messageInput.value = status.message || DEFAULTS.storeStatus.message;
+        if (whatsappInput) whatsappInput.value = sanitizeWhatsApp(status.whatsappNumber || DEFAULTS.storeStatus.whatsappNumber);
+        if (statusBadge) {
+            statusBadge.className = `admin-status ${status.paused ? "warning" : "success"}`;
+            statusBadge.textContent = status.paused ? "Compras pausadas" : "Tienda abierta";
+        }
+        if (preview) {
+            const number = sanitizeWhatsApp(status.whatsappNumber || DEFAULTS.storeStatus.whatsappNumber);
+            preview.className = `admin-alert ${status.paused ? "warning" : "info"}`;
+            preview.textContent = status.paused
+                ? `${status.message || DEFAULTS.storeStatus.message} WhatsApp: +${number}`
+                : "La tienda está abierta y puede recibir pedidos.";
+        }
+    }
+
     function renderForm() {
         const { logo, title } = state.settings.branding;
+        renderStoreStatusFields();
         $("#site-logo-alt").value = logo.alt || "";
         setRange("site-logo-width", logo.width);
         setRange("site-logo-x", logo.offsetX);
@@ -308,6 +347,12 @@
                 textColor: ($("#announcement-text-color-text")?.value || DEFAULTS.announcementBar.textColor).toUpperCase(),
                 linkColor: ($("#announcement-link-color-text")?.value || DEFAULTS.announcementBar.linkColor).toUpperCase(),
                 items: announcementItemsFromForm()
+            },
+            storeStatus: {
+                ...state.settings.storeStatus,
+                paused: $("#store-paused")?.checked === true,
+                message: ($("#store-pause-message")?.value || DEFAULTS.storeStatus.message).trim(),
+                whatsappNumber: sanitizeWhatsApp($("#store-pause-whatsapp")?.value || DEFAULTS.storeStatus.whatsappNumber)
             },
             colors
         };
@@ -470,7 +515,7 @@
             state.customized = Boolean(verification.customized ?? true);
             renderForm();
             setStatus(verification.settings || verifiedSettings, state.customized);
-            message("La identidad, las posiciones del encabezado, la cinta y los colores ya están publicados.", "success");
+            message("La identidad, el modo de compras, la cinta y los colores ya están publicados.", "success");
             AdminUI.toast("Apariencia guardada.", "success");
         } catch (error) {
             /* Mantiene en el formulario lo que el usuario estaba ajustando. */
@@ -535,6 +580,25 @@
         });
 
         $("#announcement-enabled")?.addEventListener("change", updatePreview);
+
+        ["store-paused", "store-pause-message", "store-pause-whatsapp"].forEach((id) => {
+            const element = $(`#${id}`);
+            if (!element) return;
+            const eventName = element.type === "checkbox" ? "change" : "input";
+            element.addEventListener(eventName, () => {
+                state.settings = mergeSettings({
+                    ...state.settings,
+                    storeStatus: {
+                        ...state.settings.storeStatus,
+                        paused: $("#store-paused")?.checked === true,
+                        message: ($("#store-pause-message")?.value || DEFAULTS.storeStatus.message).trim(),
+                        whatsappNumber: sanitizeWhatsApp($("#store-pause-whatsapp")?.value || DEFAULTS.storeStatus.whatsappNumber)
+                    }
+                });
+                renderStoreStatusFields();
+            });
+        });
+
         [
             ["announcement-background", "announcement-background-text"],
             ["announcement-text-color", "announcement-text-color-text"],

@@ -189,8 +189,186 @@
         applyElementPosition(".site-header .navbar-actions", layout.actions);
     }
 
+
+    let currentStoreStatus = {
+        paused: false,
+        message: "Nuestra tienda online estará disponible próximamente. Si necesitas consultar por un producto, escríbenos por WhatsApp.",
+        whatsappNumber: CONFIG.whatsapp || "56954633848"
+    };
+
+    function cleanWhatsApp(value) {
+        return String(value || CONFIG.whatsapp || "56954633848").replace(/[^0-9]/g, "") || "56954633848";
+    }
+
+    function storePauseMessage() {
+        return String(currentStoreStatus.message || "Nuestra tienda online estará disponible próximamente. Si necesitas consultar por un producto, escríbenos por WhatsApp.").trim();
+    }
+
+    function storePauseWhatsappUrl() {
+        const text = encodeURIComponent("Hola Mommy Crafts, quiero consultar por un producto mientras la tienda online está en preparación.");
+        return `https://wa.me/${cleanWhatsApp(currentStoreStatus.whatsappNumber)}?text=${text}`;
+    }
+
+    function ensurePauseStyles() {
+        if (document.getElementById("mc-store-pause-styles")) return;
+        const style = document.createElement("style");
+        style.id = "mc-store-pause-styles";
+        style.textContent = `
+            .mc-store-paused .mc-purchase-action,
+            .mc-store-paused #btn-open-checkout,
+            .mc-store-paused #btn-enviar-pedido,
+            .mc-store-paused #checkout-mobile-pay-button,
+            .mc-store-paused #mc-quick-view-add-cart,
+            .mc-store-paused #btn-enviar {
+                opacity: .55;
+                cursor: not-allowed !important;
+            }
+            .mc-store-pause-banner {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                gap: .7rem;
+                padding: .85rem 1rem;
+                background: #71364F;
+                color: #fff;
+                text-align: center;
+                font-weight: 700;
+                box-shadow: 0 6px 18px rgba(54, 30, 47, .16);
+                position: relative;
+                z-index: 30;
+            }
+            .mc-store-pause-banner a {
+                color: #fff;
+                border: 1px solid rgba(255,255,255,.7);
+                border-radius: 999px;
+                padding: .45rem .8rem;
+                text-decoration: none;
+                white-space: nowrap;
+            }
+            .mc-store-pause-card {
+                margin: 1rem auto;
+                max-width: 920px;
+                border: 1px solid #F0D6E6;
+                border-radius: 18px;
+                background: #FFF2FA;
+                color: #372A32;
+                padding: 1rem;
+                box-shadow: 0 12px 30px rgba(113, 54, 79, .12);
+            }
+            .mc-store-pause-card strong { display:block; color:#71364F; margin-bottom:.25rem; }
+            .mc-store-pause-card a { display:inline-flex; align-items:center; gap:.4rem; margin-top:.75rem; }
+        `;
+        document.head.appendChild(style);
+    }
+
+    function renderPauseBanner() {
+        ensurePauseStyles();
+        document.documentElement.classList.toggle("mc-store-paused", Boolean(currentStoreStatus.paused));
+        document.body?.classList.toggle("mc-store-paused", Boolean(currentStoreStatus.paused));
+
+        let banner = document.getElementById("mc-store-pause-banner");
+        if (!currentStoreStatus.paused) {
+            banner?.remove();
+            return;
+        }
+
+        if (!banner) {
+            banner = document.createElement("div");
+            banner.id = "mc-store-pause-banner";
+            banner.className = "mc-store-pause-banner";
+            document.body?.prepend(banner);
+        }
+
+        banner.innerHTML = `
+            <span>${storePauseMessage()}</span>
+            <a href="${storePauseWhatsappUrl()}" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
+        `;
+    }
+
+    function renderPauseNotice(target, { compact = false } = {}) {
+        const container = typeof target === "string" ? document.querySelector(target) : target;
+        if (!container || !currentStoreStatus.paused) return null;
+        let notice = container.querySelector?.(".mc-store-pause-card");
+        if (!notice) {
+            notice = document.createElement("div");
+            notice.className = "mc-store-pause-card";
+            container.prepend(notice);
+        }
+        notice.innerHTML = `
+            <strong>Compras temporalmente pausadas</strong>
+            <p>${storePauseMessage()}</p>
+            <a class="btn-primary" href="${storePauseWhatsappUrl()}" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
+        `;
+        if (compact) notice.classList.add("is-compact");
+        return notice;
+    }
+
+    function syncPurchaseUi() {
+        const paused = Boolean(currentStoreStatus.paused);
+        const selectors = [
+            "#btn-open-checkout",
+            "#btn-enviar-pedido",
+            "#checkout-mobile-pay-button",
+            "#mc-quick-view-add-cart",
+            "#btn-enviar"
+        ];
+        document.querySelectorAll(selectors.join(",")).forEach((button) => {
+            button.classList.add("mc-purchase-action");
+            button.toggleAttribute("aria-disabled", paused);
+            if (["BUTTON", "INPUT"].includes(button.tagName)) button.disabled = paused;
+            if (paused && button.tagName === "A") {
+                button.dataset.pauseHref = button.getAttribute("href") || "";
+                button.setAttribute("href", storePauseWhatsappUrl());
+                button.setAttribute("target", "_blank");
+                button.setAttribute("rel", "noopener noreferrer");
+            } else if (!paused && button.dataset.pauseHref) {
+                button.setAttribute("href", button.dataset.pauseHref);
+                button.removeAttribute("target");
+                button.removeAttribute("rel");
+                delete button.dataset.pauseHref;
+            }
+        });
+
+        renderPauseNotice(".product-detail, .product-main, .product-detail-shell", { compact: true });
+        if (document.body?.dataset.page === "cart") renderPauseNotice(".cart-layout, main, .container", { compact: true });
+        if (document.body?.dataset.page === "checkout") renderPauseNotice("#checkout-content, main, .checkout-shell", { compact: true });
+    }
+
+    function setStoreStatus(settings = {}) {
+        currentStoreStatus = {
+            ...currentStoreStatus,
+            ...(settings.storeStatus || {}),
+            whatsappNumber: cleanWhatsApp(settings.storeStatus?.whatsappNumber || currentStoreStatus.whatsappNumber)
+        };
+        renderPauseBanner();
+        syncPurchaseUi();
+        document.dispatchEvent(new CustomEvent("store:status", { detail: currentStoreStatus }));
+    }
+
+    function preventPurchase(event) {
+        if (!currentStoreStatus.paused) return false;
+        if (event) {
+            event.preventDefault?.();
+            event.stopPropagation?.();
+        }
+        renderPauseBanner();
+        window.open(storePauseWhatsappUrl(), "_blank", "noopener,noreferrer");
+        return true;
+    }
+
+    window.StoreStatus = Object.freeze({
+        get: () => ({ ...currentStoreStatus }),
+        isPaused: () => Boolean(currentStoreStatus.paused),
+        message: storePauseMessage,
+        whatsappUrl: storePauseWhatsappUrl,
+        renderNotice: renderPauseNotice,
+        preventPurchase
+    });
+
     function apply(settings) {
         const colors = settings?.colors || {};
+        setStoreStatus(settings);
         applyAnnouncementBar(settings);
         applyHeaderLayout(settings);
         for (const [key, variable] of Object.entries(CSS_VARIABLES)) {
@@ -207,6 +385,7 @@
             link.href = branding.logo.url;
         });
 
+        syncPurchaseUi();
         document.dispatchEvent(new CustomEvent("site:settings-applied", { detail: settings }));
     }
 
@@ -265,5 +444,9 @@
     }
 
     window.SiteSettings = Object.freeze({ apply, load, applyCachedSettings });
+    document.addEventListener("click", (event) => {
+        const purchase = event.target.closest?.("#btn-open-checkout, #btn-enviar-pedido, #checkout-mobile-pay-button, #mc-quick-view-add-cart, #btn-enviar");
+        if (purchase) preventPurchase(event);
+    }, true);
     document.addEventListener("DOMContentLoaded", load, { once: true });
 })();
