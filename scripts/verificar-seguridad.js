@@ -82,8 +82,8 @@ const config = fs.readFileSync(
     "utf8"
 );
 
-if (!config.includes('APP_VERSION: "3.62.1"')) {
-    errors.push("js/config.js no informa la versión 3.62.1.");
+if (!config.includes('APP_VERSION: "3.62.2"')) {
+    errors.push("js/config.js no informa la versión 3.62.2.");
 }
 
 if (!config.includes("https://mommy-crafts-backend.onrender.com/api")) {

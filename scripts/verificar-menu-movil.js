@@ -12,11 +12,11 @@ const js = fs.readFileSync(path.join(root, "js", "mobile-menu-v3380.js"), "utf8"
 const config = fs.readFileSync(path.join(root, "js", "config.js"), "utf8");
 
 const checks = [
-    ["CONFIG versión 3.62.1", config.includes('APP_VERSION: "3.62.1"')],
-    ["CSS de menú móvil cargado en inicio", index.includes('css/mobile-menu-v3380.css?v=3.62.1')],
-    ["CSS de menú móvil cargado en producto", product.includes('css/mobile-menu-v3380.css?v=3.62.1')],
-    ["JS de menú móvil cargado en inicio", index.includes('js/mobile-menu-v3380.js?v=3.62.1')],
-    ["JS de menú móvil cargado en producto", product.includes('js/mobile-menu-v3380.js?v=3.62.1')],
+    ["CONFIG versión 3.62.2", config.includes('APP_VERSION: "3.62.2"')],
+    ["CSS de menú móvil cargado en inicio", index.includes('css/mobile-menu-v3380.css?v=3.62.2')],
+    ["CSS de menú móvil cargado en producto", product.includes('css/mobile-menu-v3380.css?v=3.62.2')],
+    ["JS de menú móvil cargado en inicio", index.includes('js/mobile-menu-v3380.js?v=3.62.2')],
+    ["JS de menú móvil cargado en producto", product.includes('js/mobile-menu-v3380.js?v=3.62.2')],
     ["Panel lateral definido", css.includes('.mc-mobile-menu-panel') && css.includes('transform: translateX(-105%)')],
     ["Menú antiguo se desactiva en móvil", css.includes('.site-header .menu.is-open') && css.includes('display: none !important')],
     ["Botones móviles uniformes", css.includes('--mc-mobile-action-size: 39px')],

@@ -18,7 +18,7 @@ const auth = read("js/customer-auth.js");
 const account = read("js/account-pages.js");
 const seo = read("js/seo-v3490.js");
 
-ok(config.includes('APP_VERSION: "3.62.1"'), "frontend declara version 3.62.1");
+ok(config.includes('APP_VERSION: "3.62.2"'), "frontend declara version 3.62.2");
 ok(config.includes('ventasEmail: "venta@mommycrafts.cl"'), "correo ventas visible en CONFIG");
 ok(!config.includes("contacto@mommycrafts.cl"), "CONFIG no mantiene correo contacto antiguo");
 ok(seo.includes("sales and customer support") && seo.includes("venta@mommycrafts.cl"), "Schema Organization incluye correo de ventas");
@@ -26,4 +26,4 @@ ok(auth.includes("cancelOrder") && auth.includes("/cancelar"), "CustomerAuth per
 ok(account.includes("data-cancel-order") && account.includes("Cancelar pedido pendiente"), "Cuenta cliente muestra accion de cancelar pedido pendiente");
 ok(account.includes("puedeCancelar"), "frontend respeta permiso de cancelacion enviado por backend");
 
-console.log("\nVerificacion de cancelacion de pedidos y correo ventas v3.62.1 completada.");
+console.log("\nVerificacion de cancelacion de pedidos y correo ventas v3.62.2 completada.");
